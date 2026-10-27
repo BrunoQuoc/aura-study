@@ -1,4 +1,0 @@
-/* Student/Admin unified login surface */
-.auth-tabs.student-login-only{grid-template-columns:1fr}
-.auth-tabs.student-login-only .auth-tab{cursor:default}
-.student-auth-note{padding:10px 12px;border:1px solid rgba(83,103,232,.12);border-radius:12px;background:#f7f8ff;color:#67718a;font-size:11px;line-height:1.5}
