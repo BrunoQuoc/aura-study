@@ -1,50 +1,36 @@
 # AURA STUDY
 
-PWA học tập lớp 6 tối ưu cho iPad/iPhone/Android. GitHub Pages là lớp triển khai ứng dụng; Google Drive là kho dữ liệu gốc.
+AURA STUDY là web app học tập lớp 6 tối ưu cho iPad/iPhone/Android. GitHub Pages là lớp triển khai ứng dụng; Google Drive là kho dữ liệu gốc.
 
-## Phiên bản hiện tại
-**V2.4.2** đồng bộ trạng thái nguồn tài liệu mới nhất từ phiên làm việc ngày 27/10/2026, trên nền giao diện tinh gọn và Đề thi thông minh V2.4. Nội dung học gốc không bị xóa hoặc thay đổi; web phân biệt rõ dữ liệu đang có trong AURA với file mới chỉ mới được xác nhận trên Drive.
+## Truy cập hiện tại
+AURA STUDY dùng mô hình **2 link riêng, không đăng nhập**:
 
-### V2.4.2 – Source Sync
-- Thêm khối `Đồng bộ 00_INBOX` trên Tổng quan và Thư viện.
-- Ghi nhận đúng **9 file** đã kiểm tra trong INBOX ngày 27/10/2026.
-- Toán 6: **6 file** gồm 5 đề giữa HKI số 01–05 và 1 tài liệu ôn tập bài toán thực tế.
-- Ngữ văn / Tiếng Việt 6: **3 file** gồm `LỚP 6- NLXH.docx`, `LỚP 6- TIẾNG VIỆT.docx`, `Bo_De_On_Tap_Tieng_Viet.docx`.
-- Tiếng Anh: chưa có file mới được xác nhận trong INBOX ở lần kiểm tra này; ngân hàng Tiếng Anh đang có trong AURA vẫn được giữ nguyên.
-- Không coi file đang nằm trong INBOX là đã nhập vào AURA DATA. Chỉ nội dung đã được kiểm tra và chuẩn hóa vào repo mới được tính là `đã có trong app`.
-- Bump PWA cache lên `aura-study-v2.4.2-r1` để iPad/iPhone nhận giao diện và trạng thái nguồn mới.
+- **Học sinh:** `https://brunoquoc.github.io/aura-study/student-direct.html`
+- **Admin:** `https://brunoquoc.github.io/aura-study/admin-direct.html`
 
-### V2.4.1 – Clean UI/Data
-- Chuẩn hóa hệ icon vector cho 8 môn, thanh điều hướng, tài liệu, sao lưu/khôi phục.
-- Làm lại logo AURA theo biểu tượng sách mở + ánh sáng; đồng bộ launcher icon 180/192/512 px.
-- Mỗi môn có một màu nhận diện riêng nhưng vẫn giữ cùng ngôn ngữ thiết kế.
-- Thẻ môn học chỉ hiện dữ liệu cần thiết: số đề/câu/bài đang có, trạng thái `Sẵn sàng` hoặc `Đang cập nhật`.
-- Trang chủ rút gọn thông điệp còn: học – ôn – theo dõi phần yếu – offline.
-- Card, nút, form, ghi chú, trạng thái và thanh mobile được tinh gọn spacing, font và độ tương phản.
-- Lớp làm đẹp nằm ở `ui_polish.css` + `ui_polish.js`, tách khỏi dữ liệu học để giảm rủi ro làm hỏng nội dung.
+Không còn luồng tạo user, email xác nhận, Supabase Auth hay mật khẩu trong giao diện đang sử dụng.
 
-## Đề thi thông minh V2.4
-- Có mục `Tạo đề` trên desktop và mobile.
-- Chọn môn, căn cứ tạo đề, số câu, mức độ, từ khóa và chiến lược.
-- Các chiến lược: `Cân bằng 40/40/20`, `Ưu tiên phần yếu`, `Mô phỏng kiểm tra`, `Củng cố nền tảng`.
-- Lưu lịch sử câu gần đây để giảm lặp giữa các đề.
-- Sau khi chấm, hệ thống cập nhật thống kê đúng/sai theo nhóm kỹ năng có thể chấm tự động và ưu tiên các nhóm đang yếu ở những đề sau.
-- Toán tiếp tục sinh biến thể tham số và tự tính đáp án.
-- Ngữ văn tiếp tục dùng ngân hàng đọc hiểu + Thực hành Tiếng Việt HKI; câu tự luận không tự đánh giá đúng/sai khi chưa có tiêu chí xác định.
+> Lưu ý: link Admin không có lớp xác thực. Ai có đúng URL Admin đều có thể mở giao diện quản trị. Mô hình này phù hợp với hệ thống gia đình hiện tại.
 
-## Tiếng Anh Units 1–3
-- Tổng ngân hàng hiện tại: **93 mục**.
-- Phạm vi: Unit 1 School, Unit 2 House, Unit 3 Friends, Reading và Rewrite.
-- Có các nút tạo nhanh: `Unit 1 • School`, `Unit 2 • House`, `Unit 3 • Friends`, `Reading`, `Rewrite`, `Review Units 1–3`.
-- Chấm tự động toàn bộ trắc nghiệm và các Rewrite có đáp án xác định.
-- Các câu mới do AURA soạn được ghi nhãn `câu mới cùng dạng`; hệ thống không gọi chúng là câu gốc của tài liệu.
+## Cache / Service Worker
+Service Worker cũ đã được nghỉ sử dụng. `sw.js` hiện chỉ có nhiệm vụ xóa cache cũ rồi tự unregister để tránh thiết bị tiếp tục hiện màn hình đăng nhập đã bỏ.
+
+Hai trang `student-direct.html` và `admin-direct.html` cũng chủ động xóa cache cũ khi mở.
+
+## Phạm vi học tập
+Nội dung học gốc không bị xóa hoặc thay đổi khi tách Admin/Học sinh.
+
+- Toán 6: đề kiểm tra, ôn tập, hình minh họa, chấm tự động phần đủ dữ kiện.
+- Ngữ văn 6: đọc hiểu, Thực hành Tiếng Việt, tài liệu tham khảo.
+- Tiếng Anh 6: ngân hàng Units 1–3, Reading, Rewrite và các dạng luyện tập hiện có.
+- Tạo đề thông minh: cân mức độ, giảm lặp, ưu tiên phần yếu và lưu lịch sử làm bài cục bộ.
 
 ## Cách thức hoạt động
 1. Tài liệu gốc lưu trên Google Drive theo cấu trúc Lớp → Môn → Bài học/Bài tập/Đề/Đáp án/Tham khảo.
 2. File mới đưa vào `00_INBOX`.
 3. Nova đọc nội dung, xác định môn/loại tài liệu, đổi tên chuẩn, ghép đề–đáp án và chuyển đúng thư mục.
 4. Nội dung đủ dữ kiện được chuẩn hóa vào AURA DATA trên repo; GitHub Pages tự publish.
-5. Bé sử dụng AURA STUDY trên iPad/mobile; dữ liệu học cục bộ lưu bằng localStorage.
+5. Bé sử dụng AURA STUDY trên iPad/mobile; dữ liệu học cục bộ lưu bằng `localStorage`.
 
 ## Nguyên tắc dữ liệu
 - Google Drive là nguồn dữ liệu gốc.
@@ -54,10 +40,18 @@ PWA học tập lớp 6 tối ưu cho iPad/iPhone/Android. GitHub Pages là lớ
 - Thống kê phần yếu chỉ dựa trên các mục có thể xác định đúng/sai đáng tin cậy.
 - Trạng thái INBOX chỉ là trạng thái nguồn; không đồng nghĩa với trạng thái đã nhập vào web.
 
-## Sao lưu & khôi phục
-- `Sao lưu`: xuất JSON chứa lịch sử điểm, bài đang làm, tiến độ ôn tập, đề ngẫu nhiên, lịch sử chống lặp và thống kê kỹ năng.
-- `Khôi phục`: phục hồi các dữ liệu trên thiết bị mới.
-- V2.4.2 vẫn đọc được backup kiểu cũ chỉ chứa `attempts`.
+## Dữ liệu cục bộ
+Không còn tài khoản người dùng nên dữ liệu học được lưu theo trình duyệt/thiết bị bằng `localStorage`.
+
+- Hai link Student và Admin trên cùng một trình duyệt có thể nhìn cùng dữ liệu cục bộ.
+- Đổi thiết bị hoặc xóa dữ liệu trình duyệt có thể làm mất kết quả chưa sao lưu.
+- Admin có nút **Sao lưu / Khôi phục** để xuất và phục hồi dữ liệu JSON.
 
 ## Sử dụng trên iPad/iPhone
-Mở trang GitHub Pages bằng Safari → Chia sẻ → Thêm vào Màn hình chính.
+Mở link Student hoặc Admin bằng Safari. Có thể dùng **Chia sẻ → Thêm vào Màn hình chính** để tạo biểu tượng truy cập nhanh.
+
+## Trạng thái kiến trúc
+- Frontend production: GitHub Pages.
+- Không dùng Lovable làm frontend.
+- Không dùng Supabase Auth cho luồng truy cập hiện tại.
+- Không có role Teacher trong sản phẩm.
