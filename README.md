@@ -3,7 +3,7 @@
 PWA học tập lớp 6 tối ưu cho iPad/iPhone/Android. GitHub Pages là lớp triển khai ứng dụng; Google Drive là kho dữ liệu gốc.
 
 ## Phiên bản hiện tại
-V2.3.0 bổ sung Bộ tạo đề ngẫu nhiên theo mẫu đề / đề cương ôn tập, tiếp tục giữ sao lưu/khôi phục đầy đủ dữ liệu học cục bộ và PWA offline.
+V2.3.0 bổ sung Bộ tạo đề ngẫu nhiên theo mẫu đề / đề cương ôn tập, mở rộng ngân hàng Ngữ văn từ tài liệu Thực hành Tiếng Việt HKI, đồng thời tiếp tục giữ sao lưu/khôi phục đầy đủ dữ liệu học cục bộ và PWA offline.
 
 ## Cách thức hoạt động
 1. Tài liệu gốc được lưu trên Google Drive theo cấu trúc Lớp → Môn → Bài học/Bài tập/Đề/Đáp án/Tham khảo.
@@ -18,7 +18,7 @@ V2.3.0 bổ sung Bộ tạo đề ngẫu nhiên theo mẫu đề / đề cương
 - `Theo mẫu đề`: Toán trộn các câu nguồn đã xác minh với các biến thể tham số cùng dạng; đáp án biến thể được tính trực tiếp từ dữ kiện sinh ra.
 - `Theo đề cương`: ưu tiên ngân hàng ôn tập của môn và từ khóa người dùng nhập.
 - Toán: hỗ trợ trắc nghiệm + tự luận; phần trắc nghiệm chấm tự động và lưu lịch sử.
-- Ngữ văn: rút ngẫu nhiên từ câu hỏi/đáp án đã có trong ngân hàng ôn tập; không tự bịa đáp án ngoài nguồn.
+- Ngữ văn: ngân hàng hiện gồm phần đọc hiểu và thêm 20 câu Thực hành Tiếng Việt HKI về từ đơn/từ phức, biện pháp tu từ, ẩn dụ, dấu câu và cụm danh từ.
 - Tiếng Anh: hiện tạm khóa sinh đề khi dữ liệu chỉ có đáp án tóm tắt mà thiếu nguyên câu hỏi. Khi câu hỏi nguồn được đồng bộ đủ, bộ tạo đề tự mở.
 - Mỗi đề có seed/mã đề riêng; có thể tạo đề khác, in đề và mở lại đề gần nhất.
 
