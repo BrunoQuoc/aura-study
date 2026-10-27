@@ -10,6 +10,9 @@ body.student-shell .hero h1{max-width:620px;margin-bottom:18px}
 body.student-shell .sectionhead span{display:none}
 body.student-shell .sync-panel{display:none!important}
 body.student-shell [data-aura-sync]{display:none!important}
+/* Generator: keep controls/actions, hide system explanations. */
+body.student-shell #app>.card:has(.generator-grid) .note{display:none!important}
+body.student-shell #app>.card:has(.generator-grid)+.card{display:none!important}
 body.student-shell .layout{grid-template-columns:210px minmax(0,1fr)}
 body.student-shell .mobilebar{grid-template-columns:repeat(4,1fr)!important}
 @media(max-width:900px){body.student-shell .layout{grid-template-columns:1fr}}
