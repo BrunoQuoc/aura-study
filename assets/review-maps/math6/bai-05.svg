@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+<rect width="1200" height="800" fill="#ffffff"/>
+<path d="M 600.0 390.0 C 420.0 390.0, 420.0 142.5, 240.0 142.5" fill="none" stroke="#2d78c5" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 415.0 390.0, 415.0 395.0, 230.0 395.0" fill="none" stroke="#35a155" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 420.0 390.0, 420.0 657.5, 240.0 657.5" fill="none" stroke="#8b5db8" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 780.0 390.0, 780.0 147.5, 960.0 147.5" fill="none" stroke="#e08a20" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 785.0 390.0, 785.0 400.0, 970.0 400.0" fill="none" stroke="#d84f80" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 785.0 390.0, 785.0 657.5, 970.0 657.5" fill="none" stroke="#2a9aa0" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<rect x="45" y="45" width="390" height="195" rx="18" fill="#edf6ff" stroke="#2d78c5" stroke-width="2"/>
+<text x="63" y="75" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#2d78c5">1. PHÉP NHÂN SỐ TỰ NHIÊN</text>
+<text x="63" y="105" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• a × b = c.</text>
+<text x="63" y="131" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• a, b là thừa số; c là tích.</text>
+<text x="63" y="157" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: 6 × 4 = 24.</text>
+<rect x="25" y="285" width="410" height="220" rx="18" fill="#effaf2" stroke="#35a155" stroke-width="2"/>
+<text x="43" y="315" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#35a155">2. TÍNH CHẤT CỦA PHÉP NHÂN</text>
+<text x="43" y="345" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Giao hoán: a×b = b×a.</text>
+<text x="43" y="371" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Kết hợp: (a×b)×c = a×(b×c).</text>
+<text x="43" y="397" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Nhân với 1: a×1 = a; nhân với 0: a×0 = 0.</text>
+<text x="43" y="423" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Phân phối: a×(b+c) = a×b + a×c.</text>
+<rect x="45" y="565" width="390" height="185" rx="18" fill="#f7f0fb" stroke="#8b5db8" stroke-width="2"/>
+<text x="63" y="595" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#8b5db8">3. PHÉP CHIA HẾT</text>
+<text x="63" y="625" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• a : b = c (b ≠ 0).</text>
+<text x="63" y="651" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• a là số bị chia; b là số chia; c là thương.</text>
+<text x="63" y="677" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: 24 : 6 = 4; 0 : b = 0 (b ≠ 0).</text>
+<rect x="765" y="45" width="390" height="205" rx="18" fill="#fff7eb" stroke="#e08a20" stroke-width="2"/>
+<text x="783" y="75" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#e08a20">4. PHÉP CHIA CÓ DƯ</text>
+<text x="783" y="105" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Nếu a chia b được thương q, dư r: a=b×q+r.</text>
+<text x="783" y="131" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Điều kiện: 0 ≤ r &lt; b.</text>
+<text x="783" y="157" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: 17 : 5 = 3 dư 2.</text>
+<rect x="785" y="300" width="370" height="200" rx="18" fill="#fff0f5" stroke="#d84f80" stroke-width="2"/>
+<text x="803" y="330" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#d84f80">5. QUAN HỆ GIỮA PHÉP NHÂN VÀ PHÉP CHIA</text>
+<text x="803" y="360" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Nếu a : b = c thì a = b × c.</text>
+<text x="803" y="386" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Tìm số bị chia: thương × số chia.</text>
+<text x="803" y="412" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Tìm số chia: số bị chia : thương.</text>
+<text x="803" y="438" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: 36 : 9 = 4 nên 36 = 9 × 4.</text>
+<rect x="785" y="565" width="370" height="185" rx="18" fill="#eefafa" stroke="#2a9aa0" stroke-width="2"/>
+<text x="803" y="595" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#2a9aa0">6. TÍNH NHẨM – ỨNG DỤNG</text>
+<text x="803" y="625" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Có thể nhóm các thừa số để tính thuận tiện.</text>
+<text x="803" y="651" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• 25 × 4 = 100; 2 × 5 × 6 = 10 × 6 = 60.</text>
+<text x="803" y="677" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ứng dụng: chia đều, xếp hàng, đóng gói, tính</text>
+<text x="803" y="698" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">  số nhóm.</text>
+<rect x="465" y="285" width="270" height="210" rx="65" fill="#ffffff" stroke="#397ab4" stroke-width="4"/>
+<text x="600.0" y="343" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="800" fill="#17447e">BÀI 5</text>
+<text x="600.0" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="800" fill="#17447e">PHÉP NHÂN VÀ PHÉP CHIA</text>
+<text x="600.0" y="429" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="800" fill="#17447e">SỐ TỰ NHIÊN</text>
+<text x="600.0" y="473" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#6b7892">Bản số hóa từ ảnh ôn tập nguồn</text>
+<rect x="420" y="720" width="360" height="54" rx="15" fill="#fffaf0" stroke="#e5c76d" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="600" y="743" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#c78021">GHI NHỚ</text>
+<text x="600" y="763" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#3c4658">Ôn theo từng nhánh → đánh dấu đã hiểu → làm bài luyện nhanh.</text>
+</svg>
