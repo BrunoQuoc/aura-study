@@ -1,0 +1,81 @@
+/* AURA STUDY unified Supabase auth + role-based UI */
+(function(){
+  const cfg=window.AURA_AUTH_CONFIG||{};
+  if(!window.supabase?.createClient||!cfg.url||!cfg.publishableKey){
+    document.body.classList.remove('auth-pending');
+    console.error('AURA Auth config missing');
+    return;
+  }
+  const client=window.supabase.createClient(cfg.url,cfg.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  window.AURA_SUPABASE=client;
+  let currentUser=null,currentRoles=[],adminAssetsLoaded=false;
+
+  function q(s){return document.querySelector(s)}
+  function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+  function authMarkup(){return `<div class="auth-screen" id="authScreen"><section class="auth-card" aria-label="Đăng nhập AURA STUDY"><div class="auth-brand"><div class="auth-logo">A</div><div><b>AURA STUDY</b><span>Kho học tập lớp 6</span></div></div><div class="auth-tabs"><button class="auth-tab active" data-mode="login" type="button">Đăng nhập</button><button class="auth-tab" data-mode="signup" type="button">Tạo tài khoản</button></div><form class="auth-form" id="authForm"><div class="auth-field signup-only" hidden><label for="authName">Tên hiển thị</label><input id="authName" autocomplete="name" maxlength="80" placeholder="Tên của bé"></div><div class="auth-field"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="email" required placeholder="email@example.com"></div><div class="auth-field"><label for="authPassword">Mật khẩu</label><input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="Tối thiểu 6 ký tự"></div><div class="auth-row"><button class="auth-link" id="forgotBtn" type="button">Quên mật khẩu?</button><span></span></div><button class="auth-submit" id="authSubmit" type="submit">Đăng nhập</button><p class="auth-message" id="authMessage" aria-live="polite"></p></form></section></div>`}
+  function ensureAuthScreen(){if(!q('#authScreen'))document.body.insertAdjacentHTML('afterbegin',authMarkup());bindAuthUi()}
+  function bindAuthUi(){
+    document.querySelectorAll('.auth-tab').forEach(btn=>btn.onclick=()=>setMode(btn.dataset.mode||'login'));
+    const f=q('#authForm');if(f)f.onsubmit=submitAuth;
+    const forgot=q('#forgotBtn');if(forgot)forgot.onclick=forgotPassword;
+  }
+  function setMode(mode){
+    document.querySelectorAll('.auth-tab').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+    document.querySelectorAll('.signup-only').forEach(x=>x.hidden=mode!=='signup');
+    const p=q('#authPassword');if(p)p.autocomplete=mode==='signup'?'new-password':'current-password';
+    const s=q('#authSubmit');if(s)s.textContent=mode==='signup'?'Tạo tài khoản':'Đăng nhập';
+    const f=q('#forgotBtn');if(f)f.hidden=mode==='signup';
+    q('#authForm')?.setAttribute('data-mode',mode);message('');
+  }
+  function message(text,type=''){const el=q('#authMessage');if(!el)return;el.textContent=text;el.className='auth-message'+(type?' '+type:'')}
+  async function submitAuth(e){
+    e.preventDefault();const form=e.currentTarget,mode=form.dataset.mode||'login',email=q('#authEmail')?.value.trim(),password=q('#authPassword')?.value||'',name=q('#authName')?.value.trim()||'';
+    if(!email||!password)return message('Vui lòng nhập email và mật khẩu.','error');
+    const btn=q('#authSubmit');if(btn)btn.disabled=true;message('Đang xử lý…');
+    try{
+      if(mode==='signup'){
+        const {data,error}=await client.auth.signUp({email,password,options:{data:{display_name:name||email.split('@')[0]}}});
+        if(error)throw error;
+        if(data.session){await activateSession(data.session)}else message('Tài khoản đã tạo. Hãy kiểm tra email để xác nhận rồi đăng nhập.','ok');
+      }else{
+        const {data,error}=await client.auth.signInWithPassword({email,password});if(error)throw error;await activateSession(data.session);
+      }
+    }catch(err){message(humanAuthError(err?.message),'error')}finally{if(btn)btn.disabled=false}
+  }
+  function humanAuthError(m=''){const x=String(m).toLowerCase();if(x.includes('invalid login'))return 'Email hoặc mật khẩu chưa đúng.';if(x.includes('already registered'))return 'Email này đã có tài khoản.';if(x.includes('password'))return 'Mật khẩu chưa hợp lệ. Vui lòng dùng ít nhất 6 ký tự.';if(x.includes('email'))return 'Email chưa hợp lệ hoặc chưa được xác nhận.';return 'Không thể đăng nhập lúc này. Vui lòng thử lại.'}
+  async function forgotPassword(){const email=q('#authEmail')?.value.trim();if(!email)return message('Nhập email trước, rồi bấm Quên mật khẩu.','error');const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});if(error)return message(humanAuthError(error.message),'error');message('Đã gửi hướng dẫn đặt lại mật khẩu vào email.','ok')}
+  async function loadIdentity(user){
+    const [{data:roles},{data:profile}]=await Promise.all([
+      client.from('user_roles').select('role').eq('user_id',user.id),
+      client.from('profiles').select('display_name').eq('id',user.id).maybeSingle()
+    ]);
+    currentRoles=(roles||[]).map(x=>x.role);const display=profile?.display_name||user.user_metadata?.display_name||user.email?.split('@')[0]||'AURA User';
+    return {display,isAdmin:currentRoles.includes('admin')};
+  }
+  function addAccountChip(display,isAdmin){
+    q('.aura-account')?.remove();const host=q('.topin');if(!host)return;
+    host.insertAdjacentHTML('beforeend',`<div class="aura-account"><b>${esc(display)}</b><span class="aura-role">${isAdmin?'Admin':'Học sinh'}</span><button class="aura-logout" type="button" title="Đăng xuất" aria-label="Đăng xuất">↪</button></div>`);
+    q('.aura-logout').onclick=async()=>{await client.auth.signOut();showLoggedOut()};
+  }
+  function loadCss(href){if(document.querySelector(`link[href="${href}"]`))return Promise.resolve();return new Promise((res,rej)=>{const l=document.createElement('link');l.rel='stylesheet';l.href=href;l.onload=res;l.onerror=rej;document.head.appendChild(l)})}
+  function loadScript(src){if(document.querySelector(`script[src="${src}"]`))return Promise.resolve();return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.body.appendChild(s)})}
+  async function enableAdminUi(){
+    if(adminAssetsLoaded)return;adminAssetsLoaded=true;document.body.classList.remove('student-shell');document.body.classList.add('admin-shell');
+    await Promise.all([loadCss('sync_status.css'),loadCss('guide.css')]);
+    await loadScript('guide.js');await loadScript('backup.js');await loadScript('sync_status.js');
+    const side=q('.side');if(side&&!side.querySelector('[data-page="guide"]'))side.insertAdjacentHTML('beforeend','<button class="navbtn" data-page="guide" onclick="guide()">? Hướng dẫn & Vận hành</button><div class="sidebox"><b>AURA Smart Practice</b><div class="small">Cân mức độ • giảm lặp • ưu tiên phần yếu.</div></div>');
+    const mob=q('.mobilebar');if(mob&&!mob.querySelector('[data-admin-guide]')){mob.insertAdjacentHTML('beforeend','<button data-admin-guide onclick="guide()">?<br><small>Hướng dẫn</small></button>');mob.style.gridTemplateColumns='repeat(5,1fr)'}
+    const top=q('.topin');if(top&&!top.querySelector('.admin-only')){const acct=q('.aura-account');acct?.insertAdjacentHTML('beforebegin','<button class="btn soft admin-only" type="button" onclick="backup()">Sao lưu</button><button class="btn soft admin-only" type="button" onclick="restoreBackup()">Khôi phục</button>')}
+    if(typeof auraInsertSourceSync==='function')auraInsertSourceSync();
+  }
+  function disableAdminUi(){document.body.classList.add('student-shell');document.body.classList.remove('admin-shell');document.querySelectorAll('.admin-only').forEach(x=>x.remove());q('.side [data-page="guide"]')?.remove();q('.side .sidebox')?.remove();q('.mobilebar [data-admin-guide]')?.remove();if(q('.mobilebar'))q('.mobilebar').style.gridTemplateColumns='repeat(4,1fr)';q('[data-aura-sync]')?.remove()}
+  async function activateSession(session){
+    currentUser=session?.user;if(!currentUser)return showLoggedOut();
+    const {display,isAdmin}=await loadIdentity(currentUser);q('#authScreen')?.remove();document.body.classList.remove('auth-pending');
+    addAccountChip(display,isAdmin);if(isAdmin)await enableAdminUi();else disableAdminUi();
+    if(new URLSearchParams(location.search).get('admin')==='1'&&isAdmin&&typeof guide==='function')guide();else if(typeof home==='function')home();
+  }
+  function showLoggedOut(){currentUser=null;currentRoles=[];disableAdminUi();document.body.classList.add('auth-pending');ensureAuthScreen();setMode('login')}
+  async function init(){ensureAuthScreen();const {data}=await client.auth.getSession();if(data.session)await activateSession(data.session);else showLoggedOut();client.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT')showLoggedOut();else if(session&&session.user?.id!==currentUser?.id)activateSession(session)})}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
