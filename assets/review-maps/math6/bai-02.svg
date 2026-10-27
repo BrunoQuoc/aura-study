@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+<rect width="1200" height="800" fill="#ffffff"/>
+<path d="M 600.0 390.0 C 420.0 390.0, 420.0 142.5, 240.0 142.5" fill="none" stroke="#2d78c5" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 415.0 390.0, 415.0 395.0, 230.0 395.0" fill="none" stroke="#35a155" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 420.0 390.0, 420.0 657.5, 240.0 657.5" fill="none" stroke="#8b5db8" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 780.0 390.0, 780.0 147.5, 960.0 147.5" fill="none" stroke="#e08a20" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 785.0 390.0, 785.0 400.0, 970.0 400.0" fill="none" stroke="#d84f80" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 785.0 390.0, 785.0 657.5, 970.0 657.5" fill="none" stroke="#2a9aa0" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<rect x="45" y="45" width="390" height="195" rx="18" fill="#edf6ff" stroke="#2d78c5" stroke-width="2"/>
+<text x="63" y="75" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#2d78c5">1. HỆ THẬP PHÂN</text>
+<text x="63" y="105" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Dùng 10 chữ số: 0,1,2,3,4,5,6,7,8,9.</text>
+<text x="63" y="131" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• 10 đơn vị = 1 chục; 10 chục = 1 trăm;</text>
+<text x="63" y="157" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• 10 trăm = 1 nghìn.</text>
+<text x="63" y="183" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: 205; 4 318; 56 020.</text>
+<rect x="25" y="285" width="410" height="220" rx="18" fill="#effaf2" stroke="#35a155" stroke-width="2"/>
+<text x="43" y="315" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#35a155">2. GIÁ TRỊ CHỮ SỐ</text>
+<text x="43" y="345" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Giá trị chữ số phụ thuộc vào vị trí trong số.</text>
+<text x="43" y="371" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Các hàng: đơn vị, chục, trăm, nghìn,...</text>
+<text x="43" y="397" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: trong 32 019, chữ số 2 có giá trị 2 000.</text>
+<rect x="45" y="565" width="390" height="185" rx="18" fill="#f7f0fb" stroke="#8b5db8" stroke-width="2"/>
+<text x="63" y="595" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#8b5db8">3. VIẾT SỐ THÀNH TỔNG</text>
+<text x="63" y="625" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Có thể viết số thành tổng giá trị các chữ số.</text>
+<text x="63" y="651" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• 32 019 = 30 000 + 2 000 + 10 + 9.</text>
+<text x="63" y="677" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• 34 604 = 30 000 + 4 000 + 600 + 4.</text>
+<rect x="765" y="45" width="390" height="205" rx="18" fill="#fff7eb" stroke="#e08a20" stroke-width="2"/>
+<text x="783" y="75" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#e08a20">4. CÁCH ĐỌC, CÁCH VIẾT</text>
+<text x="783" y="105" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Số lớn: từ phải sang trái, cứ 3 chữ số thành một</text>
+<text x="783" y="126" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">  nhóm.</text>
+<text x="783" y="152" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Khi đọc: đọc từ trái sang phải theo từng lớp.</text>
+<text x="783" y="178" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• 7 110 385: bảy triệu một trăm mười nghìn</text>
+<text x="783" y="204" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• ba trăm tám mươi lăm.</text>
+<rect x="785" y="300" width="370" height="200" rx="18" fill="#fff0f5" stroke="#d84f80" stroke-width="2"/>
+<text x="803" y="330" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#d84f80">5. SỐ LA MÃ</text>
+<text x="803" y="360" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• I = 1; V = 5; X = 10.</text>
+<text x="803" y="386" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• IV = 4; IX = 9.</text>
+<text x="803" y="412" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: XIV=14; XVI=16; XXIII=23; XXVII=27.</text>
+<rect x="785" y="565" width="370" height="185" rx="18" fill="#eefafa" stroke="#2a9aa0" stroke-width="2"/>
+<text x="803" y="595" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#2a9aa0">6. ỨNG DỤNG – GHI NHỚ</text>
+<text x="803" y="625" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Biết đọc, viết số tự nhiên trong hệ thập</text>
+<text x="803" y="646" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">  phân.</text>
+<text x="803" y="672" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Xác định giá trị chữ số theo vị trí.</text>
+<text x="803" y="698" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Viết số thành tổng các giá trị hàng.</text>
+<text x="803" y="724" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Đọc và viết một số La Mã quen thuộc.</text>
+<rect x="465" y="285" width="270" height="210" rx="65" fill="#ffffff" stroke="#397ab4" stroke-width="4"/>
+<text x="600.0" y="343" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="800" fill="#17447e">BÀI 2</text>
+<text x="600.0" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="800" fill="#17447e">CÁCH GHI</text>
+<text x="600.0" y="429" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="800" fill="#17447e">SỐ TỰ NHIÊN</text>
+<text x="600.0" y="473" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#6b7892">Bản số hóa từ ảnh ôn tập nguồn</text>
+<rect x="420" y="720" width="360" height="54" rx="15" fill="#fffaf0" stroke="#e5c76d" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="600" y="743" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#c78021">GHI NHỚ</text>
+<text x="600" y="763" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#3c4658">Ôn theo từng nhánh → đánh dấu đã hiểu → làm bài luyện nhanh.</text>
+</svg>
