@@ -1,0 +1,16 @@
+/* Student-first shell: keep only learning-facing UI visible. */
+body.student-shell .brandtext small{display:none}
+body.student-shell .topin{min-height:66px}
+body.student-shell .topin>.pill{display:none}
+body.student-shell .sidebox{display:none!important}
+body.student-shell .hero .small{display:none!important}
+body.student-shell .hero p{display:none!important}
+body.student-shell .hero{min-height:235px}
+body.student-shell .hero h1{max-width:620px;margin-bottom:18px}
+body.student-shell .sectionhead span{display:none}
+body.student-shell .sync-panel{display:none!important}
+body.student-shell [data-aura-sync]{display:none!important}
+body.student-shell .layout{grid-template-columns:210px minmax(0,1fr)}
+body.student-shell .mobilebar{grid-template-columns:repeat(4,1fr)!important}
+@media(max-width:900px){body.student-shell .layout{grid-template-columns:1fr}}
+@media(max-width:520px){body.student-shell .brandtext b{font-size:13px}body.student-shell .hero{min-height:auto}}
