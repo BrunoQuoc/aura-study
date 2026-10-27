@@ -1,0 +1,40 @@
+{
+  "version": "2.2.2",
+  "policy": "Only original images extracted from the verified source exam may be used. Never redraw, infer, or substitute an image.",
+  "source_status": "pending_access_to_AURA_Drive",
+  "exams": {
+    "de1": {
+      "status": "source_unavailable",
+      "required": ["full_source_review_before_enabling_exam"]
+    },
+    "de2": {
+      "status": "pending_original_images",
+      "required": [
+        {"location": "mc", "number": 8, "target": "assets/math/de2/q08-original.png"},
+        {"location": "mc", "number": 9, "target": "assets/math/de2/q09-original.png"},
+        {"location": "mc", "number": 10, "target": "assets/math/de2/q10-original.png"}
+      ]
+    },
+    "de3": {
+      "status": "pending_original_images",
+      "required": [
+        {"location": "mc", "number": 9, "target": "assets/math/de3/q09-original.png"},
+        {"location": "mc", "number": 10, "target": "assets/math/de3/q10-original.png"},
+        {"location": "essay", "number": 5, "target": "assets/math/de3/bai05-original.png"}
+      ]
+    },
+    "de4": {
+      "status": "pending_original_images",
+      "required": [
+        {"location": "mc", "number": 10, "target": "assets/math/de4/q10-original.png"}
+      ]
+    },
+    "de5": {
+      "status": "pending_original_images",
+      "required": [
+        {"location": "mc", "number": 6, "target": "assets/math/de5/q06-original.png"},
+        {"location": "mc", "number": 10, "target": "assets/math/de5/q10-original.png"}
+      ]
+    }
+  }
+}
