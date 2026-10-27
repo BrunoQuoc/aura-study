@@ -1,5 +1,5 @@
 function auraPatchAllV24(){
-  document.querySelectorAll('.small,.brandtext small,.hero .small,.generated-head .small').forEach(el=>{
+  document.querySelectorAll('.small,.note,.brandtext small,.hero .small,.generated-head .small').forEach(el=>{
     el.textContent=el.textContent.replace(/V2\.3\.1/g,'V2.4.0').replace(/V2\.3\.0/g,'V2.4.0').replace(/V2\.4(?!\.0)/g,'V2.4.0');
   });
 }
@@ -13,6 +13,10 @@ const auraGradeV24PatchBase=window.gradeAuraGenerated;
 window.gradeAuraGenerated=function(){
   const e=JSON.parse(localStorage.getItem('aura_generated_exam')||'null');
   auraGradeV24PatchBase();
+  if(e?.engineVersion==='2.4.0'&&typeof attempts==='function'&&typeof saveAttempts==='function'){
+    const a=attempts();
+    if(a[0]){a[0].title=String(a[0].title||'').replace(/V2\.3\.1/g,'V2.4.0');a[0].note=String(a[0].note||'').replace(/V2\.3\.1/g,'V2.4.0');saveAttempts(a)}
+  }
   auraPatchAllV24();
   document.querySelectorAll('button').forEach(b=>{
     if(b.textContent.trim()==='Tạo đề ưu tiên phần yếu')b.onclick=()=>auraOpenWeakGenerator(e?.subject);
