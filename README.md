@@ -3,7 +3,16 @@
 PWA học tập lớp 6 tối ưu cho iPad/iPhone/Android. GitHub Pages là lớp triển khai ứng dụng; Google Drive là kho dữ liệu gốc.
 
 ## Phiên bản hiện tại
-**V2.4.1** là bản tinh gọn giao diện/dữ liệu hiển thị trên nền Đề thi thông minh V2.4. Nội dung học gốc không bị xóa hoặc thay đổi; lớp hiển thị được rút gọn để bé nhìn nhanh và thao tác dễ hơn.
+**V2.4.2** đồng bộ trạng thái nguồn tài liệu mới nhất từ phiên làm việc ngày 27/10/2026, trên nền giao diện tinh gọn và Đề thi thông minh V2.4. Nội dung học gốc không bị xóa hoặc thay đổi; web phân biệt rõ dữ liệu đang có trong AURA với file mới chỉ mới được xác nhận trên Drive.
+
+### V2.4.2 – Source Sync
+- Thêm khối `Đồng bộ 00_INBOX` trên Tổng quan và Thư viện.
+- Ghi nhận đúng **9 file** đã kiểm tra trong INBOX ngày 27/10/2026.
+- Toán 6: **6 file** gồm 5 đề giữa HKI số 01–05 và 1 tài liệu ôn tập bài toán thực tế.
+- Ngữ văn / Tiếng Việt 6: **3 file** gồm `LỚP 6- NLXH.docx`, `LỚP 6- TIẾNG VIỆT.docx`, `Bo_De_On_Tap_Tieng_Viet.docx`.
+- Tiếng Anh: chưa có file mới được xác nhận trong INBOX ở lần kiểm tra này; ngân hàng Tiếng Anh đang có trong AURA vẫn được giữ nguyên.
+- Không coi file đang nằm trong INBOX là đã nhập vào AURA DATA. Chỉ nội dung đã được kiểm tra và chuẩn hóa vào repo mới được tính là `đã có trong app`.
+- Bump PWA cache lên `aura-study-v2.4.2-r1` để iPad/iPhone nhận giao diện và trạng thái nguồn mới.
 
 ### V2.4.1 – Clean UI/Data
 - Chuẩn hóa hệ icon vector cho 8 môn, thanh điều hướng, tài liệu, sao lưu/khôi phục.
@@ -43,11 +52,12 @@ PWA học tập lớp 6 tối ưu cho iPad/iPhone/Android. GitHub Pages là lớ
 - Câu mới do generator tạo phải gắn nhãn là biến thể/câu mới cùng dạng, không giả là câu gốc.
 - Câu hình/scan thiếu dữ kiện thật không được đưa vào chấm tự động.
 - Thống kê phần yếu chỉ dựa trên các mục có thể xác định đúng/sai đáng tin cậy.
+- Trạng thái INBOX chỉ là trạng thái nguồn; không đồng nghĩa với trạng thái đã nhập vào web.
 
 ## Sao lưu & khôi phục
 - `Sao lưu`: xuất JSON chứa lịch sử điểm, bài đang làm, tiến độ ôn tập, đề ngẫu nhiên, lịch sử chống lặp và thống kê kỹ năng.
 - `Khôi phục`: phục hồi các dữ liệu trên thiết bị mới.
-- V2.4.1 vẫn đọc được backup kiểu cũ chỉ chứa `attempts`.
+- V2.4.2 vẫn đọc được backup kiểu cũ chỉ chứa `attempts`.
 
 ## Sử dụng trên iPad/iPhone
 Mở trang GitHub Pages bằng Safari → Chia sẻ → Thêm vào Màn hình chính.
