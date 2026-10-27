@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+<rect width="1200" height="800" fill="#ffffff"/>
+<path d="M 600.0 390.0 C 420.0 390.0, 420.0 142.5, 240.0 142.5" fill="none" stroke="#2d78c5" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 415.0 390.0, 415.0 395.0, 230.0 395.0" fill="none" stroke="#35a155" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 420.0 390.0, 420.0 657.5, 240.0 657.5" fill="none" stroke="#8b5db8" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 780.0 390.0, 780.0 147.5, 960.0 147.5" fill="none" stroke="#e08a20" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 785.0 390.0, 785.0 400.0, 970.0 400.0" fill="none" stroke="#d84f80" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<path d="M 600.0 390.0 C 785.0 390.0, 785.0 657.5, 970.0 657.5" fill="none" stroke="#2a9aa0" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+<rect x="45" y="45" width="390" height="195" rx="18" fill="#edf6ff" stroke="#2d78c5" stroke-width="2"/>
+<text x="63" y="75" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#2d78c5">1. TẬP HỢP</text>
+<text x="63" y="105" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Tập hợp là một nhóm các đối tượng xác định.</text>
+<text x="63" y="131" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Các đối tượng của tập hợp được gọi là phần tử.</text>
+<text x="63" y="157" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: A = {a; b; c; d}.</text>
+<rect x="25" y="285" width="410" height="220" rx="18" fill="#effaf2" stroke="#35a155" stroke-width="2"/>
+<text x="43" y="315" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#35a155">2. CÁCH VIẾT TẬP HỢP</text>
+<text x="43" y="345" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Liệt kê các phần tử trong dấu ngoặc nhọn { }.</text>
+<text x="43" y="371" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Các phần tử cách nhau bởi dấu ;</text>
+<text x="43" y="397" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Hoặc chỉ ra tính chất đặc trưng.</text>
+<text x="43" y="423" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: C = {x ∈ N | x &lt; 5}.</text>
+<rect x="45" y="565" width="390" height="185" rx="18" fill="#f7f0fb" stroke="#8b5db8" stroke-width="2"/>
+<text x="63" y="595" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#8b5db8">3. PHẦN TỬ CỦA TẬP HỢP</text>
+<text x="63" y="625" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• a ∈ A: a thuộc A.</text>
+<text x="63" y="651" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• a ∉ A: a không thuộc A.</text>
+<text x="63" y="677" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: A={2;4;6;8}; 4 ∈ A; 3 ∉ A.</text>
+<rect x="765" y="45" width="390" height="205" rx="18" fill="#fff7eb" stroke="#e08a20" stroke-width="2"/>
+<text x="783" y="75" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#e08a20">4. KÍ HIỆU, ĐỌC TẬP HỢP</text>
+<text x="783" y="105" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Tập hợp thường kí hiệu bằng chữ in hoa: A, B,</text>
+<text x="783" y="126" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">  C,...</text>
+<text x="783" y="152" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ A={a;b;c}: tập hợp A gồm a, b, c.</text>
+<rect x="785" y="300" width="370" height="200" rx="18" fill="#fff0f5" stroke="#d84f80" stroke-width="2"/>
+<text x="803" y="330" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#d84f80">5. TẬP HỢP RỖNG</text>
+<text x="803" y="360" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Không có phần tử nào gọi là tập hợp rỗng.</text>
+<text x="803" y="386" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Kí hiệu: ∅ hoặc { }.</text>
+<rect x="785" y="565" width="370" height="185" rx="18" fill="#eefafa" stroke="#2a9aa0" stroke-width="2"/>
+<text x="803" y="595" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#2a9aa0">6. ỨNG DỤNG</text>
+<text x="803" y="625" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Tập hợp dùng trong nhiều bài toán và thực</text>
+<text x="803" y="646" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">  tiễn.</text>
+<text x="803" y="672" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• Ví dụ: ngày trong tuần; học sinh trong lớp;</text>
+<text x="803" y="698" font-family="Arial, sans-serif" font-size="15.5" fill="#263247">• các số tự nhiên nhỏ hơn 10.</text>
+<rect x="465" y="285" width="270" height="210" rx="65" fill="#ffffff" stroke="#397ab4" stroke-width="4"/>
+<text x="600.0" y="343" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="800" fill="#17447e">BÀI 1</text>
+<text x="600.0" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="800" fill="#17447e">TẬP HỢP.</text>
+<text x="600.0" y="429" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="800" fill="#17447e">PHẦN TỬ CỦA TẬP HỢP</text>
+<text x="600.0" y="473" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#6b7892">Bản số hóa từ ảnh ôn tập nguồn</text>
+<rect x="420" y="720" width="360" height="54" rx="15" fill="#fffaf0" stroke="#e5c76d" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="600" y="743" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#c78021">GHI NHỚ</text>
+<text x="600" y="763" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#3c4658">Ôn theo từng nhánh → đánh dấu đã hiểu → làm bài luyện nhanh.</text>
+</svg>
