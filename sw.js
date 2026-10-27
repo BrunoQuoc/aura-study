@@ -1,1 +1,15 @@
-const C='aura-study-v2.4.3-noauth-split-r1';const A=['./','./index.html','./admin.html','./style.css','./v23.css','./ui_polish.css','./premium_ui.css','./student_mode.css','./lesson_maps.css','./sync_status.css','./guide.css','./data.js','./lesson_maps.js','./nguvan_bank.js','./english_bank.js','./english_extra.js','./visuals.js','./app.js','./lesson_maps_ui.js','./backup.js','./generator.js','./generator_guard.js','./smart_engine.js','./v24_patch.js','./ui_polish.js','./sync_status.js','./guide.js','./premium_ui.js','./manifest.webmanifest','./icon.svg','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png','./assets/math/IMAGE_MANIFEST.json','./assets/math/normalized/square-set.svg','./assets/math/normalized/triangle-set.svg','./assets/math/normalized/triangle-alpha.svg','./assets/math/normalized/hexagon-set.svg','./assets/math/normalized/hexagon-num.svg','./assets/math/normalized/traffic-sign-set.svg','./assets/review-maps/math6/bai-01.svg','./assets/review-maps/math6/bai-02.svg','./assets/review-maps/math6/bai-03.svg','./assets/review-maps/math6/bai-04.svg','./assets/review-maps/math6/bai-05.svg'];self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(A)))});self.addEventListener('activate',e=>{e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x))))]))});self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{const x=r.clone();caches.open(C).then(c=>c.put(e.request,x));return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./index.html'))))});
+/* AURA STUDY legacy Service Worker cleanup.
+   Authentication and offline cache were removed when the app split into
+   direct Student/Admin links. Any old registration should clear its caches
+   and unregister itself so stale login screens cannot return. */
+self.addEventListener('install',event=>{
+  self.skipWaiting();
+});
+self.addEventListener('activate',event=>{
+  event.waitUntil((async()=>{
+    const keys=await caches.keys();
+    await Promise.all(keys.map(key=>caches.delete(key)));
+    await self.registration.unregister();
+    await self.clients.claim();
+  })());
+});
