@@ -89,7 +89,7 @@
   }
   const baseGradeGenerated=window.gradeAuraGenerated;
   if(typeof baseGradeGenerated==='function'&&!baseGradeGenerated.__auraMultiSubject){
-    const wrapped=function(...args){const e=read('aura_generated_exam',null),before=read(ATTEMPTS,[]).length,res=baseGradeGenerated.apply(this,args);if(e?.subject)patchLatestAttempt(e.subject,{sourceType:'generated',sourceId:e.id||'',period:localStorage.getItem('aura_exam_period')||''},before);return res};
+    const wrapped=function(...args){const e=read('aura_generated_exam',null),before=read(ATTEMPTS,[]).length,res=baseGradeGenerated.apply(this,args);if(e?.subject)patchLatestAttempt(e.subject,{sourceType:'generated',sourceId:e.id||'',period:e.period||''},before);return res};
     wrapped.__auraMultiSubject=true;window.gradeAuraGenerated=wrapped;
   }
   const baseSaveReview=window.saveReview;
