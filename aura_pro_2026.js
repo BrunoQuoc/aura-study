@@ -81,3 +81,14 @@
     script.src='exam_timer.js?v=timer-r2';script.async=false;script.dataset.auraTimer='1';document.head.appendChild(script);
   }
 })();
+
+(function loadResponsiveRefinement(){
+  if(!document.querySelector('link[data-aura-refine]')){
+    const link=document.createElement('link');
+    link.rel='stylesheet';link.href='responsive_refine.css?v=refine-r1';link.dataset.auraRefine='1';document.head.appendChild(link);
+  }
+  if(document.body.classList.contains('student-shell')&&!document.querySelector('script[data-aura-student-feedback]')){
+    const script=document.createElement('script');
+    script.src='student_feedback.js?v=feedback-r1';script.async=false;script.dataset.auraStudentFeedback='1';document.head.appendChild(script);
+  }
+})();
