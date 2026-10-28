@@ -27,6 +27,11 @@
     const priority=Object.entries(priorityTopics).sort((a,b)=>b[1]-a[1])[0]?.[0]||'';
     return {start,end,cur,prev,curAvg,prevAvg,strengthened,improved,bestTopic,priority,active};
   }
+  function signature(d){return [
+    +d.start,d.cur.length,d.prev.length,d.curAvg,d.prevAvg,d.strengthened.length,d.improved.length,d.bestTopic,d.priority,d.active.length,
+    d.cur.map(x=>`${x.time||''}:${x.score||''}`).join('|'),
+    d.active.map(x=>`${x.key||x.stem||''}:${x.wrongCount||0}:${x.correctAfterWrong||0}:${x.consecutiveCorrect||0}:${x.lastSeen||''}:${x.lastCorrect||''}`).join('|')
+  ].join('~')}
   function trendText(d){
     if(d.curAvg===null)return {text:'Chưa có điểm',cls:'neutral',detail:'Làm một bài có chấm điểm để bắt đầu báo cáo.'};
     if(d.prevAvg===null)return {text:`${d.curAvg}/10`,cls:'neutral',detail:'Chưa đủ dữ liệu tuần trước để so sánh.'};
@@ -41,26 +46,27 @@
     return 'Chưa đủ dữ liệu để đưa khuyến nghị. Hãy hoàn thành một đề hoặc một lượt luyện để AURA bắt đầu phân tích.';
   }
   function reportHTML(d,compact=false){
-    const tr=trendText(d),range=`${dateShort(d.start)} – ${dateShort(addDays(d.end,-1))}`;
+    const tr=trendText(d),range=`${dateShort(d.start)} – ${dateShort(addDays(d.end,-1))}`,sig=esc(signature(d));
     if(compact){
-      return `<section class="weekly-mini"><div><span class="weekly-kicker">TUẦN NÀY · ${range}</span><b>${d.cur.length} lượt có điểm · ${d.active.length} câu cần ôn</b><small>${d.bestTopic?`Đang cải thiện: ${esc(d.bestTopic)}`:d.priority?`Ưu tiên: ${esc(d.priority)}`:'AURA sẽ cập nhật khi có thêm dữ liệu.'}</small></div><button type="button" onclick="history()">Xem báo cáo →</button></section>`;
+      return `<section class="weekly-mini" data-weekly-signature="${sig}"><div><span class="weekly-kicker">TUẦN NÀY · ${range}</span><b>${d.cur.length} lượt có điểm · ${d.active.length} câu cần ôn</b><small>${d.bestTopic?`Đang cải thiện: ${esc(d.bestTopic)}`:d.priority?`Ưu tiên: ${esc(d.priority)}`:'AURA sẽ cập nhật khi có thêm dữ liệu.'}</small></div><button type="button" onclick="history()">Xem báo cáo →</button></section>`;
     }
-    return `<section class="card weekly-report"><div class="weekly-head"><div><div class="small">BÁO CÁO TIẾN BỘ THEO TUẦN</div><h3>Tuần ${range}</h3></div><span>Dữ liệu trên thiết bị này</span></div><div class="weekly-metrics"><article><span>Bài có điểm</span><strong>${d.cur.length}</strong><small>${d.prev.length?`Tuần trước ${d.prev.length}`:'Chưa có mốc tuần trước'}</small></article><article class="${tr.cls}"><span>Điểm trung bình</span><strong>${tr.text}</strong><small>${tr.detail}</small></article><article><span>Câu đã củng cố</span><strong>${d.strengthened.length}</strong><small>${d.improved.length?`${d.improved.length} câu có tiến bộ trong tuần`:'Chưa ghi nhận lượt sửa đúng'}</small></article></div><div class="weekly-insights"><div class="weekly-insight good"><span>TIẾN BỘ NỔI BẬT</span><b>${d.bestTopic?esc(d.bestTopic):'Chưa đủ dữ liệu'}</b><p>${d.bestTopic?`Đây là chủ đề có nhiều câu được làm đúng lại nhất trong tuần.`:'Khi bé sửa đúng các câu từng sai, AURA sẽ ghi nhận chủ đề cải thiện tại đây.'}</p></div><div class="weekly-insight focus"><span>ƯU TIÊN TUẦN TỚI</span><b>${d.priority?esc(d.priority):'Duy trì nhịp học'}</b><p>${esc(recommendation(d))}</p>${d.active.length&&typeof window.openWrongPractice==='function'?'<button class="btn soft" type="button" onclick="openWrongPractice()">Luyện câu cần ưu tiên</button>':''}</div></div><p class="weekly-note">Báo cáo chỉ dùng điểm, câu sai và lượt sửa đúng đã được AURA ghi nhận; không suy đoán những chủ đề chưa có dữ liệu.</p></section>`;
+    return `<section class="card weekly-report" data-weekly-signature="${sig}"><div class="weekly-head"><div><div class="small">BÁO CÁO TIẾN BỘ THEO TUẦN</div><h3>Tuần ${range}</h3></div><span>Dữ liệu trên thiết bị này</span></div><div class="weekly-metrics"><article><span>Bài có điểm</span><strong>${d.cur.length}</strong><small>${d.prev.length?`Tuần trước ${d.prev.length}`:'Chưa có mốc tuần trước'}</small></article><article class="${tr.cls}"><span>Điểm trung bình</span><strong>${tr.text}</strong><small>${tr.detail}</small></article><article><span>Câu đã củng cố</span><strong>${d.strengthened.length}</strong><small>${d.improved.length?`${d.improved.length} câu có tiến bộ trong tuần`:'Chưa ghi nhận lượt sửa đúng'}</small></article></div><div class="weekly-insights"><div class="weekly-insight good"><span>TIẾN BỘ NỔI BẬT</span><b>${d.bestTopic?esc(d.bestTopic):'Chưa đủ dữ liệu'}</b><p>${d.bestTopic?'Đây là chủ đề có nhiều câu được làm đúng lại nhất trong tuần.':'Khi bé sửa đúng các câu từng sai, AURA sẽ ghi nhận chủ đề cải thiện tại đây.'}</p></div><div class="weekly-insight focus"><span>ƯU TIÊN TUẦN TỚI</span><b>${d.priority?esc(d.priority):'Duy trì nhịp học'}</b><p>${esc(recommendation(d))}</p>${d.active.length&&typeof window.openWrongPractice==='function'?'<button class="btn soft" type="button" onclick="openWrongPractice()">Luyện câu cần ưu tiên</button>':''}</div></div><p class="weekly-note">Báo cáo chỉ dùng điểm, câu sai và lượt sửa đúng đã được AURA ghi nhận; không suy đoán những chủ đề chưa có dữ liệu.</p></section>`;
   }
+  function elementFrom(html){const holder=document.createElement('div');holder.innerHTML=html;return holder.firstElementChild}
   function injectHistory(){
     const app=document.getElementById('app');if(!app)return;
     const h=app.querySelector('.sectionhead h2');if(!h||!/Kết quả học tập/i.test(h.textContent||''))return;
-    let box=app.querySelector('.weekly-report');const d=windowData();
-    if(!box){const holder=document.createElement('div');holder.innerHTML=reportHTML(d);box=holder.firstElementChild;h.closest('.sectionhead').insertAdjacentElement('afterend',box)}
-    else box.outerHTML=reportHTML(d);
+    const d=windowData(),sig=signature(d);let box=app.querySelector('.weekly-report');
+    if(!box){box=elementFrom(reportHTML(d));h.closest('.sectionhead').insertAdjacentElement('afterend',box)}
+    else if(box.dataset.weeklySignature!==sig){const fresh=elementFrom(reportHTML(d));box.replaceWith(fresh);box=fresh}
     const anchor=app.querySelector('.learning-insights')||app.querySelector('.wrong-book-summary');
-    box=app.querySelector('.weekly-report');if(anchor&&box&&anchor.nextElementSibling!==box)anchor.insertAdjacentElement('afterend',box);
+    if(anchor&&box&&anchor.nextElementSibling!==box)anchor.insertAdjacentElement('afterend',box);
   }
   function injectHome(){
     const app=document.getElementById('app');if(!app||!app.querySelector('.dash-home'))return;
-    let mini=app.querySelector('.weekly-mini');const d=windowData();
-    if(!mini){const holder=document.createElement('div');holder.innerHTML=reportHTML(d,true);mini=holder.firstElementChild;const stats=app.querySelector('.dash-stats');stats?.insertAdjacentElement('afterend',mini)}
-    else mini.outerHTML=reportHTML(d,true);
+    const d=windowData(),sig=signature(d);let mini=app.querySelector('.weekly-mini');
+    if(!mini){mini=elementFrom(reportHTML(d,true));app.querySelector('.dash-stats')?.insertAdjacentElement('afterend',mini)}
+    else if(mini.dataset.weeklySignature!==sig){const fresh=elementFrom(reportHTML(d,true));mini.replaceWith(fresh)}
   }
   let queued=false;
   function refresh(){injectHistory();injectHome()}
