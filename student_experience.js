@@ -32,14 +32,15 @@
 
   function subjectName(id){return SUBJECTS().find(x=>x[0]===id)?.[1]||id}
   function setPage(p){if(typeof window.setActive==='function')window.setActive(p)}
+  function resourceTitle(r){return r.kind==='review'?String(r.title||'').replace(/^Ôn tập/i,'Bài mẫu'):r.title}
 
   function studentReviewHub(){
     setPage('library');const app=$('#app');if(!app)return;
     const rs=resources(),unassigned=rs.filter(x=>!x.period).length;
-    app.innerHTML=`<div class="sectionhead" style="margin-top:0"><div><h2>Ôn thi theo năm học</h2><span>Chọn kỳ thi để xem đúng phạm vi ôn tập</span></div></div>
+    app.innerHTML=`<div class="sectionhead" style="margin-top:0"><div><h2>Ôn thi theo năm học</h2><span>Chọn kỳ thi để xem đề và bài mẫu có lời giải</span></div></div>
       <div class="card quick15-card"><div class="quick15-row"><div class="quick15-main"><div class="quick15-icon">15'</div><div><h3>Kiểm tra 15 phút</h3><p>AURA tự trộn 10 câu trắc nghiệm từ ngân hàng câu hỏi đủ dữ kiện. Mỗi lần bắt đầu là một đề mới.</p></div></div><button class="btn primary" onclick="startRandom15Exam()">Làm bài 15 phút</button></div></div>
       <div class="subjects">${Object.entries(PERIODS).map(([id,p])=>{const n=rs.filter(x=>x.period===id).length;return `<div class="subject" onclick="studentExamPeriod('${id}')"><div class="ico">${p.icon}</div><h3>${p.title}</h3><div class="meta">${p.desc}</div><span class="tag ${n?'ready':'empty'}">${n?n+' tài liệu · '+p.minutes+' phút':'Chưa có nội dung'}</span></div>`}).join('')}</div>
-      <div class="card" style="margin-top:16px"><b>AURA tự phân loại theo kỳ thi</b><p class="meta">Khi có nội dung ôn hoặc đề cương, AURA sẽ gắn bài học, bài tập và đề vào đúng kỳ. Tài liệu chưa đủ căn cứ sẽ không bị xếp đoán.</p>${unassigned?`<div class="note">${unassigned} tài liệu hiện có chưa được gắn kỳ vì chưa đủ căn cứ.</div>`:''}</div>`;
+      <div class="card" style="margin-top:16px"><b>AURA tự phân loại theo kỳ thi</b><p class="meta">Khi có nội dung ôn hoặc đề cương, AURA sẽ gắn bài học, bài mẫu và đề vào đúng kỳ. Tài liệu chưa đủ căn cứ sẽ không bị xếp đoán.</p>${unassigned?`<div class="note">${unassigned} tài liệu hiện có chưa được gắn kỳ vì chưa đủ căn cứ.</div>`:''}</div>`;
   }
 
   function studentExamPeriod(id){
@@ -47,7 +48,7 @@
     const list=resources().filter(x=>x.period===id);
     app.innerHTML=`<button class="btn soft" onclick="studentReviewHub()" style="margin-bottom:12px">← Ôn thi</button>
       <div class="sectionhead" style="margin-top:0"><div><h2>${p.title}</h2><span>${p.desc} · Thời gian làm đề: ${p.minutes} phút</span></div></div>
-      <div class="card">${list.length?list.map(r=>`<div class="resource"><div class="fileico">${r.kind==='exam'?'📝':'📚'}</div><div class="grow"><b>${esc(r.title)}</b><small>${esc(subjectName(r.subject))} · ${esc(r.desc)}</small></div><button class="btn ${r.kind==='exam'?'primary':'soft'}" onclick="${r.kind==='exam'?`exam('${r.id}')`:`review('${r.subject}','${r.id}')`}">${r.kind==='exam'?'Làm đề':'Ôn bài'}</button></div>`).join(''):`<div class="meta">Chưa có nội dung được gắn chắc chắn cho ${p.title}. Khi có nội dung ôn, AURA sẽ tự đưa tài liệu phù hợp vào đây.</div><div style="margin-top:14px"><button class="btn primary" onclick="lessons()">Mở bài học</button></div>`}</div>`;
+      <div class="card">${list.length?list.map(r=>`<div class="resource"><div class="fileico">${r.kind==='exam'?'📝':'📘'}</div><div class="grow"><b>${esc(resourceTitle(r))}</b><small>${esc(subjectName(r.subject))} · ${r.kind==='review'?'Bài mẫu có lời giải · ':''}${esc(r.desc)}</small></div><button class="btn ${r.kind==='exam'?'primary':'soft'}" onclick="${r.kind==='exam'?`exam('${r.id}')`:`review('${r.subject}','${r.id}')`}">${r.kind==='exam'?'Làm đề':'Xem lời giải'}</button></div>`).join(''):`<div class="meta">Chưa có nội dung được gắn chắc chắn cho ${p.title}. Khi có nội dung ôn, AURA sẽ tự đưa tài liệu phù hợp vào đây.</div><div style="margin-top:14px"><button class="btn primary" onclick="lessons()">Mở bài học</button></div>`}</div>`;
   }
 
   function studentPractice(sub='TOAN'){
