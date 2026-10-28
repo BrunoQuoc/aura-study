@@ -14,9 +14,28 @@ AURA tách metadata thành 3 lớp:
    - `periods`
    - `assignmentBasis`
 3. **MANUAL OVERRIDE** — quyết định sử dụng của Admin/phụ huynh.
-   - nằm riêng trong `OVERRIDES`
+   - lưu riêng trong `aura_metadata_overrides_v1`
    - `assignmentBasis: 'manual_admin_override'`
    - không thay đổi SOURCE hoặc DEFAULT ASSIGNMENT.
+
+## Admin UI
+
+Admin quản lý override trực tiếp tại **Admin → Phân kỳ**.
+
+Mỗi tài liệu/ngân hàng hiển thị đồng thời:
+
+- **Nguồn** — metadata bất biến.
+- **Mặc định AURA** — cách AURA tự phân kỳ khi chưa có override.
+- **Đang sử dụng** — effective assignment mà Student thực sự thấy.
+
+Admin có thể:
+
+- **Chuyển sang kỳ đã chọn** → `replace`.
+- **Dùng thêm ở kỳ đã chọn** → `add`.
+- **Trả về mặc định** → xóa override.
+- **Dùng đúng kỳ nguồn** → tạo `replace` theo `sourcePeriods` khi nguồn ghi rõ kỳ cụ thể.
+
+Mọi override thủ công phải có **lý do/ghi chú** để truy vết.
 
 ## Hai kiểu override
 
@@ -27,7 +46,7 @@ Dùng khi muốn chuyển phạm vi sử dụng sang kỳ khác.
 Ví dụ nguồn là HK1 nhưng muốn dùng ở GK2:
 
 ```js
-'review:SUBJECT:resource_id': {
+{
   periods:['GK2'],
   mode:'replace',
   assignmentBasis:'manual_admin_override',
@@ -47,7 +66,7 @@ Kết quả:
 Dùng khi muốn giữ kỳ mặc định và đồng thời dùng thêm ở kỳ khác.
 
 ```js
-'review:SUBJECT:resource_id': {
+{
   periods:['GK2'],
   mode:'add',
   assignmentBasis:'manual_admin_override',
@@ -61,6 +80,14 @@ Kết quả:
 - Đồng thời xuất hiện thêm ở GK2.
 - Metadata nguồn không đổi.
 
+## Lưu trữ và backup
+
+- Override Admin được lưu ở `localStorage` key `aura_metadata_overrides_v1`.
+- Student và Admin trên cùng browser/device dùng chung override vì cùng origin GitHub Pages.
+- Backup AURA bao gồm cấu hình override vì key thuộc nhóm `aura_*`.
+- Restore full snapshot sẽ khôi phục override của snapshot; nếu snapshot cũ không có override thì override hiện tại bị xóa để tránh trộn trạng thái.
+- Sau restore, registry reload override ngay trong phiên hiện tại.
+
 ## Quy tắc vận hành
 
 - Không sửa `sourceTerm` hoặc `sourcePeriods` để làm tài liệu “trông như” thuộc kỳ khác.
@@ -72,7 +99,7 @@ Kết quả:
 
 ## Cách yêu cầu sau này
 
-Có thể dùng ngôn ngữ tự nhiên, ví dụ:
+Có thể dùng Admin UI hoặc ngôn ngữ tự nhiên, ví dụ:
 
 - “Đưa bài này sang HK2.” → `replace`.
 - “Giữ ở HK1 nhưng dùng thêm HK2.” → `add`.
