@@ -79,7 +79,7 @@
   function patchLatestAttempt(subject,extra={},beforeLength=null){
     if(!subject||subject==='KHAC')return;
     const a=read(ATTEMPTS,[]);if(!a.length)return;
-    if(beforeLength!==null&&a.length<=beforeLength&&!a[0])return;
+    if(beforeLength!==null&&a.length<=beforeLength)return;
     a[0]={...a[0],subject,...extra};write(ATTEMPTS,a);
   }
 
