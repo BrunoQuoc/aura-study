@@ -1,21 +1,85 @@
 (function(){
   const REVIEWS=()=>window.AURA_REVIEWS||{};
   const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
-  const getState=id=>{try{return JSON.parse(localStorage.getItem('review_'+id)||'{}')}catch(e){return {}}};
-  function numericValue(s){const m=String(s??'').match(/-?[\d\s.,]+/);if(!m)return null;const cleaned=m[0].replace(/[\s.,]/g,'');const n=Number(cleaned);return Number.isFinite(n)?n:null}
-  function sameMathAnswer(a,b){const na=String(a??'').trim().toLowerCase().replace(/\s+/g,' '),nb=String(b??'').trim().toLowerCase().replace(/\s+/g,' ');if(na===nb)return true;const aa=numericValue(a),bb=numericValue(b);return aa!==null&&bb!==null&&aa===bb}
-  function updateProgress(r,id){const s=getState(id),done=(s.done||[]).filter(Boolean).length,total=r.items.length,pct=total?Math.round(done/total*100):0;const t=document.getElementById('reviewProgressText'),b=document.getElementById('reviewProgressBar');if(t)t.textContent=`${done}/${total} bài đã hiểu`;if(b)b.style.width=pct+'%';r.items.forEach((_,i)=>document.querySelector(`[data-review-index="${i}"]`)?.classList.toggle('is-done',!!s.done?.[i]))}
-  window.review=function(sub,id){
-    setActive('library');
-    const r=(REVIEWS()[sub]||[]).find(x=>x.id===id);if(!r)return;
-    const state=getState(id),done=(state.done||[]).filter(Boolean).length,total=r.items.length,pct=total?Math.round(done/total*100):0,isMath=sub==='TOAN';
-    const cards=r.items.map((x,i)=>{
-      const answer=state.answers?.[i]||'',checked=state.done?.[i]?'checked':'';
-      const field=isMath?`<input class="review-answer" id="rv${i}" value="${esc(answer)}" oninput="saveReview('${sub}','${id}')" placeholder="Nhập đáp án ngắn...">`:`<textarea class="review-answer review-answer-long" id="rv${i}" rows="3" oninput="saveReview('${sub}','${id}')" placeholder="Viết câu trả lời của em...">${esc(answer)}</textarea>`;
-      return `<section class="card review-card ${checked?'is-done':''}" data-review-index="${i}"><div class="review-question-row"><div class="review-number">${i+1}</div><div class="review-question">${esc(x[0])}</div></div><div class="review-answer-wrap">${field}</div><div class="review-actions">${isMath?`<button class="btn soft review-check" type="button" onclick="reviewCheck('${sub}','${id}',${i})">Kiểm tra</button>`:''}<details class="review-solution"><summary>💡 Xem đáp án</summary><div class="review-solution-box">${esc(x[1])}</div></details><label class="review-done"><input type="checkbox" id="ck${i}" ${checked} onchange="saveReview('${sub}','${id}')"><span>✓ Đã hiểu</span></label></div><div class="review-feedback" id="reviewFeedback${i}"></div></section>`;
-    }).join('');
-    document.getElementById('app').innerHTML=`<div class="review-page"><button class="btn soft" onclick="subject('${sub}')" style="margin-bottom:12px">← Quay lại</button><section class="card review-head"><div class="review-headline"><div><div class="review-eyebrow">Ôn tập</div><h2>${esc(r.title)}</h2><p class="meta">${esc(r.desc)}</p></div><div class="review-progress"><strong id="reviewProgressText">${done}/${total} bài đã hiểu</strong><div class="review-progress-track"><div class="review-progress-bar" id="reviewProgressBar" style="width:${pct}%"></div></div></div></div></section><div class="review-list">${cards}</div></div>`;
+
+  const MATH_WORKED={
+    toan_gk1_thucte:[
+      [
+        'Số học sinh tham quan buổi chiều: 465 + 175 = 640 (học sinh).',
+        'Tổng số học sinh đã tham quan: 465 + 640 = 1 105 (học sinh).',
+        'Số học sinh chưa tham quan: 1 280 − 1 105 = 175 (học sinh).',
+        'Đáp số: 175 học sinh.'
+      ],
+      [
+        'Sau khi xuất 1 450 kg, số gạo còn lại: 5 600 − 1 450 = 4 150 (kg).',
+        'Nhập thêm 875 kg, cuối ngày có: 4 150 + 875 = 5 025 (kg).',
+        'Đáp số: 5 025 kg gạo.'
+      ],
+      [
+        'Buổi chiều bán ít hơn buổi sáng 125 phần quà nên số bán buổi chiều: 785 − 125 = 660 (phần quà).',
+        'Sau hai buổi, số phần quà còn: 2 500 − 785 − 660 = 1 055 (phần quà).',
+        'Nhận thêm 350 phần quà: 1 055 + 350 = 1 405 (phần quà).',
+        'Đáp số: 1 405 phần quà.'
+      ],
+      [
+        'Tổng số vở ban đầu: 25 × 48 = 1 200 (quyển).',
+        'Ngày 2 bán gấp đôi ngày 1: 375 × 2 = 750 (quyển).',
+        'Tổng số vở đã bán: 375 + 750 = 1 125 (quyển).',
+        'Số vở còn lại: 1 200 − 1 125 = 75 (quyển).',
+        'Đáp số: 75 quyển vở.'
+      ],
+      [
+        'Khối 6 có: 8 × 65 = 520 (quyển sách).',
+        'Khối 7 có nhiều hơn khối 6 là 180 quyển nên có: 520 + 180 = 700 (quyển sách).',
+        'Tổng số sách của hai khối: 520 + 700 = 1 220 (quyển).',
+        'Dành riêng 100 quyển, số sách còn để chia vào tủ: 1 220 − 100 = 1 120 (quyển).',
+        'Mỗi tủ có: 1 120 : 10 = 112 (quyển).',
+        'Đáp số: 112 quyển sách mỗi tủ.'
+      ],
+      [
+        'Tổng số bánh ban đầu: 30 × 40 = 1 200 (cái bánh).',
+        'Buổi chiều bán nhiều hơn buổi sáng 75 cái nên bán: 325 + 75 = 400 (cái bánh).',
+        'Sau hai buổi còn: 1 200 − 325 − 400 = 475 (cái bánh).',
+        'Chia số bánh còn lại vào các túi, mỗi túi 25 cái: 475 : 25 = 19 (túi).',
+        'Đáp số: 19 túi bánh.'
+      ]
+    ]
   };
-  window.saveReview=function(sub,id){const r=(REVIEWS()[sub]||[]).find(x=>x.id===id);if(!r)return;const s={answers:r.items.map((_,i)=>document.getElementById('rv'+i)?.value||''),done:r.items.map((_,i)=>document.getElementById('ck'+i)?.checked||false)};localStorage.setItem('review_'+id,JSON.stringify(s));updateProgress(r,id)};
-  window.reviewCheck=function(sub,id,i){const r=(REVIEWS()[sub]||[]).find(x=>x.id===id);if(!r)return;const input=document.getElementById('rv'+i),fb=document.getElementById('reviewFeedback'+i),got=input?.value||'',expected=r.items[i]?.[1]||'';if(!fb)return;fb.className='review-feedback';if(!got.trim()){fb.textContent='Nhập đáp án trước khi kiểm tra nhé.';fb.classList.add('hint');return}if(sameMathAnswer(got,expected)){fb.textContent='✓ Chính xác. Em có thể đánh dấu “Đã hiểu”.';fb.classList.add('ok')}else{fb.textContent='Chưa đúng. Kiểm tra lại phép tính rồi thử thêm một lần.';fb.classList.add('bad')}};
+
+  function workedSolution(sub,id,i,item){
+    const steps=MATH_WORKED[id]?.[i];
+    if(steps){
+      return `<div class="worked-steps">${steps.map((s,k)=>`<div class="worked-step ${k===steps.length-1?'worked-answer':''}"><span>${k===steps.length-1?'✓':k+1}</span><p>${esc(s)}</p></div>`).join('')}</div>`;
+    }
+    return `<div class="worked-text">${esc(item?.[1]||'Chưa có lời giải.').replace(/\n/g,'<br>')}</div>`;
+  }
+
+  function relabel(root=document){
+    root.querySelectorAll('#app h3').forEach(h=>{
+      const t=(h.textContent||'').trim();
+      if(/^📚\s*Ôn tập/i.test(t))h.textContent='📘 Bài mẫu có lời giải';
+    });
+    root.querySelectorAll('#app .resource').forEach(row=>{
+      const btn=row.querySelector('button[onclick*="review("]');
+      if(!btn)return;
+      btn.textContent='Xem lời giải';
+      const title=row.querySelector('.grow b');
+      if(title)title.textContent=(title.textContent||'').replace(/^Ôn tập/i,'Bài mẫu');
+    });
+  }
+
+  window.review=function(sub,id){
+    if(typeof setActive==='function')setActive('library');
+    const r=(REVIEWS()[sub]||[]).find(x=>x.id===id);if(!r)return;
+    const cards=r.items.map((x,i)=>`<section class="card review-card"><div class="review-question-row"><div class="review-number">${i+1}</div><div class="review-question">${esc(x[0])}</div></div><details class="review-solution"><summary><span>↳</span> Xem lời giải đầy đủ</summary><div class="review-solution-box">${workedSolution(sub,id,i,x)}</div></details></section>`).join('');
+    document.getElementById('app').innerHTML=`<div class="review-page"><button class="btn soft" onclick="subject('${sub}')" style="margin-bottom:12px">← Quay lại</button><section class="card review-head"><div class="review-eyebrow">BÀI MẪU CÓ LỜI GIẢI</div><h2>${esc(r.title.replace(/^Ôn tập/i,'Bài mẫu'))}</h2><p class="meta">${esc(r.desc)} · Không chấm điểm</p></section><div class="review-list">${cards}</div></div>`;
+  };
+
+  window.saveReview=function(){};
+  window.reviewCheck=function(){};
+
+  let queued=false;
+  function queue(){if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;relabel()})}
+  function init(){relabel();const app=document.getElementById('app');if(app)new MutationObserver(queue).observe(app,{childList:true,subtree:true})}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
