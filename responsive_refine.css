@@ -1,0 +1,171 @@
+/* AURA STUDY — compact responsive UI refinement */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body.aura-polished{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  letter-spacing:-.008em;
+}
+.aura-polished .content{width:100%;max-width:1180px;margin:0 auto;padding:18px 20px 96px}
+body.student-shell .content{max-width:1080px}
+.aura-polished .card{border-radius:14px!important}
+body.student-shell .card{padding:15px 17px!important;margin-bottom:10px!important}
+body.student-shell .sectionhead{margin:16px 0 10px!important}
+body.student-shell .sectionhead h2{font-size:clamp(20px,2vw,23px)!important;line-height:1.18;letter-spacing:-.025em}
+body.student-shell .card h2{font-size:clamp(19px,1.8vw,22px)!important;line-height:1.24;letter-spacing:-.022em}
+body.student-shell .card h3{font-size:clamp(15px,1.4vw,17px)!important;line-height:1.36;letter-spacing:-.012em}
+body.student-shell .small{font-size:10.5px!important;letter-spacing:.055em}
+body.student-shell .meta{font-size:12px!important;line-height:1.45}
+body.student-shell .btn,body.student-shell button.btn{min-height:38px;padding:9px 13px!important;border-radius:10px!important;font-size:12.5px!important;font-weight:800!important}
+body.student-shell input,body.student-shell textarea,body.student-shell select{font-size:14px!important}
+body.student-shell textarea{min-height:92px}
+
+/* Compact page structure */
+body.student-shell .dash-hero{min-height:0!important;padding:20px!important;margin-bottom:10px!important}
+body.student-shell .dash-hero h1{font-size:clamp(25px,3vw,34px)!important;line-height:1.08!important;margin:3px 0 12px!important}
+body.student-shell .dash-stats{gap:8px!important;margin:10px 0!important}
+body.student-shell .dash-stats article{padding:12px 14px!important;border-radius:12px!important}
+body.student-shell .dash-stats strong{font-size:23px!important}
+body.student-shell .dash-today,body.student-shell .dash-subjects{gap:8px!important}
+body.student-shell .dash-task{min-height:104px!important;padding:14px!important;border-radius:13px!important}
+body.student-shell .dash-subject{min-height:62px!important;padding:10px 12px!important;border-radius:12px!important}
+body.student-shell .subjects{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))!important;gap:9px!important}
+body.student-shell .subject{min-height:0!important;padding:14px!important;border-radius:13px!important}
+body.student-shell .subject .ico{width:38px!important;height:38px!important;border-radius:11px!important;font-size:17px!important}
+body.student-shell .subject h3{margin:10px 0 4px!important}
+body.student-shell .resource{padding:11px 12px!important;gap:10px!important}
+body.student-shell .fileico{width:36px!important;height:36px!important;border-radius:10px!important}
+body.student-shell .q{padding:15px 17px!important}
+body.student-shell .q h3{font-size:15.5px!important;line-height:1.46!important;margin:6px 0 11px!important}
+body.student-shell .answer-option,body.student-shell .practice-option{padding:10px 11px!important;border-radius:10px!important;font-size:13.5px!important;line-height:1.4!important}
+body.student-shell .answer-option span,body.student-shell .practice-option span{font-size:13.5px!important}
+body.student-shell .aura-exam-navigator{padding:11px 12px!important;margin-bottom:10px!important;border-radius:12px!important}
+body.student-shell .aura-qjump{width:34px!important;height:34px!important;border-radius:9px!important}
+
+/* Multi-subject results: denser hierarchy */
+body.student-shell .multi-overview{gap:8px!important;margin-bottom:10px!important}
+body.student-shell .multi-overview article{padding:11px 12px!important;border-radius:12px!important}
+body.student-shell .multi-overview strong{font-size:21px!important}
+body.student-shell .multi-section-head{margin:13px 0 8px!important}
+body.student-shell .multi-subject-grid{grid-template-columns:repeat(auto-fit,minmax(235px,1fr))!important;gap:9px!important}
+body.student-shell .multi-subject-card{padding:14px!important}
+body.student-shell .multi-subject-top{gap:9px!important}
+body.student-shell .multi-subject-icon{width:36px!important;height:36px!important;border-radius:10px!important}
+body.student-shell .multi-subject-top strong{font-size:19px!important}
+body.student-shell .multi-subject-line{margin:10px 0!important;padding-top:9px!important}
+body.student-shell .multi-history-row{padding:12px 14px!important}
+body.student-shell .multi-subject-detail-summary{gap:8px!important;margin-bottom:10px!important}
+body.student-shell .multi-subject-detail-summary article{padding:12px!important;border-radius:12px!important}
+body.student-shell .multi-detail-card{padding:14px!important}
+body.student-shell .multi-weak-row,body.student-shell .multi-review-row{padding:9px 0!important}
+
+/* Weekly report: compact and scan-friendly */
+body.student-shell .weekly-report{padding:15px 16px!important;margin-bottom:10px!important}
+body.student-shell .weekly-head{margin-bottom:10px!important}
+body.student-shell .weekly-head h3{font-size:18px!important}
+body.student-shell .weekly-metrics{gap:8px!important}
+body.student-shell .weekly-metrics article{padding:11px 12px!important;border-radius:12px!important}
+body.student-shell .weekly-metrics strong{font-size:19px!important}
+body.student-shell .weekly-section-title{margin:12px 0 7px!important}
+body.student-shell .weekly-subjects{gap:8px!important}
+body.student-shell .weekly-subject{padding:11px 12px!important;border-radius:12px!important}
+body.student-shell .weekly-subject-head strong{font-size:15px!important}
+body.student-shell .weekly-insights{margin-top:8px!important;gap:8px!important}
+body.student-shell .weekly-insight{padding:12px 13px!important;border-radius:12px!important}
+body.student-shell .weekly-strengthened{margin-top:8px!important;padding:12px!important;border-radius:12px!important}
+body.student-shell .weekly-strengthened-item{padding:8px 9px!important}
+body.student-shell .weekly-mini{margin-top:10px!important;padding:12px 14px!important;border-radius:13px!important}
+
+/* Exam-year flow compact */
+body.student-shell .exam-year-guide{padding:12px 14px!important}
+body.student-shell .exam-flow-section{padding:14px!important}
+body.student-shell .exam-resource-row{padding:10px!important}
+body.student-shell .exam-subject-summary{gap:8px!important}
+body.student-shell .exam-subject-summary>div{padding:11px!important}
+body.student-shell .quick15-card{padding:13px!important}
+
+/* Student mode: remove instructional copy from fields/cards, keep content + feedback */
+body.student-shell .dash-hero p,
+body.student-shell .dash-progress-card small,
+body.student-shell .dash-stats small,
+body.student-shell .dash-section-head span,
+body.student-shell .dash-task small,
+body.student-shell .dash-subject-copy small,
+body.student-shell .multi-overview small,
+body.student-shell .multi-subject-top small,
+body.student-shell .multi-review-note,
+body.student-shell .multi-section-head span,
+body.student-shell .weekly-metrics small,
+body.student-shell .weekly-subject p,
+body.student-shell .weekly-section-title span,
+body.student-shell .weekly-note,
+body.student-shell .exam-flow-title p,
+body.student-shell .exam-flow-empty span,
+body.student-shell .exam-year-note,
+body.student-shell .exam-period-note,
+body.student-shell .quick15-card p,
+body.student-shell .practice-choice-summary span,
+body.student-shell .learning-insights-head>span,
+body.student-shell .learning-insights-note,
+body.student-shell .wrong-book-summary p.meta,
+body.student-shell .wrong-item>p.meta,
+body.student-shell .wrong-practice-hero p.meta,
+body.student-shell .wrong-practice-finish p.meta{display:none!important}
+
+/* Strong visual feedback for selected/clicked states */
+.aura-polished .navbtn,.aura-polished .mobilebar button,.aura-polished .btn,
+.aura-polished .subject,.aura-polished .dash-task,.aura-polished .dash-subject,
+.aura-polished .multi-subject-card,.aura-polished .answer-option,.aura-polished .practice-option,
+.aura-polished .practice-subject,.aura-polished .practice-count,.aura-polished .aura-qjump{
+  transition:background-color .14s ease,border-color .14s ease,color .14s ease,box-shadow .14s ease,transform .08s ease;
+}
+.aura-polished .side .navbtn.active{background:linear-gradient(135deg,#5568e8,#6f7df1)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 7px 18px rgba(76,94,220,.20)!important}
+.aura-polished .mobilebar button.is-active{color:#4658d5!important;background:#edf0ff!important}
+.aura-polished .mobilebar button.is-active .ui-icon{color:#4658d5!important}
+body.student-shell .answer-option,body.student-shell .practice-option{border:1px solid #e2e6ee!important;background:#fff!important}
+body.student-shell .answer-option:has(input:checked),body.student-shell .practice-option:has(input:checked){border-color:#7180ee!important;background:#eef1ff!important;color:#25366f!important;box-shadow:inset 0 0 0 1px rgba(91,108,230,.10),0 5px 14px rgba(75,92,205,.08)!important}
+body.student-shell input[type="radio"],body.student-shell input[type="checkbox"]{accent-color:#586be5}
+.aura-polished .btn:focus-visible,.aura-polished button:focus-visible,.aura-polished input:focus-visible,.aura-polished textarea:focus-visible,.aura-polished select:focus-visible{outline:3px solid rgba(88,107,229,.22)!important;outline-offset:2px!important}
+.aura-polished .btn:active,.aura-polished .subject:active,.aura-polished .dash-task:active,.aura-polished .dash-subject:active,.aura-polished .multi-subject-card:active,.aura-polished .mobilebar button:active{transform:scale(.985)}
+@media(hover:hover){
+  .aura-polished .subject:hover,.aura-polished .dash-task:hover,.aura-polished .dash-subject:hover,.aura-polished .multi-subject-card:hover{border-color:#cbd2fb!important;background:#f8f9ff!important;box-shadow:0 8px 22px rgba(44,59,120,.07)!important}
+  .aura-polished .btn:hover{filter:saturate(1.06)}
+}
+
+/* Wrong-answer explanation stays visible in Student mode */
+body.student-shell .wrong-explanation{display:block!important;margin-top:10px;padding:11px 12px;border:1px solid #f0d8cf;border-radius:11px;background:#fff8f5;color:#5e433b}
+body.student-shell .wrong-explanation>span{display:block;margin-bottom:4px;color:#b3553f;font-size:10px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}
+body.student-shell .wrong-explanation p{display:block!important;margin:0;color:#4f413d;font-size:12.5px;line-height:1.52}
+body.student-shell .wrong-explanation small{display:block!important;margin-top:5px;color:#876e66;font-size:11.5px;line-height:1.45}
+body.student-shell .wrong-practice-result.correct .wrong-explanation{border-color:#d7eadf;background:#f4fbf7}
+body.student-shell .wrong-practice-result.correct .wrong-explanation>span{color:#28775a}
+
+@media(max-width:900px){
+  .aura-polished .content{max-width:none;padding:14px 15px 88px}
+  body.student-shell .layout{grid-template-columns:1fr!important}
+  body.student-shell .multi-overview{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body.student-shell .weekly-subjects{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body.student-shell .dash-today{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:620px){
+  .aura-polished .content{padding:11px 11px 84px}
+  body.student-shell .topin{min-height:58px!important}
+  body.student-shell .card{padding:13px 14px!important;margin-bottom:8px!important;border-radius:12px!important}
+  body.student-shell .sectionhead{margin:12px 0 8px!important}
+  body.student-shell .sectionhead h2{font-size:19px!important}
+  body.student-shell .card h2{font-size:18px!important}
+  body.student-shell .card h3{font-size:15px!important}
+  body.student-shell .btn,body.student-shell button.btn{min-height:36px;padding:8px 11px!important;font-size:12px!important}
+  body.student-shell .dash-hero{padding:16px!important}
+  body.student-shell .dash-hero h1{font-size:26px!important}
+  body.student-shell .dash-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body.student-shell .dash-today,body.student-shell .multi-overview,body.student-shell .weekly-subjects,body.student-shell .weekly-metrics{grid-template-columns:1fr!important}
+  body.student-shell .subjects,body.student-shell .multi-subject-grid{grid-template-columns:1fr!important}
+  body.student-shell .subject{padding:12px!important}
+  body.student-shell .q{padding:13px 14px!important}
+  body.student-shell .q h3{font-size:15px!important}
+  body.student-shell .answer-option,body.student-shell .practice-option{padding:9px 10px!important;font-size:13px!important}
+  body.student-shell .answer-option span,body.student-shell .practice-option span{font-size:13px!important}
+  body.student-shell .weekly-report{padding:13px!important}
+  body.student-shell .weekly-head{align-items:flex-start!important;gap:4px!important}
+  body.student-shell .multi-history-row{align-items:flex-start!important;gap:8px!important}
+}
