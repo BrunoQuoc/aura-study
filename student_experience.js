@@ -1,4 +1,4 @@
-/* AURA STUDY — Student-first navigation and guided study flow. */
+/* AURA STUDY — student functions only; visual system stays unchanged. */
 (function(){
   if(!document.body.classList.contains('student-shell'))return;
   const $=s=>document.querySelector(s);
@@ -6,19 +6,6 @@
   const SUBJECTS=()=>window.AURA_SUBJECTS||[];
   const EXAMS=()=>window.AURA_MATH_EXAMS||[];
   const REV=()=>window.AURA_REVIEWS||{};
-  const oldSubject=window.subject;
-
-  function labelChrome(){
-    const brand=document.querySelector('.brandtext small');if(brand)brand.textContent='Lớp 6 · Học dễ hơn mỗi ngày';
-    const account=document.querySelector('.aura-account');if(account)account.innerHTML='<b>Lớp 6</b>';
-    const labels={home:'Hôm nay',library:'Ôn thi',lessons:'Bài học',generator:'Luyện nhanh',history:'Kết quả'};
-    document.querySelectorAll('.side .navbtn').forEach(b=>{const t=b.querySelector('span');if(t&&labels[b.dataset.page])t.textContent=labels[b.dataset.page]});
-    document.querySelectorAll('.mobilebar button').forEach(b=>{
-      const oc=b.getAttribute('onclick')||'';let text='';
-      if(oc.includes('home('))text='Hôm nay';else if(oc.includes('studentReviewHub(')||oc.includes('library('))text='Ôn thi';else if(oc.includes('lessons('))text='Bài học';else if(oc.includes('generator('))text='Luyện nhanh';else if(oc.includes('history('))text='Kết quả';
-      const sm=b.querySelector('small');if(sm&&text)sm.textContent=text;
-    });
-  }
 
   function periodOf(text){
     const s=String(text||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -28,7 +15,13 @@
     if(/(cuoi\s*(ky|hk)\s*(2|ii)\b|hoc\s*ky\s*(2|ii)\b)/.test(s))return'CK2';
     return'';
   }
-  const PERIODS={GK1:{title:'Giữa kỳ 1',sub:'Ôn phần kiến thức trước giữa HK1'},CK1:{title:'Cuối kỳ 1',sub:'Ôn toàn bộ phạm vi HK1'},GK2:{title:'Giữa kỳ 2',sub:'Ôn phần kiến thức đầu HK2'},CK2:{title:'Cuối kỳ 2',sub:'Ôn toàn bộ phạm vi HK2'}};
+
+  const PERIODS={
+    GK1:{title:'Giữa kỳ 1',desc:'Ôn phần kiến thức trước giữa học kỳ 1',icon:'①'},
+    CK1:{title:'Cuối kỳ 1',desc:'Ôn toàn bộ phạm vi học kỳ 1',icon:'②'},
+    GK2:{title:'Giữa kỳ 2',desc:'Ôn phần kiến thức đầu học kỳ 2',icon:'③'},
+    CK2:{title:'Cuối kỳ 2',desc:'Ôn toàn bộ phạm vi học kỳ 2',icon:'④'}
+  };
 
   function resources(){
     const out=[];
@@ -36,31 +29,32 @@
     Object.entries(REV()).forEach(([sub,groups])=>(groups||[]).forEach(x=>out.push({kind:'review',subject:sub,id:x.id,title:x.title,desc:x.desc||'',period:periodOf(`${x.title} ${x.desc||''}`)})));
     return out;
   }
+
   function subjectName(id){return SUBJECTS().find(x=>x[0]===id)?.[1]||id}
-  function setPage(p){if(typeof window.setActive==='function')window.setActive(p);else document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.page===p))}
+  function setPage(p){if(typeof window.setActive==='function')window.setActive(p)}
 
   function studentReviewHub(){
     setPage('library');const app=$('#app');if(!app)return;
     const rs=resources(),unassigned=rs.filter(x=>!x.period).length;
-    app.innerHTML=`<div class="student-page-head"><div><span class="student-kicker">ÔN THI THEO NĂM HỌC</span><h1>Con đang chuẩn bị cho kỳ nào?</h1><p>Chọn đúng kỳ thi. AURA chỉ đưa những tài liệu đã nhận diện chắc chắn thuộc phạm vi đó.</p></div></div>
-    <div class="exam-period-grid">${Object.entries(PERIODS).map(([id,p],i)=>{const n=rs.filter(x=>x.period===id).length;return`<button class="exam-period-card p${i+1}" onclick="studentExamPeriod('${id}')"><span class="period-no">0${i+1}</span><div><b>${p.title}</b><small>${p.sub}</small><em>${n?n+' tài liệu đã xếp':'Đang chờ nội dung ôn'}</em></div><span class="period-arrow">→</span></button>`}).join('')}</div>
-    <div class="student-info-card"><b>AURA tự phân loại</b><span>Khi có đề cương hoặc nội dung ôn Anh đưa vào INBOX, AURA sẽ gắn bài học, bài tập và đề vào đúng 1 trong 4 kỳ. Tài liệu chưa đủ căn cứ sẽ không bị xếp đoán.</span>${unassigned?`<small>${unassigned} tài liệu hiện có chưa được gắn kỳ vì tên/nội dung chưa đủ chắc chắn.</small>`:''}</div>`;
+    app.innerHTML=`<div class="sectionhead" style="margin-top:0"><div><h2>Ôn thi theo năm học</h2><span>Chọn kỳ thi để xem đúng phạm vi ôn tập</span></div></div>
+      <div class="subjects">${Object.entries(PERIODS).map(([id,p])=>{const n=rs.filter(x=>x.period===id).length;return `<div class="subject" onclick="studentExamPeriod('${id}')"><div class="ico">${p.icon}</div><h3>${p.title}</h3><div class="meta">${p.desc}</div><span class="tag ${n?'ready':'empty'}">${n?n+' tài liệu':'Chưa có nội dung'}</span></div>`}).join('')}</div>
+      <div class="card" style="margin-top:16px"><b>AURA tự phân loại theo kỳ thi</b><p class="meta">Khi có nội dung ôn hoặc đề cương, AURA sẽ gắn bài học, bài tập và đề vào đúng kỳ. Tài liệu chưa đủ căn cứ sẽ không bị xếp đoán.</p>${unassigned?`<div class="note">${unassigned} tài liệu hiện có chưa được gắn kỳ vì chưa đủ căn cứ.</div>`:''}</div>`;
   }
 
   function studentExamPeriod(id){
     setPage('library');const app=$('#app'),p=PERIODS[id];if(!app||!p)return studentReviewHub();
     const list=resources().filter(x=>x.period===id);
-    app.innerHTML=`<button class="btn soft" onclick="studentReviewHub()" style="margin-bottom:14px">← 4 kỳ thi</button><div class="student-page-head compact"><div><span class="student-kicker">${p.title.toUpperCase()}</span><h1>${p.title}</h1><p>${p.sub}</p></div></div>${list.length?`<div class="student-resource-list">${list.map(r=>`<article class="student-resource"><div><span>${esc(subjectName(r.subject))}</span><b>${esc(r.title)}</b><small>${esc(r.desc)}</small></div><button class="btn primary" onclick="${r.kind==='exam'?`exam('${r.id}')`:`review('${r.subject}','${r.id}')`}">${r.kind==='exam'?'Làm đề':'Ôn bài'}</button></article>`).join('')}</div>`:`<div class="student-empty-state"><div class="empty-mark">✓</div><h2>Chưa có nội dung được gắn chắc chắn</h2><p>Khi Anh gửi nội dung ôn của ${p.title}, AURA sẽ tự đưa đúng bài học, bài tập và đề vào đây.</p><button class="btn primary" onclick="lessons()">Học bài trước</button></div>`}`;
+    app.innerHTML=`<button class="btn soft" onclick="studentReviewHub()" style="margin-bottom:12px">← Ôn thi</button>
+      <div class="sectionhead" style="margin-top:0"><div><h2>${p.title}</h2><span>${p.desc}</span></div></div>
+      <div class="card">${list.length?list.map(r=>`<div class="resource"><div class="fileico">${r.kind==='exam'?'📝':'📚'}</div><div class="grow"><b>${esc(r.title)}</b><small>${esc(subjectName(r.subject))} · ${esc(r.desc)}</small></div><button class="btn ${r.kind==='exam'?'primary':'soft'}" onclick="${r.kind==='exam'?`exam('${r.id}')`:`review('${r.subject}','${r.id}')`}">${r.kind==='exam'?'Làm đề':'Ôn bài'}</button></div>`).join(''):`<div class="meta">Chưa có nội dung được gắn chắc chắn cho ${p.title}. Khi có nội dung ôn, AURA sẽ tự đưa tài liệu phù hợp vào đây.</div><div style="margin-top:14px"><button class="btn primary" onclick="lessons()">Mở bài học</button></div>`}</div>`;
   }
 
   function studentPractice(sub='TOAN'){
     setPage('generator');const app=$('#app');if(!app)return;
     const ready=['TOAN','NGUVAN','TIENGANH'];
-    app.innerHTML=`<div class="student-page-head"><div><span class="student-kicker">LUYỆN NHANH</span><h1>Chọn môn rồi bắt đầu</h1><p>Không cần cài đặt đề. AURA tự chọn câu phù hợp từ nội dung đang có.</p></div></div>
-      <div class="quick-subjects">${SUBJECTS().map(s=>`<button class="quick-subject ${s[0]===sub?'active':''}" ${ready.includes(s[0])?`onclick="generator('${s[0]}')"`:'disabled'}><span>${esc(s[2])}</span><b>${esc(s[1])}</b><small>${ready.includes(s[0])?'Sẵn sàng':'Đang cập nhật'}</small></button>`).join('')}</div>
-      <div class="student-page-head compact"><div><h2>Con muốn luyện bao nhiêu?</h2><p>Chọn một mức, AURA sẽ tạo bài ngay.</p></div></div>
-      <div class="quick-levels"><button onclick="studentStartQuick('${sub}',10)"><b>10 câu</b><span>Nhanh · khoảng 10 phút</span></button><button class="recommended" onclick="studentStartQuick('${sub}',15)"><em>Nên chọn</em><b>15 câu</b><span>Vừa đủ · khoảng 15–20 phút</span></button><button onclick="studentStartQuick('${sub}',20)"><b>20 câu</b><span>Ôn kỹ · khoảng 25 phút</span></button></div>
-      <div class="student-tip"><b>Mẹo học nhanh:</b> làm hết một lượt trước, sau đó mới xem đáp án và ôn lại câu sai.</div>`;
+    app.innerHTML=`<div class="sectionhead" style="margin-top:0"><div><h2>Luyện nhanh</h2><span>Chọn môn và số câu, AURA tự chuẩn bị bài luyện</span></div></div>
+      <div class="subjects">${SUBJECTS().map(s=>`<div class="subject" ${ready.includes(s[0])?`onclick="generator('${s[0]}')"`:'style="opacity:.5"'}><div class="ico">${esc(s[2])}</div><h3>${esc(s[1])}</h3><div class="meta">${ready.includes(s[0])?'Có thể luyện ngay':'Đang cập nhật nội dung'}</div><span class="tag ${ready.includes(s[0])?'ready':'empty'}">${s[0]===sub&&ready.includes(s[0])?'Đang chọn':ready.includes(s[0])?'Sẵn sàng':'Chưa có nội dung'}</span></div>`).join('')}</div>
+      <div class="card" style="margin-top:16px"><h3>Chọn số câu</h3><p class="meta">Bé chỉ cần chọn độ dài buổi luyện.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn soft" onclick="studentStartQuick('${sub}',10)">10 câu · Nhanh</button><button class="btn primary" onclick="studentStartQuick('${sub}',15)">15 câu · Vừa đủ</button><button class="btn soft" onclick="studentStartQuick('${sub}',20)">20 câu · Ôn kỹ</button></div><div class="note" style="margin-top:14px"><b>Mẹo:</b> làm hết một lượt trước, sau đó mới xem đáp án và ôn lại câu sai.</div></div>`;
   }
 
   function studentStartQuick(sub,count){
@@ -69,24 +63,9 @@
     if(typeof window.generateAuraExam==='function')window.generateAuraExam();
   }
 
-  // Student never sees the advanced generator/library UI; Admin keeps them unchanged.
   window.studentReviewHub=studentReviewHub;
   window.studentExamPeriod=studentExamPeriod;
   window.studentStartQuick=studentStartQuick;
-  window.generator=studentPractice;
   window.library=studentReviewHub;
-
-  // Make subject pages return to the child-friendly exam hub instead of the raw library.
-  if(typeof oldSubject==='function')window.subject=function(id){const r=oldSubject(id);setTimeout(()=>{const back=[...document.querySelectorAll('#app button')].find(b=>(b.getAttribute('onclick')||'').includes('library()'));if(back){back.textContent='← Ôn thi';back.setAttribute('onclick','studentReviewHub()')}},0);return r};
-
-  function patchDashboard(){
-    if(!document.querySelector('.dash-home'))return;
-    const tasks=[...document.querySelectorAll('.dash-task')];
-    const q=tasks.find(x=>x.textContent.includes('LUYỆN ĐỀ'));
-    if(q){const k=q.querySelector('.dash-task-kicker'),b=q.querySelector('b'),s=q.querySelector('small');if(k)k.textContent='LUYỆN NHANH';if(b)b.textContent='Luyện 10–20 câu';if(s)s.textContent='Chọn môn, chọn số câu rồi bắt đầu ngay.'}
-    const weak=tasks.find(x=>x.textContent.includes('ÔN PHẦN YẾU'));if(weak){const k=weak.querySelector('.dash-task-kicker');if(k)k.textContent='XEM LẠI CÂU SAI'}
-  }
-
-  labelChrome();patchDashboard();
-  const obs=new MutationObserver(()=>{labelChrome();patchDashboard()});obs.observe(document.body,{childList:true,subtree:true});
+  window.generator=studentPractice;
 })();
