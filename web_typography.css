@@ -1,0 +1,107 @@
+/* AURA STUDY — Web readability scale
+   Typography/readability only. No learning content or app logic changes. */
+
+body.aura-polished{
+  font-size:16px;
+  line-height:1.55;
+}
+
+/* Header + navigation */
+.aura-polished .brandtext b{font-size:15.5px;line-height:1.25}
+.aura-polished .brandtext small{font-size:12px;line-height:1.35}
+.aura-polished .aura-account{font-size:13px}
+.aura-polished .aura-account b{font-size:13px}
+.aura-polished .aura-role{font-size:10.5px}
+.aura-polished .navbtn{min-height:48px;font-size:14px;line-height:1.3}
+.aura-polished .sidebox b{font-size:12px}
+.aura-polished .sidebox .small{font-size:12px;line-height:1.55}
+
+/* Global content hierarchy */
+.aura-polished .sectionhead h2{font-size:24px;line-height:1.25}
+.aura-polished .sectionhead span{font-size:13.5px;line-height:1.5}
+.aura-polished .card h2{font-size:24px;line-height:1.3}
+.aura-polished .card h3{font-size:18px;line-height:1.4}
+.aura-polished .meta{font-size:13.5px;line-height:1.55}
+.aura-polished .small{font-size:12.5px;line-height:1.5}
+.aura-polished .btn,
+.aura-polished button.btn{font-size:14px;line-height:1.25}
+.aura-polished input,
+.aura-polished textarea,
+.aura-polished select{font-size:15px}
+
+/* Subject / resource cards */
+.aura-polished .subject h3{font-size:17px;line-height:1.35}
+.aura-polished .subject .meta{font-size:13px;line-height:1.5}
+.aura-polished .subject .tag{font-size:11.5px;line-height:1.3}
+.aura-polished .resource .grow>b{font-size:15.5px;line-height:1.4}
+.aura-polished .resource .grow>small{font-size:12.5px;line-height:1.5}
+
+/* Dashboard */
+.aura-polished .dash-eyebrow{font-size:11px}
+.aura-polished .dash-hero p{font-size:14.5px;line-height:1.65}
+.aura-polished .dash-actions .btn{font-size:14px}
+.aura-polished .dash-progress-head{font-size:12px}
+.aura-polished .dash-progress-card small{font-size:11.5px}
+.aura-polished .dash-stats span{font-size:11px}
+.aura-polished .dash-stats strong{font-size:28px}
+.aura-polished .dash-stats small{font-size:11.5px}
+.aura-polished .dash-section-head h2{font-size:22px}
+.aura-polished .dash-section-head span{font-size:13px}
+.aura-polished .dash-link{font-size:12.5px}
+.aura-polished .dash-task-kicker{font-size:10px}
+.aura-polished .dash-task b{font-size:16px;line-height:1.35}
+.aura-polished .dash-task small{font-size:12.5px;line-height:1.55}
+
+/* Lessons */
+.aura-polished .lesson-card h3{font-size:17px;line-height:1.4}
+.aura-polished .lesson-badge{font-size:11.5px}
+.aura-polished .node-type{font-size:11px}
+.aura-polished .node-points,
+.aura-polished .node-points li{font-size:14.5px;line-height:1.65}
+.aura-polished .lesson-example{font-size:14px;line-height:1.6}
+.aura-polished .lesson-tabs button{font-size:13.5px}
+
+/* Exams */
+.aura-polished .q h3{font-size:18px;line-height:1.5}
+.aura-polished .q .small{font-size:12px}
+.aura-polished .answer-option,
+.aura-polished .practice-option{font-size:15px;line-height:1.55}
+.aura-polished .answer-option span,
+.aura-polished .practice-option span{font-size:15px}
+.aura-polished .exam-timer-label,
+.aura-polished .exam-timer-rule{font-size:12.5px}
+
+/* Worked examples / review */
+.aura-polished .review-eyebrow{font-size:12px}
+.aura-polished .review-question{font-size:17px;line-height:1.65}
+.aura-polished .review-solution summary{font-size:14px}
+.aura-polished .worked-step p,
+.aura-polished .worked-text{font-size:15px;line-height:1.7}
+
+/* Bottom navigation */
+.aura-polished .mobilebar button{font-size:13px}
+.aura-polished .mobilebar small{font-size:11.5px;line-height:1.25}
+
+@media(max-width:900px){
+  body.aura-polished{font-size:15.5px}
+  .aura-polished .sectionhead h2{font-size:22px}
+  .aura-polished .card h2{font-size:22px}
+  .aura-polished .q h3{font-size:17px}
+  .aura-polished .review-question{font-size:16.5px}
+  .aura-polished .subject h3{font-size:16.5px}
+}
+
+@media(max-width:520px){
+  body.aura-polished{font-size:15px}
+  .aura-polished .brandtext b{font-size:14.5px}
+  .aura-polished .sectionhead h2{font-size:21px}
+  .aura-polished .card h2{font-size:21px}
+  .aura-polished .card h3{font-size:17px}
+  .aura-polished .meta{font-size:13px}
+  .aura-polished .btn,
+  .aura-polished button.btn{font-size:13.5px}
+  .aura-polished .q h3{font-size:16.5px}
+  .aura-polished .review-question{font-size:16px}
+  .aura-polished .worked-step p,
+  .aura-polished .worked-text{font-size:14.5px}
+}
