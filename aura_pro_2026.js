@@ -89,7 +89,7 @@
   }
   if(document.body.classList.contains('student-shell')&&!document.querySelector('script[data-aura-student-feedback]')){
     const script=document.createElement('script');
-    script.src='student_feedback.js?v=feedback-r1';script.async=false;script.dataset.auraStudentFeedback='1';document.head.appendChild(script);
+    script.src='student_feedback.js?v=feedback-r2';script.async=false;script.dataset.auraStudentFeedback='1';document.head.appendChild(script);
   }
 })();
 
