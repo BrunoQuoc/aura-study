@@ -60,7 +60,7 @@
     const rows=allRows(),overrideCount=rows.filter(x=>effective(x.group,x.key,x.row).override).length,validation=typeof window.auraValidateExamMetadata==='function'?window.auraValidateExamMetadata():{ok:true,errors:[]};
     app.innerHTML=`<div class="sectionhead metadata-admin-head" style="margin-top:0"><div><h2>Quản lý phân kỳ & cách sử dụng</h2><span>Metadata nguồn không bị sửa · Admin chỉ thay đổi cách AURA sử dụng tài liệu</span></div></div>
       <section class="metadata-summary"><article><span>Tài liệu / ngân hàng</span><strong>${rows.length}</strong><small>Đang có metadata</small></article><article><span>Admin override</span><strong>${overrideCount}</strong><small>Đang dùng khác mặc định</small></article><article><span>Registry</span><strong>${validation.ok?'OK':'CẦN KIỂM TRA'}</strong><small>v${esc(registry().version||'')}</small></article></section>
-      <div class="card metadata-policy"><b>Nguyên tắc bất biến</b><p>Nguồn gốc tài liệu luôn được giữ trong <code>sourceTerm/sourcePeriods</code>. “Chuyển sang kỳ khác” chỉ đổi nơi AURA sử dụng tài liệu; “Dùng thêm” giữ mặc định và bổ sung kỳ mới.</p></div>
+      <div class="card metadata-policy"><b>Nguyên tắc bất biến</b><p>Nguồn gốc tài liệu luôn được giữ trong <code>sourceTerm/sourcePeriods</code>. “Chuyển sang kỳ khác” chỉ đổi nơi AURA sử dụng tài liệu; “Dùng thêm” giữ mặc định và bổ sung kỳ mới. Mọi override thủ công phải có lý do để truy vết.</p></div>
       ${validation.ok?'':`<div class="card metadata-warning"><b>Registry có lỗi:</b><p>${validation.errors.map(esc).join('<br>')}</p></div>`}
       <div class="metadata-list">${rows.map(rowHTML).join('')}</div>`;
     document.body.dataset.auraPage='metadata';
@@ -76,6 +76,7 @@
   window.auraSaveMetadataOverride=function(btn){
     const card=cardOf(btn);if(!card)return;const payload=payloadFrom(card);
     if(!payload.periods.length){alert('Hãy chọn ít nhất một kỳ. Nếu muốn bỏ override, dùng “Trả về mặc định”.');return}
+    if(!payload.reason){alert('Hãy nhập lý do/ghi chú cho quyết định phân kỳ để AURA có thể truy vết về sau.');return}
     applyAndRender(()=>window.auraSetMetadataOverride?.(card.dataset.group,card.dataset.key,payload)||{ok:false,error:'Registry chưa sẵn sàng.'});
   };
   window.auraResetMetadataOverride=function(btn){const card=cardOf(btn);if(!card)return;applyAndRender(()=>window.auraClearMetadataOverride?.(card.dataset.group,card.dataset.key)||{ok:false,error:'Registry chưa sẵn sàng.'})};
