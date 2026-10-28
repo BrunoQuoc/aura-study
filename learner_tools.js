@@ -93,6 +93,10 @@
     if((x.consecutiveCorrect||0)===1)return['Đang tiến bộ','improving'];
     return['Cần ôn lại','needs-review'];
   }
+  function topicInsights(){
+    const groups={};wrongEntries().forEach(x=>{const k=x.topic||'Toán tổng hợp',g=groups[k]||(groups[k]={topic:k,questions:0,active:0,wrong:0,recovered:0});g.questions++;g.wrong+=x.wrongCount||0;g.recovered+=x.correctAfterWrong||0;if((x.consecutiveCorrect||0)<2)g.active++});
+    return Object.values(groups).sort((a,b)=>(b.active*5+b.wrong-b.recovered)-(a.active*5+a.wrong-a.recovered));
+  }
   function appendWrongSummary(){
     const app=$('#app');if(!app||!app.querySelector('.sectionhead h2'))return;
     if(!/Kết quả học tập/i.test(app.querySelector('.sectionhead h2')?.textContent||''))return;
@@ -101,6 +105,13 @@
     const box=document.createElement('section');box.className='card wrong-book-summary';
     box.innerHTML=`<div class="wrong-book-summary-main"><div class="wrong-book-icon">↺</div><div><div class="small">SỔ CÂU SAI</div><h3>${list.length?`${need} câu cần ôn lại`:'Chưa có câu sai'}</h3><p class="meta">${list.length?'AURA ưu tiên câu sai nhiều lần và giảm ưu tiên khi em làm đúng lại.':'Khi làm sai trong đề, câu đó sẽ tự xuất hiện tại đây.'}</p></div></div>${list.length?'<button class="btn soft" type="button" onclick="openWrongBook()">Mở sổ câu sai</button>':''}`;
     app.querySelector('.sectionhead').insertAdjacentElement('afterend',box);
+  }
+  function appendTopicInsights(){
+    const app=$('#app'),anchor=app?.querySelector('.wrong-book-summary');if(!app||!anchor||app.querySelector('.learning-insights'))return;
+    const groups=topicInsights();if(!groups.length)return;
+    const box=document.createElement('section');box.className='card learning-insights';
+    box.innerHTML=`<div class="learning-insights-head"><div><div class="small">PHÂN TÍCH THEO CHỦ ĐỀ</div><h3>Phần nên ưu tiên</h3></div><span>Dựa trên các câu từng làm sai</span></div><div class="learning-topic-grid">${groups.slice(0,4).map(g=>{const status=g.active?`${g.active} câu cần ôn`:'Đã cải thiện';const cls=g.active?'needs':'better';return `<div class="learning-topic ${cls}"><b>${esc(g.topic)}</b><span>${status}</span><small>Sai ${g.wrong} lượt · đúng lại ${g.recovered} lượt</small></div>`}).join('')}</div><p class="learning-insights-note">AURA chỉ kết luận từ dữ liệu bé đã làm; chủ đề chưa có đủ câu sẽ không bị gắn nhãn mạnh/yếu.</p>`;
+    anchor.insertAdjacentElement('afterend',box);
   }
   window.openWrongBook=function(){
     if(typeof window.setActive==='function')window.setActive('history');
@@ -115,7 +126,7 @@
     document.querySelectorAll('.mobilebar button').forEach(b=>{const oc=b.getAttribute('onclick')||'',small=b.querySelector('small');if(!small)return;if(/home\(/.test(oc))small.textContent='Hôm nay';else if(/library\(/.test(oc))small.textContent='Ôn thi';else if(/lessons\(/.test(oc))small.textContent='Bài học';else if(/generator\(/.test(oc))small.textContent='Luyện nhanh';else if(/history\(/.test(oc))small.textContent='Kết quả'});
   }
 
-  function refresh(){relabelStudentNav();ensureExamNavigator();appendWrongSummary()}
+  function refresh(){relabelStudentNav();ensureExamNavigator();appendWrongSummary();appendTopicInsights()}
   function queue(){if(mutQueued)return;mutQueued=true;requestAnimationFrame(()=>{mutQueued=false;refresh()})}
   function init(){refresh();document.addEventListener('change',e=>{if(e.target.matches('#app input[type="radio"][name^="mc"]'))setTimeout(updateExamProgress,0)});addEventListener('scroll',trackCurrentQuestion,{passive:true});new MutationObserver(queue).observe(document.body,{childList:true,subtree:true})}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
