@@ -17,15 +17,15 @@
   }
 
   const PERIODS={
-    GK1:{title:'Giữa kỳ 1',desc:'Ôn phần kiến thức trước giữa học kỳ 1',icon:'①'},
-    CK1:{title:'Cuối kỳ 1',desc:'Ôn toàn bộ phạm vi học kỳ 1',icon:'②'},
-    GK2:{title:'Giữa kỳ 2',desc:'Ôn phần kiến thức đầu học kỳ 2',icon:'③'},
-    CK2:{title:'Cuối kỳ 2',desc:'Ôn toàn bộ phạm vi học kỳ 2',icon:'④'}
+    GK1:{title:'Giữa kỳ 1',desc:'Ôn phần kiến thức trước giữa học kỳ 1',icon:'①',minutes:45},
+    CK1:{title:'Cuối kỳ 1',desc:'Ôn toàn bộ phạm vi học kỳ 1',icon:'②',minutes:60},
+    GK2:{title:'Giữa kỳ 2',desc:'Ôn phần kiến thức đầu học kỳ 2',icon:'③',minutes:45},
+    CK2:{title:'Cuối kỳ 2',desc:'Ôn toàn bộ phạm vi học kỳ 2',icon:'④',minutes:60}
   };
 
   function resources(){
     const out=[];
-    EXAMS().filter(x=>x.ready).forEach(x=>out.push({kind:'exam',subject:'TOAN',id:x.id,title:x.title,desc:x.desc||'',period:periodOf(`${x.title} ${x.desc||''}`)}));
+    EXAMS().filter(x=>x.ready&&x.id!=='quick15').forEach(x=>out.push({kind:'exam',subject:'TOAN',id:x.id,title:x.title,desc:x.desc||'',period:periodOf(`${x.title} ${x.desc||''}`)}));
     Object.entries(REV()).forEach(([sub,groups])=>(groups||[]).forEach(x=>out.push({kind:'review',subject:sub,id:x.id,title:x.title,desc:x.desc||'',period:periodOf(`${x.title} ${x.desc||''}`)})));
     return out;
   }
@@ -37,7 +37,8 @@
     setPage('library');const app=$('#app');if(!app)return;
     const rs=resources(),unassigned=rs.filter(x=>!x.period).length;
     app.innerHTML=`<div class="sectionhead" style="margin-top:0"><div><h2>Ôn thi theo năm học</h2><span>Chọn kỳ thi để xem đúng phạm vi ôn tập</span></div></div>
-      <div class="subjects">${Object.entries(PERIODS).map(([id,p])=>{const n=rs.filter(x=>x.period===id).length;return `<div class="subject" onclick="studentExamPeriod('${id}')"><div class="ico">${p.icon}</div><h3>${p.title}</h3><div class="meta">${p.desc}</div><span class="tag ${n?'ready':'empty'}">${n?n+' tài liệu':'Chưa có nội dung'}</span></div>`}).join('')}</div>
+      <div class="card quick15-card"><div class="quick15-row"><div class="quick15-main"><div class="quick15-icon">15'</div><div><h3>Kiểm tra 15 phút</h3><p>AURA tự trộn 10 câu trắc nghiệm từ ngân hàng câu hỏi đủ dữ kiện. Mỗi lần bắt đầu là một đề mới.</p></div></div><button class="btn primary" onclick="startRandom15Exam()">Làm bài 15 phút</button></div></div>
+      <div class="subjects">${Object.entries(PERIODS).map(([id,p])=>{const n=rs.filter(x=>x.period===id).length;return `<div class="subject" onclick="studentExamPeriod('${id}')"><div class="ico">${p.icon}</div><h3>${p.title}</h3><div class="meta">${p.desc}</div><span class="tag ${n?'ready':'empty'}">${n?n+' tài liệu · '+p.minutes+' phút':'Chưa có nội dung'}</span></div>`}).join('')}</div>
       <div class="card" style="margin-top:16px"><b>AURA tự phân loại theo kỳ thi</b><p class="meta">Khi có nội dung ôn hoặc đề cương, AURA sẽ gắn bài học, bài tập và đề vào đúng kỳ. Tài liệu chưa đủ căn cứ sẽ không bị xếp đoán.</p>${unassigned?`<div class="note">${unassigned} tài liệu hiện có chưa được gắn kỳ vì chưa đủ căn cứ.</div>`:''}</div>`;
   }
 
@@ -45,7 +46,7 @@
     setPage('library');const app=$('#app'),p=PERIODS[id];if(!app||!p)return studentReviewHub();
     const list=resources().filter(x=>x.period===id);
     app.innerHTML=`<button class="btn soft" onclick="studentReviewHub()" style="margin-bottom:12px">← Ôn thi</button>
-      <div class="sectionhead" style="margin-top:0"><div><h2>${p.title}</h2><span>${p.desc}</span></div></div>
+      <div class="sectionhead" style="margin-top:0"><div><h2>${p.title}</h2><span>${p.desc} · Thời gian làm đề: ${p.minutes} phút</span></div></div>
       <div class="card">${list.length?list.map(r=>`<div class="resource"><div class="fileico">${r.kind==='exam'?'📝':'📚'}</div><div class="grow"><b>${esc(r.title)}</b><small>${esc(subjectName(r.subject))} · ${esc(r.desc)}</small></div><button class="btn ${r.kind==='exam'?'primary':'soft'}" onclick="${r.kind==='exam'?`exam('${r.id}')`:`review('${r.subject}','${r.id}')`}">${r.kind==='exam'?'Làm đề':'Ôn bài'}</button></div>`).join(''):`<div class="meta">Chưa có nội dung được gắn chắc chắn cho ${p.title}. Khi có nội dung ôn, AURA sẽ tự đưa tài liệu phù hợp vào đây.</div><div style="margin-top:14px"><button class="btn primary" onclick="lessons()">Mở bài học</button></div>`}</div>`;
   }
 
