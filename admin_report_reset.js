@@ -2,7 +2,7 @@
 (function(){
   if(!document.body.classList.contains('admin-shell'))return;
 
-  const EXACT_KEYS=['aura_attempts','aura_wrong_book_v1','aura_smart_stats'];
+  const EXACT_KEYS=['aura_attempts','aura_wrong_book_v1','aura_smart_stats','aura_smart_graded_ids','aura_exam_period'];
   const PREFIX_KEYS=['review_'];
 
   function reportKeys(){
@@ -26,7 +26,7 @@
     removeModal();
     const c=counts(),wrap=document.createElement('div');
     wrap.className='aura-reset-modal';
-    wrap.innerHTML=`<div class="aura-reset-backdrop" onclick="auraCloseReportReset()"></div><section class="aura-reset-dialog" role="dialog" aria-modal="true" aria-labelledby="auraResetTitle"><div class="aura-reset-icon">↺</div><div class="aura-reset-copy"><div class="small">ADMIN · DỮ LIỆU HỌC TẬP</div><h2 id="auraResetTitle">Reset báo cáo học tập?</h2><p>Thao tác này xóa dữ liệu dùng để tạo báo cáo trên thiết bị này. Kho tài liệu, đề thi, metadata và bài đang làm vẫn được giữ nguyên.</p></div><div class="aura-reset-summary"><div><span>Bài có điểm</span><b>${c.attempts}</b></div><div><span>Câu trong sổ sai</span><b>${c.wrong}</b></div><div><span>Bài ôn có tiến độ</span><b>${c.reviews}</b></div></div><div class="aura-reset-kept"><b>Sẽ xóa:</b> điểm/lịch sử chấm, Sổ câu sai, thống kê kỹ năng và tiến độ ôn tập.</div><div class="aura-reset-actions"><button class="btn soft" type="button" onclick="auraCloseReportReset()">Hủy</button><button class="btn soft" type="button" onclick="backup()">Sao lưu trước</button><button class="btn aura-reset-danger" type="button" onclick="auraConfirmReportReset(this)">Reset báo cáo</button></div></section>`;
+    wrap.innerHTML=`<div class="aura-reset-backdrop" onclick="auraCloseReportReset()"></div><section class="aura-reset-dialog" role="dialog" aria-modal="true" aria-labelledby="auraResetTitle"><div class="aura-reset-icon">↺</div><div class="aura-reset-copy"><div class="small">ADMIN · DỮ LIỆU HỌC TẬP</div><h2 id="auraResetTitle">Reset báo cáo học tập?</h2><p>Thao tác này xóa dữ liệu dùng để tạo báo cáo trên thiết bị này. Kho tài liệu, đề thi, metadata và bài đang làm vẫn được giữ nguyên.</p></div><div class="aura-reset-summary"><div><span>Bài có điểm</span><b>${c.attempts}</b></div><div><span>Câu trong sổ sai</span><b>${c.wrong}</b></div><div><span>Bài ôn có tiến độ</span><b>${c.reviews}</b></div></div><div class="aura-reset-kept"><b>Sẽ xóa:</b> điểm/lịch sử chấm, Sổ câu sai, thống kê kỹ năng, trạng thái chống ghi nhận trùng và tiến độ ôn tập.</div><div class="aura-reset-actions"><button class="btn soft" type="button" onclick="auraCloseReportReset()">Hủy</button><button class="btn soft" type="button" onclick="backup()">Sao lưu trước</button><button class="btn aura-reset-danger" type="button" onclick="auraConfirmReportReset(this)">Reset báo cáo</button></div></section>`;
     document.body.appendChild(wrap);
     setTimeout(()=>wrap.classList.add('open'),10);
   }
