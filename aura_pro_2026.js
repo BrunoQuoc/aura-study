@@ -48,3 +48,14 @@
   function init(){normalizeChrome();new MutationObserver(queue).observe(document.body,{childList:true,subtree:true})}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
+
+(function loadReviewExperience(){
+  if(!document.querySelector('link[data-aura-review]')){
+    const link=document.createElement('link');
+    link.rel='stylesheet';link.href='review_experience.css?v=review-r1';link.dataset.auraReview='1';document.head.appendChild(link);
+  }
+  if(!document.querySelector('script[data-aura-review]')){
+    const script=document.createElement('script');
+    script.src='review_experience.js?v=review-r1';script.async=false;script.dataset.auraReview='1';document.head.appendChild(script);
+  }
+})();
