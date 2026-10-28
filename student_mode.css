@@ -18,5 +18,24 @@ body.student-shell #app>.card:has(.generator-grid) .note{display:none!important}
 body.student-shell #app>.card:has(.generator-grid)+.card{display:none!important}
 body.student-shell .layout{grid-template-columns:210px minmax(0,1fr)}
 body.student-shell .mobilebar{grid-template-columns:repeat(4,1fr)!important}
+
+/* Quick practice — selected state */
+body.student-shell .practice-subject{position:relative;transition:.18s ease;border:1px solid var(--pro-line,#e7eaf0)}
+body.student-shell .practice-subject.is-selected{border-color:#7d8cf2!important;background:linear-gradient(145deg,#f0f2ff 0%,#fafaff 100%)!important;box-shadow:0 10px 28px rgba(85,103,233,.14),inset 0 0 0 1px rgba(85,103,233,.08)}
+body.student-shell .practice-subject.is-selected:after{content:'✓';position:absolute;top:12px;right:12px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#596bea;color:#fff;font-size:12px;font-weight:900;box-shadow:0 5px 13px rgba(85,103,233,.25)}
+body.student-shell .practice-subject.is-selected .ico{background:#596bea!important;color:#fff!important;box-shadow:0 7px 18px rgba(85,103,233,.18)}
+body.student-shell .practice-subject.is-selected h3{color:#263773!important}
+body.student-shell .practice-selected-tag{background:#e3e7ff!important;color:#3e50c2!important}
+body.student-shell .practice-counts{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+body.student-shell .practice-count{min-width:118px;padding:11px 15px!important;border:1px solid #dfe3ef!important;background:#f8f9fc!important;color:#57627a!important;box-shadow:none!important}
+body.student-shell .practice-count span{margin-left:5px;font-size:10px;font-weight:700;color:#929aad}
+body.student-shell .practice-count:hover{border-color:#c6cdf5!important;background:#f3f5ff!important}
+body.student-shell .practice-count.is-selected{border-color:#596bea!important;background:#596bea!important;color:#fff!important;box-shadow:0 8px 20px rgba(85,103,233,.22)!important}
+body.student-shell .practice-count.is-selected span{color:#e8ebff}
+body.student-shell .practice-start-row{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:22px;padding-top:18px;border-top:1px solid #edf0f5}
+body.student-shell .practice-choice-summary span{display:block;margin-bottom:4px;color:#929aad;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+body.student-shell .practice-choice-summary strong{color:#26334f;font-size:14px}
+body.student-shell .practice-start{min-width:160px}
 @media(max-width:900px){body.student-shell .layout{grid-template-columns:1fr}}
+@media(max-width:620px){body.student-shell .practice-start-row{align-items:stretch;flex-direction:column}body.student-shell .practice-start{width:100%}body.student-shell .practice-count{flex:1;min-width:96px}}
 @media(max-width:520px){body.student-shell .brandtext b{font-size:13px}body.student-shell .hero{min-height:auto}}
