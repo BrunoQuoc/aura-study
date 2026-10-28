@@ -1,0 +1,114 @@
+/* AURA STUDY — readable learning typography: serif for study content, sans-serif for app chrome */
+body.student-shell.aura-polished{font-size:16px}
+
+/* Keep app/navigation chrome modern and crisp */
+body.student-shell .topbar,
+body.student-shell .side,
+body.student-shell .mobilebar,
+body.student-shell .btn,
+body.student-shell button,
+body.student-shell .sectionhead,
+body.student-shell .dash-home,
+body.student-shell .subject,
+body.student-shell .resource,
+body.student-shell .multi-overview,
+body.student-shell .multi-subject-card,
+body.student-shell .multi-section-head,
+body.student-shell .weekly-report,
+body.student-shell .exam-year-guide,
+body.student-shell .exam-flow-section,
+body.student-shell .aura-exam-navigator{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+/* Learning content: familiar textbook-style serif */
+body.student-shell #app .q h3,
+body.student-shell #app .answer-option span,
+body.student-shell #app .practice-option span,
+body.student-shell #app .review-question,
+body.student-shell #app .worked-step p,
+body.student-shell #app .worked-text,
+body.student-shell #app .node-points,
+body.student-shell #app .node-points li,
+body.student-shell #app .lesson-example,
+body.student-shell #app .okbox,
+body.student-shell #app textarea,
+body.student-shell #app .wrong-item h3,
+body.student-shell #app .wrong-practice-result h3,
+body.student-shell #app .wrong-explanation p,
+body.student-shell #app .wrong-explanation small{
+  font-family:"Times New Roman",Times,serif!important;
+  letter-spacing:0!important;
+}
+
+/* Slightly larger Student UI without expanding the layout too much */
+body.student-shell .sectionhead h2{font-size:clamp(21px,2vw,24px)!important}
+body.student-shell .card h2{font-size:clamp(20px,1.8vw,23px)!important}
+body.student-shell .card h3{font-size:clamp(16px,1.4vw,18px)!important}
+body.student-shell .meta{font-size:13px!important;line-height:1.5!important}
+body.student-shell .btn,body.student-shell button.btn{font-size:13.5px!important}
+body.student-shell .dash-task b{font-size:16.5px!important}
+body.student-shell .dash-subject-copy b{font-size:14px!important}
+body.student-shell .subject h3{font-size:15px!important}
+body.student-shell .resource .grow>b{font-size:14.5px!important}
+body.student-shell .multi-subject-top b,
+body.student-shell .multi-subject-top h3{font-size:15px!important}
+body.student-shell .multi-history-main>b{font-size:14px!important}
+
+/* Reading sizes */
+body.student-shell #app .q h3{font-size:18px!important;line-height:1.55!important}
+body.student-shell #app .answer-option,
+body.student-shell #app .practice-option{font-size:16px!important;line-height:1.5!important}
+body.student-shell #app .answer-option span,
+body.student-shell #app .practice-option span{font-size:16px!important;line-height:1.5!important}
+body.student-shell #app .answer-option span>b,
+body.student-shell #app .practice-option span>b{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:13px}
+body.student-shell #app .review-question{font-size:17.5px!important;line-height:1.65!important}
+body.student-shell #app .worked-step p,
+body.student-shell #app .worked-text,
+body.student-shell #app .node-points,
+body.student-shell #app .node-points li{font-size:16.5px!important;line-height:1.7!important}
+body.student-shell #app .lesson-example{font-size:16px!important;line-height:1.65!important}
+body.student-shell #app .okbox{font-size:16px!important;line-height:1.6!important}
+body.student-shell #app textarea{font-size:16px!important;line-height:1.55!important}
+body.student-shell #app .wrong-item h3,
+body.student-shell #app .wrong-practice-result h3{font-size:17px!important;line-height:1.55!important}
+body.student-shell #app .wrong-explanation p{font-size:14.5px!important;line-height:1.58!important}
+body.student-shell #app .wrong-explanation small{font-size:13.5px!important;line-height:1.5!important}
+
+/* Tablet */
+@media(max-width:900px){
+  body.student-shell.aura-polished{font-size:15.5px}
+  body.student-shell #app .q h3{font-size:17.5px!important}
+  body.student-shell #app .answer-option span,
+  body.student-shell #app .practice-option span{font-size:15.5px!important}
+  body.student-shell #app .review-question{font-size:17px!important}
+  body.student-shell #app .worked-step p,
+  body.student-shell #app .worked-text,
+  body.student-shell #app .node-points,
+  body.student-shell #app .node-points li{font-size:16px!important}
+}
+
+/* Mobile: minimum comfortable reading size */
+@media(max-width:620px){
+  body.student-shell.aura-polished{font-size:15.5px}
+  body.student-shell .sectionhead h2{font-size:20px!important}
+  body.student-shell .card h2{font-size:19px!important}
+  body.student-shell .card h3{font-size:16px!important}
+  body.student-shell .meta{font-size:12.5px!important}
+  body.student-shell .btn,body.student-shell button.btn{font-size:13px!important}
+  body.student-shell .dash-subject-copy b{font-size:13.5px!important}
+  body.student-shell #app .q h3{font-size:17px!important;line-height:1.52!important}
+  body.student-shell #app .answer-option span,
+  body.student-shell #app .practice-option span{font-size:15.5px!important;line-height:1.48!important}
+  body.student-shell #app .review-question{font-size:16.5px!important}
+  body.student-shell #app .worked-step p,
+  body.student-shell #app .worked-text,
+  body.student-shell #app .node-points,
+  body.student-shell #app .node-points li,
+  body.student-shell #app .lesson-example,
+  body.student-shell #app .okbox,
+  body.student-shell #app textarea{font-size:15.5px!important}
+  body.student-shell #app .wrong-explanation p{font-size:14px!important}
+  body.student-shell #app .wrong-explanation small{font-size:13px!important}
+}
