@@ -92,3 +92,10 @@
     script.src='student_feedback.js?v=feedback-r1';script.async=false;script.dataset.auraStudentFeedback='1';document.head.appendChild(script);
   }
 })();
+
+(function loadSubjectPalette(){
+  if(!document.querySelector('link[data-aura-subject-palette]')){
+    const link=document.createElement('link');
+    link.rel='stylesheet';link.href='subject_palette.css?v=palette-r1';link.dataset.auraSubjectPalette='1';document.head.appendChild(link);
+  }
+})();
