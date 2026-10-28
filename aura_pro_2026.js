@@ -59,3 +59,14 @@
     script.src='review_experience.js?v=review-r1';script.async=false;script.dataset.auraReview='1';document.head.appendChild(script);
   }
 })();
+
+(function loadExamExperience(){
+  if(!document.querySelector('link[data-aura-exam]')){
+    const link=document.createElement('link');
+    link.rel='stylesheet';link.href='exam_ui.css?v=exam-r1';link.dataset.auraExam='1';document.head.appendChild(link);
+  }
+  if(!document.querySelector('script[data-aura-exam]')){
+    const script=document.createElement('script');
+    script.src='exam_ui.js?v=exam-r1';script.async=false;script.dataset.auraExam='1';document.head.appendChild(script);
+  }
+})();
