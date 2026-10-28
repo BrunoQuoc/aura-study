@@ -44,6 +44,26 @@
    - Nếu nguồn chưa có lời giải chi tiết, AURA chỉ nêu đáp án đã xác minh và nói rõ chưa đủ căn cứ để kết luận nguyên nhân sai.
    - Không suy đoán lỗi tư duy của học sinh chỉ từ đáp án đã chọn.
 
+## Thay đổi được phê duyệt sau checkpoint
+
+### Admin quản lý phân kỳ / cách sử dụng tài liệu
+
+Theo quyết định của phụ huynh/Admin, AURA bổ sung mục **Admin → Phân kỳ** nhưng vẫn giữ nguyên nguyên tắc dữ liệu:
+
+- `sourceTerm/sourcePeriods` là metadata nguồn bất biến.
+- `term/periods` là default assignment của AURA.
+- Quyết định của Admin được lưu riêng tại `aura_metadata_overrides_v1`.
+- `replace`: chuyển nơi sử dụng sang kỳ Admin chọn.
+- `add`: giữ mặc định và dùng thêm ở kỳ Admin chọn.
+- `clear`: trả về default assignment.
+- Khi nguồn ghi rõ kỳ cụ thể, Admin có thể chọn **Dùng đúng kỳ nguồn**.
+- Mọi override thủ công phải có lý do/ghi chú để truy vết.
+- Cấu hình override được backup/restore cùng dữ liệu AURA.
+- Student và Admin trên cùng origin/browser/device dùng chung effective assignment.
+- Override áp dụng được cho cả tài liệu và ngân hàng tạo đề; quyền generator theo kỳ dùng effective periods.
+
+Thay đổi này là chức năng quản trị dữ liệu, không làm thay đổi metadata nguồn hoặc nội dung tài liệu gốc.
+
 ## Phần đang hoạt động và được giữ nguyên
 
 - Kết quả học tập đa môn.
@@ -55,6 +75,7 @@
 - Palette môn PA1 Premium nhẹ.
 - Times New Roman cho nội dung học; UI/navigation giữ sans-serif.
 - Admin Backup / Restore / Reset báo cáo.
+- Admin quản lý phân kỳ và manual usage override.
 
 ## Giới hạn đã biết — không phải lỗi chặn sử dụng hiện tại
 
@@ -62,7 +83,7 @@
 AURA hiện dùng `localStorage`. Student và Admin chỉ thấy cùng dữ liệu khi ở cùng browser/device. Cloud Sync đa thiết bị chưa triển khai.
 
 ### Admin chưa có authentication/PIN
-Admin production là link riêng nhưng chưa có lớp xác thực. Parent PIN cho Reset/Restore là nâng cấp an toàn phù hợp trong tương lai, không được coi là đã triển khai.
+Admin production là link riêng nhưng chưa có lớp xác thực. Parent PIN cho Reset/Restore và các thao tác quản trị metadata là nâng cấp an toàn phù hợp trong tương lai, không được coi là đã triển khai.
 
 ### Technical debt: nhiều lớp patch/module
 Core cũ và các lớp Dashboard / Smart Engine / Multi-subject / Weekly Report / Feedback vẫn được load theo thứ tự. Hiện luồng đã được guard và ổn định; nếu mở lại dự án để phát triển lớn, nên ưu tiên refactor module trước khi thêm nhiều tính năng mới.
@@ -79,7 +100,8 @@ KHTN, Lịch sử & Địa lý, GDCD, Tin học và Công nghệ chưa bật gen
 5. “Vì sao sai?” phải có nguồn/rule đủ chắc hoặc phải nói rõ giới hạn.
 6. Trước khi thêm feature lớn: kiểm tra schema kết quả, backup/restore và migration.
 7. Cloud Sync hoặc Parent Lock nếu triển khai phải giữ tương thích dữ liệu local hiện tại.
+8. Manual metadata override không bao giờ được sửa SOURCE; mọi thay đổi chỉ đi qua lớp override và phải có reason.
 
 ## Trạng thái đóng
 
-Checkpoint này là mốc để tạm dừng AURA STUDY. Không tiếp tục chỉnh UI/feature trong giai đoạn pause trừ khi phát hiện lỗi dữ liệu, lỗi vận hành hoặc lỗi làm mất dữ liệu.
+Checkpoint này là mốc để tạm dừng AURA STUDY. Không tiếp tục chỉnh UI/feature trong giai đoạn pause trừ khi phát hiện lỗi dữ liệu, lỗi vận hành hoặc lỗi làm mất dữ liệu, hoặc có thay đổi quản trị dữ liệu được phụ huynh/Admin phê duyệt rõ ràng.
