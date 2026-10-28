@@ -1,0 +1,21 @@
+(function(){
+  const REVIEWS=()=>window.AURA_REVIEWS||{};
+  const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
+  const getState=id=>{try{return JSON.parse(localStorage.getItem('review_'+id)||'{}')}catch(e){return {}}};
+  function numericValue(s){const m=String(s??'').match(/-?[\d\s.,]+/);if(!m)return null;const cleaned=m[0].replace(/[\s.,]/g,'');const n=Number(cleaned);return Number.isFinite(n)?n:null}
+  function sameMathAnswer(a,b){const na=String(a??'').trim().toLowerCase().replace(/\s+/g,' '),nb=String(b??'').trim().toLowerCase().replace(/\s+/g,' ');if(na===nb)return true;const aa=numericValue(a),bb=numericValue(b);return aa!==null&&bb!==null&&aa===bb}
+  function updateProgress(r,id){const s=getState(id),done=(s.done||[]).filter(Boolean).length,total=r.items.length,pct=total?Math.round(done/total*100):0;const t=document.getElementById('reviewProgressText'),b=document.getElementById('reviewProgressBar');if(t)t.textContent=`${done}/${total} bài đã hiểu`;if(b)b.style.width=pct+'%';r.items.forEach((_,i)=>document.querySelector(`[data-review-index="${i}"]`)?.classList.toggle('is-done',!!s.done?.[i]))}
+  window.review=function(sub,id){
+    setActive('library');
+    const r=(REVIEWS()[sub]||[]).find(x=>x.id===id);if(!r)return;
+    const state=getState(id),done=(state.done||[]).filter(Boolean).length,total=r.items.length,pct=total?Math.round(done/total*100):0,isMath=sub==='TOAN';
+    const cards=r.items.map((x,i)=>{
+      const answer=state.answers?.[i]||'',checked=state.done?.[i]?'checked':'';
+      const field=isMath?`<input class="review-answer" id="rv${i}" value="${esc(answer)}" oninput="saveReview('${sub}','${id}')" placeholder="Nhập đáp án ngắn...">`:`<textarea class="review-answer review-answer-long" id="rv${i}" rows="3" oninput="saveReview('${sub}','${id}')" placeholder="Viết câu trả lời của em...">${esc(answer)}</textarea>`;
+      return `<section class="card review-card ${checked?'is-done':''}" data-review-index="${i}"><div class="review-question-row"><div class="review-number">${i+1}</div><div class="review-question">${esc(x[0])}</div></div><div class="review-answer-wrap">${field}</div><div class="review-actions">${isMath?`<button class="btn soft review-check" type="button" onclick="reviewCheck('${sub}','${id}',${i})">Kiểm tra</button>`:''}<details class="review-solution"><summary>💡 Xem đáp án</summary><div class="review-solution-box">${esc(x[1])}</div></details><label class="review-done"><input type="checkbox" id="ck${i}" ${checked} onchange="saveReview('${sub}','${id}')"><span>✓ Đã hiểu</span></label></div><div class="review-feedback" id="reviewFeedback${i}"></div></section>`;
+    }).join('');
+    document.getElementById('app').innerHTML=`<div class="review-page"><button class="btn soft" onclick="subject('${sub}')" style="margin-bottom:12px">← Quay lại</button><section class="card review-head"><div class="review-headline"><div><div class="review-eyebrow">Ôn tập</div><h2>${esc(r.title)}</h2><p class="meta">${esc(r.desc)}</p></div><div class="review-progress"><strong id="reviewProgressText">${done}/${total} bài đã hiểu</strong><div class="review-progress-track"><div class="review-progress-bar" id="reviewProgressBar" style="width:${pct}%"></div></div></div></div></section><div class="review-list">${cards}</div></div>`;
+  };
+  window.saveReview=function(sub,id){const r=(REVIEWS()[sub]||[]).find(x=>x.id===id);if(!r)return;const s={answers:r.items.map((_,i)=>document.getElementById('rv'+i)?.value||''),done:r.items.map((_,i)=>document.getElementById('ck'+i)?.checked||false)};localStorage.setItem('review_'+id,JSON.stringify(s));updateProgress(r,id)};
+  window.reviewCheck=function(sub,id,i){const r=(REVIEWS()[sub]||[]).find(x=>x.id===id);if(!r)return;const input=document.getElementById('rv'+i),fb=document.getElementById('reviewFeedback'+i),got=input?.value||'',expected=r.items[i]?.[1]||'';if(!fb)return;fb.className='review-feedback';if(!got.trim()){fb.textContent='Nhập đáp án trước khi kiểm tra nhé.';fb.classList.add('hint');return}if(sameMathAnswer(got,expected)){fb.textContent='✓ Chính xác. Em có thể đánh dấu “Đã hiểu”.';fb.classList.add('ok')}else{fb.textContent='Chưa đúng. Kiểm tra lại phép tính rồi thử thêm một lần.';fb.classList.add('bad')}};
+})();
