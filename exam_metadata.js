@@ -3,7 +3,7 @@
 (function(){
   const SUBJECTS={
     TOAN:{label:'Toán',status:'ready',generatorPeriods:['GK1'],note:'Kho hiện tại tập trung nội dung đầu năm và giữa học kỳ I.'},
-    NGUVAN:{label:'Ngữ văn',status:'partial',generatorPeriods:['CK1'],note:'Có nội dung HKI; tài liệu không ghi rõ kỳ cụ thể vẫn giữ trạng thái chưa phân kỳ.'},
+    NGUVAN:{label:'Ngữ văn',status:'partial',generatorPeriods:[],note:'Có nội dung HKI nhưng generator đang dùng chung tài liệu chưa phân kỳ; chưa bật mô phỏng theo kỳ cho tới khi tách pool sạch metadata.'},
     TIENGANH:{label:'Tiếng Anh',status:'partial',generatorPeriods:['GK1'],note:'Ngân hàng hiện tại theo phạm vi Units 1–3.'},
     KHTN:{label:'KHTN',status:'awaiting_source',generatorPeriods:[],note:'Chưa có kho câu hỏi/tài liệu đủ căn cứ để gắn kỳ.'},
     LSDL:{label:'Lịch sử & Địa lý',status:'awaiting_source',generatorPeriods:[],note:'Chưa có kho câu hỏi/tài liệu đủ căn cứ để gắn kỳ.'},
@@ -37,9 +37,9 @@
       generator:true,assignmentBasis:'current_bank_scope',confidence:'medium'
     },
     'NGUVAN:reviews':{
-      periods:['CK1'],term:'HK1',scope:'Tiếng Việt HKI và các bài đọc hiểu hiện có',
-      generator:true,assignmentBasis:'source_declared_term',confidence:'medium',
-      note:'Generator dùng kho HKI hiện có; tài liệu đọc hiểu chưa phân kỳ không tự được gắn vào danh sách bài mẫu CK1.'
+      periods:[],term:'HK1',scope:'Tiếng Việt HKI và các bài đọc hiểu hiện có',
+      generator:false,assignmentBasis:'mixed_scope_requires_split',confidence:'low',
+      note:'Kho hiện tại trộn tài liệu HKI với bài đọc hiểu chưa phân kỳ; không dùng để tạo đề mô phỏng theo kỳ.'
     },
     'TIENGANH:units_1_3':{
       periods:['GK1'],term:'HK1',scope:'Global Success 6 · Units 1–3 · Reading · Rewrite',
@@ -55,12 +55,12 @@
   };
 
   const registry={
-    version:'1.0.0',schemaVersion:1,periods:PERIODS,subjects:SUBJECTS,resources:RESOURCES,banks:BANKS,
+    version:'1.0.1',schemaVersion:1,periods:PERIODS,subjects:SUBJECTS,resources:RESOURCES,banks:BANKS,
     schema:{
       required:['subject','docType'],
       optional:['periods','term','scope','assignmentBasis','confidence','note'],
       confidence:['high','medium','low','unassigned'],
-      assignmentBasis:['source_declared','source_declared_term','curriculum_scope','current_bank_scope','insufficient_source_evidence']
+      assignmentBasis:['source_declared','source_declared_term','curriculum_scope','current_bank_scope','mixed_scope_requires_split','insufficient_source_evidence']
     }
   };
 
