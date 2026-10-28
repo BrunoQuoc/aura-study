@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "math6-bai18-regular-polygons",
+  "source": {
+    "provider": "google_drive",
+    "driveFileId": "1VjpyEPAUO0Mxc2TaZH5MaUnt_ovugzQ2",
+    "name": "L6_TOAN_CONG_THUC_HINH_HOC.jpg",
+    "mimeType": "image/jpeg",
+    "modifiedTime": "2026-10-27T07:49:30.069Z",
+    "parentFolderId": "1Br5bEWN44kHWn2dJh1KNQimzFlQ2dRp8",
+    "sourceViewUrl": "https://drive.google.com/file/d/1VjpyEPAUO0Mxc2TaZH5MaUnt_ovugzQ2/view",
+    "preservation": "Source remains unchanged in Google Drive."
+  },
+  "classification": {
+    "grade": 6,
+    "subject": "TOAN",
+    "chapter": "Một số hình phẳng trong thực tiễn",
+    "lesson": "Bài 18 – Tam giác đều · Hình vuông · Hình lục giác đều",
+    "documentType": "knowledge_formula_poster",
+    "classificationBasis": "Declared directly on source image"
+  },
+  "originalView": {
+    "type": "source_link",
+    "note": "Original image is preserved on Drive; no redrawn substitute is used."
+  },
+  "structuredKnowledge": [
+    {
+      "topic": "Tam giác đều",
+      "facts": ["Có 3 đỉnh, 3 cạnh bằng nhau.", "Có 3 góc bằng nhau, mỗi góc 60°.", "Nếu tam giác đều ABC thì AB = BC = CA."],
+      "sourceExamples": ["Tam giác đều cạnh 3 cm.", "Biển báo hình tam giác đều cạnh 40 cm có chu vi P = 3 × 40 = 120 cm."],
+      "construction": "Dùng thước và êke 60°."
+    },
+    {
+      "topic": "Hình vuông",
+      "facts": ["Có 4 đỉnh, 4 cạnh bằng nhau.", "Có 4 góc vuông, mỗi góc 90°.", "Hai đường chéo bằng nhau: AC = BD.", "Hai đường chéo cắt nhau tại trung điểm mỗi đường."],
+      "sourceExamples": ["Phòng vuông cạnh 5 m; gạch vuông cạnh 50 cm.", "Diện tích phòng: 25 m²; diện tích một viên: 0,25 m²; cần 100 viên nếu bỏ qua mạch gạch và hao hụt."],
+      "construction": "Dùng thước và êke."
+    },
+    {
+      "topic": "Hình lục giác đều",
+      "facts": ["Có 6 đỉnh, 6 cạnh bằng nhau.", "Có 6 góc trong, mỗi góc 120°.", "Ba đường chéo chính bằng nhau: AD = BE = CF.", "Có thể chia thành 6 tam giác đều chung đỉnh O; góc ở tâm 60°."],
+      "sourceExamples": ["Chia bánh thành 6 phần bằng nhau: nối tâm với 6 đỉnh.", "Chia 12 phần: chia đôi mỗi phần trên."],
+      "construction": "Vẽ đường tròn, dùng compa lấy liên tiếp 6 dây bằng bán kính rồi nối 6 đỉnh."
+    },
+    {
+      "topic": "So sánh",
+      "facts": ["Số cạnh lần lượt: 3, 4, 6.", "Mỗi góc trong lần lượt: 60°, 90°, 120°.", "Chu vi với cạnh a lần lượt: 3a, 4a, 6a.", "Cùng dùng dây dài 36 cm thì cạnh lần lượt: 12 cm, 9 cm, 6 cm.", "Cùng chu vi, cạnh tỉ lệ 4 : 3 : 2."]
+    },
+    {
+      "topic": "Ứng dụng trong thực tiễn",
+      "facts": ["Nguyên lý lát kín: tổng các góc quanh một đỉnh bằng 360°.", "Tam giác đều: 6 × 60° = 360°.", "Hình vuông: 4 × 90° = 360°.", "Lục giác đều: 3 × 120° = 360°.", "Ứng dụng: lát nền, trang trí, tổ ong, kiến trúc."]
+    }
+  ],
+  "reviewCards": [
+    {"front": "Tam giác đều có đặc điểm gì?", "back": "3 cạnh bằng nhau; 3 góc bằng nhau, mỗi góc 60°."},
+    {"front": "Hình vuông có đặc điểm gì?", "back": "4 cạnh bằng nhau; 4 góc vuông; hai đường chéo bằng nhau và cắt nhau tại trung điểm mỗi đường."},
+    {"front": "Hình lục giác đều có góc trong bao nhiêu?", "back": "Mỗi góc trong bằng 120°."},
+    {"front": "Chu vi tam giác đều, hình vuông, lục giác đều cạnh a?", "back": "Lần lượt 3a, 4a, 6a."},
+    {"front": "Vì sao ba loại hình này có thể lát kín quanh một đỉnh?", "back": "Vì 6×60° = 4×90° = 3×120° = 360°."}
+  ],
+  "sourceExercises": [
+    {"prompt": "Tính chu vi tam giác đều cạnh 5 cm.", "answerFromSource": "15 cm"},
+    {"prompt": "Tính chu vi hình vuông cạnh 7 cm.", "answerFromSource": "28 cm"},
+    {"prompt": "Lục giác đều cạnh 5 cm: tính AD, BE, CF.", "answerFromSource": "AD = BE = CF = 10 cm"},
+    {"prompt": "Cắt ghép, chia phần và xếp hình đều.", "answerFromSource": null, "note": "Nguồn không cung cấp đáp án cụ thể; không tự suy đoán."},
+    {"prompt": "6 ngôi nhà ở 6 đỉnh lục giác đều. Đặt trạm ở tâm O để cách đều các nhà.", "answerFromSource": null, "note": "Bài toán thực tế trong nguồn; nguồn không ghi một đáp án diễn giải riêng."}
+  ],
+  "auraPractice": {
+    "status": "not_generated",
+    "reason": "Source already contains review exercises; no model-created questions are needed for this ingestion."
+  }
+}

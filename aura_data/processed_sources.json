@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "provider": "google_drive",
+      "driveFileId": "1VjpyEPAUO0Mxc2TaZH5MaUnt_ovugzQ2",
+      "name": "L6_TOAN_CONG_THUC_HINH_HOC.jpg",
+      "modifiedTime": "2026-10-27T07:49:30.069Z",
+      "classification": "grade6/math/bai18/knowledge_formula_poster",
+      "representation": "aura_data/math6/bai18_tam_giac_deu_hinh_vuong_luc_giac_deu.json",
+      "sourcePreserved": true
+    }
+  ]
+}
