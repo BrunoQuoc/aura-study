@@ -6,6 +6,8 @@
   const SUBJECTS=()=>window.AURA_SUBJECTS||[];
   const EXAMS=()=>window.AURA_MATH_EXAMS||[];
   const REV=()=>window.AURA_REVIEWS||{};
+  const PRACTICE_READY=['TOAN','NGUVAN','TIENGANH'];
+  let practiceSelection={sub:'TOAN',count:15};
 
   function periodOf(text){
     const s=String(text||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -51,12 +53,25 @@
       <div class="card">${list.length?list.map(r=>`<div class="resource"><div class="fileico">${r.kind==='exam'?'📝':'📘'}</div><div class="grow"><b>${esc(resourceTitle(r))}</b><small>${esc(subjectName(r.subject))} · ${r.kind==='review'?'Bài mẫu có lời giải · ':''}${esc(r.desc)}</small></div><button class="btn ${r.kind==='exam'?'primary':'soft'}" onclick="${r.kind==='exam'?`exam('${r.id}')`:`review('${r.subject}','${r.id}')`}">${r.kind==='exam'?'Làm đề':'Xem lời giải'}</button></div>`).join(''):`<div class="meta">Chưa có nội dung được gắn chắc chắn cho ${p.title}. Khi có nội dung ôn, AURA sẽ tự đưa tài liệu phù hợp vào đây.</div><div style="margin-top:14px"><button class="btn primary" onclick="lessons()">Mở bài học</button></div>`}</div>`;
   }
 
-  function studentPractice(sub='TOAN'){
+  function studentPractice(sub=practiceSelection.sub,count=practiceSelection.count){
     setPage('generator');const app=$('#app');if(!app)return;
-    const ready=['TOAN','NGUVAN','TIENGANH'];
+    if(PRACTICE_READY.includes(sub))practiceSelection.sub=sub;
+    if([10,15,20].includes(Number(count)))practiceSelection.count=Number(count);
+    const selectedSub=practiceSelection.sub,selectedCount=practiceSelection.count;
     app.innerHTML=`<div class="sectionhead" style="margin-top:0"><div><h2>Luyện nhanh</h2><span>Chọn môn và số câu, AURA tự chuẩn bị bài luyện</span></div></div>
-      <div class="subjects">${SUBJECTS().map(s=>`<div class="subject" ${ready.includes(s[0])?`onclick="generator('${s[0]}')"`:'style="opacity:.5"'}><div class="ico">${esc(s[2])}</div><h3>${esc(s[1])}</h3><div class="meta">${ready.includes(s[0])?'Có thể luyện ngay':'Đang cập nhật nội dung'}</div><span class="tag ${ready.includes(s[0])?'ready':'empty'}">${s[0]===sub&&ready.includes(s[0])?'Đang chọn':ready.includes(s[0])?'Sẵn sàng':'Chưa có nội dung'}</span></div>`).join('')}</div>
-      <div class="card" style="margin-top:16px"><h3>Chọn số câu</h3><p class="meta">Bé chỉ cần chọn độ dài buổi luyện.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn soft" onclick="studentStartQuick('${sub}',10)">10 câu · Nhanh</button><button class="btn primary" onclick="studentStartQuick('${sub}',15)">15 câu · Vừa đủ</button><button class="btn soft" onclick="studentStartQuick('${sub}',20)">20 câu · Ôn kỹ</button></div><div class="note" style="margin-top:14px"><b>Mẹo:</b> làm hết một lượt trước, sau đó mới xem đáp án và ôn lại câu sai.</div></div>`;
+      <div class="subjects practice-subjects">${SUBJECTS().map(s=>{const ready=PRACTICE_READY.includes(s[0]),selected=s[0]===selectedSub&&ready;return `<div class="subject practice-subject ${selected?'is-selected':''}" ${ready?`onclick="studentSelectPracticeSubject('${s[0]}')"`:'style="opacity:.5"'} aria-pressed="${selected?'true':'false'}"><div class="ico">${esc(s[2])}</div><h3>${esc(s[1])}</h3><div class="meta">${ready?'Có thể luyện ngay':'Đang cập nhật nội dung'}</div><span class="tag ${selected?'practice-selected-tag':ready?'ready':'empty'}">${selected?'✓ Đang chọn':ready?'Sẵn sàng':'Chưa có nội dung'}</span></div>`}).join('')}</div>
+      <div class="card practice-picker" style="margin-top:16px"><h3>Chọn số câu</h3><p class="meta">Bé chọn độ dài buổi luyện, sau đó bấm “Bắt đầu luyện”.</p><div class="practice-counts"><button class="btn practice-count ${selectedCount===10?'is-selected':''}" onclick="studentSelectPracticeCount(10)">10 câu <span>Nhanh</span></button><button class="btn practice-count ${selectedCount===15?'is-selected':''}" onclick="studentSelectPracticeCount(15)">15 câu <span>Vừa đủ</span></button><button class="btn practice-count ${selectedCount===20?'is-selected':''}" onclick="studentSelectPracticeCount(20)">20 câu <span>Ôn kỹ</span></button></div><div class="practice-start-row"><div class="practice-choice-summary"><span>Đã chọn</span><strong>${esc(subjectName(selectedSub))} · ${selectedCount} câu</strong></div><button class="btn primary practice-start" onclick="studentStartQuick('${selectedSub}',${selectedCount})">Bắt đầu luyện →</button></div></div>`;
+  }
+
+  function studentSelectPracticeSubject(sub){
+    if(!PRACTICE_READY.includes(sub))return;
+    practiceSelection.sub=sub;
+    studentPractice(sub,practiceSelection.count);
+  }
+  function studentSelectPracticeCount(count){
+    count=Number(count);if(![10,15,20].includes(count))return;
+    practiceSelection.count=count;
+    studentPractice(practiceSelection.sub,count);
   }
 
   function studentStartQuick(sub,count){
@@ -67,6 +82,8 @@
 
   window.studentReviewHub=studentReviewHub;
   window.studentExamPeriod=studentExamPeriod;
+  window.studentSelectPracticeSubject=studentSelectPracticeSubject;
+  window.studentSelectPracticeCount=studentSelectPracticeCount;
   window.studentStartQuick=studentStartQuick;
   window.library=studentReviewHub;
   window.generator=studentPractice;
