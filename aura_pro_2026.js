@@ -99,3 +99,10 @@
     link.rel='stylesheet';link.href='subject_palette.css?v=palette-r1';link.dataset.auraSubjectPalette='1';document.head.appendChild(link);
   }
 })();
+
+(function loadReadingTypography(){
+  if(document.body.classList.contains('student-shell')&&!document.querySelector('link[data-aura-reading-type]')){
+    const link=document.createElement('link');
+    link.rel='stylesheet';link.href='reading_typography.css?v=reading-r1';link.dataset.auraReadingType='1';document.head.appendChild(link);
+  }
+})();
