@@ -62,14 +62,15 @@
   };
 
   function format(sec){sec=Math.max(0,sec);const m=Math.floor(sec/60),s=sec%60;return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+  function examIsVisible(){return !!document.querySelector('#app input[type="radio"][name^="mc"]')}
   function injectTimer(exam){
     const app=document.getElementById('app');if(!app)return;
     app.querySelector('.exam-timerbar')?.remove();
     const duration=durationFor(exam),key=timerKey(exam.id);
     let end=Number(localStorage.getItem(key)||0);
-    if(!end||end<=Date.now()){end=Date.now()+duration*60*1000;localStorage.setItem(key,String(end))}
+    if(!end){end=Date.now()+duration*60*1000;localStorage.setItem(key,String(end))}
     const bar=document.createElement('div');bar.className='exam-timerbar';
-    bar.innerHTML=`<div><span class="exam-timer-label">Thời gian làm bài</span><strong id="examCountdown">${format(duration*60)}</strong></div><div class="exam-timer-rule">${duration} phút</div>`;
+    bar.innerHTML=`<div><span class="exam-timer-label">Thời gian làm bài</span><strong id="examCountdown">${format(Math.max(0,Math.ceil((end-Date.now())/1000)))}</strong></div><div class="exam-timer-rule">${duration} phút</div>`;
     const first=app.firstElementChild;first?.insertAdjacentElement('afterend',bar);
     activeExamId=exam.id;
     clearInterval(tickHandle);
@@ -79,18 +80,25 @@
       const el=document.getElementById('examCountdown');if(el)el.textContent=format(left);
       bar.classList.toggle('is-warning',left<=300&&left>60);
       bar.classList.toggle('is-danger',left<=60);
-      if(left<=0&&!submitting){submitting=true;clearInterval(tickHandle);localStorage.removeItem(key);setTimeout(()=>{try{window.gradeExam(exam.id)}finally{submitting=false}},50)}
+      if(left<=0&&!submitting){
+        clearInterval(tickHandle);
+        if(!examIsVisible())return;
+        submitting=true;
+        setTimeout(()=>{try{window.gradeExam(exam.id)}finally{submitting=false}},50);
+      }
     }
-    tick();tickHandle=setInterval(tick,1000);
+    tick();if(Number(localStorage.getItem(key)||0)>Date.now())tickHandle=setInterval(tick,1000);
   }
 
   const originalExam=window.exam;
   if(typeof originalExam==='function'){
     window.exam=function(id){
+      const app=document.getElementById('app');
+      const fromResult=!!app?.querySelector('.score')&&/KẾT QUẢ TRẮC NGHIỆM/i.test(app.textContent||'');
       if(id===QUICK_ID)ensureQuick();
       const e=EXAMS().find(x=>x.id===id);
       originalExam(id);
-      if(e&&e.ready)setTimeout(()=>injectTimer(e),0);
+      if(e&&e.ready&&!fromResult)setTimeout(()=>injectTimer(e),0);
     };
   }
 
