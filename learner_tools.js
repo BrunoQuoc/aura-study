@@ -38,14 +38,7 @@
     });
     saveWrong(book);
   }
-
-  /* Wrap grading without changing the existing scoring logic. */
-  function installGradeHook(){
-    if(typeof window.gradeExam!=='function'||window.gradeExam.__auraWrongHook)return;
-    const original=window.gradeExam;
-    const wrapped=function(id){recordExamLearning(id);return original.apply(this,arguments)};
-    wrapped.__auraWrongHook=true;window.gradeExam=wrapped;
-  }
+  window.auraRecordExamLearning=recordExamLearning;
 
   function examQuestions(){return [...document.querySelectorAll('#app .q')].filter(q=>q.querySelector('input[type="radio"][name^="mc"]'))}
   function answered(q){return !!q.querySelector('input[type="radio"]:checked')}
@@ -113,7 +106,7 @@
     if(typeof window.setActive==='function')window.setActive('history');
     const app=$('#app'),list=wrongEntries();if(!app)return;
     const need=list.filter(x=>(x.consecutiveCorrect||0)<2).length;
-    app.innerHTML=`<button class="btn soft" type="button" onclick="history()" style="margin-bottom:12px">← Kết quả</button><div class="sectionhead" style="margin-top:0"><div><h2>Sổ câu sai</h2><span>${need} câu đang cần ưu tiên ôn lại</span></div></div>${list.length?`<div class="wrong-book-grid">${list.map((x,i)=>{const st=wrongStatus(x);return `<article class="card wrong-item ${st[1]}"><div class="wrong-item-top"><span class="wrong-topic">${esc(x.topic||'Toán')}</span><span class="wrong-status">${st[0]}</span></div><h3>${esc(x.stem)}</h3><div class="wrong-stats"><span>Sai <b>${x.wrongCount||0}</b> lần</span><span>Làm đúng lại <b>${x.correctAfterWrong||0}</b> lần</span></div><details><summary>Xem đáp án đúng</summary><div class="okbox"><b>${esc(x.correctAnswer)}.</b> ${esc(x.correctText)}</div></details>${x.lastAnswer?`<p class="meta">Lần sai gần nhất: ${esc(x.lastAnswer)}${x.lastExam?' · '+esc(x.lastExam):''}</p>`:''}</article>`}).join('')}</div>`:`<div class="card"><h3>Chưa có câu sai</h3><p class="meta">Sau khi bé làm đề, AURA sẽ tự lưu các câu cần ôn lại tại đây.</p></div>`}`;
+    app.innerHTML=`<button class="btn soft" type="button" onclick="history()" style="margin-bottom:12px">← Kết quả</button><div class="sectionhead" style="margin-top:0"><div><h2>Sổ câu sai</h2><span>${need} câu đang cần ưu tiên ôn lại</span></div></div>${list.length?`<div class="wrong-book-grid">${list.map(x=>{const st=wrongStatus(x);return `<article class="card wrong-item ${st[1]}"><div class="wrong-item-top"><span class="wrong-topic">${esc(x.topic||'Toán')}</span><span class="wrong-status">${st[0]}</span></div><h3>${esc(x.stem)}</h3><div class="wrong-stats"><span>Sai <b>${x.wrongCount||0}</b> lần</span><span>Làm đúng lại <b>${x.correctAfterWrong||0}</b> lần</span></div><details><summary>Xem đáp án đúng</summary><div class="okbox"><b>${esc(x.correctAnswer)}.</b> ${esc(x.correctText)}</div></details>${x.lastAnswer?`<p class="meta">Lần sai gần nhất: ${esc(x.lastAnswer)}${x.lastExam?' · '+esc(x.lastExam):''}</p>`:''}</article>`}).join('')}</div>`:`<div class="card"><h3>Chưa có câu sai</h3><p class="meta">Sau khi bé làm đề, AURA sẽ tự lưu các câu cần ôn lại tại đây.</p></div>`}`;
   };
 
   function relabelStudentNav(){
@@ -122,7 +115,7 @@
     document.querySelectorAll('.mobilebar button').forEach(b=>{const oc=b.getAttribute('onclick')||'',small=b.querySelector('small');if(!small)return;if(/home\(/.test(oc))small.textContent='Hôm nay';else if(/library\(/.test(oc))small.textContent='Ôn thi';else if(/lessons\(/.test(oc))small.textContent='Bài học';else if(/generator\(/.test(oc))small.textContent='Luyện nhanh';else if(/history\(/.test(oc))small.textContent='Kết quả'});
   }
 
-  function refresh(){installGradeHook();relabelStudentNav();ensureExamNavigator();appendWrongSummary()}
+  function refresh(){relabelStudentNav();ensureExamNavigator();appendWrongSummary()}
   function queue(){if(mutQueued)return;mutQueued=true;requestAnimationFrame(()=>{mutQueued=false;refresh()})}
   function init(){refresh();document.addEventListener('change',e=>{if(e.target.matches('#app input[type="radio"][name^="mc"]'))setTimeout(updateExamProgress,0)});addEventListener('scroll',trackCurrentQuestion,{passive:true});new MutationObserver(queue).observe(document.body,{childList:true,subtree:true})}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
