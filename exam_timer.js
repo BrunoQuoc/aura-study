@@ -106,6 +106,7 @@
   if(typeof originalGrade==='function'){
     window.gradeExam=function(id){
       activeExamId='';clearInterval(tickHandle);localStorage.removeItem(timerKey(id));
+      if(typeof window.auraRecordExamLearning==='function')window.auraRecordExamLearning(id);
       return originalGrade(id);
     };
   }
