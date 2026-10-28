@@ -1,7 +1,7 @@
 /* AURA STUDY — Premium interaction layer. No study content is changed. */
 (function(){
   const navMap=[
-    ['home','home'],['library','library'],['generator','generator'],['history','history'],['guide','guide']
+    ['home','home'],['library','library'],['lessons','lessons'],['generator','generator'],['history','history'],['guide','guide']
   ];
 
   function activePage(){
@@ -67,7 +67,7 @@
   }
 
   function init(){
-    ['home','library','generator','history','guide'].forEach(wrapNavigation);
+    ['home','library','lessons','generator','history','guide'].forEach(wrapNavigation);
     decorate();
     const app=document.querySelector('#app');
     if(app)new MutationObserver(queue).observe(app,{childList:true,subtree:true});
