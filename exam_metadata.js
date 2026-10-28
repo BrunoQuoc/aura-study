@@ -100,22 +100,35 @@
     const manual=cleanPeriods(ov.periods);
     return ov.mode==='add'?[...new Set([...base,...manual])]:manual;
   }
+  function sourceLabel(row){
+    const parts=[];
+    if(row?.sourcePeriods?.length)parts.push(row.sourcePeriods.map(p=>PERIODS[p]?.label||p).join(', '));
+    else if(row?.sourceTerm)parts.push(row.sourceTerm);
+    return parts.join(' · ')||'nguồn không ghi rõ kỳ';
+  }
   function effectiveMeta(group,key,row){
     if(!row)return null;
-    const ov=overrideFor(group,key),periods=effectivePeriods(group,key,row);
+    const ov=overrideFor(group,key),defaultPeriods=cleanPeriods(row.periods),periods=effectivePeriods(group,key,row),effectiveTerm=termForPeriods(periods,row.term||'');
+    const overrideScope=ov?`Admin gán sử dụng ${periods.map(p=>PERIODS[p]?.label||p).join(', ')||'ngoài kỳ'}; nguồn: ${sourceLabel(row)}${ov.reason?` · ${ov.reason}`:''}`:'';
     return {
       ...row,
       sourcePeriods:cleanPeriods(row.sourcePeriods),
       sourceTerm:row.sourceTerm||'',
+      defaultPeriods,
+      defaultTerm:row.term||'',
+      periods,
+      term:effectiveTerm,
       effectivePeriods:periods,
-      effectiveTerm:termForPeriods(periods,row.term||''),
+      effectiveTerm,
+      scope:ov?[overrideScope,row.scope].filter(Boolean).join(' · '):row.scope,
+      assignmentBasis:ov?.assignmentBasis||row.assignmentBasis,
       override:ov?{...ov,periods:cleanPeriods(ov.periods)}:null,
       effectiveAssignmentBasis:ov?.assignmentBasis||row.assignmentBasis
     };
   }
 
   const registry={
-    version:'1.2.0',schemaVersion:2,periods:PERIODS,subjects:SUBJECTS,resources:RESOURCES,banks:BANKS,overrides:OVERRIDES,
+    version:'1.2.1',schemaVersion:2,periods:PERIODS,subjects:SUBJECTS,resources:RESOURCES,banks:BANKS,overrides:OVERRIDES,
     schema:{
       required:['subject','docType'],
       resourceRequired:['subject','resourceId','kind','grade','sourceFile','docType','sourcePeriods','sourceTerm','periods','assignmentBasis','confidence'],
