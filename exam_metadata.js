@@ -1,6 +1,7 @@
 /* AURA STUDY — standardized exam metadata registry
    Source metadata is immutable. Usage assignment can be overridden separately. */
 (function(){
+  const OVERRIDE_STORAGE_KEY='aura_metadata_overrides_v1';
   const SUBJECTS={
     TOAN:{label:'Toán',status:'ready',generatorPeriods:['GK1'],note:'Kho hiện tại tập trung nội dung đầu năm và giữa học kỳ I.'},
     NGUVAN:{label:'Ngữ văn',status:'partial',generatorPeriods:[],note:'Có nội dung HKI nhưng generator đang dùng chung tài liệu chưa phân kỳ; chưa bật mô phỏng theo kỳ cho tới khi tách pool sạch metadata.'},
@@ -66,26 +67,37 @@
     CK2:{label:'Cuối kỳ 2',term:'HK2'}
   };
 
-  /*
-    Manual usage overrides live here, separate from source/default metadata.
-    Key format must match RESOURCES or BANKS.
-
-    Example when Admin explicitly wants to USE an HK1 source in HK2:
-      resources: {
-        'review:...': {
-          periods:['GK2'], mode:'replace', assignmentBasis:'manual_admin_override',
-          reason:'Phụ huynh chủ động dùng lại nội dung HK1 trong HK2.'
-        }
-      }
-
-    mode='replace' moves usage to the requested periods without changing source metadata.
-    mode='add' keeps default periods and additionally exposes the resource in requested periods.
-  */
-  const OVERRIDES={resources:{},banks:{}};
+  /* Static overrides stay empty in production. Runtime Admin decisions are persisted separately. */
+  const STATIC_OVERRIDES={resources:{},banks:{}};
 
   function cleanPeriods(values){
     return [...new Set((Array.isArray(values)?values:[]).filter(p=>PERIODS[p]))];
   }
+  function cleanOverrideRow(row){
+    if(!row||typeof row!=='object')return null;
+    const mode=row.mode==='add'?'add':'replace';
+    return {periods:cleanPeriods(row.periods),mode,assignmentBasis:'manual_admin_override',reason:String(row.reason||'').trim(),updatedAt:String(row.updatedAt||'')};
+  }
+  function cleanOverrideGroup(rows){
+    const out={};Object.entries(rows&&typeof rows==='object'?rows:{}).forEach(([key,row])=>{const clean=cleanOverrideRow(row);if(clean)out[key]=clean});return out;
+  }
+  function readStoredOverrides(){
+    try{
+      const raw=JSON.parse(localStorage.getItem(OVERRIDE_STORAGE_KEY)||'{}');
+      return {resources:cleanOverrideGroup(raw.resources),banks:cleanOverrideGroup(raw.banks)};
+    }catch(_){return {resources:{},banks:{}}}
+  }
+  function mergeOverrides(){
+    const stored=readStoredOverrides();
+    return {resources:{...STATIC_OVERRIDES.resources,...stored.resources},banks:{...STATIC_OVERRIDES.banks,...stored.banks}};
+  }
+  let OVERRIDES=mergeOverrides();
+  function persistOverrides(){
+    const stored={resources:{...OVERRIDES.resources},banks:{...OVERRIDES.banks}};
+    localStorage.setItem(OVERRIDE_STORAGE_KEY,JSON.stringify(stored));
+    return stored;
+  }
+  function reloadOverrides(){OVERRIDES=mergeOverrides();if(window.AURA_EXAM_METADATA)window.AURA_EXAM_METADATA.overrides=OVERRIDES;return OVERRIDES}
   function termForPeriods(values,fallback=''){
     const terms=[...new Set(cleanPeriods(values).map(p=>PERIODS[p]?.term).filter(Boolean))];
     return terms.length===1?terms[0]:(fallback||'');
@@ -128,7 +140,7 @@
   }
 
   const registry={
-    version:'1.2.1',schemaVersion:2,periods:PERIODS,subjects:SUBJECTS,resources:RESOURCES,banks:BANKS,overrides:OVERRIDES,
+    version:'1.3.0',schemaVersion:3,periods:PERIODS,subjects:SUBJECTS,resources:RESOURCES,banks:BANKS,overrides:OVERRIDES,overrideStorageKey:OVERRIDE_STORAGE_KEY,
     schema:{
       required:['subject','docType'],
       resourceRequired:['subject','resourceId','kind','grade','sourceFile','docType','sourcePeriods','sourceTerm','periods','assignmentBasis','confidence'],
@@ -160,6 +172,22 @@
     return !!(s&&Array.isArray(s.generatorPeriods)&&s.generatorPeriods.includes(period));
   };
   window.auraMetadataOverrideFor=function(group,key){return overrideFor(group,key)};
+  window.auraMetadataOverrides=function(){return {resources:{...OVERRIDES.resources},banks:{...OVERRIDES.banks}}};
+  window.auraReloadMetadataOverrides=reloadOverrides;
+  window.auraSetMetadataOverride=function(group,key,payload){
+    const base=group==='resources'?RESOURCES:group==='banks'?BANKS:null;if(!base||!base[key])return {ok:false,error:'Không tìm thấy metadata gốc.'};
+    const clean=cleanOverrideRow(payload);if(!clean)return {ok:false,error:'Override không hợp lệ.'};
+    OVERRIDES[group]={...OVERRIDES[group],[key]:{...clean,updatedAt:new Date().toISOString()}};
+    registry.overrides=OVERRIDES;persistOverrides();
+    window.dispatchEvent(new CustomEvent('aura:metadata-overrides-changed',{detail:{group,key,action:'set'}}));
+    return {ok:true,meta:effectiveMeta(group,key,base[key])};
+  };
+  window.auraClearMetadataOverride=function(group,key){
+    if(!OVERRIDES[group]?.[key])return {ok:true};
+    const next={...OVERRIDES[group]};delete next[key];OVERRIDES[group]=next;registry.overrides=OVERRIDES;persistOverrides();
+    window.dispatchEvent(new CustomEvent('aura:metadata-overrides-changed',{detail:{group,key,action:'clear'}}));
+    return {ok:true};
+  };
   window.auraValidateExamMetadata=function(){
     const errors=[],validPeriods=new Set(Object.keys(PERIODS));
     const validatePeriods=(key,label,values)=>{
@@ -185,4 +213,5 @@
     }));
     return {ok:errors.length===0,errors,version:registry.version,schemaVersion:registry.schemaVersion};
   };
+  window.addEventListener('storage',e=>{if(e.key===OVERRIDE_STORAGE_KEY){reloadOverrides();window.dispatchEvent(new CustomEvent('aura:metadata-overrides-changed',{detail:{action:'storage'}}))}});
 })();
