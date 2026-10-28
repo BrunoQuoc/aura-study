@@ -10,6 +10,9 @@ body.student-shell .hero h1{max-width:620px;margin-bottom:18px}
 body.student-shell .sectionhead span{display:none}
 body.student-shell .sync-panel{display:none!important}
 body.student-shell [data-aura-sync]{display:none!important}
+/* Technical/yellow notices are for Admin only. */
+body.student-shell #app .note{display:none!important}
+body.student-shell #app .lesson-source-note{display:none!important}
 /* Generator: keep controls/actions, hide system explanations. */
 body.student-shell #app>.card:has(.generator-grid) .note{display:none!important}
 body.student-shell #app>.card:has(.generator-grid)+.card{display:none!important}
