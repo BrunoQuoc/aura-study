@@ -33,24 +33,41 @@
   }
 
   function subjectName(id){return SUBJECTS().find(x=>x[0]===id)?.[1]||id}
+  function subjectIcon(id){return SUBJECTS().find(x=>x[0]===id)?.[2]||'•'}
   function setPage(p){if(typeof window.setActive==='function')window.setActive(p)}
   function resourceTitle(r){return r.kind==='review'?String(r.title||'').replace(/^Ôn tập/i,'Bài mẫu'):r.title}
+  function periodList(id){return resources().filter(x=>x.period===id)}
+  function periodSubjectList(id,sub){return resources().filter(x=>x.period===id&&x.subject===sub)}
 
   function studentReviewHub(){
     setPage('library');const app=$('#app');if(!app)return;
     const rs=resources(),unassigned=rs.filter(x=>!x.period).length;
-    app.innerHTML=`<div class="sectionhead" style="margin-top:0"><div><h2>Ôn thi theo năm học</h2><span>Chọn kỳ thi để xem đề và bài mẫu có lời giải</span></div></div>
-      <div class="card quick15-card"><div class="quick15-row"><div class="quick15-main"><div class="quick15-icon">15'</div><div><h3>Kiểm tra 15 phút</h3><p>AURA tự trộn 10 câu trắc nghiệm từ ngân hàng câu hỏi đủ dữ kiện. Mỗi lần bắt đầu là một đề mới.</p></div></div><button class="btn primary" onclick="startRandom15Exam()">Làm bài 15 phút</button></div></div>
-      <div class="subjects">${Object.entries(PERIODS).map(([id,p])=>{const n=rs.filter(x=>x.period===id).length;return `<div class="subject" onclick="studentExamPeriod('${id}')"><div class="ico">${p.icon}</div><h3>${p.title}</h3><div class="meta">${p.desc}</div><span class="tag ${n?'ready':'empty'}">${n?n+' tài liệu · '+p.minutes+' phút':'Chưa có nội dung'}</span></div>`}).join('')}</div>
-      <div class="card" style="margin-top:16px"><b>AURA tự phân loại theo kỳ thi</b><p class="meta">Khi có nội dung ôn hoặc đề cương, AURA sẽ gắn bài học, bài mẫu và đề vào đúng kỳ. Tài liệu chưa đủ căn cứ sẽ không bị xếp đoán.</p>${unassigned?`<div class="note">${unassigned} tài liệu hiện có chưa được gắn kỳ vì chưa đủ căn cứ.</div>`:''}</div>`;
+    app.innerHTML=`<div class="sectionhead" style="margin-top:0"><div><h2>Ôn thi theo năm học</h2><span>Chọn kỳ thi → chọn môn → xem đề và bài mẫu có lời giải</span></div></div>
+      <div class="card quick15-card"><div class="quick15-row"><div class="quick15-main"><div class="quick15-icon">15'</div><div><h3>Kiểm tra 15 phút · Toán 6</h3><p>AURA tự trộn 10 câu trắc nghiệm Toán từ ngân hàng câu hỏi đủ dữ kiện. Mỗi lần bắt đầu là một đề mới.</p></div></div><button class="btn primary" onclick="startRandom15Exam()">Làm bài 15 phút</button></div></div>
+      <div class="subjects">${Object.entries(PERIODS).map(([id,p])=>{const list=rs.filter(x=>x.period===id),n=list.length,subCount=new Set(list.map(x=>x.subject)).size;return `<div class="subject" onclick="studentExamPeriod('${id}')"><div class="ico">${p.icon}</div><h3>${p.title}</h3><div class="meta">${p.desc}</div><span class="tag ${n?'ready':'empty'}">${n?subCount+' môn · '+n+' tài liệu · '+p.minutes+' phút':'Chưa có nội dung'}</span></div>`}).join('')}</div>
+      <div class="card" style="margin-top:16px"><b>AURA tự phân loại theo kỳ thi</b><p class="meta">Khi có nội dung ôn hoặc đề cương, AURA sẽ gắn bài học, bài mẫu và đề vào đúng kỳ và đúng môn. Tài liệu chưa đủ căn cứ sẽ không bị xếp đoán.</p>${unassigned?`<div class="note">${unassigned} tài liệu hiện có chưa được gắn kỳ vì chưa đủ căn cứ.</div>`:''}</div>`;
   }
 
   function studentExamPeriod(id){
     setPage('library');const app=$('#app'),p=PERIODS[id];if(!app||!p)return studentReviewHub();
-    const list=resources().filter(x=>x.period===id);
+    const list=periodList(id),readySubs=new Set(list.map(x=>x.subject));
     app.innerHTML=`<button class="btn soft" onclick="studentReviewHub()" style="margin-bottom:12px">← Ôn thi</button>
       <div class="sectionhead" style="margin-top:0"><div><h2>${p.title}</h2><span>${p.desc} · Thời gian làm đề: ${p.minutes} phút</span></div></div>
-      <div class="card">${list.length?list.map(r=>`<div class="resource"><div class="fileico">${r.kind==='exam'?'📝':'📘'}</div><div class="grow"><b>${esc(resourceTitle(r))}</b><small>${esc(subjectName(r.subject))} · ${r.kind==='review'?'Bài mẫu có lời giải · ':''}${esc(r.desc)}</small></div><button class="btn ${r.kind==='exam'?'primary':'soft'}" onclick="${r.kind==='exam'?`exam('${r.id}')`:`review('${r.subject}','${r.id}')`}">${r.kind==='exam'?'Làm đề':'Xem lời giải'}</button></div>`).join(''):`<div class="meta">Chưa có nội dung được gắn chắc chắn cho ${p.title}. Khi có nội dung ôn, AURA sẽ tự đưa tài liệu phù hợp vào đây.</div><div style="margin-top:14px"><button class="btn primary" onclick="lessons()">Mở bài học</button></div>`}</div>`;
+      <div class="subjects exam-period-subjects">${SUBJECTS().map(s=>{const n=periodSubjectList(id,s[0]).length,ready=readySubs.has(s[0]);return `<div class="subject ${ready?'':'is-empty'}" onclick="studentExamSubject('${id}','${s[0]}')" ${ready?'':'style="opacity:.62"'}><div class="ico">${esc(s[2])}</div><h3>${esc(s[1])}</h3><div class="meta">${ready?'Đề thi, bài mẫu và tài liệu ôn':'Chưa có tài liệu được gắn chắc chắn'}</div><span class="tag ${ready?'ready':'empty'}">${ready?n+' tài liệu':'Chưa có nội dung'}</span></div>`}).join('')}</div>
+      <div class="card" style="margin-top:16px"><b>${list.length?`${new Set(list.map(x=>x.subject)).size} môn đã có nội dung`:'Kỳ này chưa có nội dung được phân loại'}</b><p class="meta">Chọn từng môn để xem đúng tài liệu của môn đó. Những môn chưa có nội dung vẫn được giữ chỗ để cấu trúc năm học luôn nhất quán.</p></div>`;
+  }
+
+  function studentExamSubject(id,sub){
+    setPage('library');const app=$('#app'),p=PERIODS[id];if(!app||!p)return studentReviewHub();
+    const list=periodSubjectList(id,sub),name=subjectName(sub),icon=subjectIcon(sub);
+    app.innerHTML=`<button class="btn soft" onclick="studentExamPeriod('${id}')" style="margin-bottom:12px">← ${p.title}</button>
+      <div class="sectionhead" style="margin-top:0"><div><h2>${esc(icon)} ${esc(name)} · ${p.title}</h2><span>${list.length?`${list.length} tài liệu · `:''}Thời gian làm đề: ${p.minutes} phút</span></div></div>
+      <div class="card">${list.length?list.map(r=>`<div class="resource"><div class="fileico">${r.kind==='exam'?'📝':'📘'}</div><div class="grow"><b>${esc(resourceTitle(r))}</b><small>${r.kind==='review'?'Bài mẫu có lời giải · ':''}${esc(r.desc)}</small></div><button class="btn ${r.kind==='exam'?'primary':'soft'}" onclick="${r.kind==='exam'?`exam('${r.id}')`:`review('${r.subject}','${r.id}')`}">${r.kind==='exam'?'Làm đề':'Xem lời giải'}</button></div>`).join(''):`<div class="meta">Chưa có nội dung ${esc(name)} được gắn chắc chắn cho ${p.title}. AURA sẽ chỉ đưa tài liệu vào đây khi xác định đúng kỳ và đúng môn.</div><div style="margin-top:14px"><button class="btn primary" onclick="studentOpenSubjectLessons('${sub}')">Mở bài học ${esc(name)}</button></div>`}</div>`;
+  }
+
+  function studentOpenSubjectLessons(sub){
+    if(typeof window.lessonSubject==='function')return window.lessonSubject(sub);
+    if(typeof window.lessons==='function')return window.lessons();
   }
 
   function studentPractice(sub=practiceSelection.sub,count=practiceSelection.count){
@@ -82,6 +99,8 @@
 
   window.studentReviewHub=studentReviewHub;
   window.studentExamPeriod=studentExamPeriod;
+  window.studentExamSubject=studentExamSubject;
+  window.studentOpenSubjectLessons=studentOpenSubjectLessons;
   window.studentSelectPracticeSubject=studentSelectPracticeSubject;
   window.studentSelectPracticeCount=studentSelectPracticeCount;
   window.studentStartQuick=studentStartQuick;
