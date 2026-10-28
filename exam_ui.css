@@ -1,0 +1,37 @@
+/* AURA STUDY — focused exam answer UI */
+.aura-polished .q{padding:20px 22px!important}
+.aura-polished .q>h3{margin:7px 0 16px!important;font-size:16px;line-height:1.5}
+.aura-polished .answer-option{
+  position:relative;display:flex;align-items:center;gap:12px;min-height:54px;
+  margin:8px 0;padding:10px 46px 10px 12px;border:1px solid #e2e6ee;border-radius:14px;
+  background:#fff;cursor:pointer;box-shadow:none;transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+.aura-polished .answer-option:hover{background:#fafbff;border-color:#cfd5e8;transform:translateY(-1px)}
+.aura-polished .answer-option input[type="radio"]{
+  position:absolute;opacity:0;pointer-events:none;width:1px!important;height:1px!important;margin:0!important;padding:0!important;
+}
+.aura-polished .answer-option>span{display:flex;align-items:center;gap:12px;width:100%;min-width:0;color:#26324a;font-size:14px;line-height:1.45}
+.aura-polished .answer-option>span>b{
+  display:grid!important;place-items:center;flex:0 0 32px;width:32px;height:32px;margin:0!important;
+  border:1px solid #dfe4ee;border-radius:10px;background:#f5f7fb;color:#52617a;font-size:12px;font-weight:850;line-height:1;
+}
+.aura-polished .answer-option:has(input:checked){
+  border-color:#8d99f3;background:#f4f5ff;box-shadow:0 0 0 2px rgba(85,103,233,.09);
+}
+.aura-polished .answer-option:has(input:checked)>span{color:#1d2850;font-weight:700}
+.aura-polished .answer-option:has(input:checked)>span>b{border-color:#596be8;background:#596be8;color:#fff;box-shadow:0 6px 14px rgba(85,103,233,.22)}
+.aura-polished .answer-option:has(input:checked)::after{
+  content:"✓";position:absolute;right:15px;top:50%;transform:translateY(-50%);display:grid;place-items:center;
+  width:24px;height:24px;border-radius:999px;background:#e4e8ff;color:#4d5ed6;font-size:12px;font-weight:900;
+}
+.aura-polished .answer-option.disabled{opacity:.54;cursor:not-allowed;background:#f7f8fa}
+.aura-polished .answer-option.disabled:hover{transform:none;border-color:#e2e6ee}
+.aura-polished .exam-figure{margin:12px 0 16px}
+@media(max-width:720px){
+  .aura-polished .q{padding:17px!important}
+  .aura-polished .q>h3{font-size:15px;margin-bottom:13px!important}
+  .aura-polished .answer-option{min-height:52px;padding:9px 42px 9px 10px;border-radius:13px}
+  .aura-polished .answer-option>span{font-size:13px;gap:10px}
+  .aura-polished .answer-option>span>b{flex-basis:30px;width:30px;height:30px;border-radius:9px}
+  .aura-polished .answer-option:has(input:checked)::after{right:12px;width:22px;height:22px}
+}
