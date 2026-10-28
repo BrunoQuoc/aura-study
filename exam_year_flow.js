@@ -18,6 +18,17 @@
     CK2:{title:'Cuối kỳ 2',desc:'Ôn toàn bộ phạm vi học kỳ 2',icon:'④',minutes:60}
   };
 
+  function migrateLegacyPeriod(){
+    const legacy=localStorage.getItem('aura_exam_period')||'';
+    if(!legacy)return;
+    const generated=read('aura_generated_exam',null);
+    if(generated&&generated.smartStrategy==='exam'&&!generated.period&&PERIODS[legacy]){
+      localStorage.setItem('aura_generated_exam',JSON.stringify({...generated,period:legacy,generationContext:'exam_period'}));
+    }
+    localStorage.removeItem('aura_exam_period');
+  }
+  migrateLegacyPeriod();
+
   function periodOf(text){
     const s=normalize(text);
     if(/giua\s*(ky|hk)\s*(1|i)\b/.test(s)||/\bgk1\b/.test(s))return'GK1';
@@ -162,18 +173,23 @@
       <section class="card exam-flow-section exam-flow-weak"><div class="exam-flow-title"><div><span>03 · PHẦN YẾU CẦN ÔN</span><h3>Ưu tiên theo dữ liệu của bé</h3><p>Phần yếu là dữ liệu hiện tại của môn học và được hiển thị riêng với metadata kỳ thi; AURA không tự coi phần yếu là nội dung của kỳ nếu chưa có mapping.</p></div>${weakButtons(subject)}</div>${weakRowsHTML(subject)}</section>`;
   }
 
-  function startSmart(subject,strategy,count){
+  function startSmart(subject,strategy,count,period=''){
     const app=document.getElementById('app');if(!app||!ENGINE_READY.has(subject))return;
     count=Math.max(10,Math.min(20,Number(count)||15));
+    const beforeId=read('aura_generated_exam',null)?.id||'';
     app.innerHTML=`<div hidden><select id="genSubject"><option value="${esc(subject)}" selected>${esc(subject)}</option></select><select id="genBasis"><option value="outline" selected>outline</option></select><select id="genCount"><option value="${count}" selected>${count}</option></select><select id="genLevel"><option value="standard" selected>standard</option></select><input id="genKeywords" value=""><select id="smartStrategy"><option value="${esc(strategy)}" selected>${esc(strategy)}</option></select></div>`;
     if(typeof window.generateAuraExam==='function')window.generateAuraExam();
+    const generated=read('aura_generated_exam',null);
+    if(generated?.id&&generated.id!==beforeId){
+      const safePeriod=period&&PERIODS[period]?period:'';
+      localStorage.setItem('aura_generated_exam',JSON.stringify({...generated,period:safePeriod,generationContext:safePeriod?'exam_period':strategy==='weak'?'weakness':'practice'}));
+    }
   }
 
-  window.auraStartWeakStudy=function(subject,count=10){startSmart(subject,'weak',count)};
+  window.auraStartWeakStudy=function(subject,count=10){startSmart(subject,'weak',count,'')};
   window.auraStartPeriodExam=function(subject,period){
     if(!generatorReady(subject,period))return;
-    localStorage.setItem('aura_exam_period',period||'');
-    startSmart(subject,'exam',20);
+    startSmart(subject,'exam',20,period);
   };
 
   window.studentReviewHub=studentReviewHub;
