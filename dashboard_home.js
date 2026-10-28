@@ -3,6 +3,7 @@
   const safe=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback))}catch{return fallback}};
   const attempts=()=>read('aura_attempts',[]);
+  const wrongBook=()=>Object.values(read('aura_wrong_book_v1',{}));
   const subjects=()=>window.AURA_SUBJECTS||[];
   const maps=()=>window.AURA_LESSON_MAPS||[];
   const subjectInfo=id=>subjects().find(x=>x[0]===id)||[id,id,'•',''];
@@ -42,6 +43,12 @@
   function avgScore(a){return a.length?+(a.reduce((s,x)=>s+Number(x.score||0),0)/a.length).toFixed(1):null}
   function recent7(a){const cut=Date.now()-7*86400000;return a.filter(x=>{const t=Date.parse(x.time||'');return Number.isFinite(t)&&t>=cut}).length}
   function dateText(v){const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit'}):''}
+  function activeWrong(){return wrongBook().filter(x=>(x.consecutiveCorrect||0)<2)}
+  function weakFocus(){
+    const list=activeWrong();if(!list.length)return null;
+    const groups={};list.forEach(x=>{const k=x.topic||'Toán tổng hợp',g=groups[k]||(groups[k]={topic:k,questions:0,wrong:0,recovered:0});g.questions++;g.wrong+=x.wrongCount||0;g.recovered+=x.correctAfterWrong||0});
+    return Object.values(groups).sort((a,b)=>(b.questions*4+b.wrong-b.recovered)-(a.questions*4+a.wrong-a.recovered))[0]||null;
+  }
 
   function openSubject(id){rememberSubject(id);if(typeof window.subject==='function')window.subject(id)}
   function openLessonSubject(id){rememberSubject(id);if(typeof window.lessonSubject==='function')window.lessonSubject(id);else if(typeof window.lessons==='function')window.lessons()}
@@ -56,11 +63,12 @@
   window.auraDashboardLessons=function(){if(typeof window.lessons==='function')window.lessons()};
   window.auraDashboardGenerator=function(){if(typeof window.generator==='function')window.generator()};
   window.auraDashboardHistory=function(){if(typeof window.history==='function')window.history()};
+  window.auraDashboardWeak=function(){const focus=weakFocus();if(focus&&typeof window.openWrongBook==='function')window.openWrongBook();else if(typeof window.history==='function')window.history()};
 
   function dashboardHome(){
     if(typeof window.setActive==='function')window.setActive('home');
     const app=document.querySelector('#app');if(!app)return;
-    const a=attempts(),avg=avgScore(a),week=recent7(a),ls=lessonStats(),last=lastSubject(),lastMeta=last?subjectInfo(last):null;
+    const a=attempts(),avg=avgScore(a),week=recent7(a),ls=lessonStats(),last=lastSubject(),lastMeta=last?subjectInfo(last):null,focus=weakFocus(),wrongActive=activeWrong();
     const lowest=a.length?[...a].filter(x=>Number.isFinite(Number(x.score))).sort((x,y)=>Number(x.score)-Number(y.score))[0]:null;
     const contLabel=lastMeta?`Tiếp tục ${safe(lastMeta[1])}`:'Chọn môn để bắt đầu';
     const contHint=lastMeta?`Mở lại ${safe(lastMeta[1])} từ lần học gần nhất.`:'Chọn một môn rồi AURA sẽ ghi nhớ để lần sau mở nhanh.';
@@ -69,7 +77,8 @@
       return `<button class="dash-subject" data-subject="${safe(id)}" onclick="auraDashboardSubject('${safe(id)}')"><span class="dash-subject-icon">${safe(s[2])}</span><span class="dash-subject-copy"><b>${safe(s[1])}</b><small>${ready?'Đã có nội dung':'Đang cập nhật'}</small></span><span class="dash-chevron">›</span></button>`
     }).join('');
     const activity=a.slice(0,3).map(x=>`<div class="dash-activity-row"><div><b>${safe(x.title||'Bài luyện')}</b><small>${safe(dateText(x.time))}${x.note?' · '+safe(x.note):''}</small></div><strong>${Number.isFinite(Number(x.score))?safe(x.score)+'/10':'—'}</strong></div>`).join('');
-    const weakText=lowest?`${safe(lowest.title||'Bài gần đây')} · ${safe(lowest.score)}/10`:'Chưa có dữ liệu để xác định phần yếu.';
+    const weakTitle=focus?focus.topic:(lowest?'Xem lại kết quả':'Theo dõi phần yếu');
+    const weakText=focus?`${focus.questions} câu đang cần ôn lại · ưu tiên theo lỗi thực tế`:lowest?`${safe(lowest.title||'Bài gần đây')} · ${safe(lowest.score)}/10`:'Chưa có dữ liệu để xác định phần yếu.';
 
     app.innerHTML=`<div class="dash-home">
       <section class="dash-hero">
@@ -88,15 +97,15 @@
 
       <section class="dash-stats" aria-label="Tóm tắt học tập">
         <article><span>Điểm trung bình</span><strong>${avg===null?'—':avg+'/10'}</strong><small>${a.length?a.length+' lượt đã chấm':'Chưa có lượt chấm'}</small></article>
-        <article><span>Bài đã làm</span><strong>${a.length}</strong><small>Tổng lượt có kết quả lưu</small></article>
+        <article><span>Câu cần ôn</span><strong>${wrongActive.length}</strong><small>${wrongActive.length?'Từ Sổ câu sai':'Chưa ghi nhận câu sai'}</small></article>
         <article><span>7 ngày gần đây</span><strong>${week}</strong><small>Lượt luyện tập có chấm điểm</small></article>
       </section>
 
       <div class="dash-section-head"><div><h2>Học hôm nay</h2><span>Ba việc ngắn để bắt đầu nhanh</span></div></div>
       <section class="dash-today">
         <button class="dash-task primary-task" onclick="auraDashboardContinue()"><span class="dash-task-kicker">TIẾP TỤC</span><b>${lastMeta?safe(lastMeta[1]):'Chọn môn học'}</b><small>${lastMeta?'Quay lại môn gần nhất':'Bắt đầu từ môn em muốn học'}</small><span class="dash-task-arrow">→</span></button>
-        <button class="dash-task" onclick="auraDashboardHistory()"><span class="dash-task-kicker">ÔN PHẦN YẾU</span><b>${lowest?'Xem lại kết quả':'Theo dõi phần yếu'}</b><small>${weakText}</small><span class="dash-task-arrow">→</span></button>
-        <button class="dash-task" onclick="auraDashboardGenerator()"><span class="dash-task-kicker">LUYỆN ĐỀ</span><b>Tạo đề thông minh</b><small>Cân mức độ, giảm lặp và ưu tiên phần cần củng cố.</small><span class="dash-task-arrow">→</span></button>
+        <button class="dash-task" onclick="auraDashboardWeak()"><span class="dash-task-kicker">ÔN PHẦN YẾU</span><b>${safe(weakTitle)}</b><small>${weakText}</small><span class="dash-task-arrow">→</span></button>
+        <button class="dash-task" onclick="auraDashboardGenerator()"><span class="dash-task-kicker">LUYỆN NHANH</span><b>Tạo bài luyện</b><small>Chọn môn và số câu phù hợp cho một lượt ôn ngắn.</small><span class="dash-task-arrow">→</span></button>
       </section>
 
       <div class="dash-section-head"><div><h2>Môn học</h2><span>Chạm vào môn để mở kho nội dung</span></div><button class="dash-link" onclick="auraDashboardLessons()">Bài học →</button></div>
