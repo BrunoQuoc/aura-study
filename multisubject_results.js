@@ -4,7 +4,7 @@
   const isAdmin=document.body.classList.contains('admin-shell');
   if(!isStudent&&!isAdmin)return;
 
-  const ATTEMPTS='aura_attempts',WRONG='aura_wrong_book_v1',SMART='aura_smart_stats';
+  const ATTEMPTS='aura_attempts',WRONG='aura_wrong_book_v1',SMART='aura_smart_stats',RESET_CUTOFF='aura_report_reset_at';
   const read=(k,f)=>{try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f))}catch(_){return f}};
   const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
   const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
@@ -43,10 +43,11 @@
   function dateTime(v){const d=new Date(v);return Number.isFinite(d.getTime())?d.toLocaleString('vi-VN'):''}
 
   function reviewProgress(){
-    const out=[];
+    const out=[],cutoff=ts(localStorage.getItem(RESET_CUTOFF)||'');
     Object.entries(window.AURA_REVIEWS||{}).forEach(([subject,groups])=>(groups||[]).forEach(r=>{
-      const st=read('review_'+r.id,{}),answers=Array.isArray(st.answers)?st.answers:[],done=Array.isArray(st.done)?st.done:[];
+      const st=read('review_'+r.id,{}),answers=Array.isArray(st.answers)?st.answers:[],done=Array.isArray(st.done)?st.done:[],updated=ts(st.updatedAt);
       const total=(r.items||[]).length,doneCount=done.filter(Boolean).length,hasAnswer=answers.some(x=>String(x||'').trim());
+      if(cutoff&&(!updated||updated<=cutoff))return;
       if(!doneCount&&!hasAnswer&&!st.updatedAt)return;
       out.push({subject,id:r.id,title:r.title,total,done:doneCount,pct:total?Math.round(doneCount/total*100):0,updatedAt:st.updatedAt||'',complete:!!total&&doneCount===total});
     }));
