@@ -74,10 +74,10 @@
 (function loadTimedExamExperience(){
   if(!document.querySelector('link[data-aura-timer]')){
     const link=document.createElement('link');
-    link.rel='stylesheet';link.href='exam_timer.css?v=timer-r1';link.dataset.auraTimer='1';document.head.appendChild(link);
+    link.rel='stylesheet';link.href='exam_timer.css?v=timer-r2';link.dataset.auraTimer='1';document.head.appendChild(link);
   }
   if(!document.querySelector('script[data-aura-timer]')){
     const script=document.createElement('script');
-    script.src='exam_timer.js?v=timer-r1';script.async=false;script.dataset.auraTimer='1';document.head.appendChild(script);
+    script.src='exam_timer.js?v=timer-r2';script.async=false;script.dataset.auraTimer='1';document.head.appendChild(script);
   }
 })();
