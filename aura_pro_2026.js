@@ -52,11 +52,11 @@
 (function loadReviewExperience(){
   if(!document.querySelector('link[data-aura-review]')){
     const link=document.createElement('link');
-    link.rel='stylesheet';link.href='review_experience.css?v=worked-r2';link.dataset.auraReview='1';document.head.appendChild(link);
+    link.rel='stylesheet';link.href='review_experience.css?v=worked-r3';link.dataset.auraReview='1';document.head.appendChild(link);
   }
   if(!document.querySelector('script[data-aura-review]')){
     const script=document.createElement('script');
-    script.src='review_experience.js?v=worked-r2';script.async=false;script.dataset.auraReview='1';document.head.appendChild(script);
+    script.src='review_experience.js?v=worked-r3';script.async=false;script.dataset.auraReview='1';document.head.appendChild(script);
   }
 })();
 
