@@ -3,13 +3,13 @@
   if(!document.body.classList.contains('admin-shell'))return;
 
   const EXACT_KEYS=['aura_attempts','aura_wrong_book_v1','aura_smart_stats','aura_smart_graded_ids','aura_exam_period'];
-  const PREFIX_KEYS=['review_'];
+  const RESET_CUTOFF='aura_report_reset_at';
 
   function reportKeys(){
     const keys=[];
     for(let i=0;i<localStorage.length;i++){
       const k=localStorage.key(i)||'';
-      if(EXACT_KEYS.includes(k)||PREFIX_KEYS.some(p=>k.startsWith(p)))keys.push(k);
+      if(EXACT_KEYS.includes(k))keys.push(k);
     }
     return keys;
   }
@@ -26,7 +26,7 @@
     removeModal();
     const c=counts(),wrap=document.createElement('div');
     wrap.className='aura-reset-modal';
-    wrap.innerHTML=`<div class="aura-reset-backdrop" onclick="auraCloseReportReset()"></div><section class="aura-reset-dialog" role="dialog" aria-modal="true" aria-labelledby="auraResetTitle"><div class="aura-reset-icon">↺</div><div class="aura-reset-copy"><div class="small">ADMIN · DỮ LIỆU HỌC TẬP</div><h2 id="auraResetTitle">Reset báo cáo học tập?</h2><p>Thao tác này xóa dữ liệu dùng để tạo báo cáo trên thiết bị này. Kho tài liệu, đề thi, metadata và bài đang làm vẫn được giữ nguyên.</p></div><div class="aura-reset-summary"><div><span>Bài có điểm</span><b>${c.attempts}</b></div><div><span>Câu trong sổ sai</span><b>${c.wrong}</b></div><div><span>Bài ôn có tiến độ</span><b>${c.reviews}</b></div></div><div class="aura-reset-kept"><b>Sẽ xóa:</b> điểm/lịch sử chấm, Sổ câu sai, thống kê kỹ năng, trạng thái chống ghi nhận trùng và tiến độ ôn tập.</div><div class="aura-reset-actions"><button class="btn soft" type="button" onclick="auraCloseReportReset()">Hủy</button><button class="btn soft" type="button" onclick="backup()">Sao lưu trước</button><button class="btn aura-reset-danger" type="button" onclick="auraConfirmReportReset(this)">Reset báo cáo</button></div></section>`;
+    wrap.innerHTML=`<div class="aura-reset-backdrop" onclick="auraCloseReportReset()"></div><section class="aura-reset-dialog" role="dialog" aria-modal="true" aria-labelledby="auraResetTitle"><div class="aura-reset-icon">↺</div><div class="aura-reset-copy"><div class="small">ADMIN · DỮ LIỆU HỌC TẬP</div><h2 id="auraResetTitle">Reset báo cáo học tập?</h2><p>Thao tác này đưa báo cáo trên thiết bị này về trạng thái mới. Kho tài liệu, đề thi, metadata và nội dung bé đã gõ trong bài ôn vẫn được giữ nguyên.</p></div><div class="aura-reset-summary"><div><span>Bài có điểm</span><b>${c.attempts}</b></div><div><span>Câu trong sổ sai</span><b>${c.wrong}</b></div><div><span>Bài ôn đang lưu</span><b>${c.reviews}</b></div></div><div class="aura-reset-kept"><b>Sẽ reset:</b> điểm/lịch sử chấm, Sổ câu sai, thống kê kỹ năng và trạng thái chống ghi nhận trùng. Tiến độ ôn cũ sẽ không còn được tính vào báo cáo, nhưng câu trả lời đã nhập vẫn được giữ.</div><div class="aura-reset-actions"><button class="btn soft" type="button" onclick="auraCloseReportReset()">Hủy</button><button class="btn soft" type="button" onclick="backup()">Sao lưu trước</button><button class="btn aura-reset-danger" type="button" onclick="auraConfirmReportReset(this)">Reset báo cáo</button></div></section>`;
     document.body.appendChild(wrap);
     setTimeout(()=>wrap.classList.add('open'),10);
   }
@@ -36,14 +36,15 @@
   window.auraConfirmReportReset=function(btn){
     if(!btn)return;
     if(btn.dataset.confirmed!=='1'){
-      btn.dataset.confirmed='1';btn.textContent='Bấm lần nữa để xóa';btn.classList.add('confirming');
+      btn.dataset.confirmed='1';btn.textContent='Bấm lần nữa để reset';btn.classList.add('confirming');
       setTimeout(()=>{if(btn?.isConnected&&btn.dataset.confirmed==='1'){btn.dataset.confirmed='0';btn.textContent='Reset báo cáo';btn.classList.remove('confirming')}},5000);
       return;
     }
     const keys=reportKeys();keys.forEach(k=>localStorage.removeItem(k));
+    localStorage.setItem(RESET_CUTOFF,new Date().toISOString());
     removeModal();
     if(typeof window.history==='function')window.history();
-    const toast=document.createElement('div');toast.className='aura-reset-toast';toast.textContent=`Đã reset ${keys.length} nhóm dữ liệu báo cáo.`;document.body.appendChild(toast);setTimeout(()=>toast.classList.add('show'),20);setTimeout(()=>toast.remove(),2600);
+    const toast=document.createElement('div');toast.className='aura-reset-toast';toast.textContent='Đã reset báo cáo. Bài ôn đã nhập vẫn được giữ.';document.body.appendChild(toast);setTimeout(()=>toast.classList.add('show'),20);setTimeout(()=>toast.remove(),3000);
   };
 
   function injectButton(){
