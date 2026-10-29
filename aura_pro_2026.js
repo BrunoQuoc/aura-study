@@ -106,3 +106,13 @@
     link.rel='stylesheet';link.href='reading_typography.css?v=reading-r1';link.dataset.auraReadingType='1';document.head.appendChild(link);
   }
 })();
+
+(function loadApprovedLibraryBridge(){
+  const admin=document.body.classList.contains('admin-shell'),student=document.body.classList.contains('student-shell');
+  if(admin&&!document.querySelector('script[data-aura-library-publish]')){
+    const s=document.createElement('script');s.src='admin_library_publish.js?v=library-r1';s.async=false;s.dataset.auraLibraryPublish='1';document.head.appendChild(s);
+  }
+  if(student&&!document.querySelector('script[data-aura-library-student]')){
+    const s=document.createElement('script');s.src='approved_library_student.js?v=library-r1';s.async=false;s.dataset.auraLibraryStudent='1';document.head.appendChild(s);
+  }
+})();
