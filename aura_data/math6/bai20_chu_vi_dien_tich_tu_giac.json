@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "provider": "google_drive",
+    "driveFileId": "13NEgLhEmJBxK-_buMYYbdhOAUoLnx5gV",
+    "name": "BAI 20.jpg",
+    "modifiedTime": "2026-10-29T08:42:11.312Z",
+    "sourcePreserved": true
+  },
+  "classification": {
+    "grade": 6,
+    "subject": "Toán",
+    "lesson": "Bài 20",
+    "title": "Chu vi và diện tích của một số tứ giác đã học",
+    "documentType": "knowledge_formula_poster"
+  },
+  "originalSourceView": {
+    "sections": [
+      {"order": 1, "title": "Hình vuông", "content": ["Cạnh a", "Chu vi: C = 4a", "Diện tích: S = a²"]},
+      {"order": 2, "title": "Hình chữ nhật", "content": ["Dài a, rộng b", "Chu vi: C = 2(a + b)", "Diện tích: S = a × b"]},
+      {"order": 3, "title": "Hình thang", "content": ["Đáy a, b", "Cạnh bên c, d", "Chiều cao h", "Chu vi: C = a + b + c + d", "Diện tích: S = (a + b) × h : 2"]},
+      {"order": 4, "title": "Hình bình hành", "content": ["Cạnh a, b", "Chiều cao h", "Chu vi: C = 2(a + b)", "Diện tích: S = a × h"]},
+      {"order": 5, "title": "Hình thoi", "content": ["Cạnh m", "Hai đường chéo d₁, d₂", "Chu vi: C = 4m", "Diện tích: S = d₁ × d₂ : 2"]},
+      {"order": 6, "title": "Lưu ý - Ứng dụng", "content": ["Dùng cùng đơn vị đo.", "Đổi đơn vị trước khi tính.", "Áp dụng vào lát nền (tính diện tích) và làm hàng rào (tính chu vi)."]}
+    ]
+  },
+  "structuredKnowledge": {
+    "formulas": [
+      {"shape": "Hình vuông", "perimeter": "C = 4a", "area": "S = a²"},
+      {"shape": "Hình chữ nhật", "perimeter": "C = 2(a + b)", "area": "S = a × b"},
+      {"shape": "Hình thang", "perimeter": "C = a + b + c + d", "area": "S = (a + b) × h : 2"},
+      {"shape": "Hình bình hành", "perimeter": "C = 2(a + b)", "area": "S = a × h"},
+      {"shape": "Hình thoi", "perimeter": "C = 4m", "area": "S = d₁ × d₂ : 2"}
+    ],
+    "notes": ["Các đại lượng phải cùng đơn vị đo trước khi tính.", "Diện tích có thể dùng cho bài toán lát nền; chu vi có thể dùng cho bài toán làm hàng rào."]
+  },
+  "reviewCards": [
+    {"front": "Công thức chu vi và diện tích hình vuông?", "back": "C = 4a; S = a²", "modelCreated": false},
+    {"front": "Công thức chu vi và diện tích hình chữ nhật?", "back": "C = 2(a + b); S = a × b", "modelCreated": false},
+    {"front": "Công thức chu vi và diện tích hình thang?", "back": "C = a + b + c + d; S = (a + b) × h : 2", "modelCreated": false},
+    {"front": "Công thức chu vi và diện tích hình bình hành?", "back": "C = 2(a + b); S = a × h", "modelCreated": false},
+    {"front": "Công thức chu vi và diện tích hình thoi?", "back": "C = 4m; S = d₁ × d₂ : 2", "modelCreated": false}
+  ],
+  "questionBank": [],
+  "auraPractice": null,
+  "practiceNote": "Nguồn không chứa bài tập; không tạo thêm AURA Practice."
+}
