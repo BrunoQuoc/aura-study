@@ -2,10 +2,13 @@
 (function(){
   if(!document.body.classList.contains('admin-shell'))return;
   const CFG=window.AURA_GOOGLE_DRIVE_CONFIG||{};
+  const FOLDER_KEY='aura_drive_inbox_folder_v1';
   const QUEUE_KEY='aura_inbox_queue_v1';
   const DECISION_KEY='aura_inbox_decisions_v1';
+  const REJECTED_FOLDER_NAME='99_REJECTED';
   const read=(k,f)=>{try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f))}catch(_){return f}};
   const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+  const folder=()=>read(FOLDER_KEY,null);
   const queue=()=>{const q=read(QUEUE_KEY,[]);return Array.isArray(q)?q:[]};
   const saveQueue=q=>write(QUEUE_KEY,(Array.isArray(q)?q:[]).filter(x=>x&&x.status==='WAITING_REVIEW').slice(0,300));
   const now=()=>new Date().toISOString();
@@ -44,12 +47,30 @@
     }).finally(()=>{tokenPromise=null});
     return tokenPromise;
   }
-  async function markRejected(item,note){
-    const t=await accessToken(),rejectedAt=now();
-    const appProperties={auraState:'REJECTED',auraOrigin:'ADMIN_DEVICE_UPLOAD',auraUploadedAt:item.uploadedAt||'',auraRejectedAt:rejectedAt,auraAdminNote:String(note||'').slice(0,500)};
-    const res=await fetch(`https://www.googleapis.com/drive/v3/files/${encodeURIComponent(item.driveFileId)}?fields=id,appProperties`,{method:'PATCH',headers:{Authorization:`Bearer ${t}`,'Content-Type':'application/json'},body:JSON.stringify({appProperties})});
+  async function driveJson(url,options={}){
+    const t=await accessToken();
+    const headers=new Headers(options.headers||{});headers.set('Authorization',`Bearer ${t}`);
+    const res=await fetch(url,{...options,headers});
     if(!res.ok){let msg=`Google Drive trả lỗi ${res.status}`;try{const d=await res.json();msg=d?.error?.message||msg}catch(_){ }throw new Error(msg)}
-    return rejectedAt;
+    return res.status===204?{}:res.json();
+  }
+  async function ensureRejectedFolder(inboxId){
+    const q=`name='${REJECTED_FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder' and '${String(inboxId).replace(/'/g,"\\'")}' in parents and trashed=false`;
+    const list=await driveJson(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&pageSize=10&fields=${encodeURIComponent('files(id,name,parents)')}`);
+    if(list.files?.[0])return list.files[0];
+    return driveJson(`https://www.googleapis.com/drive/v3/files?fields=${encodeURIComponent('id,name,parents')}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:REJECTED_FOLDER_NAME,mimeType:'application/vnd.google-apps.folder',parents:[inboxId],appProperties:{auraRole:'REJECTED_ARCHIVE'}})
+    });
+  }
+  async function markRejected(item,note){
+    const inboxId=item.inboxFolderId||folder()?.id;if(!inboxId)throw new Error('Không xác định được thư mục 00_INBOX.');
+    const rejectedFolder=await ensureRejectedFolder(inboxId),rejectedAt=now();
+    const appProperties={auraState:'REJECTED',auraOrigin:'ADMIN_DEVICE_UPLOAD',auraUploadedAt:item.uploadedAt||'',auraRejectedAt:rejectedAt,auraAdminNote:String(note||'').slice(0,500),auraRejectedFolder:REJECTED_FOLDER_NAME};
+    await driveJson(`https://www.googleapis.com/drive/v3/files/${encodeURIComponent(item.driveFileId)}?addParents=${encodeURIComponent(rejectedFolder.id)}&removeParents=${encodeURIComponent(inboxId)}&fields=${encodeURIComponent('id,parents,appProperties')}`,{
+      method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({appProperties})
+    });
+    return {rejectedAt,rejectedFolderId:rejectedFolder.id,rejectedFolderName:rejectedFolder.name||REJECTED_FOLDER_NAME};
   }
 
   function decorate(){
@@ -68,7 +89,7 @@
         keep.setAttribute('onclick',`auraRejectInboxFile('${card.dataset.driveId}')`);
       }
       const help=card.querySelector('.inbox-review-help');
-      const helpText='Sau khi Duyệt hoặc Từ chối, tài liệu sẽ rời hàng chờ. Từ chối không xóa file gốc khỏi Google Drive.';
+      const helpText=`Sau khi Duyệt hoặc Từ chối, tài liệu sẽ rời hàng chờ. File bị từ chối được chuyển vào ${REJECTED_FOLDER_NAME}, không nằm lẫn trong 00_INBOX.`;
       if(help&&help.textContent!==helpText)help.textContent=helpText;
     });
 
@@ -99,10 +120,10 @@
     const item=queue().find(x=>x.driveFileId===fileId);if(!item)return;
     const card=document.querySelector(`.inbox-review-item[data-drive-id="${CSS.escape(fileId)}"]`);
     const note=card?.querySelector('.inbox-admin-note')?.value?.trim()||'';
-    if(!confirm(`Từ chối “${item.name}”?\n\nTài liệu sẽ mất khỏi hàng chờ AURA nhưng file gốc vẫn được giữ trong 00_INBOX.`))return;
+    if(!confirm(`Từ chối “${item.name}”?\n\nTài liệu sẽ rời hàng chờ và được chuyển vào 00_INBOX/${REJECTED_FOLDER_NAME}. File gốc không bị xóa.`))return;
     try{
-      const rejectedAt=await markRejected(item,note);
-      recordDecision(item,'REJECTED',{rejectedAt,adminNote:note});removePending(fileId);
+      const result=await markRejected(item,note);
+      recordDecision(item,'REJECTED',{...result,adminNote:note});removePending(fileId);
       if(typeof window.auraAdminInbox==='function')window.auraAdminInbox();setTimeout(decorate,0);
     }catch(e){alert('Chưa thể từ chối tài liệu: '+(e?.message||e))}
   };
