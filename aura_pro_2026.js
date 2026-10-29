@@ -113,7 +113,7 @@
     const s=document.createElement('script');s.src='admin_library_publish.js?v=library-r2';s.async=false;s.dataset.auraLibraryPublish='1';document.head.appendChild(s);
   }
   if(student&&!document.querySelector('script[data-aura-library-student]')){
-    const s=document.createElement('script');s.src='approved_library_student.js?v=library-r3';s.async=false;s.dataset.auraLibraryStudent='1';document.head.appendChild(s);
+    const s=document.createElement('script');s.src='approved_library_student.js?v=library-r4';s.async=false;s.dataset.auraLibraryStudent='1';document.head.appendChild(s);
   }
 })();
 
