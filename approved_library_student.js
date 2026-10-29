@@ -13,13 +13,13 @@
   function hubSection(){const docs=read();if(!docs.length)return'';const grouped={};docs.forEach(r=>(grouped[r.subject]??=[]).push(r));return `<section class="card aura-approved-library" style="margin-top:16px"><div class="small">TÀI LIỆU ADMIN ĐÃ DUYỆT</div><h2>Thư viện tài liệu mới</h2><p class="meta">Tài liệu được Admin duyệt từ INBOX. File chưa gán kỳ vẫn hiển thị ở đây để không bị mất khỏi AURA.</p>${Object.entries(grouped).map(([sub,rows])=>`<h3 style="margin-top:18px">${esc(SUBJECT_LABEL[sub]||sub)}</h3>${rows.map(row).join('')}`).join('')}</section>`}
   function appendHub(){const app=document.getElementById('app');if(!app||app.querySelector('.aura-approved-library'))return;const html=hubSection();if(html)app.insertAdjacentHTML('beforeend',html)}
   function appendPeriodSubject(period,subject){const app=document.getElementById('app');if(!app)return;const docs=read().filter(r=>r.period===period&&r.subject===subject);if(!docs.length||app.querySelector('.aura-approved-period'))return;app.insertAdjacentHTML('beforeend',`<section class="card aura-approved-period" style="margin-top:16px"><div class="small">TÀI LIỆU ADMIN ĐÃ DUYỆT</div><h3>${esc(SUBJECT_LABEL[subject]||subject)} · ${esc(PERIOD_LABEL[period]||period)}</h3>${docs.map(row).join('')}</section>`)}
-
-  const baseHub=window.studentReviewHub||window.library;
-  if(typeof baseHub==='function'){
-    const wrapped=function(){const out=baseHub.apply(this,arguments);appendHub();return out};
-    window.studentReviewHub=wrapped;window.library=wrapped;
+  function install(){
+    if(window.__auraApprovedLibraryInstalled)return;
+    const baseHub=window.studentReviewHub||window.library;if(typeof baseHub!=='function'){setTimeout(install,100);return}
+    window.__auraApprovedLibraryInstalled=true;
+    const wrapped=function(){const out=baseHub.apply(this,arguments);appendHub();return out};window.studentReviewHub=wrapped;window.library=wrapped;
+    const baseSubject=window.studentExamSubject;if(typeof baseSubject==='function')window.studentExamSubject=function(period,subject){const out=baseSubject.apply(this,arguments);appendPeriodSubject(period,subject);return out};
+    window.AURA_APPROVED_LIBRARY={read};
   }
-  const baseSubject=window.studentExamSubject;
-  if(typeof baseSubject==='function')window.studentExamSubject=function(period,subject){const out=baseSubject.apply(this,arguments);appendPeriodSubject(period,subject);return out};
-  window.AURA_APPROVED_LIBRARY={read};
+  if(document.readyState==='complete')setTimeout(install,0);else window.addEventListener('load',()=>setTimeout(install,0),{once:true});
 })();
