@@ -61,8 +61,40 @@ Theo quyết định của phụ huynh/Admin, AURA bổ sung mục **Admin → P
 - Cấu hình override được backup/restore cùng dữ liệu AURA.
 - Student và Admin trên cùng origin/browser/device dùng chung effective assignment.
 - Override áp dụng được cho cả tài liệu và ngân hàng tạo đề; quyền generator theo kỳ dùng effective periods.
+- UI được rút gọn còn một mode chung ở đầu trang và danh sách tài liệu theo từng môn.
 
 Thay đổi này là chức năng quản trị dữ liệu, không làm thay đổi metadata nguồn hoặc nội dung tài liệu gốc.
+
+### Admin INBOX — upload từ thiết bị + duyệt trước khi chuyển
+
+AURA bổ sung mục **Admin → INBOX** để quản lý vòng đời tài liệu mới:
+
+1. Admin kết nối Google bằng OAuth `drive.file`.
+2. Access token chỉ nằm trong RAM của phiên hiện tại, không lưu vào localStorage/backup.
+3. Admin dùng Google Picker để xác nhận đúng thư mục `00_INBOX`; folder ID được lưu tại `aura_drive_inbox_folder_v1`.
+4. Admin có thể chọn nhiều file từ thiết bị và upload giữ nguyên định dạng gốc vào `00_INBOX`.
+5. File upload mới được gắn Drive `appProperties.auraState = WAITING_REVIEW` và xuất hiện trong hàng chờ Admin.
+6. Admin phải chọn ít nhất **môn** và **loại tài liệu** trước khi duyệt; kỳ sử dụng có thể để chưa gán.
+7. Nút **Duyệt & chọn thư mục đích** mở Google Picker lần nữa. File chỉ được move khỏi `00_INBOX` sau khi Admin tự chọn thư mục đích.
+8. Move sử dụng Drive API `files.update` với `addParents/removeParents`; không có thao tác tự động chuyển file nếu Admin chưa duyệt.
+9. Sau duyệt, file được gắn `auraState = APPROVED` cùng subject/docType/period/note/approvedAt để truy vết.
+10. Hàng chờ cục bộ nằm tại `aura_inbox_queue_v1` và được backup/restore như các key `aura_*`; file thật vẫn nằm trên Google Drive.
+11. Có nút đồng bộ lại hàng chờ từ Drive đối với file do AURA Admin upload và vẫn có `WAITING_REVIEW`.
+12. `Reset báo cáo` không xóa hoặc thay đổi dữ liệu INBOX.
+
+Google Cloud configuration của production Admin:
+
+- Drive API: enabled.
+- Picker API: enabled.
+- OAuth scope: `https://www.googleapis.com/auth/drive.file`.
+- Cloud Project Number / Picker App ID: `704823170664`.
+- API key và OAuth Client ID là browser-visible config và phải luôn được giới hạn bằng Google Cloud restrictions; không lưu Client Secret trong repo/frontend.
+
+Giới hạn hiện tại của INBOX:
+
+- Đây là **upload + human approval workflow**. Chưa có backend/LLM tự động đọc nội dung mới upload để tự phân loại hoặc kiểm tra đáp án ngay trong website.
+- Admin hiện tự chọn subject/docType/period trước khi move. Auto-analysis chỉ được bổ sung sau khi có pipeline tin cậy và vẫn phải giữ bước Admin duyệt cuối cùng.
+- Queue/history cục bộ vẫn phụ thuộc browser/device; Drive file và Drive `appProperties` là lớp bền vững hơn cho file do AURA tạo.
 
 ## Phần đang hoạt động và được giữ nguyên
 
@@ -76,14 +108,15 @@ Thay đổi này là chức năng quản trị dữ liệu, không làm thay đ�
 - Times New Roman cho nội dung học; UI/navigation giữ sans-serif.
 - Admin Backup / Restore / Reset báo cáo.
 - Admin quản lý phân kỳ và manual usage override.
+- Admin INBOX upload từ thiết bị + duyệt thủ công + move bằng Google Drive.
 
 ## Giới hạn đã biết — không phải lỗi chặn sử dụng hiện tại
 
 ### Dữ liệu theo thiết bị
-AURA hiện dùng `localStorage`. Student và Admin chỉ thấy cùng dữ liệu khi ở cùng browser/device. Cloud Sync đa thiết bị chưa triển khai.
+AURA hiện dùng `localStorage` cho learning state và một phần Admin state. Student và Admin chỉ thấy cùng dữ liệu local khi ở cùng browser/device. Cloud Sync đa thiết bị chưa triển khai. Google Drive file không phụ thuộc localStorage.
 
 ### Admin chưa có authentication/PIN
-Admin production là link riêng nhưng chưa có lớp xác thực. Parent PIN cho Reset/Restore và các thao tác quản trị metadata là nâng cấp an toàn phù hợp trong tương lai, không được coi là đã triển khai.
+Admin production là link riêng nhưng chưa có lớp xác thực. Parent PIN cho Reset/Restore và các thao tác quản trị metadata/INBOX là nâng cấp an toàn phù hợp trong tương lai, không được coi là đã triển khai.
 
 ### Technical debt: nhiều lớp patch/module
 Core cũ và các lớp Dashboard / Smart Engine / Multi-subject / Weekly Report / Feedback vẫn được load theo thứ tự. Hiện luồng đã được guard và ổn định; nếu mở lại dự án để phát triển lớn, nên ưu tiên refactor module trước khi thêm nhiều tính năng mới.
@@ -101,6 +134,8 @@ KHTN, Lịch sử & Địa lý, GDCD, Tin học và Công nghệ chưa bật gen
 6. Trước khi thêm feature lớn: kiểm tra schema kết quả, backup/restore và migration.
 7. Cloud Sync hoặc Parent Lock nếu triển khai phải giữ tương thích dữ liệu local hiện tại.
 8. Manual metadata override không bao giờ được sửa SOURCE; mọi thay đổi chỉ đi qua lớp override và phải có reason.
+9. Tài liệu mới luôn đi qua `00_INBOX`; AURA không được tự move ra khỏi INBOX khi chưa có hành động duyệt rõ ràng từ Admin.
+10. Auto-analysis trong tương lai chỉ được đề xuất classification/answer status; quyền quyết định chuyển tài liệu vẫn thuộc Admin.
 
 ## Trạng thái đóng
 
