@@ -1,122 +1,17 @@
 {
   "schemaVersion": 1,
   "sources": [
-    {
-      "provider": "google_drive",
-      "driveFileId": "1VjpyEPAUO0Mxc2TaZH5MaUnt_ovugzQ2",
-      "name": "L6_TOAN_CONG_THUC_HINH_HOC.jpg",
-      "modifiedTime": "2026-10-27T07:49:30.069Z",
-      "classification": "grade6/math/bai18/knowledge_formula_poster",
-      "representation": "aura_data/math6/bai18_tam_giac_deu_hinh_vuong_luc_giac_deu.json",
-      "sourcePreserved": true
-    },
-    {
-      "provider": "google_drive",
-      "driveFileId": "1TlOWWyYX9hCA87VAZW9K6vAbIcmWakHB",
-      "name": "L6_TOAN_GK1_ON_TAP_BAI_TOAN_THUC_TE_20261027.docx",
-      "modifiedTime": "2026-10-27T07:49:25.381Z",
-      "classification": "grade6/math/gk1/review_real_world_problems",
-      "representation": "aura_data/math6/gk1_bai_toan_thuc_te_review.json",
-      "sourcePreserved": true
-    },
-    {
-      "provider": "google_drive",
-      "driveFileId": "1oVyfQValDi1BnRBO4haR4x3IbMIDsoOk",
-      "name": "L6_TOAN_GK1_DE_01_20261027.docx",
-      "modifiedTime": "2026-10-27T07:48:55.341Z",
-      "classification": "grade6/math/gk1/reference_exam",
-      "status": "blocked_incomplete_source_extraction",
-      "reason": "Bai 4 depends on dimensions in an embedded figure that are not present in the readable Drive text extraction; converting the exam would require guessing missing source data.",
-      "representation": null,
-      "sourcePreserved": true
-    },
-    {
-      "provider": "google_drive",
-      "driveFileId": "1qlttkPAafNjhkUOAwixQpVdA_VZbpDcx",
-      "name": "L6_TOAN_GK1_DE_02_20261027.docx",
-      "modifiedTime": "2026-10-27T07:49:00.457Z",
-      "classification": "grade6/math/gk1/reference_exam",
-      "status": "blocked_incomplete_source_extraction",
-      "reason": "Multiple-choice questions 8-10 depend on embedded figures that are not present in the readable Drive text extraction; converting the exam would require guessing which figures the options reference.",
-      "representation": null,
-      "sourcePreserved": true
-    },
-    {
-      "provider": "google_drive",
-      "driveFileId": "15b8uREix1_Mj7TREnCR0BVX9u9GI_5pd",
-      "name": "L6_TOAN_GK1_DE_03_20261027.docx",
-      "modifiedTime": "2026-10-27T07:49:09.954Z",
-      "classification": "grade6/math/gk1/reference_exam",
-      "status": "blocked_incomplete_source_extraction",
-      "reason": "Multiple-choice questions 9-10 and Bai 5 depend on embedded figures or dimensions not present in the readable Drive text extraction; safe conversion would require guessing source data.",
-      "representation": null,
-      "sourcePreserved": true
-    },
-    {
-      "provider": "google_drive",
-      "driveFileId": "1VnGkMOM8-14ryRUnGmFeSOOUBrI3k2bQ",
-      "name": "L6_TOAN_GK1_DE_04_20261027.docx",
-      "modifiedTime": "2026-10-27T07:49:14.355Z",
-      "classification": "grade6/math/gk1/reference_exam",
-      "status": "blocked_incomplete_source_extraction",
-      "reason": "Multiple-choice question 10 depends on embedded figures not present in the readable Drive text extraction; safe conversion would require guessing which figure is referenced.",
-      "representation": null,
-      "sourcePreserved": true
-    },
-    {
-      "provider": "google_drive",
-      "driveFileId": "14PlyH8Cp4KmzZ3MKZPICvzszDkP9rwP1",
-      "name": "L6_TOAN_GK1_DE_05_20261027.docx",
-      "modifiedTime": "2026-10-27T07:49:18.415Z",
-      "classification": "grade6/math/gk1/reference_exam",
-      "status": "blocked_incomplete_source_extraction",
-      "reason": "Multiple-choice questions 6 and 10 depend on embedded traffic-sign/geometry figures not present in the readable Drive text extraction; safe conversion would require guessing the referenced images or dimensions.",
-      "representation": null,
-      "sourcePreserved": true
-    },
-    {
-      "provider": "google_drive",
-      "driveFileId": "19Vke7MzDI0YF2UuOSTsS4pKpNYwHbWDf",
-      "name": "L6_NGUVAN_NLXH.docx",
-      "modifiedTime": "2026-10-27T07:49:35.395Z",
-      "classification": "grade6/literature/social_argument/reference_material",
-      "status": "blocked_incomplete_source_extraction",
-      "reason": "Drive text extraction was truncated before the end of the document. Preserving and converting the complete source would require content that was not returned by the connector.",
-      "representation": null,
-      "sourcePreserved": true
-    },
-    {
-      "provider": "google_drive",
-      "driveFileId": "1qWfHYtgV4yzg6kZG65mDkCScNLl_LVpE",
-      "name": "L6_NGUVAN_TIENG_VIET.docx",
-      "modifiedTime": "2026-10-27T07:49:41.183Z",
-      "classification": "grade6/literature/semester1/vietnamese_language_knowledge_practice",
-      "status": "blocked_incomplete_source_extraction",
-      "reason": "Drive text extraction was truncated before the end of the document. Safe structured conversion cannot preserve the full theory, exercises, and supplied guidance without the missing tail.",
-      "representation": null,
-      "sourcePreserved": true
-    },
-    {
-      "provider": "google_drive",
-      "driveFileId": "14iXNJTCnduGrxNOotcDqiz89Ln4fnpik",
-      "name": "L6_NGUVAN_ON_TAP_TIENG_VIET.docx",
-      "modifiedTime": "2026-10-27T07:49:46.778Z",
-      "classification": "grade6/literature/review/reading_comprehension",
-      "status": "blocked_incomplete_source_extraction",
-      "reason": "Drive text extraction was truncated. The visible source contains reading passages and unanswered review questions, but complete-source preservation cannot be guaranteed from the returned content.",
-      "representation": null,
-      "sourcePreserved": true
-    },
-    {
-      "provider": "google_drive",
-      "driveFileId": "1Yp6B7S0kG3DX605tYcj5R6WTr_KBQhNj",
-      "name": "L6_TIENGANH_GLOBAL_SUCCESS_REVIEW_UNIT_01_02_03_KHONG_DAP_AN.docx",
-      "modifiedTime": "2026-10-27T07:49:54.090Z",
-      "classification": "grade6/english/global_success/units1_2_3/review_without_answers",
-      "status": "blocked_incomplete_source_extraction",
-      "reason": "Drive text extraction was truncated. The visible source explicitly has no answer key and includes review/test sections, but complete-source preservation and section ordering cannot be guaranteed from the returned content.",
-      "representation": null,
-      "sourcePreserved": true
-    }
+    {"provider":"google_drive","driveFileId":"1VjpyEPAUO0Mxc2TaZH5MaUnt_ovugzQ2","name":"L6_TOAN_CONG_THUC_HINH_HOC.jpg","modifiedTime":"2026-10-27T07:49:30.069Z","classification":"grade6/math/bai18/knowledge_formula_poster","representation":"aura_data/math6/bai18_tam_giac_deu_hinh_vuong_luc_giac_deu.json","sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"1TlOWWyYX9hCA87VAZW9K6vAbIcmWakHB","name":"L6_TOAN_GK1_ON_TAP_BAI_TOAN_THUC_TE_20261027.docx","modifiedTime":"2026-10-27T07:49:25.381Z","classification":"grade6/math/gk1/review_real_world_problems","representation":"aura_data/math6/gk1_bai_toan_thuc_te_review.json","sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"1oVyfQValDi1BnRBO4haR4x3IbMIDsoOk","name":"L6_TOAN_GK1_DE_01_20261027.docx","modifiedTime":"2026-10-27T07:48:55.341Z","classification":"grade6/math/gk1/reference_exam","status":"blocked_incomplete_source_extraction","reason":"Bai 4 depends on dimensions in an embedded figure that are not present in the readable Drive text extraction; converting the exam would require guessing missing source data.","representation":null,"sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"1qlttkPAafNjhkUOAwixQpVdA_VZbpDcx","name":"L6_TOAN_GK1_DE_02_20261027.docx","modifiedTime":"2026-10-27T07:49:00.457Z","classification":"grade6/math/gk1/reference_exam","status":"blocked_incomplete_source_extraction","reason":"Multiple-choice questions 8-10 depend on embedded figures that are not present in the readable Drive text extraction; converting the exam would require guessing which figures the options reference.","representation":null,"sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"15b8uREix1_Mj7TREnCR0BVX9u9GI_5pd","name":"L6_TOAN_GK1_DE_03_20261027.docx","modifiedTime":"2026-10-27T07:49:09.954Z","classification":"grade6/math/gk1/reference_exam","status":"blocked_incomplete_source_extraction","reason":"Multiple-choice questions 9-10 and Bai 5 depend on embedded figures or dimensions not present in the readable Drive text extraction; safe conversion would require guessing source data.","representation":null,"sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"1VnGkMOM8-14ryRUnGmFeSOOUBrI3k2bQ","name":"L6_TOAN_GK1_DE_04_20261027.docx","modifiedTime":"2026-10-27T07:49:14.355Z","classification":"grade6/math/gk1/reference_exam","status":"blocked_incomplete_source_extraction","reason":"Multiple-choice question 10 depends on embedded figures not present in the readable Drive text extraction; safe conversion would require guessing which figure is referenced.","representation":null,"sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"14PlyH8Cp4KmzZ3MKZPICvzszDkP9rwP1","name":"L6_TOAN_GK1_DE_05_20261027.docx","modifiedTime":"2026-10-27T07:49:18.415Z","classification":"grade6/math/gk1/reference_exam","status":"blocked_incomplete_source_extraction","reason":"Multiple-choice questions 6 and 10 depend on embedded traffic-sign/geometry figures not present in the readable Drive text extraction; safe conversion would require guessing the referenced images or dimensions.","representation":null,"sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"19Vke7MzDI0YF2UuOSTsS4pKpNYwHbWDf","name":"L6_NGUVAN_NLXH.docx","modifiedTime":"2026-10-27T07:49:35.395Z","classification":"grade6/literature/social_argument/reference_material","status":"blocked_incomplete_source_extraction","reason":"Drive text extraction was truncated before the end of the document. Preserving and converting the complete source would require content that was not returned by the connector.","representation":null,"sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"1qWfHYtgV4yzg6kZG65mDkCScNLl_LVpE","name":"L6_NGUVAN_TIENG_VIET.docx","modifiedTime":"2026-10-27T07:49:41.183Z","classification":"grade6/literature/semester1/vietnamese_language_knowledge_practice","status":"blocked_incomplete_source_extraction","reason":"Drive text extraction was truncated before the end of the document. Safe structured conversion cannot preserve the full theory, exercises, and supplied guidance without the missing tail.","representation":null,"sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"14iXNJTCnduGrxNOotcDqiz89Ln4fnpik","name":"L6_NGUVAN_ON_TAP_TIENG_VIET.docx","modifiedTime":"2026-10-27T07:49:46.778Z","classification":"grade6/literature/review/reading_comprehension","status":"blocked_incomplete_source_extraction","reason":"Drive text extraction was truncated. The visible source contains reading passages and unanswered review questions, but complete-source preservation cannot be guaranteed from the returned content.","representation":null,"sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"1Yp6B7S0kG3DX605tYcj5R6WTr_KBQhNj","name":"L6_TIENGANH_GLOBAL_SUCCESS_REVIEW_UNIT_01_02_03_KHONG_DAP_AN.docx","modifiedTime":"2026-10-27T07:49:54.090Z","classification":"grade6/english/global_success/units1_2_3/review_without_answers","status":"blocked_incomplete_source_extraction","reason":"Drive text extraction was truncated. The visible source explicitly has no answer key and includes review/test sections, but complete-source preservation and section ordering cannot be guaranteed from the returned content.","representation":null,"sourcePreserved":true},
+    {"provider":"google_drive","driveFileId":"1rPw9aGwLo3DGZTYdSBNsFia7dyVTPTBn","name":"BAI 22.jpg","modifiedTime":"2026-10-29T07:21:47.354Z","classification":"grade6/math/bai22/knowledge_formula_poster","representation":"aura_data/math6/bai22_hinh_co_tam_doi_xung.json","sourcePreserved":true}
   ]
 }
