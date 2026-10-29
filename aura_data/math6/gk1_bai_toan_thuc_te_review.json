@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "provider": "google_drive",
+    "driveFileId": "1TlOWWyYX9hCA87VAZW9K6vAbIcmWakHB",
+    "name": "L6_TOAN_GK1_ON_TAP_BAI_TOAN_THUC_TE_20261027.docx",
+    "modifiedTime": "2026-10-27T07:49:25.381Z",
+    "sourcePreserved": true
+  },
+  "classification": {
+    "grade": 6,
+    "subject": "Toán",
+    "term": "Giữa học kì I",
+    "chapter": null,
+    "lesson": null,
+    "documentType": "ôn tập / bài toán thực tế"
+  },
+  "originalSourceView": {
+    "title": "BÀI TẬP THÊM - TOÁN 6 GIỮA HKI",
+    "school": "THCS CHÁNH HƯNG",
+    "content": [
+      "Bài 1. Một trường THCS tổ chức 1 280 học sinh tham quan bảo tàng. Buổi sáng có 465 học sinh tham gia. Buổi chiều có số học sinh tham gia nhiều hơn buổi sáng 175 học sinh. Hỏi còn bao nhiêu học sinh chưa tham gia tham quan?",
+      "Bài 2. Một kho hàng có 5 600 kg gạo. Buổi sáng, kho xuất đi 1 450 kg gạo. Buổi chiều, kho nhập thêm 875 kg gạo. Hỏi cuối ngày trong kho có bao nhiêu ki-lô-gam gạo?",
+      "Bài 3. Trong một hội chợ, gian hàng lớp 6A chuẩn bị 2 500 phần quà. Buổi sáng, lớp bán được 785 phần quà. Buổi chiều, lớp bán ít hơn buổi sáng 125 phần quà. Sau đó, lớp nhận thêm 350 phần quà từ nhà tài trợ. Hỏi cuối ngày gian hàng còn bao nhiêu phần quà?",
+      "Bài 4. Một cửa hàng văn phòng phẩm nhập về 25 thùng vở, mỗi thùng có 48 quyển vở. Trong ngày đầu tiên, cửa hàng bán được 375 quyển. Ngày thứ hai, cửa hàng bán được số vở gấp đôi ngày đầu tiên.\na) Tính tổng số quyển vở cửa hàng đã bán trong hai ngày.\nb) Hỏi sau hai ngày, cửa hàng còn lại bao nhiêu quyển vở?",
+      "Bài 5. Trong phong trào xây dựng thư viện xanh, khối 6 của một trường THCS có 8 lớp, mỗi lớp quyên góp được 65 quyển sách. Khối 7 quyên góp được nhiều hơn khối 6 là 180 quyển sách. Nhà trường dành ra 100 quyển sách để tặng học sinh khó khăn. Số sách còn lại được chia đều cho 10 tủ sách.\na) Tính tổng số quyển sách hai khối đã quyên góp.\nb) Hỏi mỗi tủ sách nhận được bao nhiêu quyển sách?",
+      "Bài 6. Để tổ chức hội chợ, lớp 6A chuẩn bị 30 hộp bánh, mỗi hộp có 40 chiếc bánh. Buổi sáng, lớp bán được 325 chiếc bánh. Buổi chiều, lớp bán nhiều hơn buổi sáng 75 chiếc bánh. Số bánh còn lại được chia đều vào các túi, mỗi túi 25 chiếc bánh.\na) Tính số chiếc bánh lớp 6A còn lại sau hai buổi bán hàng.\nb) Hỏi lớp 6A đóng gói được bao nhiêu túi bánh?"
+    ]
+  },
+  "structuredKnowledge": {
+    "skills": ["đọc dữ kiện bài toán thực tế", "cộng trừ số tự nhiên", "nhân chia số tự nhiên", "bài toán nhiều bước", "chia đều"],
+    "note": "Các kỹ năng được cấu trúc từ dạng bài trong nguồn; không bổ sung dữ kiện hoặc đáp án."
+  },
+  "reviewCards": [
+    {"front":"Khi bài toán nói 'nhiều hơn', cần xác định gì trước?","back":"Xác định đại lượng gốc và phần chênh lệch trước khi lập phép tính.","modelCreated":true},
+    {"front":"Khi bài toán yêu cầu số còn lại, cần theo dõi gì?","back":"Theo dõi lượng ban đầu, các lượng tăng/giảm và đúng thứ tự sự kiện.","modelCreated":true},
+    {"front":"Dạng 'mỗi ... có ...' thường gợi phép tính nào?","back":"Phép nhân để tìm tổng số lượng trước khi thực hiện các bước tiếp theo.","modelCreated":true}
+  ],
+  "questionBank": [
+    {"sourceQuestion":"Bài 1","answer":null,"answerStatus":"not_provided_in_source"},
+    {"sourceQuestion":"Bài 2","answer":null,"answerStatus":"not_provided_in_source"},
+    {"sourceQuestion":"Bài 3","answer":null,"answerStatus":"not_provided_in_source"},
+    {"sourceQuestion":"Bài 4","answer":null,"answerStatus":"not_provided_in_source"},
+    {"sourceQuestion":"Bài 5","answer":null,"answerStatus":"not_provided_in_source"},
+    {"sourceQuestion":"Bài 6","answer":null,"answerStatus":"not_provided_in_source"}
+  ],
+  "auraPractice": null
+}
