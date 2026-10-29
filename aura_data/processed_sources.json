@@ -18,6 +18,28 @@
       "classification": "grade6/math/gk1/review_real_world_problems",
       "representation": "aura_data/math6/gk1_bai_toan_thuc_te_review.json",
       "sourcePreserved": true
+    },
+    {
+      "provider": "google_drive",
+      "driveFileId": "1oVyfQValDi1BnRBO4haR4x3IbMIDsoOk",
+      "name": "L6_TOAN_GK1_DE_01_20261027.docx",
+      "modifiedTime": "2026-10-27T07:48:55.341Z",
+      "classification": "grade6/math/gk1/reference_exam",
+      "status": "blocked_incomplete_source_extraction",
+      "reason": "Bai 4 depends on dimensions in an embedded figure that are not present in the readable Drive text extraction; converting the exam would require guessing missing source data.",
+      "representation": null,
+      "sourcePreserved": true
+    },
+    {
+      "provider": "google_drive",
+      "driveFileId": "1qlttkPAafNjhkUOAwixQpVdA_VZbpDcx",
+      "name": "L6_TOAN_GK1_DE_02_20261027.docx",
+      "modifiedTime": "2026-10-27T07:49:00.457Z",
+      "classification": "grade6/math/gk1/reference_exam",
+      "status": "blocked_incomplete_source_extraction",
+      "reason": "Multiple-choice questions 8-10 depend on embedded figures that are not present in the readable Drive text extraction; converting the exam would require guessing which figures the options reference.",
+      "representation": null,
+      "sourcePreserved": true
     }
   ]
 }
