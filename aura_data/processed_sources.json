@@ -126,6 +126,15 @@
       "classification": "grade6/math/bai22/knowledge_formula_poster",
       "representation": "aura_data/math6/bai22_hinh_co_tam_doi_xung.json",
       "sourcePreserved": true
+    },
+    {
+      "provider": "google_drive",
+      "driveFileId": "13NEgLhEmJBxK-_buMYYbdhOAUoLnx5gV",
+      "name": "BAI 20.jpg",
+      "modifiedTime": "2026-10-29T08:42:11.312Z",
+      "classification": "grade6/math/bai20/knowledge_formula_poster",
+      "representation": "aura_data/math6/bai20_chu_vi_dien_tich_tu_giac.json",
+      "sourcePreserved": true
     }
   ]
 }
