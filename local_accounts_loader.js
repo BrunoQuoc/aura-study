@@ -13,7 +13,7 @@
       const b=document.createElement('button');b.className='btn soft';b.type='button';b.dataset.resetLearning='1';b.textContent='Reset học';b.setAttribute('onclick',`auraResetStudentLearning('${m[1]}')`);toggle.insertAdjacentElement('afterend',b);
     });
   }
-  function guardLegacyReset(){const b=document.querySelector('.aura-reset-report-btn');if(!b||!userCount())return;b.textContent='Reset theo học sinh';b.onclick=()=>{if(typeof window.auraStudentUsers==='function')window.auraStudentUsers()}}
+  function guardLegacyReset(){const b=document.querySelector('.aura-reset-report-btn');if(!b||!userCount()||b.dataset.multiuserGuard==='1')return;b.dataset.multiuserGuard='1';b.textContent='Reset theo học sinh';b.onclick=()=>{if(typeof window.auraStudentUsers==='function')window.auraStudentUsers()}}
   function addAdminNav(){
     if(!document.body.classList.contains('admin-shell')||typeof window.auraStudentUsers!=='function')return;
     const side=document.querySelector('.side');
