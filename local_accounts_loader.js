@@ -4,6 +4,7 @@
   const MIGRATION_KEY='aura_student_legacy_migrated_v1',USERS_KEY='aura_local_students_v1',SESSION_KEY='aura_student_session_v1',PROFILE_PREFIX='aura_student_profile_v1:';
   const parse=(k,f)=>{try{const x=JSON.parse(localStorage.getItem(k)||JSON.stringify(f));return x??f}catch(_){return f}};
   function userCount(){const x=parse(USERS_KEY,[]);return Array.isArray(x)?x.length:0}
+  function clearRuntimeTimers(){for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i)||'';if(k.startsWith('aura_exam_timer_'))localStorage.removeItem(k)}}
   function decorateStudentRows(){
     if(document.body.dataset.auraPage!=='students')return;
     document.querySelectorAll('#app .resource').forEach(row=>{
@@ -31,19 +32,19 @@
   function installLegacyMigration(){
     if(!document.body.classList.contains('student-shell')||window.__AURA_LEGACY_STUDENT_MIGRATION__||typeof window.auraStudentLogin!=='function'||!window.AURA_LOCAL_ACCOUNTS)return;
     window.__AURA_LEGACY_STUDENT_MIGRATION__=true;
-    const base=window.auraStudentLogin;
+    const baseLogin=window.auraStudentLogin,baseLogout=window.auraStudentLogout;
     window.auraStudentLogin=async function(e){
       const pending=localStorage.getItem(MIGRATION_KEY)!=='1',legacy={};
       if(pending){for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(window.AURA_LOCAL_ACCOUNTS.isLearningKey(k)){const v=localStorage.getItem(k);if(v!=null)legacy[k]=v}}}
-      const out=await base.apply(this,arguments);
+      const out=await baseLogin.apply(this,arguments);
       const session=parse(SESSION_KEY,null);
-      if(pending&&session?.studentId){
-        const p=window.AURA_LOCAL_ACCOUNTS.profile(session.studentId)||{},hasProfile=Object.keys(p.data||{}).length>0;
-        if(!hasProfile&&Object.keys(legacy).length){localStorage.setItem(`${PROFILE_PREFIX}${session.studentId}`,JSON.stringify({data:legacy,savedAt:new Date().toISOString(),migratedFromLegacy:true}));window.AURA_LOCAL_ACCOUNTS.restore(session.studentId);setTimeout(()=>{if(typeof window.home==='function')window.home()},0)}
-        localStorage.setItem(MIGRATION_KEY,'1');
+      if(session?.studentId){
+        if(pending){const p=window.AURA_LOCAL_ACCOUNTS.profile(session.studentId)||{},hasProfile=Object.keys(p.data||{}).length>0;if(!hasProfile&&Object.keys(legacy).length){localStorage.setItem(`${PROFILE_PREFIX}${session.studentId}`,JSON.stringify({data:legacy,savedAt:new Date().toISOString(),migratedFromLegacy:true}));window.AURA_LOCAL_ACCOUNTS.restore(session.studentId)}localStorage.setItem(MIGRATION_KEY,'1')}
+        clearRuntimeTimers();setTimeout(()=>location.reload(),0);
       }
       return out;
     };
+    if(typeof baseLogout==='function')window.auraStudentLogout=function(){const out=baseLogout.apply(this,arguments);clearRuntimeTimers();setTimeout(()=>location.reload(),0);return out};
     window.addEventListener('storage',e=>{if(e.key===USERS_KEY||e.key===SESSION_KEY)location.reload()});
   }
   window.auraResetStudentLearning=function(id){
