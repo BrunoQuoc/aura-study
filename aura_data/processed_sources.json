@@ -9,6 +9,15 @@
       "classification": "grade6/math/bai18/knowledge_formula_poster",
       "representation": "aura_data/math6/bai18_tam_giac_deu_hinh_vuong_luc_giac_deu.json",
       "sourcePreserved": true
+    },
+    {
+      "provider": "google_drive",
+      "driveFileId": "1TlOWWyYX9hCA87VAZW9K6vAbIcmWakHB",
+      "name": "L6_TOAN_GK1_ON_TAP_BAI_TOAN_THUC_TE_20261027.docx",
+      "modifiedTime": "2026-10-27T07:49:25.381Z",
+      "classification": "grade6/math/gk1/review_real_world_problems",
+      "representation": "aura_data/math6/gk1_bai_toan_thuc_te_review.json",
+      "sourcePreserved": true
     }
   ]
 }
