@@ -110,9 +110,14 @@
 (function loadApprovedLibraryBridge(){
   const admin=document.body.classList.contains('admin-shell'),student=document.body.classList.contains('student-shell');
   if(admin&&!document.querySelector('script[data-aura-library-publish]')){
-    const s=document.createElement('script');s.src='admin_library_publish.js?v=library-r1';s.async=false;s.dataset.auraLibraryPublish='1';document.head.appendChild(s);
+    const s=document.createElement('script');s.src='admin_library_publish.js?v=library-r2';s.async=false;s.dataset.auraLibraryPublish='1';document.head.appendChild(s);
   }
   if(student&&!document.querySelector('script[data-aura-library-student]')){
-    const s=document.createElement('script');s.src='approved_library_student.js?v=library-r1';s.async=false;s.dataset.auraLibraryStudent='1';document.head.appendChild(s);
+    const s=document.createElement('script');s.src='approved_library_student.js?v=library-r2';s.async=false;s.dataset.auraLibraryStudent='1';document.head.appendChild(s);
   }
+})();
+
+(function loadLocalAccounts(){
+  if(document.querySelector('script[data-aura-local-accounts-loader]'))return;
+  const s=document.createElement('script');s.src='local_accounts_loader.js?v=accounts-r1';s.async=false;s.dataset.auraLocalAccountsLoader='1';document.head.appendChild(s);
 })();
