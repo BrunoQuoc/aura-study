@@ -1,0 +1,42 @@
+/* AURA STUDY — Admin INBOX */
+.admin-shell .inbox-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 14px}
+.admin-shell .inbox-summary article{background:#fff;border:1px solid #e4e8f1;border-radius:16px;padding:15px 16px;box-shadow:0 5px 16px rgba(30,42,80,.05)}
+.admin-shell .inbox-summary span,.admin-shell .inbox-step-head>div>span{display:block;font-size:11px;font-weight:800;letter-spacing:.06em;color:#7a8498;text-transform:uppercase}
+.admin-shell .inbox-summary strong{display:block;font-size:18px;line-height:1.2;margin:5px 0 3px;color:#18213d}
+.admin-shell .inbox-summary small{color:#7a8498}
+.admin-shell .inbox-step{margin-bottom:14px;padding:16px}
+.admin-shell .inbox-step-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.admin-shell .inbox-step-head h3{margin:4px 0 5px;color:#18213d}
+.admin-shell .inbox-step-head p{margin:0;color:#657087;line-height:1.5}
+.admin-shell .inbox-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.admin-shell .inbox-folder-chip{margin-top:13px;padding:10px 12px;border:1px solid #dce6fa;background:#f3f7ff;border-radius:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.admin-shell .inbox-folder-chip span{font-size:12px;color:#6c7890;word-break:break-all}
+.admin-shell .inbox-warning{margin-top:13px;padding:10px 12px;border-radius:12px;border:1px solid #efd7ae;background:#fff8e9;color:#785821}
+.admin-shell .inbox-local-list{display:grid;gap:8px;margin-top:13px}
+.admin-shell .inbox-local-file{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 12px;border:1px solid #e6e9f0;border-radius:12px;background:#fafbfc}
+.admin-shell .inbox-local-file b{display:block;color:#202a44;word-break:break-word}
+.admin-shell .inbox-local-file small{display:block;margin-top:3px;color:#7a8498}
+.admin-shell .inbox-upload-state{white-space:nowrap;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:800;background:#f0f2f6;color:#697386}
+.admin-shell .inbox-upload-state.working{background:#eef3ff;color:#3653a3}.admin-shell .inbox-upload-state.done{background:#eaf7ef;color:#31724a}.admin-shell .inbox-upload-state.error{background:#fff0ed;color:#a04738}
+.admin-shell .inbox-empty-mini{margin-top:13px;color:#7a8498;font-size:13px}
+.admin-shell .inbox-review-list{display:grid;gap:12px}
+.admin-shell .inbox-review-item{padding:16px}
+.admin-shell .inbox-file-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px}
+.admin-shell .inbox-file-head h3{margin:4px 0;font-size:18px;color:#18213d;word-break:break-word}
+.admin-shell .inbox-file-head small{color:#788296}
+.admin-shell .inbox-state{display:inline-block;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:800;letter-spacing:.05em}
+.admin-shell .inbox-state.waiting{background:#fff2dc;color:#8a5a13;border:1px solid #f2ddb8}.admin-shell .inbox-state.approved{background:#eaf7ef;color:#31724a;border:1px solid #cfe9d8}
+.admin-shell .inbox-review-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.admin-shell .inbox-review-grid label,.admin-shell .inbox-note{display:grid;gap:6px;color:#39445d}
+.admin-shell .inbox-review-grid select,.admin-shell .inbox-note input{width:100%;box-sizing:border-box;border:1px solid #dce1ea;border-radius:10px;padding:10px 11px;background:#fff;color:#1f2944;font:inherit}
+.admin-shell .inbox-note{margin-top:10px}
+.admin-shell .inbox-review-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.admin-shell .inbox-review-help{font-size:12px;color:#7b8497;margin:10px 0 0;line-height:1.45}
+.admin-shell .inbox-empty{display:grid;gap:4px;color:#59647a}
+.admin-shell .inbox-approved-section{margin-top:20px}
+.admin-shell .inbox-review-item.approved{background:#fbfcfd}
+.admin-shell .inbox-approved-dest{padding:9px 10px;border-radius:10px;background:#f2f7f4;color:#466554}
+.admin-shell .inbox-approved-dest small{color:#718078}
+.admin-shell .btn[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}
+@media(max-width:900px){.admin-shell .inbox-summary,.admin-shell .inbox-review-grid{grid-template-columns:1fr}.admin-shell .inbox-step-head,.admin-shell .inbox-file-head{flex-direction:column}.admin-shell .inbox-actions{justify-content:flex-start}}
+@media(max-width:620px){.admin-shell .inbox-step,.admin-shell .inbox-review-item{padding:13px}.admin-shell .inbox-review-actions .btn,.admin-shell .inbox-actions .btn{flex:1 1 100%}.admin-shell .inbox-local-file{align-items:flex-start;flex-direction:column}.admin-shell .inbox-upload-state{align-self:flex-start}}
