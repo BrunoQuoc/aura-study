@@ -6,22 +6,14 @@
   const DOC_LABEL={exam:'Đề kiểm tra / đề thi',practice:'Đề ôn / bài tập',lesson:'Bài học / kiến thức',solution:'Bài giải / lời giải',answer_key:'Đáp án',formula:'Công thức / ghi nhớ',reference:'Tài liệu tham khảo'};
   const PERIOD_LABEL={GK1:'Giữa kỳ 1',CK1:'Cuối kỳ 1',GK2:'Giữa kỳ 2',CK2:'Cuối kỳ 2'};
   const parse=(k,f)=>{try{const x=JSON.parse(localStorage.getItem(k)||JSON.stringify(f));return x??f}catch(_){return f}};
-  const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+  const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
   const fmt=n=>{n=Number(n||0);if(!n)return'';const u=['B','KB','MB','GB'],i=Math.min(3,Math.floor(Math.log(n)/Math.log(1024)));return `${(n/Math.pow(1024,i)).toFixed(i?1:0)} ${u[i]}`};
   const driveOpen=id=>id?`https://drive.google.com/open?id=${encodeURIComponent(id)}`:'';
   const drivePreview=id=>id?`https://drive.google.com/file/d/${encodeURIComponent(id)}/preview`:'';
 
   function normalizeDecision(x){
-    const c=x?.adminConfirmation||{};
-    const id=x?.driveFileId||'';
-    return {
-      driveFileId:id,name:x?.name||'Tài liệu',mimeType:x?.mimeType||'',size:Number(x?.size||0),
-      webViewLink:x?.webViewLink||driveOpen(id),subject:c.subject||x?.subject||'',docType:c.docType||x?.docType||'',
-      period:c.period||x?.period||'',adminNote:c.note||x?.adminNote||'',destinationId:x?.destinationId||'',
-      destinationName:x?.destinationName||'',approvedAt:x?.decidedAt||x?.approvedAt||'',publishedAt:x?.decidedAt||new Date().toISOString(),
-      status:'ACTIVE',source:'ADMIN_APPROVED_RECOVERED',auraSuggestion:x?.auraSuggestion||null,adminConfirmation:x?.adminConfirmation||null,
-      qualityAudit:x?.qualityAudit||null,sha256:x?.sha256||''
-    };
+    const c=x?.adminConfirmation||{},id=x?.driveFileId||'';
+    return {driveFileId:id,name:x?.name||'Tài liệu',mimeType:x?.mimeType||'',size:Number(x?.size||0),webViewLink:x?.webViewLink||driveOpen(id),subject:c.subject||x?.subject||'',docType:c.docType||x?.docType||'',period:c.period||x?.period||'',adminNote:c.note||x?.adminNote||'',destinationId:x?.destinationId||'',destinationName:x?.destinationName||'',approvedAt:x?.decidedAt||x?.approvedAt||'',publishedAt:x?.decidedAt||new Date().toISOString(),status:'ACTIVE',source:'ADMIN_APPROVED_RECOVERED',auraSuggestion:x?.auraSuggestion||null,adminConfirmation:x?.adminConfirmation||null,qualityAudit:x?.qualityAudit||null,sha256:x?.sha256||''};
   }
   function recover(){
     const rows=parse(LIBRARY_KEY,[]),list=Array.isArray(rows)?rows:[],ds=parse(DECISION_KEY,[]);let changed=false;
@@ -29,8 +21,7 @@
       const entry=normalizeDecision(x);if(!entry.subject)return;
       const i=list.findIndex(r=>r?.driveFileId===entry.driveFileId);
       if(i<0){list.unshift(entry);changed=true;return}
-      const cur=list[i]||{};
-      const merged={...cur,...entry,webViewLink:entry.webViewLink||cur.webViewLink||driveOpen(entry.driveFileId),status:'ACTIVE'};
+      const cur=list[i]||{},merged={...cur,...entry,webViewLink:entry.webViewLink||cur.webViewLink||driveOpen(entry.driveFileId),status:'ACTIVE'};
       const sig=a=>JSON.stringify([a.name,a.mimeType,a.size,a.webViewLink,a.subject,a.docType,a.period,a.adminNote,a.destinationId,a.destinationName,a.status]);
       if(sig(cur)!==sig(merged)){list[i]=merged;changed=true}
     });
@@ -42,39 +33,56 @@
   const lessonDocs=subject=>read().filter(r=>r.docType==='lesson'&&(!subject||r.subject===subject));
 
   function icon(r){if((r.mimeType||'').startsWith('image/'))return'🖼️';if((r.mimeType||'').includes('pdf'))return'📄';if(r.docType==='exam')return'📝';if(r.docType==='solution'||r.docType==='answer_key')return'✅';if(r.docType==='lesson')return'📘';return'📎'}
-  function row(r){const meta=[DOC_LABEL[r.docType]||r.docType||'Tài liệu',PERIOD_LABEL[r.period]||'',fmt(r.size),r.adminNote||''].filter(Boolean).join(' · ');const link=r.webViewLink||driveOpen(r.driveFileId);const open=link?`<a class="btn soft" href="${esc(link)}" target="_blank" rel="noopener">Mở tài liệu</a>`:'<button class="btn soft" disabled>Chưa có liên kết</button>';return `<div class="resource"><div class="fileico">${icon(r)}</div><div class="grow"><b>${esc(r.name)}</b><small>${esc(meta)}</small></div>${open}</div>`}
+  function row(r){const meta=[DOC_LABEL[r.docType]||r.docType||'Tài liệu',PERIOD_LABEL[r.period]||'',fmt(r.size),r.adminNote||''].filter(Boolean).join(' · '),link=r.webViewLink||driveOpen(r.driveFileId);const open=link?`<a class="btn soft" href="${esc(link)}" target="_blank" rel="noopener">Mở tài liệu</a>`:'<button class="btn soft" disabled>Chưa có liên kết</button>';return `<div class="resource"><div class="fileico">${icon(r)}</div><div class="grow"><b>${esc(r.name)}</b><small>${esc(meta)}</small></div>${open}</div>`}
   function hubSection(){const docs=read();if(!docs.length)return'';const grouped={};docs.forEach(r=>(grouped[r.subject]??=[]).push(r));return `<section class="card aura-approved-library" style="margin-top:16px"><div class="small">TÀI LIỆU ADMIN ĐÃ DUYỆT</div><h2>Thư viện tài liệu mới</h2><p class="meta">Tài liệu được Admin duyệt từ INBOX. File chưa gán kỳ vẫn hiển thị ở đây để không bị mất khỏi AURA.</p>${Object.entries(grouped).map(([sub,rows])=>`<h3 style="margin-top:18px">${esc(SUBJECT_LABEL[sub]||sub)}</h3>${rows.map(row).join('')}`).join('')}</section>`}
   function appendHub(){const app=document.getElementById('app');if(!app||app.querySelector('.aura-approved-library'))return;const html=hubSection();if(html)app.insertAdjacentHTML('beforeend',html)}
   function appendPeriodSubject(period,subject){const app=document.getElementById('app');if(!app)return;const docs=read().filter(r=>r.period===period&&r.subject===subject);if(!docs.length||app.querySelector('.aura-approved-period'))return;app.insertAdjacentHTML('beforeend',`<section class="card aura-approved-period" style="margin-top:16px"><div class="small">TÀI LIỆU ADMIN ĐÃ DUYỆT</div><h3>${esc(SUBJECT_LABEL[subject]||subject)} · ${esc(PERIOD_LABEL[period]||period)}</h3>${docs.map(row).join('')}</section>`)}
 
-  function lessonCard(r){
-    const meta=[PERIOD_LABEL[r.period]||'',fmt(r.size),r.adminNote||''].filter(Boolean).join(' · ');
-    return `<article class="lesson-card aura-drive-lesson-card"><div class="lesson-thumb aura-drive-lesson-thumb"><div>${icon(r)}</div><small>Tài liệu Drive</small></div><span class="lesson-badge">${esc(SUBJECT_LABEL[r.subject]||r.subject||'Môn học')} 6 · Admin duyệt</span><h3>${esc(r.name)}</h3><div class="meta">${esc(meta||'Bài học / kiến thức')}</div><button class="btn soft" type="button" onclick="auraOpenApprovedLesson('${esc(r.driveFileId)}')">Mở tài liệu</button></article>`;
+  function lessonResource(r){
+    const chips=[DOC_LABEL[r.docType]||'Bài học / kiến thức',PERIOD_LABEL[r.period]||'Chưa gán kỳ'].filter(Boolean);
+    const meta=[fmt(r.size),r.adminNote||''].filter(Boolean).join(' · ');
+    return `<article class="aura-study-resource"><div class="aura-study-resource-icon">${icon(r)}</div><div class="aura-study-resource-main"><div class="aura-resource-chips"><span>Admin duyệt</span>${chips.map(x=>`<span>${esc(x)}</span>`).join('')}</div><h3>${esc(r.name)}</h3><p>${esc(meta||'Tài liệu nguồn để đọc và ôn thêm')}</p></div><div class="aura-study-resource-actions"><button class="btn primary" type="button" onclick="auraOpenApprovedLesson('${esc(r.driveFileId)}')">Xem tài liệu</button>${r.webViewLink||r.driveFileId?`<a class="btn soft" href="${esc(r.webViewLink||driveOpen(r.driveFileId))}" target="_blank" rel="noopener">Mở Drive</a>`:''}</div></article>`;
   }
   function ensureLessonStyle(){
     if(document.getElementById('aura-approved-lesson-style'))return;
-    const s=document.createElement('style');s.id='aura-approved-lesson-style';s.textContent=`.aura-approved-lessons{margin-top:24px}.aura-approved-lessons .sectionhead{margin-bottom:12px}.aura-drive-lesson-thumb{display:grid;place-items:center;align-content:center;gap:6px;min-height:150px;background:linear-gradient(180deg,#f7f9ff,#eef3ff)}.aura-drive-lesson-thumb>div{font-size:42px}.aura-drive-lesson-thumb small{color:#7180a0;font-weight:700}.aura-drive-preview{width:100%;height:min(72vh,820px);border:1px solid #dce3f1;border-radius:16px;background:#fff}.aura-approved-count-note{font-size:12px;color:#66749a;margin-top:4px}`;document.head.appendChild(s);
+    const s=document.createElement('style');s.id='aura-approved-lesson-style';s.textContent=`
+      .aura-approved-lessons{margin-top:30px;padding-top:22px;border-top:1px solid rgba(17,27,58,.10)}
+      .aura-approved-lessons .sectionhead{margin:0 0 12px}
+      .aura-approved-lessons-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}
+      .aura-approved-lessons-intro p{margin:4px 0 0;color:#6b7694;max-width:760px;line-height:1.5}
+      .aura-resource-list{display:grid;gap:10px}
+      .aura-study-resource{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;gap:14px;background:#fff;border:1px solid rgba(17,27,58,.10);border-radius:17px;padding:13px 14px;box-shadow:0 6px 18px rgba(17,27,58,.04)}
+      .aura-study-resource:hover{border-color:rgba(70,92,214,.24);box-shadow:0 9px 24px rgba(17,27,58,.07)}
+      .aura-study-resource-icon{width:52px;height:52px;border-radius:14px;background:#f1f5ff;display:grid;place-items:center;font-size:25px;border:1px solid #e1e7f5}
+      .aura-study-resource-main{min-width:0}.aura-study-resource-main h3{margin:5px 0 3px;font-size:16px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.aura-study-resource-main p{margin:0;color:#72809b;font-size:12px;line-height:1.4}
+      .aura-resource-chips{display:flex;gap:6px;flex-wrap:wrap}.aura-resource-chips span{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#eef4ff;color:#355b9a;font-size:10px;font-weight:800}.aura-resource-chips span:first-child{background:#edf8f1;color:#32734a}
+      .aura-study-resource-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.aura-study-resource-actions .btn{white-space:nowrap}
+      .aura-drive-preview{width:100%;height:min(72vh,820px);border:1px solid #dce3f1;border-radius:16px;background:#fff;margin-top:14px}
+      .aura-source-reading-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}.aura-source-reading-head .aura-resource-chips{margin-bottom:8px}
+      @media(max-width:720px){.aura-study-resource{grid-template-columns:44px minmax(0,1fr)}.aura-study-resource-icon{width:44px;height:44px}.aura-study-resource-actions{grid-column:1/-1;justify-content:flex-start;padding-left:58px}.aura-study-resource-main h3{white-space:normal}.aura-approved-lessons{margin-top:22px}}
+    `;document.head.appendChild(s);
   }
   function annotateLessonOverview(){
     const docs=lessonDocs();if(!docs.length)return;
     const bySubject={};docs.forEach(r=>bySubject[r.subject]=(bySubject[r.subject]||0)+1);
     document.querySelectorAll('#app .subject[onclick*="lessonSubject("]').forEach(card=>{
       const m=(card.getAttribute('onclick')||'').match(/lessonSubject\('([^']+)'\)/);if(!m)return;const n=bySubject[m[1]]||0;if(!n)return;
-      const tag=card.querySelector('.tag');if(tag&&!tag.dataset.approvedDocs){tag.dataset.approvedDocs='1';tag.textContent=`${tag.textContent} · ${n} tài liệu mới`;tag.classList.add('ready')}
+      const tag=card.querySelector('.tag');if(tag&&!tag.dataset.approvedDocs){tag.dataset.approvedDocs='1';tag.textContent=`${tag.textContent} · ${n} tài liệu bổ sung`;tag.classList.add('ready')}
     });
   }
   function appendLessonSubject(subject){
     const app=document.getElementById('app');if(!app||app.querySelector('.aura-approved-lessons'))return;
     const docs=lessonDocs(subject);if(!docs.length)return;ensureLessonStyle();
-    app.insertAdjacentHTML('beforeend',`<section class="aura-approved-lessons"><div class="sectionhead"><div><h2>Tài liệu bài học Admin đã duyệt</h2><span>${docs.length} tài liệu mới · nguồn Drive</span></div></div><div class="lesson-grid">${docs.map(lessonCard).join('')}</div></section>`);
+    const head=app.querySelector('.sectionhead span');if(head){const base=(head.textContent||'').replace(/\s*·\s*\d+\s+tài liệu bổ sung.*$/i,'');head.textContent=`${base} · ${docs.length} tài liệu bổ sung`}
+    app.insertAdjacentHTML('beforeend',`<section class="aura-approved-lessons"><div class="aura-approved-lessons-intro"><div><div class="small">NGUỒN HỌC & ÔN BỔ SUNG</div><h2>Tài liệu Admin đã duyệt</h2><p>Đây là tài liệu nguồn để đọc, xem lại hoặc ôn thêm. Tài liệu này chưa được tính là “bài học chuẩn hóa” cho đến khi AURA chuyển thành nội dung học tương tác.</p></div></div><div class="aura-resource-list">${docs.map(lessonResource).join('')}</div></section>`);
   }
   window.auraOpenApprovedLesson=function(fileId){
     const r=read().find(x=>x.driveFileId===fileId);if(!r)return;
     if(typeof window.setActive==='function')window.setActive('lessons');ensureLessonStyle();
     const app=document.getElementById('app');if(!app)return;
-    const subject=r.subject||'KHAC',label=SUBJECT_LABEL[subject]||subject||'Môn học',link=r.webViewLink||driveOpen(fileId),preview=drivePreview(fileId);
-    const meta=[DOC_LABEL[r.docType]||'Bài học / kiến thức',PERIOD_LABEL[r.period]||'',fmt(r.size),r.adminNote||''].filter(Boolean).join(' · ');
-    app.innerHTML=`<button class="btn soft" type="button" onclick="lessonSubject('${esc(subject)}')" style="margin-bottom:12px">← ${esc(label)} 6</button><section class="card"><div class="small">TÀI LIỆU ADMIN ĐÃ DUYỆT</div><h2>${esc(r.name)}</h2><p class="meta">${esc(meta)}</p>${link?`<a class="btn soft" href="${esc(link)}" target="_blank" rel="noopener">Mở file gốc trên Google Drive</a>`:''}</section>${preview?`<iframe class="aura-drive-preview" src="${esc(preview)}" title="${esc(r.name)}" loading="lazy" allow="autoplay"></iframe>`:''}`;
+    const subject=r.subject||'KHAC',label=SUBJECT_LABEL[subject]||subject||'Môn học',link=r.webViewLink||driveOpen(fileId),preview=drivePreview(fileId),chips=[DOC_LABEL[r.docType]||'Bài học / kiến thức',PERIOD_LABEL[r.period]||'Chưa gán kỳ'];
+    const meta=[fmt(r.size),r.adminNote||''].filter(Boolean).join(' · ');
+    app.innerHTML=`<button class="btn soft" type="button" onclick="lessonSubject('${esc(subject)}')" style="margin-bottom:12px">← ${esc(label)} 6</button><section class="card"><div class="aura-source-reading-head"><div><div class="small">TÀI LIỆU ÔN BỔ SUNG</div><div class="aura-resource-chips">${chips.map(x=>`<span>${esc(x)}</span>`).join('')}<span>Admin duyệt</span></div><h2>${esc(r.name)}</h2><p class="meta">${esc(meta||'Tài liệu nguồn trên Google Drive')}</p></div>${link?`<a class="btn soft" href="${esc(link)}" target="_blank" rel="noopener">Mở file gốc</a>`:''}</div></section>${preview?`<iframe class="aura-drive-preview" src="${esc(preview)}" title="${esc(r.name)}" loading="lazy" allow="autoplay"></iframe>`:''}`;
     document.body.dataset.auraPage='lessons';
   };
 
