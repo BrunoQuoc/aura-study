@@ -9,4 +9,10 @@
     scope:'https://www.googleapis.com/auth/drive.file',
     expectedInboxName:'00_INBOX'
   });
+  if(document.body.classList.contains('admin-shell')){
+    const s=document.createElement('script');
+    s.src='admin_inbox_auth_hint.js?v=auth-r1';
+    s.async=true;
+    document.head.appendChild(s);
+  }
 })();
