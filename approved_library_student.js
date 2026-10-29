@@ -6,7 +6,7 @@
   const DOC_LABEL={exam:'Đề kiểm tra / đề thi',practice:'Đề ôn / bài tập',lesson:'Bài học / kiến thức',solution:'Bài giải / lời giải',answer_key:'Đáp án',formula:'Công thức / ghi nhớ',reference:'Tài liệu tham khảo'};
   const PERIOD_LABEL={GK1:'Giữa kỳ 1',CK1:'Cuối kỳ 1',GK2:'Giữa kỳ 2',CK2:'Cuối kỳ 2'};
   const parse=(k,f)=>{try{const x=JSON.parse(localStorage.getItem(k)||JSON.stringify(f));return x??f}catch(_){return f}};
-  const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
+  const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
   const fmt=n=>{n=Number(n||0);if(!n)return'';const u=['B','KB','MB','GB'],i=Math.min(3,Math.floor(Math.log(n)/Math.log(1024)));return `${(n/Math.pow(1024,i)).toFixed(i?1:0)} ${u[i]}`};
   const driveOpen=id=>id?`https://drive.google.com/open?id=${encodeURIComponent(id)}`:'';
   const drivePreview=id=>id?`https://drive.google.com/file/d/${encodeURIComponent(id)}/preview`:'';
@@ -24,13 +24,18 @@
     };
   }
   function recover(){
-    const rows=parse(LIBRARY_KEY,[]),list=Array.isArray(rows)?rows:[],known=new Set(list.map(x=>x.driveFileId));const ds=parse(DECISION_KEY,[]);
-    if(Array.isArray(ds))ds.filter(x=>x?.status==='APPROVED'&&x.driveFileId&&!known.has(x.driveFileId)).forEach(x=>{
-      const entry=normalizeDecision(x);if(!entry.subject)return;list.unshift(entry);known.add(entry.driveFileId);
+    const rows=parse(LIBRARY_KEY,[]),list=Array.isArray(rows)?rows:[],ds=parse(DECISION_KEY,[]);let changed=false;
+    if(Array.isArray(ds))ds.filter(x=>x?.status==='APPROVED'&&x.driveFileId).forEach(x=>{
+      const entry=normalizeDecision(x);if(!entry.subject)return;
+      const i=list.findIndex(r=>r?.driveFileId===entry.driveFileId);
+      if(i<0){list.unshift(entry);changed=true;return}
+      const cur=list[i]||{};
+      const merged={...cur,...entry,webViewLink:entry.webViewLink||cur.webViewLink||driveOpen(entry.driveFileId),status:'ACTIVE'};
+      const sig=a=>JSON.stringify([a.name,a.mimeType,a.size,a.webViewLink,a.subject,a.docType,a.period,a.adminNote,a.destinationId,a.destinationName,a.status]);
+      if(sig(cur)!==sig(merged)){list[i]=merged;changed=true}
     });
-    let changed=false;
-    list.forEach(x=>{if(x?.driveFileId&&!x.webViewLink){x.webViewLink=driveOpen(x.driveFileId);changed=true}});
-    if(changed||Array.isArray(ds))localStorage.setItem(LIBRARY_KEY,JSON.stringify(list.slice(0,1000)));
+    list.forEach((x,i)=>{if(x?.driveFileId&&!x.webViewLink){list[i]={...x,webViewLink:driveOpen(x.driveFileId)};changed=true}});
+    if(changed)localStorage.setItem(LIBRARY_KEY,JSON.stringify(list.slice(0,1000)));
     return list;
   }
   const read=()=>recover().filter(r=>r&&r.status==='ACTIVE');
