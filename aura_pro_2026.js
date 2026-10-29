@@ -119,5 +119,5 @@
 
 (function loadLocalAccounts(){
   if(document.querySelector('script[data-aura-local-accounts-loader]'))return;
-  const s=document.createElement('script');s.src='local_accounts_loader.js?v=accounts-r1';s.async=false;s.dataset.auraLocalAccountsLoader='1';document.head.appendChild(s);
+  const s=document.createElement('script');s.src='local_accounts_loader.js?v=accounts-r2';s.async=false;s.dataset.auraLocalAccountsLoader='1';document.head.appendChild(s);
 })();
