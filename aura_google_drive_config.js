@@ -10,9 +10,14 @@
     expectedInboxName:'00_INBOX'
   });
   if(document.body.classList.contains('admin-shell')){
-    const s=document.createElement('script');
-    s.src='admin_inbox_auth_hint.js?v=auth-r1';
-    s.async=true;
-    document.head.appendChild(s);
+    const auth=document.createElement('script');
+    auth.src='admin_inbox_auth_hint.js?v=auth-r1';
+    auth.async=true;
+    document.head.appendChild(auth);
+
+    const rebuild=document.createElement('script');
+    rebuild.src='admin_drive_library_rebuild.js?v=rebuild-r1';
+    rebuild.async=false;
+    document.head.appendChild(rebuild);
   }
 })();
