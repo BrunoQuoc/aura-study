@@ -40,6 +40,39 @@
       "reason": "Multiple-choice questions 8-10 depend on embedded figures that are not present in the readable Drive text extraction; converting the exam would require guessing which figures the options reference.",
       "representation": null,
       "sourcePreserved": true
+    },
+    {
+      "provider": "google_drive",
+      "driveFileId": "15b8uREix1_Mj7TREnCR0BVX9u9GI_5pd",
+      "name": "L6_TOAN_GK1_DE_03_20261027.docx",
+      "modifiedTime": "2026-10-27T07:49:09.954Z",
+      "classification": "grade6/math/gk1/reference_exam",
+      "status": "blocked_incomplete_source_extraction",
+      "reason": "Multiple-choice questions 9-10 and Bai 5 depend on embedded figures or dimensions not present in the readable Drive text extraction; safe conversion would require guessing source data.",
+      "representation": null,
+      "sourcePreserved": true
+    },
+    {
+      "provider": "google_drive",
+      "driveFileId": "1VnGkMOM8-14ryRUnGmFeSOOUBrI3k2bQ",
+      "name": "L6_TOAN_GK1_DE_04_20261027.docx",
+      "modifiedTime": "2026-10-27T07:49:14.355Z",
+      "classification": "grade6/math/gk1/reference_exam",
+      "status": "blocked_incomplete_source_extraction",
+      "reason": "Multiple-choice question 10 depends on embedded figures not present in the readable Drive text extraction; safe conversion would require guessing which figure is referenced.",
+      "representation": null,
+      "sourcePreserved": true
+    },
+    {
+      "provider": "google_drive",
+      "driveFileId": "14PlyH8Cp4KmzZ3MKZPICvzszDkP9rwP1",
+      "name": "L6_TOAN_GK1_DE_05_20261027.docx",
+      "modifiedTime": "2026-10-27T07:49:18.415Z",
+      "classification": "grade6/math/gk1/reference_exam",
+      "status": "blocked_incomplete_source_extraction",
+      "reason": "Multiple-choice questions 6 and 10 depend on embedded traffic-sign/geometry figures not present in the readable Drive text extraction; safe conversion would require guessing the referenced images or dimensions.",
+      "representation": null,
+      "sourcePreserved": true
     }
   ]
 }
