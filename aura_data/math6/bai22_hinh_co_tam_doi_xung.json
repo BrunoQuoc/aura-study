@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "provider": "google_drive",
+    "driveFileId": "1rPw9aGwLo3DGZTYdSBNsFia7dyVTPTBn",
+    "name": "BAI 22.jpg",
+    "modifiedTime": "2026-10-29T07:21:47.354Z",
+    "sourcePreserved": true,
+    "sourceType": "image/jpeg"
+  },
+  "classification": {
+    "grade": 6,
+    "subject": "Toán",
+    "lesson": "Bài 22 - Hình có tâm đối xứng",
+    "documentType": "knowledge_formula_poster"
+  },
+  "originalSourceView": {
+    "title": "BÀI 22 - HÌNH CÓ TÂM ĐỐI XỨNG",
+    "sections": [
+      {"order": 1, "heading": "Khái niệm", "content": "Hình có tâm đối xứng nếu quay hình 180° quanh một điểm thì hình trùng với chính nó."},
+      {"order": 2, "heading": "Tâm đối xứng", "content": "Điểm đó gọi là tâm đối xứng."},
+      {"order": 3, "heading": "Ví dụ hình", "content": "Hình bình hành, hình chữ nhật, hình thoi, hình vuông, hình tròn đều có tâm đối xứng."},
+      {"order": 4, "heading": "Cách nhận biết", "content": "Lấy tâm O. Mỗi điểm A có điểm A’ đối xứng qua O và cùng thuộc hình."},
+      {"order": 5, "heading": "Trong thực tế", "content": "Cánh quạt, hoa văn, cửa sổ, đồng xu."},
+      {"order": 6, "heading": "Ứng dụng - nhận xét", "content": "Giúp nhận biết hình, trang trí cân đối, thiết kế đẹp."}
+    ],
+    "ghiNho": [
+      "Khái niệm: Hình có tâm đối xứng nếu quay hình 180° quanh một điểm thì hình trùng với chính nó.",
+      "Tâm đối xứng: Điểm quay 180° để hình trở lại vị trí ban đầu gọi là tâm đối xứng.",
+      "Ví dụ: Hình bình hành, hình chữ nhật, hình thoi, hình vuông, hình tròn đều có tâm đối xứng.",
+      "Đặc điểm: Khi quay hình 180° quanh tâm đối xứng, mỗi điểm A biến thành điểm A’ đối xứng qua tâm, hình trùng với chính nó."
+    ]
+  },
+  "structuredKnowledge": [
+    {"concept": "Hình có tâm đối xứng", "definition": "Quay hình 180° quanh một điểm mà hình trùng với chính nó."},
+    {"concept": "Tâm đối xứng", "definition": "Điểm quay 180° để hình trở lại vị trí ban đầu."},
+    {"concept": "Nhận biết", "definition": "Với tâm O, mỗi điểm A có điểm A’ đối xứng qua O và cùng thuộc hình."}
+  ],
+  "reviewCards": [
+    {"front": "Khi nào một hình có tâm đối xứng?", "back": "Khi quay hình 180° quanh một điểm thì hình trùng với chính nó.", "modelCreated": false},
+    {"front": "Kể tên các hình có tâm đối xứng trong nguồn.", "back": "Hình bình hành, hình chữ nhật, hình thoi, hình vuông và hình tròn.", "modelCreated": false},
+    {"front": "Nguồn nêu những ví dụ thực tế nào?", "back": "Cánh quạt, hoa văn, cửa sổ và đồng xu.", "modelCreated": false}
+  ],
+  "questionBank": [],
+  "auraPractice": [],
+  "notes": "Nguồn là poster kiến thức, không chứa bài tập hoặc đáp án; không tạo thêm AURA Practice."
+}
