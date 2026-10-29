@@ -45,6 +45,12 @@
       if(typeof window.auraAdminInbox==='function')window.auraAdminInbox();
     }catch(e){alert('Chưa thể tự duyệt & chuyển file: '+(e?.message||e))}
   };
-  function decorate(){if(document.body.dataset.auraPage!=='inbox')return;document.querySelectorAll('.inbox-review-item[data-drive-id]').forEach(card=>{const btn=[...card.querySelectorAll('.inbox-review-actions button')].find(b=>(b.getAttribute('onclick')||'').includes('auraApproveInboxFile'));if(btn&&btn.textContent!=='Duyệt & tự chuyển')btn.textContent='Duyệt & tự chuyển';const help=card.querySelector('.inbox-review-help');const txt='Sau khi Admin duyệt, AURA tự chuyển file vào thư mục phù hợp theo Môn + Loại tài liệu. Nếu chưa có nhánh loại phù hợp, file được chuyển vào thư mục môn.';if(help&&help.textContent!==txt)help.textContent=txt})}
+  function decorate(){
+    if(document.body.dataset.auraPage!=='inbox')return;
+    document.querySelectorAll('.inbox-review-item[data-drive-id]').forEach(card=>{
+      const btn=[...card.querySelectorAll('.inbox-review-actions button')].find(b=>(b.getAttribute('onclick')||'').includes('auraApproveInboxFile'));
+      if(btn&&btn.textContent!=='Duyệt & tự chuyển')btn.textContent='Duyệt & tự chuyển';
+    });
+  }
   const observer=new MutationObserver(decorate);observer.observe(document.getElementById('app')||document.body,{childList:true,subtree:true});setTimeout(decorate,0);
 })();
