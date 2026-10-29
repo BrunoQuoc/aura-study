@@ -117,6 +117,15 @@
       "reason": "Drive text extraction was truncated. The visible source explicitly has no answer key and includes review/test sections, but complete-source preservation and section ordering cannot be guaranteed from the returned content.",
       "representation": null,
       "sourcePreserved": true
+    },
+    {
+      "provider": "google_drive",
+      "driveFileId": "1rPw9aGwLo3DGZTYdSBNsFia7dyVTPTBn",
+      "name": "BAI 22.jpg",
+      "modifiedTime": "2026-10-29T07:21:47.354Z",
+      "classification": "grade6/math/bai22/knowledge_formula_poster",
+      "representation": "aura_data/math6/bai22_hinh_co_tam_doi_xung.json",
+      "sourcePreserved": true
     }
   ]
 }
