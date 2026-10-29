@@ -54,14 +54,26 @@
 
   function decorate(){
     if(document.body.dataset.auraPage!=='inbox')return;
-    const summary=document.querySelector('.inbox-summary article:last-child small');if(summary)summary.textContent='Chỉ hiển thị tài liệu đang chờ xử lý';
+    const summary=document.querySelector('.inbox-summary article:last-child small');
+    const summaryText='Chỉ hiển thị tài liệu đang chờ xử lý';
+    if(summary&&summary.textContent!==summaryText)summary.textContent=summaryText;
+
     document.querySelectorAll('.inbox-review-item[data-drive-id]').forEach(card=>{
       const buttons=[...card.querySelectorAll('.inbox-review-actions button')];
       const keep=buttons.find(b=>(b.getAttribute('onclick')||'').includes('auraKeepInboxFile'));
-      if(keep){keep.textContent='Từ chối';keep.classList.add('inbox-reject-btn');keep.setAttribute('onclick',`auraRejectInboxFile('${card.dataset.driveId}')`)}
-      const help=card.querySelector('.inbox-review-help');if(help)help.textContent='Sau khi Duyệt hoặc Từ chối, tài liệu sẽ rời hàng chờ. Từ chối không xóa file gốc khỏi Google Drive.';
+      if(keep&&keep.dataset.auraRejectPatched!=='1'){
+        keep.dataset.auraRejectPatched='1';
+        keep.textContent='Từ chối';
+        keep.classList.add('inbox-reject-btn');
+        keep.setAttribute('onclick',`auraRejectInboxFile('${card.dataset.driveId}')`);
+      }
+      const help=card.querySelector('.inbox-review-help');
+      const helpText='Sau khi Duyệt hoặc Từ chối, tài liệu sẽ rời hàng chờ. Từ chối không xóa file gốc khỏi Google Drive.';
+      if(help&&help.textContent!==helpText)help.textContent=helpText;
     });
-    document.querySelector('.inbox-approved-section')?.remove();
+
+    const approved=document.querySelector('.inbox-approved-section');
+    if(approved)approved.remove();
   }
 
   migrate();
@@ -95,6 +107,7 @@
     }catch(e){alert('Chưa thể từ chối tài liệu: '+(e?.message||e))}
   };
 
-  const observer=new MutationObserver(()=>decorate());observer.observe(document.getElementById('app')||document.body,{childList:true,subtree:true});
+  const observer=new MutationObserver(decorate);
+  observer.observe(document.getElementById('app')||document.body,{childList:true,subtree:true});
   setTimeout(decorate,0);
 })();
