@@ -1,0 +1,251 @@
+/* AURA STUDY — Student production theme: Final Hybrid V4
+   Rule: app/dashboard/navigation/report surfaces = hybrid gradient.
+   Only real learning/reading cards remain soft light for comfort.
+   Visual layer only; no learning/data logic. */
+:root{
+  --aura-v4-navy:#071328;
+  --aura-v4-navy2:#0b2442;
+  --aura-v4-blue:#174e92;
+  --aura-v4-teal:#0b5960;
+  --aura-v4-cyan:#18bdf0;
+  --aura-v4-ink:#17233d;
+  --aura-v4-muted:#75829a;
+  --aura-v4-light:#f4f6fa;
+  --aura-v4-light2:#eef2f7;
+  --aura-v4-line:#dbe3ee;
+}
+html,body.student-shell{
+  min-height:100%;
+  background:
+    radial-gradient(circle at 82% 16%,rgba(17,185,190,.20),transparent 30%),
+    radial-gradient(circle at 18% 10%,rgba(45,91,194,.24),transparent 34%),
+    linear-gradient(118deg,#08162d 0%,#14365d 52%,#0b5960 100%);
+  background-attachment:fixed;
+}
+body.student-shell{color:#fff}
+body.student-shell:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(0,0,0,.05))}
+
+/* Global shell */
+body.student-shell .topbar{
+  background:linear-gradient(90deg,rgba(8,22,45,.94),rgba(13,46,76,.92),rgba(8,79,86,.90));
+  border-bottom:1px solid rgba(125,219,255,.12);
+  backdrop-filter:blur(16px);
+  box-shadow:0 10px 34px rgba(0,0,0,.16)
+}
+body.student-shell .topin{max-width:1440px}
+body.student-shell .brandmark{background:linear-gradient(135deg,#1767ff,#19bce5);box-shadow:0 10px 28px rgba(31,99,255,.32)}
+body.student-shell .brandtext b,body.student-shell .aura-account b{color:#fff}
+body.student-shell .brandtext small,body.student-shell .aura-account{color:rgba(255,255,255,.76)}
+body.student-shell .aura-account{border-color:rgba(255,255,255,.12)!important;background:rgba(255,255,255,.06)!important}
+body.student-shell .layout{max-width:1440px;grid-template-columns:240px minmax(0,1fr);gap:24px;padding-top:22px;background:transparent}
+body.student-shell .content{min-width:0;color:#fff}
+
+/* Sidebar */
+body.student-shell .side{
+  top:88px;padding:14px 12px;border-radius:22px;
+  background:linear-gradient(180deg,rgba(6,20,43,.96),rgba(8,40,63,.92));
+  border:1px solid rgba(125,219,255,.11);
+  box-shadow:0 18px 48px rgba(0,0,0,.18)
+}
+body.student-shell .navbtn{gap:11px;margin:0 0 7px;padding:12px 13px;color:rgba(255,255,255,.92);font-size:14px;font-weight:800;border-radius:13px;transition:transform .18s cubic-bezier(.2,.8,.2,1),background .18s,color .18s,box-shadow .18s}
+body.student-shell .navbtn svg{width:19px;height:19px;flex:0 0 19px;stroke:currentColor;stroke-width:2.15;fill:none;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(93,207,255,.14))}
+body.student-shell .navbtn:hover{color:#fff;background:rgba(87,189,238,.10);transform:translateX(3px);box-shadow:none}
+body.student-shell .navbtn.active{color:#fff;background:linear-gradient(90deg,#5468ee,#26aee7);box-shadow:0 10px 28px rgba(31,99,255,.28)}
+body.student-shell .navbtn.active svg{filter:drop-shadow(0 0 5px rgba(255,255,255,.30))}
+
+/* Home hero follows the same blue→teal family */
+body.student-shell .dash-hero{
+  background:linear-gradient(115deg,#12244c 0%,#254887 55%,#147a86 125%);
+  border:1px solid rgba(98,185,232,.26);
+  box-shadow:0 22px 60px rgba(0,0,0,.18)
+}
+body.student-shell .dash-progress-card{background:rgba(7,25,52,.24);border-color:rgba(255,255,255,.16)}
+body.student-shell .dash-progress-track{background:rgba(255,255,255,.15)}
+body.student-shell .dash-progress-track i{background:linear-gradient(90deg,#45a6ff,#17d6ca)}
+body.student-shell .dash-section-head h2{color:#fff}
+body.student-shell .dash-section-head span{color:#b8c8d9}
+body.student-shell .dash-link{color:#7ee2ff}
+
+/* Dashboard surfaces become part of the hybrid background, not white slabs */
+body.student-shell .dash-stats article,
+body.student-shell .dash-task,
+body.student-shell .dash-task.primary-task,
+body.student-shell .dash-subject,
+body.student-shell .dash-activity,
+body.student-shell .weekly-mini,
+body.student-shell .weekly-report,
+body.student-shell .weekly-metrics article,
+body.student-shell .weekly-insight,
+body.student-shell .weekly-subject,
+body.student-shell .weekly-strengthened,
+body.student-shell .weekly-strengthened-item,
+body.student-shell .weekly-subject-empty,
+body.student-shell .weekly-strengthened-empty,
+body.student-shell .weekly-strengthened-more,
+body.student-shell .stat,
+body.student-shell .subject{
+  background:linear-gradient(135deg,rgba(16,42,76,.86),rgba(12,72,83,.72))!important;
+  color:#fff!important;
+  border-color:rgba(105,190,230,.18)!important;
+  box-shadow:0 10px 28px rgba(0,0,0,.10)!important;
+  backdrop-filter:blur(8px)
+}
+body.student-shell .dash-stats span,
+body.student-shell .dash-stats small,
+body.student-shell .dash-task small,
+body.student-shell .dash-subject-copy small,
+body.student-shell .dash-activity-row small,
+body.student-shell .dash-empty span,
+body.student-shell .weekly-mini small,
+body.student-shell .weekly-head>span,
+body.student-shell .weekly-metrics span,
+body.student-shell .weekly-metrics small,
+body.student-shell .weekly-insight>span,
+body.student-shell .weekly-insight p,
+body.student-shell .weekly-section-title span,
+body.student-shell .weekly-subject-head small,
+body.student-shell .weekly-subject p,
+body.student-shell .weekly-subject-focus span,
+body.student-shell .weekly-strengthened-head span,
+body.student-shell .weekly-strengthened-item small,
+body.student-shell .weekly-note,
+body.student-shell .stat div,
+body.student-shell .subject .meta{color:#aec3d7!important}
+body.student-shell .dash-stats strong,
+body.student-shell .dash-task b,
+body.student-shell .dash-subject-copy b,
+body.student-shell .dash-activity-row b,
+body.student-shell .dash-empty b,
+body.student-shell .weekly-mini b,
+body.student-shell .weekly-head h3,
+body.student-shell .weekly-metrics strong,
+body.student-shell .weekly-insight>b,
+body.student-shell .weekly-section-title b,
+body.student-shell .weekly-subject-head b,
+body.student-shell .weekly-subject-head>strong,
+body.student-shell .weekly-subject-focus b,
+body.student-shell .weekly-strengthened-item b,
+body.student-shell .stat b,
+body.student-shell .subject h3{color:#fff!important}
+body.student-shell .weekly-kicker,
+body.student-shell .weekly-mini button{color:#7ee2ff!important}
+body.student-shell .dash-task-kicker{color:#80dcff}
+body.student-shell .dash-task-arrow{background:rgba(255,255,255,.10);color:#8de5ff}
+body.student-shell .dash-chevron{color:#83dbff}
+body.student-shell .dash-subject-icon{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.08)}
+body.student-shell .dash-activity-row{border-bottom-color:rgba(255,255,255,.08)}
+body.student-shell .dash-activity-row strong{color:#8de5ff}
+body.student-shell .weekly-subject-focus{border-top-color:rgba(255,255,255,.08)}
+
+/* Hover/press on dark dashboard blocks */
+body.student-shell .dash-stats article,
+body.student-shell .dash-task,
+body.student-shell .dash-subject,
+body.student-shell .dash-activity,
+body.student-shell .weekly-mini,
+body.student-shell .stat,
+body.student-shell .subject{transition:transform .18s,box-shadow .18s,border-color .18s,background .18s}
+body.student-shell .dash-stats article:hover,
+body.student-shell .dash-task:hover,
+body.student-shell .dash-subject:hover,
+body.student-shell .weekly-mini:hover,
+body.student-shell .stat:hover,
+body.student-shell .subject:hover{transform:translateY(-3px);border-color:rgba(105,211,255,.34)!important;box-shadow:0 18px 38px rgba(0,0,0,.18)!important;background:linear-gradient(135deg,rgba(21,54,96,.92),rgba(11,89,96,.82))!important}
+body.student-shell .dash-stats article:active,
+body.student-shell .dash-task:active,
+body.student-shell .dash-subject:active,
+body.student-shell .weekly-mini:active,
+body.student-shell .stat:active,
+body.student-shell .subject:active{transform:translateY(1px) scale(.975)}
+
+/* Real learning/reading cards stay soft light to reduce eye strain */
+body.student-shell #app>.card:not(.weekly-report),
+body.student-shell .lesson-card,
+body.student-shell .study-card,
+body.student-shell .map-canvas,
+body.student-shell .node-chip,
+body.student-shell .resource,
+body.student-shell .answer-option,
+body.student-shell .exam-card,
+body.student-shell .result-card,
+body.student-shell .practice-option,
+body.student-shell .lesson-example,
+body.student-shell .exam-figure{
+  background:linear-gradient(180deg,var(--aura-v4-light),var(--aura-v4-light2))!important;
+  color:var(--aura-v4-ink)!important;
+  border-color:var(--aura-v4-line)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.10)
+}
+body.student-shell #app>.card:not(.weekly-report) h1,
+body.student-shell #app>.card:not(.weekly-report) h2,
+body.student-shell #app>.card:not(.weekly-report) h3,
+body.student-shell .lesson-card h1,
+body.student-shell .lesson-card h2,
+body.student-shell .lesson-card h3,
+body.student-shell .study-card h1,
+body.student-shell .study-card h2,
+body.student-shell .study-card h3,
+body.student-shell .exam-card h1,
+body.student-shell .exam-card h2,
+body.student-shell .exam-card h3,
+body.student-shell .result-card h1,
+body.student-shell .result-card h2,
+body.student-shell .result-card h3{color:var(--aura-v4-ink)!important}
+body.student-shell .lesson-card .meta,
+body.student-shell .study-card .meta,
+body.student-shell .resource .meta,
+body.student-shell .exam-card .meta,
+body.student-shell .result-card .meta{color:var(--aura-v4-muted)!important}
+body.student-shell .lesson-thumb{background:#f2f5f9}
+body.student-shell .map-hotspot span{background:#10264b;color:#fff}
+
+/* Section headings sit directly on the hybrid background */
+body.student-shell #app>.sectionhead h2,
+body.student-shell #app>h1,
+body.student-shell #app>h2,
+body.student-shell #app>h3,
+body.student-shell .lesson-hero h1,
+body.student-shell .lesson-hero h2{color:#fff}
+body.student-shell #app>.sectionhead .meta,
+body.student-shell #app>.sectionhead span,
+body.student-shell .lesson-hero .meta{color:#b7c8da}
+body.student-shell .lesson-tabs{background:transparent}
+body.student-shell .lesson-tabs button{background:rgba(7,25,52,.60);color:#e5f0ff;border-color:rgba(125,223,255,.18)}
+body.student-shell .lesson-tabs button.active{background:linear-gradient(90deg,#3763ef,#19acdf);color:#fff;border-color:transparent;box-shadow:0 8px 22px rgba(31,99,255,.24)}
+
+/* Learning-card motion */
+body.student-shell .lesson-card,
+body.student-shell .study-card,
+body.student-shell .resource,
+body.student-shell .exam-card,
+body.student-shell .result-card{transition:transform .18s,box-shadow .18s,border-color .18s}
+body.student-shell .lesson-card:hover,
+body.student-shell .study-card:hover,
+body.student-shell .resource:hover,
+body.student-shell .exam-card:hover,
+body.student-shell .result-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,0,0,.16);border-color:#b7cfe3!important}
+body.student-shell .lesson-card:active,
+body.student-shell .study-card:active,
+body.student-shell .resource:active,
+body.student-shell .exam-card:active,
+body.student-shell .result-card:active{transform:translateY(1px) scale(.975)}
+
+/* Buttons */
+body.student-shell button,body.student-shell .btn{position:relative;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .18s,background .18s,border-color .18s,color .18s}
+body.student-shell button:active,body.student-shell .btn:active{transform:translateY(1px) scale(.965)}
+body.student-shell button:focus-visible,body.student-shell .btn:focus-visible{outline:3px solid rgba(64,201,255,.42);outline-offset:3px}
+body.student-shell .primary{background:linear-gradient(90deg,#1f63ff,#16a9e7);color:#fff;box-shadow:0 8px 20px rgba(31,99,255,.24)}
+body.student-shell .soft{background:#e9eef6;color:#365078;border:1px solid #d5deea}
+
+/* Inputs and long-form reading stay light */
+body.student-shell input,body.student-shell textarea,body.student-shell select{background:#f7f9fc;color:var(--aura-v4-ink);border-color:#d8dfeb}
+
+/* Mobile */
+body.student-shell .mobilebar{background:linear-gradient(90deg,rgba(7,19,40,.97),rgba(8,54,73,.96));border-top:1px solid rgba(255,255,255,.10);backdrop-filter:blur(16px)}
+body.student-shell .mobilebar button{color:rgba(255,255,255,.90);font-weight:800}
+body.student-shell .mobilebar svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+body.student-shell .mobilebar small{color:inherit}
+
+@media(max-width:900px){body.student-shell .layout{grid-template-columns:1fr;max-width:100%;padding-top:16px}body.student-shell .side{display:none}}
+@media(max-width:560px){body.student-shell .lesson-tabs{background:rgba(9,22,45,.88);padding:8px;border-radius:14px}}
+@media(prefers-reduced-motion:reduce){body.student-shell *,body.student-shell *:before,body.student-shell *:after{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
