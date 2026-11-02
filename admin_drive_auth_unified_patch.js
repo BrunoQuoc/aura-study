@@ -8,13 +8,28 @@
       return baseConnect();
     };
   }
+
   function decorate(){
     if(document.body.dataset.auraPage!=='inbox')return;
-    const auth=window.AURA_DRIVE_AUTH?.status?.();
-    if(!auth?.connected)return;
-    const summary=document.querySelector('.inbox-summary article:first-child strong');
-    if(summary)summary.textContent='ĐÃ KẾT NỐI';
+    const auth=window.AURA_DRIVE_AUTH?.status?.()||{connected:false};
+    const summary=document.querySelector('.inbox-summary article:first-child');
+    const strong=summary?.querySelector('strong');
+    const small=summary?.querySelector('small');
+    if(strong)strong.textContent=auth.connected?'ĐÃ KẾT NỐI':'CHƯA KẾT NỐI';
+    if(small)small.textContent=auth.connected?'Phiên Google Drive đang hoạt động':'OAuth scope: drive.file';
+
+    const connect=[...document.querySelectorAll('.inbox-step .inbox-actions button')].find(b=>(b.getAttribute('onclick')||'').includes('auraConnectDrive'));
+    if(connect){
+      connect.textContent=auth.connected?'Đổi / kết nối lại Google':'Kết nối Google';
+      connect.classList.toggle('primary',!auth.connected);
+      connect.classList.toggle('soft',auth.connected);
+    }
   }
-  const app=document.getElementById('app');if(app)new MutationObserver(decorate).observe(app,{childList:true,subtree:true});
+
+  window.addEventListener('aura-drive-auth-change',decorate);
+  const app=document.getElementById('app');
+  if(app)new MutationObserver(decorate).observe(app,{childList:true,subtree:true,characterData:true});
+  const timer=setInterval(()=>{if(document.body.dataset.auraPage==='inbox')decorate()},1000);
+  window.addEventListener('pagehide',()=>clearInterval(timer),{once:true});
   setTimeout(decorate,0);
 })();
