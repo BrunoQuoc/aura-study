@@ -39,16 +39,13 @@
       return Promise.resolve();
     }
     let s=document.getElementById(id);
-    if(!s){
-      s=document.createElement('script');s.id=id;s.src=src;s.async=true;s.defer=true;document.head.appendChild(s);
-    }
+    if(!s){s=document.createElement('script');s.id=id;s.src=src;s.async=true;s.defer=true;document.head.appendChild(s)}
     return waitFor(test).then(()=>{s.dataset.loaded='1'});
   }
 
   async function ensureGsi(){
     if(runtime.gsiPromise)return runtime.gsiPromise;
-    runtime.gsiPromise=loadScript('aura-google-gsi','https://accounts.google.com/gsi/client',()=>!!window.google?.accounts?.oauth2)
-      .catch(e=>{runtime.gsiPromise=null;throw e});
+    runtime.gsiPromise=loadScript('aura-google-gsi','https://accounts.google.com/gsi/client',()=>!!window.google?.accounts?.oauth2).catch(e=>{runtime.gsiPromise=null;throw e});
     return runtime.gsiPromise;
   }
 
@@ -57,10 +54,7 @@
     if(runtime.gapiPromise)return runtime.gapiPromise;
     runtime.gapiPromise=(async()=>{
       await loadScript('aura-google-api','https://apis.google.com/js/api.js',()=>!!window.gapi);
-      await new Promise((resolve,reject)=>{
-        try{gapi.load('picker',{callback:resolve,onerror:()=>reject(new Error('Không tải được Google Picker.'))})}
-        catch(e){reject(e)}
-      });
+      await new Promise((resolve,reject)=>{try{gapi.load('picker',{callback:resolve,onerror:()=>reject(new Error('Không tải được Google Picker.'))})}catch(e){reject(e)}});
       runtime.pickerReady=!!window.google?.picker;
       if(!runtime.pickerReady)throw new Error('Google Picker chưa sẵn sàng.');
     })().catch(e=>{runtime.gapiPromise=null;throw e});
@@ -73,9 +67,7 @@
     if(runtime.tokenPromise)return runtime.tokenPromise;
     await ensureGsi();
     if(!CFG.clientId)throw new Error('Thiếu Google OAuth Client ID.');
-    if(!runtime.client){
-      runtime.client=google.accounts.oauth2.initTokenClient({client_id:CFG.clientId,scope:CFG.scope||'https://www.googleapis.com/auth/drive.file',callback:()=>{}});
-    }
+    if(!runtime.client)runtime.client=google.accounts.oauth2.initTokenClient({client_id:CFG.clientId,scope:CFG.scope||'https://www.googleapis.com/auth/drive.file',callback:()=>{}});
     runtime.tokenPromise=new Promise((resolve,reject)=>{
       const c=runtime.client;
       c.callback=r=>{
@@ -94,18 +86,12 @@
     let token=await requestToken(interactive);
     const headers=new Headers(options.headers||{});headers.set('Authorization',`Bearer ${token}`);
     let res=await fetch(url,{...options,headers});
-    if(res.status===401&&retry){
-      runtime.token='';runtime.expiresAt=0;token=await requestToken(true);headers.set('Authorization',`Bearer ${token}`);res=await fetch(url,{...options,headers});
-    }
+    if(res.status===401&&retry){runtime.token='';runtime.expiresAt=0;token=await requestToken(true);headers.set('Authorization',`Bearer ${token}`);res=await fetch(url,{...options,headers})}
     if(!res.ok){let msg=`Google Drive trả lỗi ${res.status}`;try{const d=await res.json();msg=d?.error?.message||msg}catch(_){ }throw new Error(msg)}
     return res.status===204?{}:res.json();
   }
 
-  async function accountInfo(){
-    const d=await driveJson('https://www.googleapis.com/drive/v3/about?fields=user(displayName,emailAddress)',{},false);
-    return d?.user||{};
-  }
-
+  async function accountInfo(){const d=await driveJson('https://www.googleapis.com/drive/v3/about?fields=user(displayName,emailAddress)',{},false);return d?.user||{}}
   async function verifyFolder(f){
     if(!f?.id)throw new Error('Chưa chọn thư mục 00_INBOX.');
     const fields='id,name,mimeType,capabilities(canAddChildren)';
@@ -117,23 +103,14 @@
   }
 
   async function pickInbox(){
-    await ensurePicker();
-    const token=await requestToken(false);
+    await ensurePicker();const token=await requestToken(false);
     return new Promise(resolve=>{
-      const view=new google.picker.DocsView(google.picker.ViewId.DOCS)
-        .setIncludeFolders(true).setSelectFolderEnabled(true)
-        .setMimeTypes('application/vnd.google-apps.folder')
-        .setMode(google.picker.DocsViewMode.LIST);
-      const picker=new google.picker.PickerBuilder().addView(view).setOAuthToken(token).setDeveloperKey(CFG.apiKey).setAppId(CFG.appId)
-        .setOrigin(location.origin).setTitle(`Chọn đúng thư mục ${CFG.expectedInboxName||'00_INBOX'}`)
-        .setCallback(data=>{
-          const action=data[google.picker.Response.ACTION];
-          if(action===google.picker.Action.PICKED){
-            const doc=data[google.picker.Response.DOCUMENTS]?.[0];
-            resolve(doc?{id:doc[google.picker.Document.ID],name:doc[google.picker.Document.NAME]||'',mimeType:doc[google.picker.Document.MIME_TYPE]||'',url:doc[google.picker.Document.URL]||''}:null);
-          }else if(action===google.picker.Action.CANCEL)resolve(null);
-        }).build();
-      picker.setVisible(true);
+      const view=new google.picker.DocsView(google.picker.ViewId.DOCS).setIncludeFolders(true).setSelectFolderEnabled(true).setMimeTypes('application/vnd.google-apps.folder').setMode(google.picker.DocsViewMode.LIST);
+      const picker=new google.picker.PickerBuilder().addView(view).setOAuthToken(token).setDeveloperKey(CFG.apiKey).setAppId(CFG.appId).setOrigin(location.origin).setTitle(`Chọn đúng thư mục ${CFG.expectedInboxName||'00_INBOX'}`).setCallback(data=>{
+        const action=data[google.picker.Response.ACTION];
+        if(action===google.picker.Action.PICKED){const doc=data[google.picker.Response.DOCUMENTS]?.[0];resolve(doc?{id:doc[google.picker.Document.ID],name:doc[google.picker.Document.NAME]||'',mimeType:doc[google.picker.Document.MIME_TYPE]||'',url:doc[google.picker.Document.URL]||''}:null)}
+        else if(action===google.picker.Action.CANCEL)resolve(null);
+      }).build();picker.setVisible(true);
     });
   }
 
@@ -143,14 +120,13 @@
     return account;
   }
   function currentAccount(){try{return JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null')}catch(_){return null}}
-
+  function setText(el,text){if(el&&el.textContent!==text)el.textContent=text}
   function decorate(){
     if(document.body.dataset.auraPage!=='inbox')return;
     const acct=currentAccount();if(!acct)return;
     const summary=document.querySelector('.inbox-summary article:first-child');
-    const strong=summary?.querySelector('strong'),small=summary?.querySelector('small');
-    if(strong)strong.textContent='ĐÃ KẾT NỐI';
-    if(small)small.textContent=acct.email?`Google: ${acct.email}`:'Google Drive đã xác thực';
+    setText(summary?.querySelector('strong'),'ĐÃ KẾT NỐI');
+    setText(summary?.querySelector('small'),acct.email?`Google: ${acct.email}`:'Google Drive đã xác thực');
   }
 
   const baseInbox=window.auraAdminInbox;
@@ -158,28 +134,22 @@
 
   window.auraConnectDrive=async function(){
     try{
-      await Promise.all([ensureGsi(),ensurePicker()]);
-      await requestToken(true);
+      await Promise.all([ensureGsi(),ensurePicker()]);await requestToken(true);
       const user=await accountInfo();saveAccount(user);
       const old=read(FOLDER_KEY,null);
-      if(old?.id){
-        try{const checked=await verifyFolder(old);write(FOLDER_KEY,checked)}
-        catch(_){localStorage.removeItem(FOLDER_KEY);rerender();alert(`Đã kết nối Google${user?.emailAddress?' ('+user.emailAddress+')':''}.\n\nThư mục 00_INBOX đã lưu trước đó không còn truy cập được bằng phiên Google này. Hãy bấm “Chọn 00_INBOX” và chọn lại một lần.`);return}
-      }
+      if(old?.id){try{const checked=await verifyFolder(old);write(FOLDER_KEY,checked)}catch(_){localStorage.removeItem(FOLDER_KEY);rerender();alert(`Đã kết nối Google${user?.emailAddress?' ('+user.emailAddress+')':''}.\n\nThư mục 00_INBOX đã lưu trước đó không còn truy cập được bằng phiên Google này. Hãy bấm “Chọn 00_INBOX” và chọn lại một lần.`);return}}
       rerender();
     }catch(e){alert('Không thể kết nối Google Drive:\n'+friendlyError(e));rerender()}
   };
 
   window.auraSelectInboxFolder=async function(){
     try{
-      await Promise.all([ensureGsi(),ensurePicker()]);
-      if(!tokenValid())await requestToken(true);
-      const user=await accountInfo();saveAccount(user);
-      const picked=await pickInbox();if(!picked)return;
+      await Promise.all([ensureGsi(),ensurePicker()]);if(!tokenValid())await requestToken(true);
+      const user=await accountInfo();saveAccount(user);const picked=await pickInbox();if(!picked)return;
       const checked=await verifyFolder(picked);write(FOLDER_KEY,checked);rerender();
     }catch(e){alert('Không thể chọn 00_INBOX:\n'+friendlyError(e));rerender()}
   };
 
-  const obs=new MutationObserver(decorate);obs.observe(document.getElementById('app')||document.body,{childList:true,subtree:true});
+  window.addEventListener('aura-drive-auth-change',decorate);
   setTimeout(decorate,0);
 })();
