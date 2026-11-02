@@ -1,0 +1,15 @@
+/* AURA STUDY Hybrid Preview — touch feedback for non-button cards */
+.aura-touch-card{position:relative;overflow:hidden;isolation:isolate;cursor:default;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .2s ease,border-color .2s ease,background .2s ease!important;will-change:transform}
+.aura-touch-card::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:18px;border-radius:50%;pointer-events:none;z-index:0;opacity:0;transform:translate(-50%,-50%) scale(.2);background:radial-gradient(circle,rgba(84,214,255,.30) 0 30%,rgba(33,118,255,.15) 45%,rgba(33,118,255,0) 72%)}
+.aura-touch-card>*{position:relative;z-index:1}
+.aura-touch-card:hover{transform:translateY(-3px);border-color:rgba(72,190,255,.42)!important;box-shadow:0 18px 38px rgba(3,22,54,.18),0 0 0 1px rgba(72,190,255,.08) inset!important}
+.aura-touch-card:active,.aura-touch-card.is-pressed{transform:translateY(1px) scale(.975)!important;box-shadow:0 7px 18px rgba(0,0,0,.15),0 0 0 1px rgba(79,205,255,.30) inset!important;transition-duration:.07s!important}
+.aura-touch-card.touch-pulse::after{animation:auraCardRipple .48s ease-out}
+.aura-touch-card.touch-pulse strong{animation:auraNumberBounce .42s cubic-bezier(.2,.9,.25,1.25)}
+.stat.aura-touch-card:nth-child(1).touch-pulse{border-color:rgba(64,201,255,.75)!important;box-shadow:0 14px 34px rgba(64,201,255,.13),0 0 0 1px rgba(64,201,255,.16) inset!important}
+.stat.aura-touch-card:nth-child(2).touch-pulse{border-color:rgba(83,182,255,.75)!important;box-shadow:0 14px 34px rgba(83,182,255,.13),0 0 0 1px rgba(83,182,255,.16) inset!important}
+.stat.aura-touch-card:nth-child(3).touch-pulse{border-color:rgba(255,184,86,.75)!important;box-shadow:0 14px 34px rgba(255,184,86,.12),0 0 0 1px rgba(255,184,86,.15) inset!important}
+.stat.aura-touch-card:nth-child(4).touch-pulse{border-color:rgba(34,215,153,.75)!important;box-shadow:0 14px 34px rgba(34,215,153,.12),0 0 0 1px rgba(34,215,153,.15) inset!important}
+@keyframes auraCardRipple{0%{opacity:.8;transform:translate(-50%,-50%) scale(.15)}75%{opacity:.22}100%{opacity:0;transform:translate(-50%,-50%) scale(28)}}
+@keyframes auraNumberBounce{0%{transform:scale(1)}45%{transform:scale(1.13) translateY(-2px)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.aura-touch-card,.aura-touch-card::after,.aura-touch-card strong{animation:none!important;transition:none!important}.aura-touch-card:active,.aura-touch-card.is-pressed{transform:none!important}}
