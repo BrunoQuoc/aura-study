@@ -6,11 +6,13 @@
   const state={token:'',expiresAt:0,pending:null,originalInit:null,patched:false,gsiPromise:null};
   const valid=()=>!!state.token&&Date.now()<state.expiresAt-30000;
   const remaining=()=>Math.max(60,Math.floor((state.expiresAt-Date.now())/1000));
+  const emit=()=>{try{window.dispatchEvent(new CustomEvent('aura-drive-auth-change',{detail:{connected:valid(),expiresAt:state.expiresAt}}))}catch(_){}};
 
-  function clear(){state.token='';state.expiresAt=0}
+  function clear(){state.token='';state.expiresAt=0;emit()}
   function remember(r){
     state.token=r?.access_token||'';
     state.expiresAt=Date.now()+Math.max(60,Number(r?.expires_in||3600)-60)*1000;
+    emit();
     return state.token;
   }
 
