@@ -9,6 +9,27 @@
     scope:'https://www.googleapis.com/auth/drive.file',
     expectedInboxName:'00_INBOX'
   });
+
+  /* Compatibility guard:
+     Several Admin modules share the same Google Identity script id.
+     Some older loaders only check data-loaded="1". If another module loaded
+     the script first without setting that flag, the upload loader could wait
+     forever for a load event that had already fired. Keep the shared script
+     state explicit so Upload / Quality / Queue can coexist safely. */
+  function markGoogleScript(script){
+    if(!script)return;
+    const id=script.id||'';
+    if(id!=='aura-google-gsi'&&id!=='aura-google-api')return;
+    const mark=()=>{script.dataset.loaded='1'};
+    if(id==='aura-google-gsi'&&window.google?.accounts?.oauth2){mark();return}
+    if(id==='aura-google-api'&&window.gapi){mark();return}
+    script.addEventListener('load',mark,{once:true});
+  }
+  document.querySelectorAll('#aura-google-gsi,#aura-google-api').forEach(markGoogleScript);
+  new MutationObserver(records=>records.forEach(r=>r.addedNodes.forEach(n=>{
+    if(n?.nodeType===1&&n.tagName==='SCRIPT')markGoogleScript(n);
+  }))).observe(document.head,{childList:true});
+
   if(document.body.classList.contains('admin-shell')){
     const auth=document.createElement('script');
     auth.src='admin_inbox_auth_hint.js?v=auth-r1';
