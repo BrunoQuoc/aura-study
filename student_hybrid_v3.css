@@ -1,0 +1,87 @@
+/* AURA STUDY — Student production theme: Final Hybrid V3
+   Scope: visual shell/motion only. No learning/data logic. */
+:root{--aura-hybrid-navy:#071328;--aura-hybrid-navy2:#0d203f;--aura-hybrid-blue:#1f63ff;--aura-hybrid-cyan:#13b8e8;--aura-hybrid-teal:#0fb6a8;--aura-hybrid-ink:#13213f;--aura-hybrid-line:#dfe6f1}
+html,body.student-shell{min-height:100%;background:linear-gradient(135deg,#09162d 0%,#12385d 54%,#0b5960 100%);background-attachment:fixed}
+body.student-shell{color:#fff}
+body.student-shell:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(circle at 88% 8%,rgba(16,201,178,.16),transparent 27%),radial-gradient(circle at 18% 10%,rgba(31,99,255,.20),transparent 31%)}
+
+/* Top shell */
+body.student-shell .topbar{background:rgba(7,19,40,.92);border-bottom:1px solid rgba(255,255,255,.09);backdrop-filter:blur(16px);box-shadow:0 8px 30px rgba(0,0,0,.12)}
+body.student-shell .topin{max-width:1440px}
+body.student-shell .brandmark{background:linear-gradient(135deg,#1767ff,#19bce5);box-shadow:0 10px 28px rgba(31,99,255,.34)}
+body.student-shell .brandtext b,body.student-shell .aura-account b{color:#fff}
+body.student-shell .brandtext small,body.student-shell .aura-account{color:rgba(255,255,255,.74)}
+body.student-shell .aura-account{border-color:rgba(255,255,255,.12)!important;background:rgba(255,255,255,.06)!important}
+
+/* Desktop shell */
+body.student-shell .layout{max-width:1440px;grid-template-columns:240px minmax(0,1fr);gap:24px;padding-top:22px}
+body.student-shell .side{top:88px;padding:14px 12px;border-radius:22px;background:linear-gradient(180deg,#071328,#0d203f);border:1px solid rgba(255,255,255,.08);box-shadow:0 18px 46px rgba(0,0,0,.16)}
+body.student-shell .navbtn{gap:11px;margin:0 0 7px;padding:12px 13px;color:rgba(255,255,255,.90);font-size:14px;font-weight:800;border-radius:13px;transition:transform .18s cubic-bezier(.2,.8,.2,1),background .18s,color .18s,box-shadow .18s}
+body.student-shell .navbtn svg{width:19px;height:19px;flex:0 0 19px;stroke:currentColor;stroke-width:2.15;fill:none;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(93,207,255,.12))}
+body.student-shell .navbtn:hover{color:#fff;background:rgba(255,255,255,.075);transform:translateX(3px);box-shadow:none}
+body.student-shell .navbtn.active{color:#fff;background:linear-gradient(90deg,#1f63ff,#18addf);box-shadow:0 10px 28px rgba(31,99,255,.28)}
+body.student-shell .navbtn.active svg{filter:drop-shadow(0 0 5px rgba(255,255,255,.28))}
+body.student-shell .content{min-width:0}
+
+/* Keep Home structure, apply final palette */
+body.student-shell .dash-hero{background:linear-gradient(120deg,#111d3e 0%,#20366d 56%,#5365d6 125%);border:1px solid rgba(109,137,255,.35);box-shadow:0 22px 60px rgba(0,0,0,.18)}
+body.student-shell .dash-progress-card{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.16)}
+body.student-shell .dash-progress-track{background:rgba(255,255,255,.14)}
+body.student-shell .dash-progress-track i{background:linear-gradient(90deg,#1f63ff,#13b8e8)}
+body.student-shell .dash-stats article{background:#fff;color:var(--aura-hybrid-ink);border-color:var(--aura-hybrid-line);box-shadow:0 8px 24px rgba(25,50,94,.09);cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s}
+body.student-shell .dash-stats article:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.16);border-color:#b9d6ee}
+body.student-shell .dash-stats article:active{transform:translateY(1px) scale(.975)}
+body.student-shell .dash-section-head h2{color:#fff}
+body.student-shell .dash-section-head span{color:#b7c5d8}
+body.student-shell .dash-link{color:#79dfff}
+
+/* Only content cards stay white; surrounding page remains Hybrid */
+body.student-shell #app>.card,
+body.student-shell .card,
+body.student-shell .stat,
+body.student-shell .subject,
+body.student-shell .lesson-card,
+body.student-shell .study-card,
+body.student-shell .map-canvas,
+body.student-shell .node-chip,
+body.student-shell .resource,
+body.student-shell .answer-option,
+body.student-shell .dash-task,
+body.student-shell .dash-subject,
+body.student-shell .dash-activity,
+body.student-shell .exam-card,
+body.student-shell .result-card{background:#fff;color:var(--aura-hybrid-ink);border-color:var(--aura-hybrid-line);box-shadow:0 8px 24px rgba(0,0,0,.10)}
+body.student-shell #app>.card h1,body.student-shell #app>.card h2,body.student-shell #app>.card h3,
+body.student-shell .lesson-card h1,body.student-shell .lesson-card h2,body.student-shell .lesson-card h3,
+body.student-shell .study-card h1,body.student-shell .study-card h2,body.student-shell .study-card h3{color:var(--aura-hybrid-ink)}
+body.student-shell #app>.sectionhead h2,body.student-shell #app>h1,body.student-shell #app>h2,body.student-shell #app>h3,body.student-shell .lesson-hero h1,body.student-shell .lesson-hero h2{color:#fff}
+body.student-shell #app>.sectionhead .meta,body.student-shell #app>.sectionhead span{color:#b7c5d8}
+
+/* Hybrid section-like wrappers that are not cards */
+body.student-shell .lesson-tabs{background:transparent}
+body.student-shell .lesson-tabs button{background:rgba(7,25,52,.62);color:#dfeaff;border-color:rgba(125,223,255,.18)}
+body.student-shell .lesson-tabs button.active{background:linear-gradient(90deg,#1f63ff,#18addf);color:#fff;border-color:transparent;box-shadow:0 8px 22px rgba(31,99,255,.24)}
+body.student-shell .dash-task,body.student-shell .dash-subject,body.student-shell .lesson-card,body.student-shell .study-card,body.student-shell .resource,body.student-shell .exam-card{transition:transform .18s,box-shadow .18s,border-color .18s}
+body.student-shell .dash-task:hover,body.student-shell .dash-subject:hover,body.student-shell .lesson-card:hover,body.student-shell .study-card:hover,body.student-shell .resource:hover,body.student-shell .exam-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,0,0,.16);border-color:#b9d6ee}
+body.student-shell .dash-task:active,body.student-shell .dash-subject:active,body.student-shell .lesson-card:active,body.student-shell .study-card:active,body.student-shell .resource:active,body.student-shell .exam-card:active{transform:translateY(1px) scale(.975)}
+
+/* Buttons: tactile motion, no continuous animation */
+body.student-shell button,body.student-shell .btn{position:relative;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform .16s cubic-bezier(.2,.8,.2,1),box-shadow .18s,background .18s,border-color .18s,color .18s}
+body.student-shell button:active,body.student-shell .btn:active{transform:translateY(1px) scale(.965)}
+body.student-shell button:focus-visible,body.student-shell .btn:focus-visible{outline:3px solid rgba(64,201,255,.42);outline-offset:3px}
+body.student-shell .primary{background:linear-gradient(90deg,#1f63ff,#16a9e7);color:#fff;box-shadow:0 8px 20px rgba(31,99,255,.24)}
+body.student-shell .soft{background:#eef3fb;color:#365078;border:1px solid #dce5f2}
+
+/* Mobile navigation */
+body.student-shell .mobilebar{background:rgba(7,19,40,.96);border-top:1px solid rgba(255,255,255,.10);backdrop-filter:blur(16px)}
+body.student-shell .mobilebar button{color:rgba(255,255,255,.88);font-weight:800}
+body.student-shell .mobilebar svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+body.student-shell .mobilebar small{color:inherit}
+
+/* Inputs / reading surfaces remain light for legibility */
+body.student-shell input,body.student-shell textarea,body.student-shell select{background:#fff;color:var(--aura-hybrid-ink);border-color:#d8dfeb}
+body.student-shell .exam-figure,body.student-shell .lesson-thumb{background:#f4f7fb}
+
+@media(max-width:900px){body.student-shell .layout{grid-template-columns:1fr;max-width:100%;padding-top:16px}body.student-shell .side{display:none}}
+@media(max-width:560px){body.student-shell .lesson-tabs{background:rgba(9,22,45,.92);padding:8px;border-radius:14px}}
+@media(prefers-reduced-motion:reduce){body.student-shell *,body.student-shell *:before,body.student-shell *:after{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
