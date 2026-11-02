@@ -1,4 +1,4 @@
-/* AURA STUDY — PA1 premium-light subject palette */
+/* AURA STUDY — subject palette adapted for Hybrid V4 */
 body.student-shell .dash-subject,
 body.student-shell .subject{
   --subject-accent:#5f6fdf;
@@ -10,14 +10,14 @@ body.student-shell .subject{
 }
 
 /* Dashboard subject cards */
-body.student-shell .dash-subject[data-subject="TOAN"]{--subject-accent:#596bdc;--subject-soft:#eef0ff;--subject-border:#d9defb;--subject-shadow:rgba(78,95,194,.12)}
-body.student-shell .dash-subject[data-subject="NGUVAN"]{--subject-accent:#b85f7e;--subject-soft:#fceff4;--subject-border:#f3d9e3;--subject-shadow:rgba(184,95,126,.11)}
-body.student-shell .dash-subject[data-subject="TIENGANH"]{--subject-accent:#397bc2;--subject-soft:#eef6ff;--subject-border:#d7e8f8;--subject-shadow:rgba(57,123,194,.11)}
-body.student-shell .dash-subject[data-subject="KHTN"]{--subject-accent:#3f8d70;--subject-soft:#edf8f3;--subject-border:#d5ebdf;--subject-shadow:rgba(63,141,112,.11)}
-body.student-shell .dash-subject[data-subject="LSDL"]{--subject-accent:#b67b3f;--subject-soft:#fbf4e9;--subject-border:#efdfc8;--subject-shadow:rgba(182,123,63,.11)}
-body.student-shell .dash-subject[data-subject="GDCD"]{--subject-accent:#b96558;--subject-soft:#fcf1ee;--subject-border:#f0ddd8;--subject-shadow:rgba(185,101,88,.10)}
-body.student-shell .dash-subject[data-subject="TINHOC"]{--subject-accent:#3f819f;--subject-soft:#edf7fb;--subject-border:#d6e9f1;--subject-shadow:rgba(63,129,159,.11)}
-body.student-shell .dash-subject[data-subject="CONGNGHE"]{--subject-accent:#765fb0;--subject-soft:#f4f0fb;--subject-border:#e3d9f2;--subject-shadow:rgba(118,95,176,.11)}
+body.student-shell .dash-subject[data-subject="TOAN"]{--subject-accent:#596bdc;--subject-soft:#eef0ff;--subject-border:#d9defb;--subject-shadow:rgba(78,95,194,.20)}
+body.student-shell .dash-subject[data-subject="NGUVAN"]{--subject-accent:#b85f7e;--subject-soft:#fceff4;--subject-border:#f3d9e3;--subject-shadow:rgba(184,95,126,.19)}
+body.student-shell .dash-subject[data-subject="TIENGANH"]{--subject-accent:#397bc2;--subject-soft:#eef6ff;--subject-border:#d7e8f8;--subject-shadow:rgba(57,123,194,.19)}
+body.student-shell .dash-subject[data-subject="KHTN"]{--subject-accent:#3f8d70;--subject-soft:#edf8f3;--subject-border:#d5ebdf;--subject-shadow:rgba(63,141,112,.19)}
+body.student-shell .dash-subject[data-subject="LSDL"]{--subject-accent:#b67b3f;--subject-soft:#fbf4e9;--subject-border:#efdfc8;--subject-shadow:rgba(182,123,63,.19)}
+body.student-shell .dash-subject[data-subject="GDCD"]{--subject-accent:#b96558;--subject-soft:#fcf1ee;--subject-border:#f0ddd8;--subject-shadow:rgba(185,101,88,.18)}
+body.student-shell .dash-subject[data-subject="TINHOC"]{--subject-accent:#3f819f;--subject-soft:#edf7fb;--subject-border:#d6e9f1;--subject-shadow:rgba(63,129,159,.19)}
+body.student-shell .dash-subject[data-subject="CONGNGHE"]{--subject-accent:#765fb0;--subject-soft:#f4f0fb;--subject-border:#e3d9f2;--subject-shadow:rgba(118,95,176,.19)}
 
 body.student-shell .dash-subject .dash-subject-icon{
   color:var(--subject-accent)!important;
@@ -26,26 +26,30 @@ body.student-shell .dash-subject .dash-subject-icon{
   box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
   transition:transform .16s ease,background-color .16s ease,color .16s ease,box-shadow .16s ease;
 }
-body.student-shell .dash-subject .dash-chevron{color:color-mix(in srgb,var(--subject-accent) 58%, #9aa4b8)!important}
+body.student-shell .dash-subject .dash-chevron{color:color-mix(in srgb,var(--subject-accent) 72%, #a9d9ee)!important}
 body.student-shell .dash-subject:before{
   content:"";position:absolute;left:0;top:11px;bottom:11px;width:3px;border-radius:0 4px 4px 0;
-  background:var(--subject-accent);opacity:0;transform:scaleY(.58);transition:.16s ease;
+  background:var(--subject-accent);opacity:.68;transform:scaleY(.72);transition:.16s ease;
 }
+
+/* Hybrid theme: hover/active stay dark; only accent gets brighter. */
 @media(hover:hover){
   body.student-shell .dash-subject:hover{
-    border-color:var(--subject-border)!important;
-    background:linear-gradient(135deg,#fff 0%,var(--subject-soft) 180%)!important;
-    box-shadow:0 9px 22px var(--subject-shadow)!important;
+    border-color:color-mix(in srgb,var(--subject-accent) 60%, #73dcff)!important;
+    background:linear-gradient(135deg,rgba(24,57,101,.96),rgba(10,91,99,.88))!important;
+    box-shadow:0 12px 28px rgba(0,0,0,.20),0 0 0 1px color-mix(in srgb,var(--subject-accent) 28%, transparent)!important;
+    color:#fff!important;
   }
-  body.student-shell .dash-subject:hover .dash-subject-icon{transform:translateY(-1px) scale(1.035);box-shadow:0 6px 14px var(--subject-shadow),inset 0 1px 0 rgba(255,255,255,.9)}
-  body.student-shell .dash-subject:hover:before{opacity:.92;transform:scaleY(1)}
+  body.student-shell .dash-subject:hover .dash-subject-icon{transform:translateY(-1px) scale(1.035);box-shadow:0 6px 16px var(--subject-shadow),inset 0 1px 0 rgba(255,255,255,.9)}
+  body.student-shell .dash-subject:hover:before{opacity:1;transform:scaleY(1)}
 }
 body.student-shell .dash-subject:active,
 body.student-shell .dash-subject.is-selected,
 body.student-shell .dash-subject[aria-pressed="true"]{
-  border-color:var(--subject-border)!important;
-  background:var(--subject-soft)!important;
-  box-shadow:0 5px 14px var(--subject-shadow)!important;
+  border-color:color-mix(in srgb,var(--subject-accent) 70%, #7ee2ff)!important;
+  background:linear-gradient(135deg,rgba(27,62,110,.98),rgba(9,97,103,.90))!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.22),0 0 0 1px color-mix(in srgb,var(--subject-accent) 34%, transparent)!important;
+  color:#fff!important;
 }
 body.student-shell .dash-subject:active .dash-subject-icon,
 body.student-shell .dash-subject.is-selected .dash-subject-icon,
@@ -56,28 +60,41 @@ body.student-shell .dash-subject:active:before,
 body.student-shell .dash-subject.is-selected:before,
 body.student-shell .dash-subject[aria-pressed="true"]:before{opacity:1;transform:scaleY(1)}
 
-/* Library subject cards: same palette, inferred from onclick */
-body.student-shell .subject[onclick*="'TOAN'"]{--subject-accent:#596bdc;--subject-soft:#eef0ff;--subject-border:#d9defb;--subject-shadow:rgba(78,95,194,.12)}
-body.student-shell .subject[onclick*="'NGUVAN'"]{--subject-accent:#b85f7e;--subject-soft:#fceff4;--subject-border:#f3d9e3;--subject-shadow:rgba(184,95,126,.11)}
-body.student-shell .subject[onclick*="'TIENGANH'"]{--subject-accent:#397bc2;--subject-soft:#eef6ff;--subject-border:#d7e8f8;--subject-shadow:rgba(57,123,194,.11)}
-body.student-shell .subject[onclick*="'KHTN'"]{--subject-accent:#3f8d70;--subject-soft:#edf8f3;--subject-border:#d5ebdf;--subject-shadow:rgba(63,141,112,.11)}
-body.student-shell .subject[onclick*="'LSDL'"]{--subject-accent:#b67b3f;--subject-soft:#fbf4e9;--subject-border:#efdfc8;--subject-shadow:rgba(182,123,63,.11)}
-body.student-shell .subject[onclick*="'GDCD'"]{--subject-accent:#b96558;--subject-soft:#fcf1ee;--subject-border:#f0ddd8;--subject-shadow:rgba(185,101,88,.10)}
-body.student-shell .subject[onclick*="'TINHOC'"]{--subject-accent:#3f819f;--subject-soft:#edf7fb;--subject-border:#d6e9f1;--subject-shadow:rgba(63,129,159,.11)}
-body.student-shell .subject[onclick*="'CONGNGHE'"]{--subject-accent:#765fb0;--subject-soft:#f4f0fb;--subject-border:#e3d9f2;--subject-shadow:rgba(118,95,176,.11)}
+/* Library/lesson subject cards: same palette, inferred from onclick */
+body.student-shell .subject[onclick*="'TOAN'"]{--subject-accent:#596bdc;--subject-soft:#eef0ff;--subject-border:#d9defb;--subject-shadow:rgba(78,95,194,.20)}
+body.student-shell .subject[onclick*="'NGUVAN'"]{--subject-accent:#b85f7e;--subject-soft:#fceff4;--subject-border:#f3d9e3;--subject-shadow:rgba(184,95,126,.19)}
+body.student-shell .subject[onclick*="'TIENGANH'"]{--subject-accent:#397bc2;--subject-soft:#eef6ff;--subject-border:#d7e8f8;--subject-shadow:rgba(57,123,194,.19)}
+body.student-shell .subject[onclick*="'KHTN'"]{--subject-accent:#3f8d70;--subject-soft:#edf8f3;--subject-border:#d5ebdf;--subject-shadow:rgba(63,141,112,.19)}
+body.student-shell .subject[onclick*="'LSDL'"]{--subject-accent:#b67b3f;--subject-soft:#fbf4e9;--subject-border:#efdfc8;--subject-shadow:rgba(182,123,63,.19)}
+body.student-shell .subject[onclick*="'GDCD'"]{--subject-accent:#b96558;--subject-soft:#fcf1ee;--subject-border:#f0ddd8;--subject-shadow:rgba(185,101,88,.18)}
+body.student-shell .subject[onclick*="'TINHOC'"]{--subject-accent:#3f819f;--subject-soft:#edf7fb;--subject-border:#d6e9f1;--subject-shadow:rgba(63,129,159,.19)}
+body.student-shell .subject[onclick*="'CONGNGHE'"]{--subject-accent:#765fb0;--subject-soft:#f4f0fb;--subject-border:#e3d9f2;--subject-shadow:rgba(118,95,176,.19)}
 body.student-shell .subject .ico{
   color:var(--subject-accent)!important;background:var(--subject-soft)!important;border:1px solid var(--subject-border)!important;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.88);transition:.16s ease;
 }
 body.student-shell .subject:after{
-  content:"";position:absolute;right:13px;top:50%;width:6px;height:6px;border-top:1.8px solid var(--subject-accent);border-right:1.8px solid var(--subject-accent);transform:translateY(-50%) rotate(45deg);opacity:.55;
+  content:"";position:absolute;right:13px;top:50%;width:6px;height:6px;border-top:1.8px solid var(--subject-accent);border-right:1.8px solid var(--subject-accent);transform:translateY(-50%) rotate(45deg);opacity:.72;
 }
 @media(hover:hover){
-  body.student-shell .subject:hover{border-color:var(--subject-border)!important;background:linear-gradient(135deg,#fff 0%,var(--subject-soft) 185%)!important;box-shadow:0 9px 22px var(--subject-shadow)!important}
-  body.student-shell .subject:hover .ico{transform:translateY(-1px) scale(1.04);box-shadow:0 6px 14px var(--subject-shadow)}
+  body.student-shell .subject:hover{
+    border-color:color-mix(in srgb,var(--subject-accent) 60%, #73dcff)!important;
+    background:linear-gradient(135deg,rgba(24,57,101,.96),rgba(10,91,99,.88))!important;
+    box-shadow:0 12px 28px rgba(0,0,0,.20),0 0 0 1px color-mix(in srgb,var(--subject-accent) 28%, transparent)!important;
+    color:#fff!important;
+  }
+  body.student-shell .subject:hover h3{color:#fff!important}
+  body.student-shell .subject:hover .meta{color:#c5d6e5!important}
+  body.student-shell .subject:hover .ico{transform:translateY(-1px) scale(1.04);box-shadow:0 6px 16px var(--subject-shadow)}
   body.student-shell .subject:hover:after{opacity:1}
 }
-body.student-shell .subject:active{background:var(--subject-soft)!important;border-color:var(--subject-border)!important}
+body.student-shell .subject:active{
+  background:linear-gradient(135deg,rgba(27,62,110,.98),rgba(9,97,103,.90))!important;
+  border-color:color-mix(in srgb,var(--subject-accent) 70%, #7ee2ff)!important;
+  color:#fff!important;
+}
+body.student-shell .subject:active h3{color:#fff!important}
+body.student-shell .subject:active .meta{color:#c5d6e5!important}
 body.student-shell .subject:active .ico{color:#fff!important;background:var(--subject-accent)!important;border-color:var(--subject-accent)!important}
 
 @media(max-width:620px){
