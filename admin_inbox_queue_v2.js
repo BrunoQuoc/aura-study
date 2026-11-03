@@ -36,6 +36,7 @@
   }
   async function accessToken(){
     if(token&&Date.now()<tokenExpiresAt-30000)return token;
+    if(window.AURA_DRIVE_AUTH?.hasToken?.()){token=window.AURA_DRIVE_AUTH.token;tokenExpiresAt=window.AURA_DRIVE_AUTH.status().expiresAt||Date.now()+300000;return token}
     if(tokenPromise)return tokenPromise;
     await ensureGsi();
     if(!CFG.clientId)throw new Error('Thiếu Google OAuth Client ID.');
@@ -81,6 +82,8 @@
 
     document.querySelectorAll('.inbox-review-item[data-drive-id]').forEach(card=>{
       const buttons=[...card.querySelectorAll('.inbox-review-actions button')];
+      const approve=buttons.find(b=>(b.getAttribute('onclick')||'').includes('auraApproveInboxFile'));
+      if(approve&&approve.textContent!=='Duyệt & tự chuyển')approve.textContent='Duyệt & tự chuyển';
       const keep=buttons.find(b=>(b.getAttribute('onclick')||'').includes('auraKeepInboxFile'));
       if(keep&&keep.dataset.auraRejectPatched!=='1'){
         keep.dataset.auraRejectPatched='1';
@@ -89,7 +92,7 @@
         keep.setAttribute('onclick',`auraRejectInboxFile('${card.dataset.driveId}')`);
       }
       const help=card.querySelector('.inbox-review-help');
-      const helpText=`Sau khi Duyệt hoặc Từ chối, tài liệu sẽ rời hàng chờ. File bị từ chối được chuyển vào ${REJECTED_FOLDER_NAME}, không nằm lẫn trong 00_INBOX.`;
+      const helpText='Sau khi Admin duyệt, AURA tự chuyển file theo Môn → Loại tài liệu → Kỳ sử dụng. Từ chối sẽ chuyển file vào 99_REJECTED.';
       if(help&&help.textContent!==helpText)help.textContent=helpText;
     });
 
@@ -110,7 +113,7 @@
     const before=queue().find(x=>x.driveFileId===fileId);const out=await baseApprove(fileId);
     const after=queue().find(x=>x.driveFileId===fileId);
     if(after?.status==='APPROVED'){
-      recordDecision({...before,...after},'APPROVED',{destinationId:after.destinationId||'',destinationName:after.destinationName||''});
+      recordDecision({...before,...after},'APPROVED',{destinationId:after.destinationId||'',destinationName:after.destinationName||'',destinationPath:after.destinationPath||''});
       removePending(fileId);if(typeof window.auraAdminInbox==='function')window.auraAdminInbox();
     }
     setTimeout(decorate,0);return out;
