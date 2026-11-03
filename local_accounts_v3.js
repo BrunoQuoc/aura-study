@@ -1,0 +1,79 @@
+/* AURA STUDY — local-first student accounts v3.
+   Admin creates students; Student selects an existing local user and enters PIN.
+   Learning state is isolated per student. */
+(function(){
+  if(window.__AURA_LOCAL_ACCOUNTS_V3__)return;
+  window.__AURA_LOCAL_ACCOUNTS_V3__='3.0.0';
+
+  const USERS_KEY='aura_local_students_v1',SESSION_KEY='aura_student_session_v1',PROFILE_PREFIX='aura_student_profile_v1:';
+  const nativeGet=Storage.prototype.getItem,nativeSet=Storage.prototype.setItem,nativeRemove=Storage.prototype.removeItem,nativeClear=Storage.prototype.clear;
+  const rawGet=k=>nativeGet.call(localStorage,k),rawSet=(k,v)=>nativeSet.call(localStorage,k,v),rawRemove=k=>nativeRemove.call(localStorage,k);
+  const read=(k,f)=>{try{const v=JSON.parse(rawGet(k)||'null');return v==null?f:v}catch(_){return f}};
+  const write=(k,v)=>rawSet(k,JSON.stringify(v));
+  const now=()=>new Date().toISOString();
+  const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
+  const normalizeLogin=s=>String(s||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9._-]+/g,'').slice(0,32);
+  const users=()=>{const x=read(USERS_KEY,[]);return Array.isArray(x)?x:[]};
+  const activeUsers=()=>users().filter(x=>x&&x.active!==false);
+  const saveUsers=x=>write(USERS_KEY,Array.isArray(x)?x:[]);
+  const profileKey=id=>PROFILE_PREFIX+id;
+  const profile=id=>{const x=read(profileKey(id),{});return x&&typeof x==='object'?x:{}};
+  const saveProfile=(id,x)=>write(profileKey(id),x&&typeof x==='object'?x:{});
+  const randomId=()=>`stu_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`;
+  const bytesToHex=a=>[...a].map(b=>b.toString(16).padStart(2,'0')).join('');
+  const salt=()=>{const a=new Uint8Array(16);crypto.getRandomValues(a);return bytesToHex(a)};
+  async function digest(text){const b=new TextEncoder().encode(String(text));const d=await crypto.subtle.digest('SHA-256',b);return bytesToHex(new Uint8Array(d))}
+  async function pinHash(pin,s){return digest(`${s}|${pin}`)}
+
+  function isLearningKey(k){
+    k=String(k||'');
+    if(/^exam_/.test(k)||/^review_/.test(k)||/^aura_wrong/.test(k)||/^aura_smart/.test(k))return true;
+    return ['aura_attempts','aura_recent_questions','aura_generated_exam','aura_generated_draft','aura_exam_period','aura_lesson_state','aura_last_subject','aura_report_reset_at'].includes(k);
+  }
+  function learningKeys(){const out=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(isLearningKey(k))out.push(k)}return out}
+  function snapshot(id){if(!id)return;const data={};learningKeys().forEach(k=>{const v=rawGet(k);if(v!=null)data[k]=v});saveProfile(id,{data,savedAt:now()})}
+  function clearLearning(){learningKeys().forEach(rawRemove)}
+  function restore(id){clearLearning();const p=profile(id);Object.entries(p.data||{}).forEach(([k,v])=>{if(isLearningKey(k)&&v!=null)rawSet(k,String(v))})}
+
+  window.AURA_LOCAL_ACCOUNTS={users,profile,snapshot,restore,isLearningKey,normalizeLogin,status(){const list=activeUsers();return{count:list.length,usernames:list.map(x=>x.username||''),origin:location.origin,version:'3.0.0'}}};
+
+  if(document.body.classList.contains('student-shell')){
+    let currentId='',mirroring=false;
+    function mirror(k,v,remove=false){if(mirroring||!currentId||!isLearningKey(k))return;mirroring=true;try{const p=profile(currentId),data={...(p.data||{})};if(remove)delete data[k];else data[k]=String(v);saveProfile(currentId,{data,savedAt:now()})}finally{mirroring=false}}
+    Storage.prototype.setItem=function(k,v){const out=nativeSet.call(this,k,v);if(this===localStorage)mirror(String(k),v,false);return out};
+    Storage.prototype.removeItem=function(k){const out=nativeRemove.call(this,k);if(this===localStorage)mirror(String(k),'',true);return out};
+    Storage.prototype.clear=function(){if(this!==localStorage)return nativeClear.call(this);const keep=[];for(let i=0;i<this.length;i++){const k=this.key(i);if(!isLearningKey(k))keep.push([k,nativeGet.call(this,k)])}nativeClear.call(this);keep.forEach(([k,v])=>nativeSet.call(this,k,v));if(currentId)saveProfile(currentId,{data:{},savedAt:now()})};
+
+    function activeUser(){const s=read(SESSION_KEY,null);if(!s?.studentId)return null;return users().find(x=>x.id===s.studentId&&x.active!==false)||null}
+    function setHeader(u){const box=document.querySelector('.aura-account');if(!box)return;if(!u){box.innerHTML='<b>Học sinh</b><span class="aura-role">Chưa đăng nhập</span>';return}box.innerHTML=`<b>${esc(u.name)}</b><span class="aura-role">Student · <button type="button" onclick="auraStudentLogout()" style="border:0;background:none;padding:0;color:inherit;text-decoration:underline;cursor:pointer">Đăng xuất</button></span>`}
+    function ensureStyle(){if(document.getElementById('aura-local-login-style'))return;const s=document.createElement('style');s.id='aura-local-login-style';s.textContent=`.aura-login-overlay{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#071328 0%,#12345a 55%,#07566a 100%);display:grid;place-items:center;padding:24px}.aura-login-card{width:min(430px,100%);box-sizing:border-box;background:#f6f8fc;border:1px solid rgba(255,255,255,.22);border-radius:22px;padding:26px;box-shadow:0 24px 70px rgba(0,0,0,.28);color:#111b3a}.aura-login-card h1{margin:0 0 6px}.aura-login-card p{color:#6b7694;margin:0 0 20px;line-height:1.5}.aura-login-card label{display:block;margin:12px 0 6px;font-weight:800}.aura-login-card input,.aura-login-card select{width:100%;box-sizing:border-box;border:1px solid #d7deee;border-radius:12px;padding:12px 14px;font:inherit;background:#fff;color:#111b3a}.aura-login-card .btn{margin-top:16px;width:100%}.aura-login-error{color:#b42318;font-weight:700;margin-top:12px}.aura-login-note{font-size:12px;color:#8490aa;margin-top:12px;line-height:1.45}`;document.head.appendChild(s)}
+    function requestedId(){try{return new URLSearchParams(location.search).get('student')||''}catch(_){return''}}
+    function showLogin(message=''){
+      ensureStyle();setHeader(null);let o=document.querySelector('.aura-login-overlay');if(!o){o=document.createElement('div');o.className='aura-login-overlay';document.body.appendChild(o)}
+      const list=activeUsers(),preferred=requestedId();
+      const opts=list.map(u=>`<option value="${esc(u.id)}" ${u.id===preferred?'selected':''}>${esc(u.name)} (@${esc(u.username||'')})</option>`).join('');
+      o.innerHTML=`<form class="aura-login-card" onsubmit="return auraStudentLogin(event)"><div class="small">AURA STUDY · STUDENT</div><h1>Đăng nhập học sinh</h1><p>${list.length?`Đã thấy ${list.length} học sinh trên browser này. Chọn đúng học sinh và nhập PIN.`:'Browser này chưa có học sinh nào. Hãy mở Student từ nút “Mở Student” trong Admin để dùng đúng local storage.'}</p><label>Học sinh</label><select id="auraLoginStudent" ${list.length?'':'disabled'}>${opts||'<option>Chưa có user</option>'}</select><label>Mã PIN</label><input id="auraLoginPin" type="password" inputmode="numeric" autocomplete="current-password" ${list.length?'':'disabled'}><button class="btn primary" ${list.length?'':'disabled'}>Vào học</button><div class="aura-login-error">${esc(message)}</div><div class="aura-login-note">Local-first · ${esc(location.origin)} · ${list.length} user trong storage hiện tại.</div></form>`;
+    }
+    function hideLogin(){document.querySelector('.aura-login-overlay')?.remove()}
+    window.auraStudentLogin=async function(e){
+      e?.preventDefault?.();const id=document.getElementById('auraLoginStudent')?.value||'',pin=String(document.getElementById('auraLoginPin')?.value||'');const u=activeUsers().find(x=>x.id===id);
+      if(!u){showLogin('Không tìm thấy học sinh này trong browser hiện tại.');return false}
+      if(!u.pinSalt||!u.pinHash){showLogin('Tài khoản thiếu dữ liệu PIN. Admin hãy dùng “Đổi PIN”.');return false}
+      const h=await pinHash(pin,u.pinSalt);if(h!==u.pinHash){showLogin('Mã PIN không đúng.');return false}
+      if(currentId&&currentId!==u.id)snapshot(currentId);restore(u.id);currentId=u.id;write(SESSION_KEY,{studentId:u.id,loggedInAt:now()});hideLogin();setHeader(u);setTimeout(()=>{if(typeof window.home==='function')window.home()},0);return false;
+    };
+    window.auraStudentLogout=function(){if(currentId)snapshot(currentId);clearLearning();currentId='';rawRemove(SESSION_KEY);showLogin('')};
+    const u=activeUser();if(u){currentId=u.id;restore(u.id);setTimeout(()=>{hideLogin();setHeader(u)},0)}else{rawRemove(SESSION_KEY);setTimeout(()=>showLogin(''),0)}
+    addEventListener('beforeunload',()=>{if(currentId)snapshot(currentId)});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&currentId)snapshot(currentId)});
+  }
+
+  if(document.body.classList.contains('admin-shell')){
+    function row(u){return `<div class="resource"><div class="fileico">👤</div><div class="grow"><b>${esc(u.name)}</b><small>@${esc(u.username)} · ${u.active===false?'Đã khóa':'Đang hoạt động'} · tạo ${esc(new Date(u.createdAt).toLocaleDateString('vi-VN'))}</small></div><button class="btn primary" onclick="auraOpenStudent('${esc(u.id)}')">Mở Student</button><button class="btn soft" onclick="auraToggleStudent('${esc(u.id)}')">${u.active===false?'Mở khóa':'Khóa'}</button><button class="btn soft" onclick="auraResetStudentPin('${esc(u.id)}')">Đổi PIN</button><button class="btn soft" onclick="auraDeleteStudent('${esc(u.id)}')">Xóa</button></div>`}
+    window.auraStudentUsers=function(){if(typeof window.setActive==='function')window.setActive('students');document.body.dataset.auraPage='students';const app=document.getElementById('app');if(!app)return;const list=users();app.innerHTML=`<div class="sectionhead" style="margin-top:0"><div><h2>Học sinh</h2><span>Mỗi user là một hồ sơ học tập độc lập trong browser hiện tại</span></div></div><section class="card"><div class="small">TẠO HỌC SINH MỚI</div><div class="generator-grid"><label><b>Tên học sinh</b><input id="studentName" placeholder="Ví dụ: Vi Khôi"></label><label><b>Tên đăng nhập</b><input id="studentUsername" placeholder="Ví dụ: vikhoi"></label><label><b>PIN 4–8 số</b><input id="studentPin" type="password" inputmode="numeric" placeholder="Ví dụ: 1234"></label></div><button class="btn primary" style="margin-top:14px" onclick="auraCreateStudent()">Tạo user học sinh</button><p class="meta">Sau khi tạo, dùng nút “Mở Student” để chuyển sang Student trong chính browser/storage này. PIN được lưu dạng hash.</p></section><div class="sectionhead"><div><h2>Danh sách học sinh</h2><span>${list.length} user</span></div></div><section class="card">${list.length?list.map(row).join(''):'<div class="meta">Chưa có học sinh.</div>'}</section>`};
+    window.auraCreateStudent=async function(){const name=String(document.getElementById('studentName')?.value||'').trim(),un=normalizeLogin(document.getElementById('studentUsername')?.value),pin=String(document.getElementById('studentPin')?.value||'');if(!name)return alert('Hãy nhập tên học sinh.');if(un.length<3)return alert('Tên đăng nhập cần ít nhất 3 ký tự.');if(!/^\d{4,8}$/.test(pin))return alert('PIN cần 4–8 chữ số.');const list=users();if(list.some(x=>x.username===un))return alert('Tên đăng nhập này đã tồn tại.');const s=salt(),h=await pinHash(pin,s),u={id:randomId(),name,username:un,pinSalt:s,pinHash:h,active:true,createdAt:now(),updatedAt:now(),schemaVersion:3};list.push(u);saveUsers(list);window.auraStudentUsers();alert(`Đã tạo ${u.name}. Bấm “Mở Student” ở dòng học sinh để đăng nhập.`)};
+    window.auraOpenStudent=function(id){const u=users().find(x=>x.id===id);if(!u)return;if(u.active===false)return alert('Học sinh đang bị khóa.');location.href=`student-direct.html?student=${encodeURIComponent(id)}&release=accounts-v3`};
+    window.auraToggleStudent=function(id){const list=users(),i=list.findIndex(x=>x.id===id);if(i<0)return;list[i]={...list[i],active:list[i].active===false,updatedAt:now()};saveUsers(list);window.auraStudentUsers()};
+    window.auraResetStudentPin=async function(id){const list=users(),i=list.findIndex(x=>x.id===id);if(i<0)return;const pin=prompt(`Nhập PIN mới cho ${list[i].name} (4–8 số):`);if(pin==null)return;if(!/^\d{4,8}$/.test(pin))return alert('PIN cần 4–8 chữ số.');const s=salt(),h=await pinHash(pin,s);list[i]={...list[i],pinSalt:s,pinHash:h,updatedAt:now(),schemaVersion:3};saveUsers(list);alert(`Đã đổi PIN cho ${list[i].name}.`)};
+    window.auraDeleteStudent=function(id){const list=users(),u=list.find(x=>x.id===id);if(!u)return;if(!confirm(`Xóa user “${u.name}” và toàn bộ dữ liệu học tập cục bộ của user này?`))return;saveUsers(list.filter(x=>x.id!==id));rawRemove(profileKey(id));const sess=read(SESSION_KEY,null);if(sess?.studentId===id)rawRemove(SESSION_KEY);window.auraStudentUsers()};
+  }
+})();
