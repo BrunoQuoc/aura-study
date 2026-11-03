@@ -1,1 +1,25 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>AURA STUDY</title><style>html,body{margin:0;min-height:100%;background:#071328;color:#fff;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}.boot{min-height:100vh;display:grid;place-items:center}.boot div{text-align:center}.boot b{display:block;font-size:22px}.boot span{display:block;margin-top:8px;color:#9ec7df;font-size:13px}</style></head><body><div class="boot"><div><b>AURA STUDY</b><span>Đang mở phiên bản mới nhất…</span></div></div><script>(async()=>{try{const u='student-direct.html?fresh='+Date.now();const r=await fetch(u,{cache:'no-store',credentials:'same-origin'});if(!r.ok)throw new Error('HTTP '+r.status);let html=await r.text();const palette='<link rel="stylesheet" href="subject_palette.css?v=palette-r2" data-aura-subject-palette="1">';html=html.replace('</head>',palette+'</head>');html=html.replace('</body>','<script src="student_approved_subject_patch.js?v=subject-approved-r1"></script></body>');document.open();document.write(html);document.close();}catch(e){document.body.innerHTML='<div class="boot"><div><b>Không tải được AURA STUDY</b><span>Kiểm tra kết nối mạng rồi tải lại trang.</span></div></div>';}})();</script></body></html>
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="robots" content="noindex">
+  <title>AURA STUDY</title>
+  <style>html,body{margin:0;min-height:100%;background:#071328;color:#fff;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}.boot{min-height:100vh;display:grid;place-items:center}.boot div{text-align:center}.boot b{display:block;font-size:22px}.boot span{display:block;margin-top:8px;color:#9ec7df;font-size:13px}</style>
+</head>
+<body>
+  <div class="boot"><div><b>AURA STUDY</b><span>Đang mở bản Student ổn định…</span></div></div>
+  <script>
+    (function(){
+      var target=new URL('student-direct.html',location.href);
+      target.searchParams.set('release','20261103-r1');
+      if(location.hash)target.hash=location.hash;
+      location.replace(target.href);
+    })();
+  </script>
+  <noscript><meta http-equiv="refresh" content="0;url=student-direct.html?release=20261103-r1"></noscript>
+</body>
+</html>
