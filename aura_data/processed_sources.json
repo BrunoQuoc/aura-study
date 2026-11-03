@@ -135,6 +135,17 @@
       "classification": "grade6/math/bai20/knowledge_formula_poster",
       "representation": "aura_data/math6/bai20_chu_vi_dien_tich_tu_giac.json",
       "sourcePreserved": true
+    },
+    {
+      "provider": "google_drive",
+      "driveFileId": "1701XKfpNyVxkQRtSmvp7WO787uhWa8zv",
+      "name": "DE_ON_TAP_GHK1_LICH_SU_DIA_LI_6_KHONG_DAP_AN.docx",
+      "modifiedTime": "2026-11-03T08:02:22.485Z",
+      "classification": "grade6/history_geography/gk1/review_exam_without_answers",
+      "status": "blocked_incomplete_source_extraction",
+      "reason": "The Drive text extraction preserves the question text but does not include the embedded geographic coordinate-grid image required by the Geography true/false and short-answer sections. Safe AURA STUDY conversion would not preserve the complete source structure and would require reconstructing source visual data, so the file is left unprocessed.",
+      "representation": null,
+      "sourcePreserved": true
     }
   ]
 }
