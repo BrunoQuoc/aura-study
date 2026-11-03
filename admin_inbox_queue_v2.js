@@ -92,7 +92,7 @@
         keep.setAttribute('onclick',`auraRejectInboxFile('${card.dataset.driveId}')`);
       }
       const help=card.querySelector('.inbox-review-help');
-      const helpText='Sau khi Admin duyệt, AURA tự chuyển file theo Môn → Loại tài liệu → Kỳ sử dụng. Từ chối sẽ chuyển file vào 99_REJECTED.';
+      const helpText='Sau khi Admin duyệt, AURA tự chuyển file theo Môn → Loại tài liệu → Kỳ sử dụng. Không cần chọn thư mục đích.';
       if(help&&help.textContent!==helpText)help.textContent=helpText;
     });
 
