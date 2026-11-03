@@ -30,6 +30,7 @@
     decorateStudentRows();guardLegacyReset();
   }
   function installLegacyMigration(){
+    if(window.__AURA_LOCAL_ACCOUNTS_V3__)return;
     if(!document.body.classList.contains('student-shell')||window.__AURA_LEGACY_STUDENT_MIGRATION__||typeof window.auraStudentLogin!=='function'||!window.AURA_LOCAL_ACCOUNTS)return;
     window.__AURA_LEGACY_STUDENT_MIGRATION__=true;
     const baseLogin=window.auraStudentLogin,baseLogout=window.auraStudentLogout;
