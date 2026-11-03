@@ -9,6 +9,29 @@
     };
   }
 
+  const baseUpload=window.auraUploadInboxFiles;
+  if(typeof baseUpload==='function'){
+    window.auraUploadInboxFiles=async function(){
+      let folder=null;
+      try{folder=JSON.parse(localStorage.getItem('aura_drive_inbox_folder_v1')||'null')}catch(_){ }
+      if(!folder?.id){alert('Hãy chọn 00_INBOX trước khi upload.');return}
+      const btn=[...document.querySelectorAll('button')].find(b=>(b.getAttribute('onclick')||'').includes('auraUploadInboxFiles'));
+      const old=btn?.textContent||'';
+      if(btn){btn.disabled=true;btn.textContent='Đang xác thực Google…'}
+      try{
+        if(!window.AURA_DRIVE_AUTH?.hasToken?.())await window.AURA_DRIVE_AUTH?.connect?.(true);
+        if(btn?.isConnected)btn.textContent='Đang đẩy lên INBOX…';
+        return await baseUpload();
+      }catch(e){
+        const msg=String(e?.message||e||'Không thể xác thực Google Drive.');
+        alert('Upload chưa bắt đầu: '+msg);
+      }finally{
+        if(btn?.isConnected){btn.disabled=false;btn.textContent=old||'Đẩy lên INBOX'}
+        setTimeout(decorate,0);
+      }
+    };
+  }
+
   function setText(el,text){if(el&&el.textContent!==text)el.textContent=text}
   function decorate(){
     if(document.body.dataset.auraPage!=='inbox')return;
