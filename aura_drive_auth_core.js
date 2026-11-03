@@ -67,8 +67,30 @@
     return state.gsiPromise;
   }
 
+  async function connect(interactive=true){
+    await ensureGsi();
+    if(valid())return state.token;
+    const cfg=window.AURA_GOOGLE_DRIVE_CONFIG||{};
+    if(!cfg.clientId)throw new Error('Thiếu Google OAuth Client ID.');
+    return new Promise((resolve,reject)=>{
+      const client=window.google.accounts.oauth2.initTokenClient({
+        client_id:cfg.clientId,
+        scope:cfg.scope||'https://www.googleapis.com/auth/drive.file',
+        callback:()=>{}
+      });
+      client.callback=r=>{
+        if(r?.error){reject(new Error(r.error_description||r.error));return}
+        if(r?.access_token&&!valid())remember(r);
+        resolve(valid()?state.token:(r?.access_token||''));
+      };
+      client.error_callback=e=>reject(new Error(e?.message||e?.type||'Không thể xác thực Google Drive.'));
+      try{client.requestAccessToken({prompt:interactive?'select_account':''})}catch(e){reject(e)}
+    });
+  }
+
   window.AURA_DRIVE_AUTH=Object.freeze({
     ensure:ensureGsi,
+    connect,
     clear,
     hasToken:valid,
     get token(){return valid()?state.token:''},
