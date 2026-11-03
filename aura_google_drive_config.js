@@ -37,8 +37,9 @@
     document.head.appendChild(auth);
 
     const rebuild=document.createElement('script');
-    rebuild.src='admin_drive_library_rebuild.js?v=rebuild-r1';
+    rebuild.src='admin_drive_library_rebuild.js?v=rebuild-r2';
     rebuild.async=false;
+    rebuild.dataset.auraDriveRebuild='1';
     document.head.appendChild(rebuild);
   }
 })();
