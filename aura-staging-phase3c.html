@@ -170,6 +170,15 @@ el("inspect").addEventListener("click",()=>run("inspect","inspect-output",async(
  // Phase 3B recorded exactly one legitimate synthetic event for this lesson.
  // Phase 3C test:true must not increase that count.
  ensure(Number(linked?.lesson_views)>=1,"Không thấy dữ liệu Phase 3B trong Progress");
+ const {data:rawLesson,error:rawError}=await client.from("aura_learning_events")
+   .select("event_id,payload")
+   .eq("learner_id",scope.learnerId).eq("content_item_id",linkedContent)
+   .eq("event_type","lesson_viewed");
+ if(rawError)throw Error("Không đọc được dữ liệu đối chiếu Learning Progress");
+ const countable=(rawLesson||[]).filter(x=>
+   x.payload?.test!==true && x.payload?.source!=="staging_phase2c").length;
+ ensure(Number(linked.lesson_views)===countable,
+   "Learning Progress đang đếm sai sự kiện test:true");
  const {data:rows,error}=await client.from("aura_learning_events")
    .select("event_id,payload")
    .eq("learner_id",scope.learnerId)
@@ -178,7 +187,7 @@ el("inspect").addEventListener("click",()=>run("inspect","inspect-output",async(
  ensure((rows||[]).every(x=>x.payload.test===true),"Có event Phase3C thiếu test:true");
  return [
   "PASS — Learning Progress đọc được qua RLS",
-  "Số lượt xem bài Phase 3B/3C (không tính event test): "+linked.lesson_views,
+  "PASS — Đếm đúng sự kiện không phải test: "+linked.lesson_views,
   "Số event thử nghiệm Phase3C đang trên server: "+(rows?.length??0),
   "IndexedDB: "+s.total+" bản ghi; chờ: "+s.pending+
     "; bị chặn: "+s.blocked+"; cần xem xét: "+s.review,
