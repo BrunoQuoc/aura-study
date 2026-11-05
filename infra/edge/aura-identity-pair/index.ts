@@ -8,6 +8,7 @@ const ALLOWED_ORIGINS = new Set([
   "https://brunoquoc.github.io",
   "http://localhost:4173",
   "http://127.0.0.1:4173",
+  new URL(Deno.env.get("SUPABASE_URL") || "https://invalid.example").origin,
 ]);
 
 function headers(origin: string | null) {
