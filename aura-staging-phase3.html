@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — STAGING Phase 3A Pipeline Test</title>
+<style>
+:root{font:16px system-ui,sans-serif;background:#f4f7fc;color:#1b2e48}
+*{box-sizing:border-box}main{max-width:870px;margin:30px auto;padding:0 18px}
+.card{padding:20px;margin:16px 0;border:1px solid #d9e1eb;border-radius:14px;background:white}
+h1{font-size:1.55rem}h2{font-size:1.1rem}.muted{color:#586b7b;font-size:.94rem;line-height:1.6}
+.warn{border:1px solid #eedab4;background:#fff8e9;border-radius:10px;padding:15px}
+button{width:100%;border:0;border-radius:9px;padding:12px;margin-top:10px;background:#256eac;color:white;font-weight:700;cursor:pointer}
+button:disabled{opacity:.6}button.secondary{background:#e8f0f9;color:#1c5480}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eff5fd;border-radius:10px;min-height:70px;padding:12px}
+code{font-size:.9em}a{color:#216ba1}
+</style></head>
+<body>
+<main>
+<h1>AURA STUDY — Phase 3A Learning Pipeline</h1>
+<div class="warn"><strong>STAGING ONLY.</strong> Đăng nhập Student tại <a href="aura-staging-login.html">STAGING Auth</a> trước.
+Bài thử sẽ ghi <strong>một sự kiện giả lập tồn lưu</strong>, không dùng dữ liệu học thật.
+Không chia sẻ JWT, OTP hay mã ghép đôi.</div>
+<section class="card">
+<h2>1. Kiểm tra Student và nội dung</h2>
+<button id="inspect" class="secondary">Kiểm tra JWT và nội dung đã xuất bản</button>
+<pre id="inspect-log" aria-live="polite">Chưa kiểm tra.</pre>
+</section>
+<section class="card">
+<h2>2. Thử chống ghi trùng</h2>
+<p class="muted">Tạo đúng một event <code>lesson_viewed</code>, gửi lại cùng <code>event_id</code>, kiểm tra bản ghi không tăng hai lần và phát hiện event khác nội dung nhưng trùng ID.</p>
+<button id="dedup">Thực hiện kiểm thử idempotency</button>
+<pre id="dedup-log" aria-live="polite">Chưa kiểm tra.</pre>
+</section>
+<section class="card">
+<h2>3. Đọc các bảng tổng hợp Phase 3</h2>
+<button id="views" class="secondary">Kiểm tra Learning Progress / Daily / Verified Outcomes</button>
+<pre id="views-log" aria-live="polite">Chưa kiểm tra.</pre>
+<p class="muted">Hiện có thể trả về 0 kết quả vì STAGING chưa có nội dung học được phát hành. Event thử nghiệm có <code>test:true</code> nên không được tính vào các bảng tổng hợp.</p>
+</section>
+</main>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/+esm";
+import { createLearningEvent, appendLearningEvent, getContentProgress, getDailyActivity, getVerifiedOutcomes }
+ from "./aura_learning_pipeline_v1.js";
+const db = createClient(
+  "https://ufqzuowjhdqpydqvcsob.supabase.co",
+  "sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p",
+  {auth:{storageKey:"aura-stage-student-v1",flowType:"pkce",detectSessionInUrl:false,persistSession:true,autoRefreshToken:true}}
+);
+let context=null;
+const el = id => document.getElementById(id);
+const out = (id,text) => {el(id).textContent=text;};
+async function loadContext(){
+ const {data:auth,error:authError}=await db.auth.getUser();
+ if(authError||!auth?.user||auth.user.is_anonymous!==true)throw Error("Chưa đăng nhập Student hợp lệ.");
+ const {data:devices,error:deviceError}=await db.from("aura_student_devices")
+  .select("id,learner_id,auth_uid").eq("auth_uid",auth.user.id);
+ if(deviceError||devices?.length!==1)throw Error("Thiết bị chưa được ghép đôi hoặc đã bị thu hồi.");
+ const {data:items,error:itemError}=await db.from("aura_content_items")
+  .select("id,title,subject,content_type,status").eq("status","PUBLISHED");
+ if(itemError)throw Error("Không truy cập được danh mục nội dung.");
+ const eligible=(items||[]).filter(x=>x.content_type!=="ANSWER_KEY"&&x.content_type!=="SOLUTION");
+ context={user:auth.user,device:devices[0],content:eligible};
+ return context;
+}
+async function runner(buttonId,logId,cb){
+ const btn=el(buttonId);btn.disabled=true;out(logId,"Đang kiểm tra...");
+ try{out(logId,await cb());}
+ catch(err){out(logId,"CHƯA ĐẠT: "+(err?.message||"Lỗi không xác định"));}
+ finally{btn.disabled=false;}
+}
+el("inspect").onclick=()=>runner("inspect","inspect-log",async()=>{
+ const c=await loadContext();
+ return ["PASS — Xác thực Student qua Auth server",
+ "PASS — RLS trả về đúng thiết bị ghép đôi",
+ "Nội dung đã xuất bản được phép đọc: "+c.content.length,
+ c.content.length===0?"Ghi chú: chưa có nội dung để liên kết với tiến độ.":"Có thể bắt đầu liên kết nội dung."].join("\n");
+});
+el("dedup").onclick=()=>runner("dedup","dedup-log",async()=>{
+ const c=context||await loadContext();
+ const envelope=createLearningEvent({
+    learnerId:c.device.learner_id,deviceId:c.device.id,
+    eventType:"lesson_viewed",contentItemId:c.content[0]?.id??null,
+    payload:{test:true,source:"staging_phase3a",type:"dedup_e2e"}
+ });
+ const first=await appendLearningEvent(db,envelope);
+ const second=await appendLearningEvent(db,envelope);
+ if(first.status!=="created"||second.status!=="already_recorded"){
+    throw Error("Lần ghi lặp không được xác nhận chính xác.");
+ }
+ const altered={...envelope,payload:{test:true,source:"staging_phase3a",type:"tampered"}};
+ let rejected=false;
+ try{await appendLearningEvent(db,altered);}
+ catch(err){rejected=err?.message==="EVENT_ID_COLLISION_OR_UNAUTHORIZED";}
+ if(!rejected)throw Error("Trùng event_id nhưng đổi payload không bị từ chối.");
+ const {data,error}=await db.from("aura_learning_events")
+    .select("event_id").eq("event_id",envelope.event_id);
+ if(error||data?.length!==1)throw Error("Có nhiều hơn hoặc ít hơn một bản ghi.");
+ return "PASS — Ghi mới thành công\nPASS — Gửi lại nhận already_recorded\nPASS — Thay đổi payload với cùng event_id bị từ chối\nPASS — Chỉ tồn tại 1 sự kiện thử nghiệm.";
+});
+el("views").onclick=()=>runner("views","views-log",async()=>{
+ const c=context||await loadContext();
+ const [progress,daily,outcomes]=await Promise.all([
+  getContentProgress(db,c.device.learner_id),
+  getDailyActivity(db,c.device.learner_id),
+  getVerifiedOutcomes(db,c.device.learner_id)
+ ]);
+ return "PASS — Đọc 3 views qua JWT Student + RLS\nLearning Progress: "+progress.length+
+  " nhóm nội dung\nDaily Activity: "+daily.length+
+  " nhóm ngày/sự kiện\nVerified Outcomes: "+outcomes.length+
+  " kết quả đã xác minh.\nEvent test:true không đóng góp vào các views này.";
+});
+</script></body></html>
