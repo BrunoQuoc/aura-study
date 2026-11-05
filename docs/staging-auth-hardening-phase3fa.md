@@ -105,3 +105,20 @@ The Phase 3F Production Readiness manifest must retain ANONYMOUS_AUTH_ABUSE and 
 - Repeat Security Advisor, RLS and Auth E2E evidence and record operator sign-off.
 
 The existing Auth/anonymous-abuse and password-protection production release gates remain **OPEN**. No server Auth configuration was changed by the browser tests. No STAGING data cleanup or production promotion performed.
+
+
+---
+
+## 9. Attack Protection dashboard evidence — 2026-11-05
+
+The operator provided a screenshot of **Supabase STAGING → Authentication → Attack Protection**. The visible settings show:
+
+- **Enable Captcha protection: OFF** (toggle gray).
+- **Prevent use of leaked passwords: DISABLED**, with an entry point named **Configure in email provider**.
+- No unsaved changes were visible; **Save changes** was inactive.
+
+These are **observed dashboard settings**, not evidence of configuration activation. No key, token, email or personal data was supplied, and no server configuration was changed.
+
+**Safe activation sequence:** Create a STAGING-only Cloudflare Turnstile widget, add its **public Site Key** to the public frontend and publish/verify functioning independent Admin and Student challenges; only then enable CAPTCHA in Supabase using the **private Secret Key** inside the Dashboard. Verify valid/invalid tokens for both signup and Magic Link, restore the STAGING CAPTCHA toggle to OFF first if it blocks onboarding. Do not disable RLS or revoke the original paired Student. For leaked password protection, inspect the email provider setting and plan availability without changing login methods by assumption.
+
+**Status:** `ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION` remain OPEN. Production NO-GO.
