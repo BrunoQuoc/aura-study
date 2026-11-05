@@ -72,3 +72,36 @@ After activating server CAPTCHA, run a separate controlled new-login test with v
 The Phase 3F Production Readiness manifest must retain ANONYMOUS_AUTH_ABUSE and PASSWORD_BREACH_PROTECTION as **OPEN** until server-side enforcement and independently reviewed evidence exist.
 
 **Production remains NO-GO.** Do not copy STAGING accounts, learner content, or diagnostic events to production.
+
+
+---
+
+## 8. Auth browser regression acceptance — 2026-11-05
+
+**Decision: ACCEPTED — read-only STAGING Auth UI/session/RLS regression, 4/4 checks.**
+**Not accepted: server-side CAPTCHA, Auth rate limits and leaked-password protection; PRODUCTION remains NO-GO.**
+
+### Browser evidence from the paired user's session
+
+1. **UI Auth contract — PASS:** public login config enforces no automatic new Admin Auth account via the UI's Magic Link (`shouldCreateUser:false`). CAPTCHA frontend mode is explicitly **CHƯA KÍCH HOẠT**; Supabase server CAPTCHA remains **CHƯA XÁC MINH**. This checks UI contract, not actual negative signup via Auth API.
+2. **Student Auth and device — PASS:** Auth `getUser()` returned the existing anonymous Student; paired-device RLS lookup succeeded.
+3. **Knowledge Library RLS — PASS:** Student read **2/2 PUBLISHED Phase3B** content items. Test did not write Learning Events or scores.
+4. **Admin Auth — PASS:** existing Admin session authenticated with the Auth server, without requesting new OTP or pairing code. This does **not** by itself re-test Admin's full bootstrap authorization.
+
+### Independent Supabase snapshot after screenshot
+
+- 5 Auth users, 4 anonymous.
+- 1 household, 1 learner, **1 active paired Student device**, 3 historically revoked devices.
+- 13 Learning Events, **0 Phase3F-A events**, 0 attempts; 2 published Phase3B items; 2 counted activities in Learning Progress.
+- Simulated Student RLS query: 2 published content items, 1 active paired device visible, **0 household Admin rows**, 2 counted progress events.
+- Security Advisor unchanged: six `auth_allow_anonymous_sign_ins` warnings, one `auth_leaked_password_protection` warning and two informational tables intentionally without direct RLS policies.
+
+### Explicitly unresolved before any Phase 3F-A server security sign-off
+
+- Configure and activate Cloudflare Turnstile frontend widget + matching Supabase Auth server CAPTCHA (coordinated rollout; no secret in repo/chat).
+- Validate anonymous signup and Admin OTP with valid CAPTCHA, reject missing/invalid CAPTCHA via the actual server, and check active Student unaffected.
+- Inspect / adjust server Auth rate limits with an approved owner, then test controlled 429 without production traffic.
+- Enable leaked-password protection if available, or formally approve an alternative after verifying actual password-login settings.
+- Repeat Security Advisor, RLS and Auth E2E evidence and record operator sign-off.
+
+The existing Auth/anonymous-abuse and password-protection production release gates remain **OPEN**. No server Auth configuration was changed by the browser tests. No STAGING data cleanup or production promotion performed.
