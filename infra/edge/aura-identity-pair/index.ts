@@ -34,8 +34,13 @@ function getKey(kind: "publishable" | "secret"): string {
     ? "SUPABASE_ANON_KEY" : "SUPABASE_SERVICE_ROLE_KEY";
   try {
     const names = JSON.parse(Deno.env.get(jsonName) || "{}");
-    const envName = names.default;
-    const value = typeof envName === "string" ? Deno.env.get(envName) : null;
+    const configured = names.default;
+    // Current hosted Supabase exposes the actual default key in this JSON;
+    // older environments may expose the name of an env var instead.
+    const expectedPrefix = kind === "publishable" ? "sb_publishable_" : "sb_secret_";
+    if (typeof configured === "string" && configured.startsWith(expectedPrefix))
+      return configured;
+    const value = typeof configured === "string" ? Deno.env.get(configured) : null;
     if (value) return value;
   } catch (_) { /* fallback for legacy project configuration */ }
   const fallback = Deno.env.get(legacyName);
