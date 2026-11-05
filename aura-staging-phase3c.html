@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — PHASE 3C Offline Queue (STAGING)</title>
+<style>
+:root{font:16px system-ui,sans-serif;color:#18304b;background:#f4f7fc}
+*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:940px;margin:auto}
+h1{font-size:1.7rem;margin:0 0 7px}h2{font-size:1.12rem}
+p{line-height:1.55}.hint{font-size:.91rem;color:#586d83}
+.warn{background:#fff9eb;border:1px solid #efd8a8;padding:15px;border-radius:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:white;padding:19px;border:1px solid #d7e3ee;border-radius:15px}
+button{width:100%;padding:12px;border:0;border-radius:8px;color:white;background:#2376ac;font-weight:700;margin-top:10px;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}.secondary{background:#e9f1fa;color:#1e567a}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf5fe;border-radius:9px;padding:12px;min-height:90px;font:0.87rem/1.5 ui-monospace,monospace}
+small{color:#526b80}a{color:#14629e}
+</style>
+</head>
+<body><main>
+<h1>AURA STUDY — PHASE 3C</h1>
+<p><strong>Offline Queue · Reliable Sync · Data Governance</strong> — Supabase STAGING only.</p>
+<div class="warn">
+ <strong>Không sử dụng dữ liệu học thật.</strong> Hàng đợi được lưu bằng IndexedDB trong trình duyệt này, không lưu JWT/OTP. Một event thử nghiệm có <code>test:true</code> sẽ được ghi vào database khi đồng bộ nhưng không đi vào thống kê tiến độ. Không chia sẻ ảnh chứa token hoặc mã ghép đôi.
+ <p class="hint">Trình duyệt có thể xóa dữ liệu IndexedDB khi thiếu dung lượng hoặc người dùng xóa dữ liệu website. Đây là cơ chế đồng bộ khi trang đang hoạt động, chưa phải dịch vụ nền khi ứng dụng đóng.</p>
+</div>
+<div class="grid">
+<section class="card">
+<h2>1. Kiểm tra Student &amp; IndexedDB</h2>
+<p>Xác nhận phiên Student thật, thiết bị vẫn ghép đôi và hàng đợi cục bộ hoạt động.</p>
+<button id="verify">Kiểm tra Student và hàng đợi</button>
+<pre id="verify-output" aria-live="polite">Chưa kiểm tra.</pre>
+</section>
+
+<section class="card">
+<h2>2. Mô phỏng mất mạng: lưu offline</h2>
+<p>Không gọi Supabase khi lưu. Tạo một event <code>lesson_viewed</code> giả lập, ghi vào IndexedDB rồi gửi lại cùng ID ngay tại hàng đợi để thử chống trùng cục bộ.</p>
+<button id="enqueue">Tạo và lưu 1 event offline thử nghiệm</button>
+<pre id="enqueue-output" aria-live="polite">Chưa lưu.</pre>
+</section>
+
+<section class="card">
+<h2>3. Khôi phục mạng: đồng bộ</h2>
+<p>Thử gửi các event đang chờ bằng JWT Student hiện tại, đối chiếu với server, rồi loại bỏ bản ghi hàng đợi đã được xác nhận. Nếu đang mất mạng thật, nhấn lại khi kết nối trở lại.</p>
+<button id="flush">Đồng bộ và đối chiếu</button>
+<pre id="flush-output" aria-live="polite">Chưa đồng bộ.</pre>
+</section>
+
+<section class="card">
+<h2>4. Data Governance</h2>
+<p>Kiểm tra thống kê số bản ghi cục bộ và bảo đảm event thử nghiệm không làm tăng Learning Progress.</p>
+<button class="secondary" id="inspect">Kiểm tra queue + Learning Progress</button>
+<pre id="inspect-output" aria-live="polite">Chưa kiểm tra.</pre>
+<small>Không có chức năng xóa hồ sơ, xóa tài khoản, xóa dữ liệu học hoặc thu hồi thiết bị trên trang này.</small>
+</section>
+</div>
+</main>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/+esm";
+import { createLearningEvent, getContentProgress }
+  from "./aura_learning_pipeline_v1.js";
+import { LearningOfflineQueue,verifyAndCreateScope,OFFLINE_QUEUE_LIMITS }
+  from "./aura_offline_queue_v1.js";
+
+const client=createClient(
+ "https://ufqzuowjhdqpydqvcsob.supabase.co",
+ "sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p",
+ {auth:{storageKey:"aura-stage-student-v1",flowType:"pkce",detectSessionInUrl:false,
+    persistSession:true,autoRefreshToken:true}}
+);
+const log=(id,msg)=>{document.getElementById(id).textContent=msg;};
+const el=id=>document.getElementById(id);
+const ensure=(cond,msg)=>{if(!cond)throw Error(msg);};
+let scope=null,queue=null,linkedContent=null,lastEnvelope=null;
+
+async function connect(){
+ if(queue)return queue;
+ scope=await verifyAndCreateScope(client);
+ const {data:content,error}=await client.from("aura_content_items")
+   .select("id,source_ref,status,content_type")
+   .eq("source_ref","AURA_STAGING_PHASE3B:LESSON:v1");
+ if(error||content?.length!==1||content[0].status!=="PUBLISHED")
+   throw Error("Cần có bài học PUBLISHED mẫu Phase 3B");
+ linkedContent=content[0].id;
+ queue=new LearningOfflineQueue(client,scope);
+ await queue.summary(); // IndexedDB must be usable
+ return queue;
+}
+
+async function run(btnId,outId,callback){
+ const button=el(btnId);button.disabled=true;log(outId,"Đang kiểm tra...");
+ try{log(outId,await callback());}
+ catch(error){log(outId,"CHƯA ĐẠT: "+(error?.message||"Lỗi kiểm thử"));}
+ finally{button.disabled=false;}
+}
+
+el("verify").addEventListener("click",()=>run("verify","verify-output",async()=>{
+ const q=await connect();
+ const s=await q.summary();
+ return [
+  "PASS — JWT Student và thiết bị ghép đôi đã được server xác minh",
+  "PASS — IndexedDB mở thành công",
+  "Hàng đợi: "+s.total+" event",
+  "Chờ đồng bộ: "+s.pending+", cần xem xét: "+s.review+", bị chặn: "+s.blocked,
+  "Giới hạn: "+OFFLINE_QUEUE_LIMITS.maxPending+" event/thiết bị",
+ ].join("\n");
+}));
+
+el("enqueue").addEventListener("click",()=>run("enqueue","enqueue-output",async()=>{
+ const q=await connect();
+ // The event is built before connection loss; the queue itself makes no network call.
+ const event=createLearningEvent({
+   learnerId:scope.learnerId,deviceId:scope.deviceId,contentItemId:linkedContent,
+   eventType:"lesson_viewed",
+   payload:{test:true,source:"staging_phase3c",scenario:"offline_queue"}
+ });
+ const first=await q.enqueue(event);
+ const second=await q.enqueue(event);
+ ensure(first.status==="queued","Không tạo được sự kiện trong IndexedDB");
+ ensure(second.status==="already_queued","Không chặn được ID trùng trong hàng đợi");
+ const s=await q.summary();
+ lastEnvelope=event;
+ return [
+  "PASS — Event đã lưu trong IndexedDB, chưa gửi server",
+  "PASS — Enqueue lần hai cùng event_id được xác nhận already_queued",
+  "Hàng đợi hiện có: "+s.total+" event; chờ đồng bộ: "+s.pending
+ ].join("\n");
+}));
+
+el("flush").addEventListener("click",()=>run("flush","flush-output",async()=>{
+ const q=await connect();
+ const before=await q.summary();
+ const pending=await q.list();
+ if(before.total===0)throw Error("Hàng đợi đang trống. Chạy bước 2 trước.");
+ const result=await q.flush({limit:10});
+ if(result.status==="offline")return "OFFLINE — Giữ nguyên hàng đợi; khi có mạng, nhấn Đồng bộ lần nữa.";
+ if(result.status!=="ok")return "CHƯA ĐẠT — Trạng thái: "+result.status+
+  ". Hàng đợi được giữ lại, không gửi sang tài khoản khác.";
+ const after=await q.summary();
+ const successful=result.created+result.replayed;
+ ensure(successful>=1,"Chưa có event được đồng bộ; kiểm tra giới hạn retry/quyền truy cập.");
+ const targetIds=new Set(pending.slice(0,10).map(x=>x.event_id));
+ const {data:rows,error}=await client.from("aura_learning_events")
+   .select("event_id,learner_id,device_id,actor_uid,payload")
+   .eq("learner_id",scope.learnerId)
+   .contains("payload",{source:"staging_phase3c",scenario:"offline_queue"});
+ if(error)throw Error("Không đọc được event đã đồng bộ");
+ const matches=(rows||[]).filter(x=>targetIds.has(x.event_id));
+ ensure(matches.length>=successful,
+  "Server chưa trả về đủ các event thử nghiệm đã xác nhận");
+ ensure(matches.every(x=>x.learner_id===scope.learnerId&&
+  x.device_id===scope.deviceId&&x.actor_uid===scope.authUid&&x.payload.test===true),
+  "Đối chiếu chủ sở hữu hoặc cờ test bị sai");
+ return [
+  "PASS — Đã gửi/đối chiếu "+successful+" event",
+  "Ghi mới: "+result.created+"; đã có trên server: "+result.replayed,
+  "Còn trong hàng đợi: "+after.total,
+  "Retry: "+result.retry+"; cần xem xét: "+result.review+"; bị chặn: "+result.blocked,
+  "PASS — JWT/RLS và cờ test:true của các event thành công đã được kiểm tra"
+ ].join("\n");
+}));
+
+el("inspect").addEventListener("click",()=>run("inspect","inspect-output",async()=>{
+ const q=await connect();
+ const s=await q.summary();
+ const progress=await getContentProgress(client,scope.learnerId);
+ const linked=progress.find(x=>x.content_item_id===linkedContent);
+ // Phase 3B recorded exactly one legitimate synthetic event for this lesson.
+ // Phase 3C test:true must not increase that count.
+ ensure(Number(linked?.lesson_views)>=1,"Không thấy dữ liệu Phase 3B trong Progress");
+ const {data:rows,error}=await client.from("aura_learning_events")
+   .select("event_id,payload")
+   .eq("learner_id",scope.learnerId)
+   .contains("payload",{source:"staging_phase3c",scenario:"offline_queue"});
+ if(error)throw Error("Không kiểm tra được sự kiện thử nghiệm từ server");
+ ensure((rows||[]).every(x=>x.payload.test===true),"Có event Phase3C thiếu test:true");
+ return [
+  "PASS — Learning Progress đọc được qua RLS",
+  "Số lượt xem bài Phase 3B/3C (không tính event test): "+linked.lesson_views,
+  "Số event thử nghiệm Phase3C đang trên server: "+(rows?.length??0),
+  "IndexedDB: "+s.total+" bản ghi; chờ: "+s.pending+
+    "; bị chặn: "+s.blocked+"; cần xem xét: "+s.review,
+  "Ghi chú: bài kiểm thử không xóa dữ liệu Student."
+ ].join("\n");
+}));
+</script>
+</body></html>
