@@ -68,3 +68,45 @@ Phase 3C's page imports Supabase JS from an external CDN at initial page load, s
 ## Next step
 
 **Phase 3D Browser E2E acceptance** is pending. Production rollout remains blocked until security, test-data governance, operational runbook, and real offline/reconnection tests pass.
+
+
+---
+
+## Phase 3D E2E evidence review — 2026-11-05
+
+**Decision: PARTIAL PASS; complete Phase 3D E2E is NOT YET ACCEPTED. Production remains BLOCKED.**
+
+User-provided browser screenshot indicates:
+- JWT/paired Student verification succeeded and minimal offline scope was cached; Web Locks API reported SUPPORTED.
+- Local IndexedDB enqueue and same-ID local duplicate suppression passed; queue had one pending item.
+- Successful manual sync/reconciliation of one `event_id`, after which local queue showed zero pending/retry/blocked/review items.
+- Governance/Progress check passed, excluding `test:true` telemetry from counted lesson progress.
+- Tab A reported that it held the lock for eight seconds, but there is no screenshot of tab B returning `locked_by_another_tab`.
+
+**Two unfulfilled browser acceptance gates:**
+1. Offline step explicitly displayed `QUEUE PASS — Chưa xác minh mất mạng thật` and `navigator.onLine: true`. This is proof of an IndexedDB enqueue but **NOT** proof of offline reload or real disconnection.
+2. Cross-tab test only shows tab A's successful lock hold; tab B's denied acquisition is **NOT** evidenced.
+
+### Independent Supabase STAGING verification
+- **Exactly one** `aura_learning_events` row with `payload.source=staging_phase3d`, scenario `offline_reload`; exactly one distinct event ID.
+- Event: `lesson_viewed`, `payload.test=true`, schema_version 1, correct learner/device/actor, active paired Student, published STAGING Phase3B LESSON. Receipt present at approximately **16:01 Asia/Ho_Chi_Minh, 2026-11-05**.
+- Two Phase3B contents; **1** current active Student device; total **8** Learning Events; **0** attempts or outcomes.
+- Learning Progress unchanged: one `lesson_viewed` and one `practice_opened`; paired Student role simulation sees 0 Admin households, 1 Phase3D event, two counted progress activities.
+- No writes or cleanup were executed during this verification.
+
+### Next browser evidence required
+
+**Actual offline reload:**
+1. While online, on the same paired Student browser, click Install Service Worker and wait for PASS, then Verify Student/Save Context and wait for PASS. Reload once online if necessary so the worker controls the page.
+2. In DevTools Network select **Offline** (or disconnect Wi-Fi), then reload `phase3d/index.html` while still offline.
+3. Click **Tạo một sự kiện khi offline**. Required evidence: the page reloads and result includes `PASS — Đã tạo event khi trình duyệt báo mất mạng` with `navigator.onLine: false`.
+4. Reconnect and run sync; verify new unique event and empty queue afterward.
+
+**Two-tab exclusion:**
+1. Open the same Phase3D URL in tab A and tab B in the same browser profile.
+2. On tab A click **Giữ khóa 8 giây**; within eight seconds click **Đồng bộ** on tab B.
+3. Required evidence: tab B reports `locked_by_another_tab` and makes no upload; tab A eventually reports lock released.
+
+Browser IndexedDB content and Web Locks are not directly verifiable by Supabase SQL, so browser evidence is essential. The 4/4 click sequence does not by itself complete the real-offline or concurrent-tab proofs. A screenshot of only tab A is insufficient.
+
+**Other unresolved gates**: storage eviction, session expiry and revocation while queued, long transient errors, formal data retention/deletion policy, Supabase Security Advisor issues. These remain outside the current browser smoke-test acceptance and block production readiness.
