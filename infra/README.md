@@ -1,6 +1,6 @@
 # AURA STUDY — Rebuild P0 / Staging foundation
 **Branch:** `rebuild/stability-v1-20261105`
-**Status:** SOURCE SCAFFOLD READY · CLOUD PROJECT NOT CREATED · NOT PRODUCTION
+**Status:** STAGING DATABASE DEPLOYED (2026-11-05) · AUTH/DEVICE PAIRING NOT YET LIVE · NOT PRODUCTION
 **Baseline:** `backup/pre-rebuild-2026-11-05` at SHA `61a57f1ecaa2742438fa2e725bc22c5b3d7f582e`.
 
 ## Implemented on this branch
@@ -22,7 +22,7 @@
 - The browser uses only a publishable key and a signed-in user's JWT. A service_role/secret must never enter GitHub Pages, client config or backup JSON.
 - Student handwriting/voice/answer media must later go to private authenticated storage. This branch currently does NOT implement upload, pairing, grading or private buckets.
 
-## Supabase staging activation checklist (NOT DONE)
+## Supabase staging activation checklist (PARTIAL)
 1. Parent chooses the target Supabase **organization**; `list_organizations` returned one, but the organization has not been explicitly selected for a new project. Creating the project might incur cost and must go through the provider's confirmation flow.
 2. Create a **staging** Supabase project in suitable region (suggest `ap-southeast-1`, Singapore; final choice by Parent/provider availability). Do not point anything to production domain.
 3. Enable verified Parent email authentication. Enable student anonymous sign-in only with abuse protection/CAPTCHA and rate limits appropriate for public-facing app.
@@ -41,7 +41,7 @@
 - No client-side master PIN as authorization, no broad `TO authenticated USING(true)`.
 - No early answer release, no unverified AI grades entered into the official competency map.
 - No mutation of existing Google Drive files or production `main`.
-- No claim that the cloud sync works until a staging project exists and device E2E actually passes.
+- No claim that cloud sync works until authenticated two-device E2E actually passes. Staging project now exists but Auth/pairing E2E still pending.
 
 ## Links
 - Approved product standards: `../docs/AURA_OFFICIAL_8_SUBJECT_STANDARDS_V1_APPROVED.md` on `design/single-learner-sync-v1`.
