@@ -110,3 +110,30 @@ User-provided browser screenshot indicates:
 Browser IndexedDB content and Web Locks are not directly verifiable by Supabase SQL, so browser evidence is essential. The 4/4 click sequence does not by itself complete the real-offline or concurrent-tab proofs. A screenshot of only tab A is insufficient.
 
 **Other unresolved gates**: storage eviction, session expiry and revocation while queued, long transient errors, formal data retention/deletion policy, Supabase Security Advisor issues. These remain outside the current browser smoke-test acceptance and block production readiness.
+
+
+---
+
+## Phase 3D real offline/reconnect retest — 2026-11-05
+
+**Decision: REAL OFFLINE QUEUE + RECONNECT SYNC ACCEPTED FOR TESTED CASES; PHASE 3D E2E STILL PARTIAL.**
+
+User-provided screenshot shows:
+- Step 1: online Student/JWT paired device revalidation and cached minimal scope PASS; Web Locks SUPPORTED.
+- Step 2: `navigator.onLine: false` and explicit `PASS — Đã tạo event khi trình duyệt báo mất mạng`; three queued offline, local duplicate suppression PASS. This now proves the local operation was invoked with a browser-reported offline state. A screenshot alone cannot independently establish that the page was reloaded after disconnection, though that is the indicated manual test procedure.
+- Step 3: manual reconnection/flush reports three created and reconciled `event_id` records, zero remaining queued/retry entries.
+- Step 5: local queue shows zero pending/blocked/review; read model excludes test telemetry, lesson view stays at one.
+- Step 4: **still only shows tab A** holding/releasing the lock for eight seconds. No tab B `locked_by_another_tab` evidence has been provided.
+
+### Independent Supabase confirmation
+- Exactly **four** persistent Phase3D-tagged events now exist, with **four distinct event IDs**: one from the prior partial run, three new events received at approximately **16:11 Asia/Ho_Chi_Minh**.
+- All four: event type `lesson_viewed`, scenario `offline_reload`, `payload.test=true`, schema_version 1, correct actor/learner/device, active device, published Phase3B lesson and non-null server receipt.
+- STAGING totals: 11 Learning Events, 1 household, 1 learner, 1 active Student device, 3 revoked historical test devices, 2 synthetic published content items, 0 attempts, 0 verified outcomes.
+- Paired Student simulated RLS view continues showing 0 Admin households and 4 visible Phase3D events.
+- Progress still counts exactly one lesson view and one practice open; test events are not included.
+
+### Remaining minimum acceptance gate
+During an overlapping two-tab test, tab B must return `locked_by_another_tab` while tab A holds the Web Lock. Only tab A's `released_after_test` result is shown so far. Capture tab B's response or implement a deterministic two-context browser test to demonstrate exclusion. The JS/mock lock test passed earlier but does not replace a browser two-tab E2E proof.
+
+### Remaining production blockers
+Final data retention/deletion approval, real storage-eviction and expired-session tests, retry error-chaos testing, compatibility/security review for shared devices and Supabase Security Advisor warnings. No cleanup or production deployment performed.
