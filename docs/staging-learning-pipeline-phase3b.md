@@ -75,3 +75,33 @@ To avoid accidental repeat accumulation, the browser checks for a previously rec
 - Design a server-authoritative grading/attempt pipeline before deriving Error Analysis or Weakness Map.
 
 Phase 3B database scope may be accepted when SQL/RLS tests PASS. Whole Phase 3B requires browser E2E evidence and a final DB check.
+
+
+---
+
+## Phase 3B E2E acceptance — 2026-11-05
+
+**Decision: PHASE 3B ACCEPTED ON STAGING for the three browser E2E scenarios. Production remains BLOCKED.**
+
+The user supplied a screenshot of `aura-staging-phase3b.html` with three successful checks:
+1. Student Auth and RLS returned exactly two Phase 3B PUBLISHED Knowledge Library entries.
+2. Student appended `lesson_viewed` and `practice_opened` linked to their respective content items; replayed identical event IDs and read each event back.
+3. Student JWT read `aura_learning_progress_v1` and `aura_learning_daily_v1` with one lesson view and one practice open; `aura_verified_outcomes_v1` returned zero grades.
+
+### Independently verified Supabase STAGING data
+
+- Exactly **two** `public.aura_learning_events` records tagged `payload.source='staging_phase3b'`; exactly two distinct event IDs.
+- One event references `AURA_STAGING_PHASE3B:LESSON:v1` with type `lesson_viewed`, one references `AURA_STAGING_PHASE3B:PRACTICE:v1` with `practice_opened`.
+- Both records have `schema_version=1`, matching event/learner/device Auth identifiers and server receipt timestamps.
+- The actual progress view returns two groups for `TOAN`, each with one corresponding activity; the daily view totals two activities.
+- A read-only SQL role simulation with the current Student UID returns two Phase 3B content entries, two events, two progress groups, two daily activities, zero verified outcomes and **zero visible Admin households**.
+- Exactly one learner, one household and one **active** Student device remain. There are three **previously revoked** temporary test devices; none was revoked by this verification. There are no persisted exam attempts or grades.
+- Aggregated Supabase API logs include HTTP 201 for successful learning-event INSERTs, 409 for duplicate event IDs, and HTTP 200 for the three read-model GET endpoints. Aggregated log rows do not prove per-request response bodies; browser screenshot and database checks support the detailed acceptance.
+
+### Remaining controls
+
+- Retain the two STAGING content fixtures and the two synthetic Phase 3B events until an authorized cleanup plan is approved; these synthetic events are deliberately counted in STAGING progress.
+- Do not copy these fixtures, users, or events to production.
+- Acknowledge the Supabase Security Advisor warnings for anonymous sign-ins and leaked-password protection; resolve or document compensating controls before a production decision.
+- Phase 3C should focus on durable offline delivery/retries, reconciliation, abuse controls, retention/cleanup, and safe monitoring.
+- Scores, verified results and Weakness Map labels must be generated through server-authoritative pipelines, not client activity telemetry.
