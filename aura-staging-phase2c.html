@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — STAGING AUTH Phase 2C</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#132c4d;background:#f4f7fc}
+*{box-sizing:border-box}body{margin:0;padding:26px}main{max-width:930px;margin:auto}
+h1{font-size:1.65rem;margin:0 0 10px}h2{font-size:1.16rem}
+p,li{line-height:1.55}.note{padding:15px 18px;background:#fff8ea;border:1px solid #efdcad;border-radius:12px;margin:15px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:690px){.grid{grid-template-columns:1fr}}
+.card{padding:20px;background:#fff;border-radius:16px;border:1px solid #d6e2ef;box-shadow:0 7px 18px #0a20300a}
+button{background:#2476ae;border:0;border-radius:9px;color:white;cursor:pointer;font-weight:700;padding:12px 15px;width:100%;margin-top:10px}
+button:disabled{opacity:.65;cursor:not-allowed}
+button.secondary{background:#e7f0f9;color:#114c77}
+button.warning{background:#8c5814}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf5ff;padding:12px;border-radius:10px;min-height:72px;font-size:.85rem}
+label{display:flex;gap:10px;margin-top:12px;align-items:flex-start;font-size:.9rem}
+input[type=checkbox]{margin-top:4px}
+a{color:#165b92}footer{margin-top:24px;color:#5e6f85;font-size:.84rem}
+</style></head>
+<body><main>
+<h1>AURA STUDY — STAGING AUTH Phase 2C</h1>
+<p><strong>End-to-End Authorization &amp; Learning Events Write</strong> — thực hiện bằng phiên đăng nhập Supabase thật, không dùng service key ở trình duyệt.</p>
+<div class="note"><strong>Chỉ dành cho STAGING.</strong> Không nhập dữ liệu học thật. Hãy đăng nhập và ghép đôi tại <a href="aura-staging-login.html">trang STAGING Auth</a> trước khi kiểm thử. Tuyệt đối không chụp hoặc chia sẻ mã ghép đôi, OTP, JWT. Bài thử ghi sẽ lưu một sự kiện thử nghiệm; bài thử thu hồi sẽ tạo rồi thu hồi một thiết bị tạm (không thu hồi thiết bị đang học).</div>
+<div class="grid">
+<section class="card">
+<h2>1. Xác thực bằng JWT thật</h2>
+<button id="check-admin" class="secondary">Kiểm tra Admin qua API</button>
+<button id="check-student" class="secondary">Kiểm tra Student + RLS qua API</button>
+<pre id="read-result" aria-live="polite">Chưa kiểm tra.</pre>
+</section>
+<section class="card">
+<h2>2. Learning Events Write</h2>
+<p>Chỉ ghi một event <code>lesson_viewed</code> có nhãn <code>staging_phase2c</code>. Không sửa hoặc xóa bài học, điểm số.</p>
+<button id="write-event">Ghi và đọc lại 1 Learning Event thử nghiệm</button>
+<pre id="write-result" aria-live="polite">Chưa ghi.</pre>
+</section>
+<section class="card">
+<h2>3. Revocation qua Edge Function</h2>
+<p>Tạo một phiên Student tạm, ghép đôi bằng Admin hiện tại, thu hồi đúng thiết bị tạm, rồi kiểm tra không còn quyền đọc/ghi. Không dùng mã ghép đôi của thiết bị hiện tại.</p>
+<p><strong>Lưu ý:</strong> thao tác này tạo bản ghi Auth và thiết bị thử nghiệm tồn lưu trong STAGING, đồng thời làm hết hiệu lực những mã ghép đôi chưa sử dụng trước đó.</p>
+<label><input id="confirm-revoke" type="checkbox">Tôi xác nhận chỉ chạy thử trên STAGING và chấp nhận tạo/thu hồi thiết bị tạm.</label>
+<button class="warning" id="test-revoke">Thử ghép đôi và thu hồi thiết bị tạm</button>
+<pre id="revoke-result" aria-live="polite">Chưa kiểm tra.</pre>
+</section>
+<section class="card">
+<h2>Quy tắc nghiệm thu</h2>
+<ul>
+<li>Student đã ghép đôi đọc được đúng hồ sơ và thiết bị.</li>
+<li>Student không đọc được household của Admin hay danh sách mã ghép đôi.</li>
+<li>Ghi event thành công; <code>actor_uid</code> do Supabase xác thực và <code>received_at</code> do máy chủ gán.</li>
+<li>Sau khi Admin thu hồi thiết bị tạm, cùng JWT vẫn không đọc/ghi được dữ liệu liên kết.</li>
+</ul>
+</section>
+</div>
+<footer>Không hiển thị hoặc lưu JWT, mật khẩu, OTP và mã ghép đôi trên trang kết quả. Các bước này kiểm tra STAGING, không tự động nghiệm thu PRODUCTION.</footer>
+</main>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/+esm";
+const config={
+ url:"https://ufqzuowjhdqpydqvcsob.supabase.co",
+ key:"sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p",
+ gateway:"https://ufqzuowjhdqpydqvcsob.supabase.co/functions/v1/aura-identity-pair"
+};
+const client = (storageKey,persistSession) => createClient(config.url,config.key,{
+ auth:{storageKey,flowType:"pkce",detectSessionInUrl:false,persistSession,autoRefreshToken:persistSession}
+});
+const parent=client("aura-stage-parent-v1",true);
+const student=client("aura-stage-student-v1",true);
+const byId=id=>document.getElementById(id);
+function report(id,message){byId(id).textContent=message;}
+function failed(message){throw new Error(message);}
+function check(result,condition,message){if(!condition)failed(message);result.push("PASS — "+message);}
+async function invoke(authClient,method,params={}){
+ const {data:{session},error:sessionError}=await authClient.auth.getSession();
+ if(sessionError||!session?.access_token)failed("Chưa có phiên Auth hợp lệ.");
+ const response=await fetch(config.gateway,{
+   method:"POST",cache:"no-store",
+   headers:{"apikey":config.key,"Authorization":"Bearer "+session.access_token,"Content-Type":"application/json"},
+   body:JSON.stringify({action:method,...params})
+ });
+ const body=await response.json().catch(()=>({}));
+ if(!response.ok)failed("Gateway từ chối thao tác ("+response.status+").");
+ return body;
+}
+async function identity(authClient){
+ const {data,error}=await authClient.auth.getUser();
+ if(error||!data?.user)failed("Phiên chưa được xác thực bởi Supabase Auth.");
+ return data.user;
+}
+async function inspectStudent(authClient){
+ const rows=[];
+ const user=await identity(authClient);
+ check(rows,user.is_anonymous===true,"JWT thuộc Student ẩn danh");
+ const status=await invoke(authClient,"status");
+ check(rows,status.role==="student" && !!status.learner_id,"Edge Function xác nhận Student đã ghép đôi");
+ const device=await authClient.from("aura_student_devices")
+   .select("id,learner_id,auth_uid").eq("auth_uid",user.id);
+ if(device.error)failed("Không đọc được bản ghi thiết bị theo RLS.");
+ check(rows,device.data.length===1 && device.data[0].learner_id===status.learner_id,
+   "RLS chỉ trả về thiết bị đã ghép đôi");
+ const learners=await authClient.from("aura_learners")
+   .select("id").eq("id",status.learner_id);
+ if(learners.error)failed("Không truy vấn được hồ sơ Student qua RLS.");
+ check(rows,learners.data.length===1,"Student đọc được hồ sơ học của mình");
+ const household=await authClient.from("aura_households").select("id");
+ if(household.error)failed("Không thực hiện được kiểm tra cách ly household.");
+ check(rows,household.data.length===0,"Student không đọc được household Admin");
+ const pairing=await authClient.from("aura_pairing_requests").select("id").limit(1);
+ check(rows,!!pairing.error,"Không được đọc trực tiếp mã ghép đôi");
+ return {rows,user,device:device.data[0],learner_id:status.learner_id};
+}
+async function testAdmin(){
+ const rows=[];
+ const user=await identity(parent);
+ check(rows,user.is_anonymous===false,"Supabase Auth xác nhận Admin không ẩn danh");
+ const status=await invoke(parent,"status");
+ check(rows,status.role==="admin","Gateway xác nhận Admin hợp lệ");
+ const h=await parent.from("aura_households").select("id").eq("admin_uid",user.id);
+ if(h.error)failed("Không truy cập được household Admin.");
+ check(rows,h.data.length===1,"Admin chỉ truy cập household của mình");
+ return rows;
+}
+async function writeOne(authClient,learner_id,device_id,user_id){
+ const event_id=crypto.randomUUID();
+ const {data,error}=await authClient.from("aura_learning_events").insert({
+   event_id,learner_id,device_id,
+   event_type:"lesson_viewed",
+   payload:{test:true,source:"staging_phase2c",kind:"auth_write_diagnostic"},
+   client_created_at:new Date().toISOString()
+ }).select("event_id,learner_id,device_id,actor_uid,received_at").single();
+ if(error||!data)failed("Learning Event INSERT không được chấp nhận.");
+ const checks=[];
+ check(checks,data.event_id===event_id && data.learner_id===learner_id &&
+   data.device_id===device_id,"Event được ghi vào đúng learner và device");
+ check(checks,data.actor_uid===user_id && !!data.received_at,
+   "actor_uid và received_at do Supabase xác định");
+ const {data:read,error:readError}=await authClient.from("aura_learning_events")
+    .select("event_id").eq("event_id",event_id).single();
+ if(readError||read?.event_id!==event_id)failed("Không đọc lại được event vừa ghi.");
+ check(checks,true,"JWT Student đọc lại được event vừa ghi");
+ return checks;
+}
+async function testIsolatedRevoke(){
+ if(!byId("confirm-revoke").checked)failed("Cần xác nhận kiểm thử thiết bị tạm.");
+ const rows=[];
+ await testAdmin();
+ let ephemeral=null, tempDeviceId=null, cleanupRequired=false, revoked=false;
+ try{
+   ephemeral=client("aura-stage-phase2c-disposable-"+crypto.randomUUID(),false);
+   const {data,error}=await ephemeral.auth.signInAnonymously();
+   if(error||!data?.user?.is_anonymous)failed("Không tạo được phiên Student tạm.");
+   check(rows,true,"Đã tạo phiên Student tạm với JWT riêng");
+   const code=await invoke(parent,"create_pairing_code");
+   if(typeof code.pairing_code!=="string")failed("Không tạo được mã ghép đôi tạm.");
+   const paired=await invoke(ephemeral,"redeem_pairing_code",{
+      pairing_code:code.pairing_code,device_label:"AURA_PHASE2C_TEMP_REVOKE"
+   });
+   if(!paired?.device_id||!paired?.learner_id)failed("Ghép đôi thiết bị tạm không thành công.");
+   tempDeviceId=paired.device_id;cleanupRequired=true;
+   check(rows,true,"Ghép đôi thiết bị tạm qua Edge Function");
+   const before=await inspectStudent(ephemeral);
+   check(rows,before.device.id===tempDeviceId,"Thiết bị tạm đọc được hồ sơ trước thu hồi");
+   const response=await invoke(parent,"revoke_student_device",{device_id:tempDeviceId});
+   revoked=response.revoked===true;
+   check(rows,revoked,"Admin thu hồi đúng thiết bị tạm qua Edge Function");
+   const afterStatus=await invoke(ephemeral,"status");
+   check(rows,afterStatus.role==="unpaired","JWT cũ không còn được nhận diện là Student");
+   const {data:afterLearner,error:afterLearnerError}=await ephemeral.from("aura_learners")
+      .select("id").eq("id",paired.learner_id);
+   if(afterLearnerError)failed("Không thể kiểm tra quyền đọc sau thu hồi.");
+   check(rows,afterLearner.length===0,"JWT cũ không đọc được hồ sơ sau thu hồi");
+   const {error:writeError}=await ephemeral.from("aura_learning_events").insert({
+      event_id:crypto.randomUUID(),learner_id:paired.learner_id,device_id:tempDeviceId,
+      event_type:"lesson_viewed",
+      payload:{test:true,source:"staging_phase2c",case:"revoked_negative"},
+      client_created_at:new Date().toISOString()
+   });
+   check(rows,!!writeError,"JWT cũ không ghi được Learning Event sau thu hồi");
+   return rows;
+ } finally {
+   if(cleanupRequired&&!revoked&&tempDeviceId){
+     try{await invoke(parent,"revoke_student_device",{device_id:tempDeviceId});}catch(_){}
+   }
+   if(ephemeral){try{await ephemeral.auth.signOut();}catch(_){}}
+ }
+}
+async function run(buttonId,outputId,fn){
+ const btn=byId(buttonId);
+ btn.disabled=true;report(outputId,"Đang kiểm tra...");
+ try{
+   const lines=await fn();
+   report(outputId,lines.join("\n")+"\nHOÀN TẤT.");
+ }catch(e){
+   report(outputId,"CHƯA ĐẠT / CHƯA THỂ KIỂM TRA\n"+(e?.message||"Lỗi kiểm thử."));
+ }finally{btn.disabled=false;}
+}
+byId("check-admin").addEventListener("click",()=>run("check-admin","read-result",testAdmin));
+byId("check-student").addEventListener("click",()=>run("check-student","read-result",async()=>{
+  const result=await inspectStudent(student);return result.rows;
+}));
+byId("write-event").addEventListener("click",()=>run("write-event","write-result",async()=>{
+  const s=await inspectStudent(student);
+  return await writeOne(student,s.learner_id,s.device.id,s.user.id);
+}));
+byId("test-revoke").addEventListener("click",()=>run("test-revoke","revoke-result",testIsolatedRevoke));
+</script></body></html>
