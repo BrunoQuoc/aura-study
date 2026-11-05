@@ -214,8 +214,10 @@ e("sync").onclick=()=>run("sync","sync-output",async()=>{
     throw Error("Số lượng hoặc ID đã xác nhận không khớp server");
   return {status:outcome.status,outcome,after,accepted:accepted.length};
  });
- if(result.status==="locked_by_another_tab"||result.status==="web_locks_unavailable")
-  return "CHƯA ĐẠT / ĐANG BẬN — "+result.status+"; không gửi dữ liệu.";
+ if(result.status==="locked_by_another_tab")
+  return "PASS — locked_by_another_tab: tab này không được cấp khóa và không gửi dữ liệu.";
+ if(result.status==="web_locks_unavailable")
+  return "CHƯA ĐẠT — trình duyệt không hỗ trợ Web Locks; đồng bộ bị chặn an toàn.";
  if(result.status==="empty")return "Hàng đợi đang trống; có thể đã được tab khác đồng bộ.";
  if(result.status!=="ok")return "CHƯA ĐẠT — "+result.status+
   "; hàng đợi được giữ và chưa được phép sử dụng danh tính khác.";
