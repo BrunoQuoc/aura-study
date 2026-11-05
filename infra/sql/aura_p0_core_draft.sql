@@ -68,6 +68,7 @@ create table if not exists public.aura_attempts (
   score_verified boolean not null default false,
   submitted_at timestamptz not null default now(),
   graded_at timestamptz,
+  released_at timestamptz,
   check (score is null or (max_score is not null and score <= max_score))
 );
 create index if not exists aura_attempts_learner_idx
@@ -104,6 +105,10 @@ revoke all on public.aura_households, public.aura_learners,
   public.aura_student_devices, public.aura_content_items,
   public.aura_attempts, public.aura_learning_events from public, anon, authenticated;
 grant usage on schema public to authenticated;
+-- Trusted backend only. Never expose a service_role key in GitHub Pages.
+grant select, insert, update, delete on public.aura_households, public.aura_learners,
+  public.aura_student_devices, public.aura_content_items,
+  public.aura_attempts, public.aura_learning_events to service_role;
 grant select on public.aura_households, public.aura_learners,
   public.aura_student_devices, public.aura_content_items,
   public.aura_attempts, public.aura_learning_events to authenticated;
@@ -150,6 +155,9 @@ create policy "aura_parent_or_published_student_content"
     )
     or (
       status = 'PUBLISHED'
+      -- Answer keys and solutions are never exposed via general content SELECT.
+      -- Release of answers requires a separate server-authorized result endpoint.
+      and content_type not in ('ANSWER_KEY','SOLUTION')
       and exists (
         select 1 from public.aura_learners l
         join public.aura_student_devices d on d.learner_id = l.id
@@ -168,10 +176,13 @@ create policy "aura_parent_or_paired_student_reads_attempts"
       join public.aura_households h on h.id = l.household_id
       where l.id = aura_attempts.learner_id and h.admin_uid = (select auth.uid())
     )
-    or exists (
+    or (
+      state = 'GRADED_FINAL' and released_at is not null
+      and exists (
       select 1 from public.aura_student_devices d
       where d.learner_id = aura_attempts.learner_id
         and d.auth_uid = (select auth.uid()) and d.revoked_at is null
+      )
     )
   );
 
