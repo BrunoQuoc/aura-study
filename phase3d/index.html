@@ -143,7 +143,7 @@ e("install").onclick=()=>run("install","setup-output",async()=>{
  assert("serviceWorker" in navigator,"Trình duyệt không hỗ trợ Service Worker");
  const reg=await navigator.serviceWorker.register("./sw.js",{scope:"./"});
  await navigator.serviceWorker.ready;
- const cache=await caches.open("aura-study-phase3d-shell-v1");
+ const cache=await caches.open("aura-study-phase3d-shell-v2");
  const cached=await cache.match(new URL("./index.html",location.href).href);
  assert(Boolean(cached),"Service Worker chưa cache được trang");
  return "PASS — Service Worker đã cài và trang offline được cache\n"+
