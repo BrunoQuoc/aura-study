@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — Phase 3F-A Auth Regression (STAGING)</title>
+<style>
+:root{font:16px system-ui,sans-serif;background:#f3f7fc;color:#193251}
+*{box-sizing:border-box}body{margin:0;padding:22px}
+main{max-width:920px;margin:auto}h1{font-size:1.6rem}h2{font-size:1.14rem}
+.notice{padding:16px;border:1px solid #edd4a4;background:#fff9eb;border-radius:12px;line-height:1.6}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:19px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:white;border:1px solid #d8e2ef;border-radius:14px;padding:19px}
+p{line-height:1.56}button{border:0;border-radius:9px;padding:13px;background:#2377ad;color:white;font-weight:700;width:100%;cursor:pointer;margin-top:10px}
+button:disabled{opacity:.6}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:.87rem/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;background:#eaf3fd;padding:13px;border-radius:9px;min-height:82px}
+small{color:#62758a}a{color:#145f98}
+</style></head>
+<body><main>
+<h1>AURA STUDY — PHASE 3F-A</h1>
+<p><strong>Auth Security Regression</strong> — STAGING, kiểm tra chỉ đọc.</p>
+<div class="notice">
+<strong>Không tạo tài khoản, không gửi email, không cấp mã ghép đôi.</strong>
+Trang này kiểm tra trạng thái cấu hình ở phía giao diện và các phiên Auth/RLS đã có.
+Bài thử không thể xác minh CAPTCHA hoặc Auth rate-limit <em>đã bật trên server</em>; chúng phải được kiểm tra độc lập trong Supabase Dashboard. Không gửi JWT, OTP hay email vào báo cáo.
+</div>
+<div class="grid">
+<section class="card">
+<h2>1. Kiểm tra hợp đồng Auth UI</h2>
+<p>Xác minh trang Magic Link không được tự đăng ký Admin mới và CAPTCHA đang ở đúng trạng thái triển khai.</p>
+<button id="config">Kiểm tra cấu hình Auth giao diện</button>
+<pre id="config-out">Chưa kiểm tra.</pre>
+</section>
+<section class="card">
+<h2>2. Kiểm tra phiên Student hiện có</h2>
+<p>Chỉ gọi Auth <code>getUser()</code> và đọc thiết bị ghép đôi. Không tạo phiên anonymous mới.</p>
+<button id="student">Kiểm tra Student / thiết bị</button>
+<pre id="student-out">Chưa kiểm tra.</pre>
+</section>
+<section class="card">
+<h2>3. Kiểm tra RLS Knowledge Library</h2>
+<p>Xác nhận Student vẫn đọc được hai nội dung STAGING Phase 3B.</p>
+<button id="rls">Đọc nội dung qua JWT Student</button>
+<pre id="rls-out">Chưa kiểm tra.</pre>
+</section>
+<section class="card">
+<h2>4. Kiểm tra Admin hiện có</h2>
+<p>Chỉ xác minh phiên Admin bằng Auth server, không gửi Magic Link mới và không tạo mã ghép đôi.</p>
+<button id="parent">Kiểm tra phiên Admin</button>
+<pre id="parent-out">Chưa kiểm tra. Nếu Admin đăng nhập ở trình duyệt khác, kiểm thử tại đó.</pre>
+</section>
+</div>
+<p><small>Production readiness chỉ có thể đạt sau khi bật và kiểm chứng CAPTCHA + rate limits + leaked-password protection trên Supabase, đánh giá tác động và nghiệm thu lại cả hai luồng Auth.</small></p>
+</main>
+<script type="module">
+import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/+esm";
+import {AURA_AUTH_SECURITY} from "./phase3fa-security-config.js";
+import {assertAuthSecurityConfig,adminOtpOptions,createCaptchaAdapter} from "./phase3fa-turnstile.js";
+
+const cfg={
+ url:"https://ufqzuowjhdqpydqvcsob.supabase.co",
+ key:"sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p"
+};
+function client(storageKey){
+ return createClient(cfg.url,cfg.key,{auth:{
+  storageKey,flowType:"pkce",detectSessionInUrl:false,
+  persistSession:true,autoRefreshToken:true
+ }});
+}
+const studentClient=client("aura-stage-student-v1");
+const adminClient=client("aura-stage-parent-v1");
+const $=id=>document.getElementById(id);
+
+async function run(id,out,fn){
+ const btn=$(id);btn.disabled=true;$(out).textContent="Đang kiểm tra...";
+ try{$(out).textContent=await fn();}
+ catch(error){$(out).textContent="CHƯA XÁC MINH: "+String(error?.message||"Lỗi kiểm thử");}
+ finally{btn.disabled=false;}
+}
+async function pairedStudent(){
+ const {data,error}=await studentClient.auth.getUser();
+ if(error||!data.user||data.user.is_anonymous!==true)throw Error("Chưa có phiên Student hợp lệ.");
+ const user=data.user;
+ const {data:devices,error:deviceError}=await studentClient.from("aura_student_devices")
+  .select("id,learner_id,auth_uid").eq("auth_uid",user.id);
+ if(deviceError||devices?.length!==1)throw Error("Thiết bị không còn ghép đôi hoặc RLS từ chối.");
+ return {user,device:devices[0]};
+}
+
+$("config").onclick=()=>run("config","config-out",async()=>{
+ assertAuthSecurityConfig(AURA_AUTH_SECURITY);
+ const adapter=createCaptchaAdapter(AURA_AUTH_SECURITY);
+ const options=adminOtpOptions(AURA_AUTH_SECURITY,
+ "https://brunoquoc.github.io/aura-study/aura-staging-login.html",null);
+ if(options.shouldCreateUser!==false)throw Error("Admin signup chưa bị chặn.");
+ return "PASS — Không tự tạo Auth user mới bằng Magic Link\n"+
+ "PASS — Auth UI contract hợp lệ\n"+
+ "CAPTCHA giao diện: "+(adapter.enabled?"TURNSTILE PREPARED":"CHƯA KÍCH HOẠT")+
+ "\nServer CAPTCHA: CHƯA XÁC MINH (kiểm tra trong Supabase Dashboard).";
+});
+$("student").onclick=()=>run("student","student-out",async()=>{
+ const {device}=await pairedStudent();
+ return "PASS — JWT Student hợp lệ qua Auth server\n"+
+  "PASS — Thiết bị ghép đôi còn hiệu lực\n"+
+  "PASS — learner/device RLS đã xác minh.";
+});
+$("rls").onclick=()=>run("rls","rls-out",async()=>{
+ await pairedStudent();
+ const {data,error}=await studentClient.from("aura_content_items")
+  .select("id,source_ref,status")
+  .in("source_ref",["AURA_STAGING_PHASE3B:LESSON:v1",
+   "AURA_STAGING_PHASE3B:PRACTICE:v1"]);
+ if(error||data?.length!==2||!data.every(x=>x.status==="PUBLISHED"))
+  throw Error("Không đọc được đủ hai nội dung PUBLISHED thuộc household.");
+ return "PASS — Student đọc 2/2 nội dung Phase 3B qua RLS\n"+
+  "PASS — Không thay đổi Learning Events hoặc điểm số.";
+});
+$("parent").onclick=()=>run("parent","parent-out",async()=>{
+ const {data,error}=await adminClient.auth.getUser();
+ if(error||!data?.user||data.user.is_anonymous!==false)
+  throw Error("Chưa có phiên Admin trong trình duyệt này.");
+ return "PASS — Phiên Admin hiện có được Auth server xác minh\n"+
+  "Không tạo email OTP hoặc mã ghép đôi.";
+});
+</script>
+</body></html>
