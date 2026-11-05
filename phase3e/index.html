@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — PHASE 3E Operational Readiness</title>
+<style>
+:root{font:16px system-ui,sans-serif;color:#153050;background:#f3f7fc}
+*{box-sizing:border-box}body{margin:0;padding:22px}main{max-width:940px;margin:auto}
+h1{font-size:1.65rem;margin:0 0 7px}
+p,li{line-height:1.58}.note{padding:16px;background:#fff8eb;border:1px solid #ead4a4;border-radius:13px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+@media(max-width:750px){.grid{grid-template-columns:1fr}}
+.card{background:white;border:1px solid #d7e3ef;padding:19px;border-radius:14px}
+h2{font-size:1.13rem;margin-top:0}
+button{width:100%;border:0;border-radius:8px;background:#2376b0;color:white;font-weight:700;padding:12px;margin-top:12px;cursor:pointer}
+button.secondary{color:#154e7d;background:#e7f1fa}button:disabled{opacity:.6;cursor:wait}
+pre{min-height:85px;padding:12px;background:#eaf3fc;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere;font:0.86rem/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}
+small{color:#586c85}a{color:#13639a}
+</style>
+</head>
+<body><main>
+<h1>AURA STUDY — PHASE 3E</h1>
+<p><strong>Operational Security · Test-data Lifecycle · Production Readiness</strong></p>
+<div class="note">
+<strong>STAGING / MOCK TESTS ONLY.</strong> Bài thử lỗi mạng bên dưới dùng Student và thiết bị <em>giả lập hoàn toàn</em>.
+Không gửi dữ liệu lên Supabase, không tạo hay thu hồi tài khoản thực. Chỉ các bản ghi IndexedDB của những ID thử ngẫu nhiên vừa tạo được xóa sau khi kiểm thử. Tuyệt đối không đưa JWT, OTP, mã ghép đôi hoặc thông tin học thật vào báo cáo.
+</div>
+<div class="grid">
+<section class="card">
+<h2>1. Chaos Test — Reliable Sync</h2>
+<p>Kiểm tra tình huống server đã nhận event nhưng trình duyệt mất phản hồi, thử gửi lại đúng ID, cùng trường hợp hết 8 lần retry.</p>
+<button id="chaos">Chạy bộ kiểm thử lỗi mạng giả lập</button>
+<pre id="chaos-result" aria-live="polite">Chưa chạy.</pre>
+<small>4 kịch bản; toàn bộ lệnh mạng được thay bằng mock. Có thể chạy mà không cần Student JWT.</small>
+</section>
+<section class="card">
+<h2>2. Authorization Under Failure</h2>
+<p>Bộ chaos cũng kiểm tra khi tài khoản đổi và khi thiết bị bị thu hồi: hàng đợi phải giữ ở trạng thái blocked và không được gửi bằng danh tính khác.</p>
+<button id="scope" class="secondary">Xem kết quả hai ca bảo mật</button>
+<pre id="scope-result" aria-live="polite">Chạy bộ kiểm thử bước 1 trước.</pre>
+</section>
+<section class="card">
+<h2>3. STAGING Data Governance</h2>
+<p>Kiểm kê dữ liệu thử nghiệm và tài khoản ẩn danh phải được thực hiện bằng script SQL <strong>chỉ đọc</strong>. Không có thao tác xóa tự động.</p>
+<p><a href="https://github.com/BrunoQuoc/aura-study/blob/main/supabase/audits/aura_phase3e_release_readiness_dry_run.sql">Xem SQL kiểm kê &amp; release gates</a></p>
+<pre>Không chạy DELETE / TRUNCATE
+Không xóa Student đang hoạt động
+Không coi dữ liệu cũ hơn 30 ngày là được phép xóa</pre>
+</section>
+<section class="card">
+<h2>4. Production Readiness</h2>
+<p>Chưa cho phép chuyển PRODUCTION cho đến khi hoàn thiện:</p>
+<ul>
+<li>Phê duyệt chính sách lưu giữ, bảo quản và dọn dữ liệu thử nghiệm.</li>
+<li>Đánh giá cảnh báo anonymous sign-ins và leaked-password protection.</li>
+<li>Kiểm thử phiên hết hạn, mất dữ liệu trình duyệt, chia sẻ thiết bị và sự cố mạng kéo dài bằng trình duyệt thật.</li>
+<li>Chốt chính sách bảo vệ session và audit; sao lưu/khôi phục hệ thống.</li>
+<li>Nghiệm thu kỹ thuật và nghiệp vụ bằng các chứng cứ E2E.</li>
+</ul>
+<small>PASS mock ≠ PASS trình duyệt thật; tuyệt đối không tự chuyển cấu hình Production.</small>
+</section>
+</div>
+</main>
+<script type="module">
+import { runPhase3EChaosSuite } from "./chaos-tests.js";
+const el=id=>document.getElementById(id);
+let latest=null;
+el("chaos").onclick=async()=>{
+ const button=el("chaos");
+ button.disabled=true;el("chaos-result").textContent="Đang kiểm thử bằng mock...";
+ let lines=[];
+ try{
+   latest=await runPhase3EChaosSuite(result=>{
+     lines.push((result.status==="PASS"?"PASS":"FAIL")+" — "+result.name+
+     "\n"+result.detail);
+     el("chaos-result").textContent=lines.join("\n\n");
+   });
+   const status=latest.pass===latest.total?"MOCK SUITE PASS":"MOCK SUITE INCOMPLETE";
+   el("chaos-result").textContent=lines.join("\n\n")+
+     "\n\n"+status+": "+latest.pass+"/"+latest.total+
+     "\nSupabase writes: "+latest.remoteSupabaseWrites+
+     "\n"+latest.localCleanup;
+ }catch(error){
+   el("chaos-result").textContent="CHƯA ĐẠT: "+
+    String(error?.message||"Lỗi kiểm thử");
+ }finally{button.disabled=false;}
+};
+el("scope").onclick=()=>{
+ const selected=latest?.results.filter(x=>/Account changed|Device revoked/.test(x.name));
+ if(!selected||selected.length!==2){
+   el("scope-result").textContent="Chạy bộ kiểm thử Chaos ở bước 1 trước.";
+   return;
+ }
+ el("scope-result").textContent=selected.map(x=>
+  x.status+" — "+x.name+"\n"+x.detail).join("\n\n");
+};
+</script>
+</body></html>
