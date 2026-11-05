@@ -97,8 +97,19 @@ export function anonymousAuthArgs(captchaToken) {
 
 export function adminOtpOptions(config,redirectTo,captchaToken) {
   assertAuthSecurityConfig(config);
-  if(typeof redirectTo!=="string"||!redirectTo.startsWith("https://"))
+  let parsed;
+  try{parsed=new URL(redirectTo);}catch(_){throw Error("INVALID_AUTH_REDIRECT");}
+  const allowedOrigins=new Set([
+    "https://brunoquoc.github.io",
+    "http://localhost:4173",
+    "http://127.0.0.1:4173"
+  ]);
+  if(!allowedOrigins.has(parsed.origin) ||
+     !parsed.pathname.endsWith("/aura-staging-login.html") ||
+     parsed.username || parsed.password ||
+     parsed.search || parsed.hash){
     throw Error("INVALID_AUTH_REDIRECT");
+  }
   return {
     emailRedirectTo:redirectTo,
     shouldCreateUser:false,
