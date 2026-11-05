@@ -138,3 +138,20 @@ Operator-provided Supabase STAGING Email provider screenshot shows:
 This is an **observation only**: no setting was toggled or saved. Keep Email provider ON for the existing Admin Magic Link. The leak-protection warning remains OPEN. Before changing password-change controls, verify whether password update or recovery is in use and whether the frontend supports reauthentication/current-password prompts. Consider length >=8 and stronger password requirements with staged regression tests. A shorter OTP lifetime requires validating all email link/OTP workflows, not just sign-in.
 
 Plan eligibility is **not confirmed** by the screenshot. If leaked password protection is unavailable on the current plan, document approved alternatives and the release blocker rather than claiming remediation. CAPTCHA remains off until the public Turnstile widget and Supabase Auth are activated in coordinated order.
+
+
+---
+
+## 11. Plan-level refusal of leaked-password protection — 2026-11-05
+
+The operator attempted to activate **Prevent use of leaked passwords** in the STAGING Email provider. The Dashboard displayed the server error:
+
+> Failed to update auth configuration: Configuring leaked password protection via HaveIBeenPwned.org is available on Pro Plans and up.
+
+A green toggle remained visible during the failed save. This is **not evidence of server activation**. A subsequent reload must be checked; the Supabase Security Advisor was independently queried and still reports `auth_leaked_password_protection` as a WARN, alongside six anonymous-sign-in policy warnings.
+
+**Disposition:** `PASSWORD_BREACH_PROTECTION` remains **OPEN — PLAN-GATED**, not resolved and not waived. Phase 3F-A's frontend contract/RLS 4/4 pass remains valid but does not supersede this release blocker.
+
+**Safe operator action:** switch the toggle back off, reload and verify no unsaved changes. Do not turn off Email provider; Admin Magic Link depends on it. Avoid repeated failed saves. Review password sign-in surface and whether plan upgrade or a documented Security-approved compensating control is justified. Strengthen minimum password requirements, signup/OTP rate limits, and server-side CAPTCHA only through tested, coordinated changes; those measures are **not equivalent to a breached-password corpus check** and must not be reported as having cleared this advisor.
+
+**Next viable track:** complete STAGING Turnstile public widget + Admin and Student client challenge rollout before enabling Supabase server-side CAPTCHA. Continue to block production until independent security approval and release criteria are met.
