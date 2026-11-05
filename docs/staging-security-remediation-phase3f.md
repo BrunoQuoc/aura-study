@@ -114,3 +114,10 @@ Required data cleanup approval sequence:
 **Security remediation not complete:** CAPTCHA, Auth rate settings, password protection and operational controls remain OPEN. **Production release: NO-GO.**
 
 Only resume with a scope-approved security remediation and an independently reviewed release checklist; never interpret earlier STAGING acceptance as full production readiness.
+
+
+### 8. Limited public-repository secret-name search
+
+A narrow GitHub code search for `sb_secret_`, `service_role`, and `SUPABASE_SERVICE_ROLE` returned no matching files at inspection time.
+
+**This is not a full secret audit.** Search indexing can lag, and credentials can appear in other formats, histories, build artifacts, logs or external configuration. The dependency/secret audit gate therefore remains **OPEN**. Before production, scan the full Git history and built GitHub Pages assets with an approved scanner, review exposed publishable keys versus service keys, and rotate any credential that has been exposed.
