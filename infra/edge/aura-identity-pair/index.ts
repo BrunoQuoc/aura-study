@@ -104,8 +104,14 @@ Deno.serve(async (req: Request) => {
     if (action === "bootstrap_parent") {
       if (!isParent) return answer(origin, 403, { error: "Verified parent login required" });
       const { data, error } = await service.rpc("aura_bootstrap_parent", { p_admin_uid: user.id });
-      if (error || !Array.isArray(data) || data.length !== 1) {
-        return answer(origin, 403, { error: "This identity is not approved for Admin" });
+      if (error) {
+        if (error.code === "42501")
+          return answer(origin, 403, { error: "Email đăng nhập chưa được phép kích hoạt Admin" });
+        console.error("aura_bootstrap_parent failed", { code: error.code || "unknown" });
+        return answer(origin, 500, { error: "Lỗi máy chủ khi khởi tạo hồ sơ Admin. Vui lòng thử lại." });
+      }
+      if (!Array.isArray(data) || data.length !== 1) {
+        return answer(origin, 500, { error: "Phản hồi khởi tạo Admin không hợp lệ" });
       }
       return answer(origin, 200, {
         role: "admin", household_id: data[0].household_id,
