@@ -81,10 +81,26 @@ async function records(owner) {
   });
 }
 
-async function add(row) {
+// Atomic capacity check + dedup under one IndexedDB readwrite transaction.
+ // Different browser tabs share the same store's transaction serialization.
+async function addOrGetAtomic(row) {
   return transaction("readwrite",(store,finish)=>{
-    store.add(row);
-    finish(row);
+    const found=store.get(row.key);
+    found.onsuccess=()=>{
+      if(found.result){
+        finish({status:"existing",event:found.result.event});
+        return;
+      }
+      const count=store.index("owner").count(row.owner);
+      count.onsuccess=()=>{
+        if(count.result>=MAX_ITEMS_PER_OWNER){
+          finish({status:"full"});
+          return;
+        }
+        store.add(row);
+        finish({status:"created"});
+      };
+    };
   });
 }
 
@@ -183,25 +199,15 @@ export class LearningOfflineQueue {
     const size=new TextEncoder().encode(JSON.stringify(event)).length;
     if(size>13*1024)throw Error("EVENT_TOO_LARGE");
     const key=this.owner+"|"+event.event_id;
-    const existing=await find(key);
-    if(existing){
-      if(!isSameEnvelope(existing.event,event))throw Error("LOCAL_EVENT_ID_COLLISION");
-      return {status:"already_queued",event_id:event.event_id};
-    }
-    if((await records(this.owner)).length>=MAX_ITEMS_PER_OWNER)
-      throw Error("OFFLINE_QUEUE_FULL");
     const now=Date.now();
     const row={key,owner:this.owner,event:structuredClone(event),
       status:"pending",createdAt:now,updatedAt:now,
       attempts:0,nextAttemptAt:0,lastCode:null};
-    try{await add(row);}
-    catch(error){
-      if(error?.name==="ConstraintError"){
-        const raced=await find(key);
-        if(raced&&isSameEnvelope(raced.event,event))
-          return {status:"already_queued",event_id:event.event_id};
-      }
-      throw error;
+    const result=await addOrGetAtomic(row);
+    if(result.status==="full")throw Error("OFFLINE_QUEUE_FULL");
+    if(result.status==="existing"){
+      if(!isSameEnvelope(result.event,event))throw Error("LOCAL_EVENT_ID_COLLISION");
+      return {status:"already_queued",event_id:event.event_id};
     }
     return {status:"queued",event_id:event.event_id};
   }
