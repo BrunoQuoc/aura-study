@@ -88,3 +88,37 @@ An initial SQL assertion contained an ambiguous PL/pgSQL variable name; this was
 6. Review Supabase Security Advisor and anonymous test-account retention before production.
 
 No production approval is implied.
+
+
+---
+
+## Phase 3A E2E acceptance — 2026-11-05
+
+**Status: PHASE 3A ACCEPTED ON STAGING for the three implemented browser scenarios.**
+**Phase 3 overall / Production: NOT APPROVED.**
+
+The user supplied a browser screenshot from `aura-staging-phase3.html` showing:
+1. PASS for Student authentication against Supabase Auth and RLS device matching; zero published content available.
+2. PASS for insert, exact-event replay (`already_recorded`), payload-modification collision rejection and exactly one persisted event per ID.
+3. PASS reading all three read models through Student JWT and RLS; zero progress/daily/outcome rows, which is expected with no published content and test-only events.
+
+Independent checks of the STAGING database found:
+- Exactly **one** `aura_learning_events` row identified by `payload.source = 'staging_phase3a'`, and exactly one distinct event ID in that group.
+- The Phase 3A event has `schema_version=1`, `payload.test=true`, actor UID matching the paired device, learner ID matching the device learner, and non-null server received timestamp.
+- Student's principal device remains active; no content items or attempts exist in the current test DB.
+- All three read models currently return 0 rows, as expected.
+- Gateway API logs include successful INSERT 201, duplicate-conflict 409, and authorized GET 200 on learning events (aggregated logs may also contain earlier Phase 2C requests).
+
+Read-model zero-row behavior must **not** be represented as verification of content-linked progress: that requires the separate Phase 3B test with a published STAGING-only lesson and practice record.
+
+### Current environment snapshot at sign-off
+- 1 household / 1 learner / 1 active Student device.
+- 3 revoked test devices and 5 Auth users total (historical staging test accounts; no cleanup performed here).
+- 4 stored test events total, 1 identified as Phase 3A.
+- 0 published content items, 0 attempts, 0 progress/daily/outcome rows.
+
+### Remaining roadmap
+- **Phase 3B:** create isolated published STAGING lesson and practice items; validate end-to-end content linking, progress aggregation, and verified outcome lifecycle.
+- **Phase 3C:** implement bounded offline event queue / retry reconciliation if required, plus lifecycle and retention of test users.
+- Review security advisors, data access, event quotas/rate limiting, and retention policy prior to production rollout.
+- Never derive Auto Grading scores or Weakness Map labels directly from Student event telemetry.
