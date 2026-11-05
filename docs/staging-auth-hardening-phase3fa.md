@@ -155,3 +155,17 @@ A green toggle remained visible during the failed save. This is **not evidence o
 **Safe operator action:** switch the toggle back off, reload and verify no unsaved changes. Do not turn off Email provider; Admin Magic Link depends on it. Avoid repeated failed saves. Review password sign-in surface and whether plan upgrade or a documented Security-approved compensating control is justified. Strengthen minimum password requirements, signup/OTP rate limits, and server-side CAPTCHA only through tested, coordinated changes; those measures are **not equivalent to a breached-password corpus check** and must not be reported as having cleared this advisor.
 
 **Next viable track:** complete STAGING Turnstile public widget + Admin and Student client challenge rollout before enabling Supabase server-side CAPTCHA. Continue to block production until independent security approval and release criteria are met.
+
+---
+
+## 12. Turnstile widget created and Secret Key rotation — 2026-11-05
+
+The STAGING Turnstile widget **AURA-STUDY-STAGING** was created for `brunoquoc.github.io` in Managed mode, with pre-clearance disabled. The operator's screenshot exposed the PUBLIC Site Key and the PRIVATE Secret Key.
+
+**Security requirement:** Treat the exposed Secret Key as compromised and rotate it in Cloudflare Turnstile → Widget Settings → Rotate Secret Key. Never copy or quote the secret in GitHub, chat, docs, screenshots or public logs. Under Cloudflare's default rotation, the prior secret can remain valid for two hours; confirm retirement of the old secret before trusting this control.
+
+**Repository change:** Only the public Site Key was added to `auth/phase3fa-security-config.js`; `captchaMode` remains `disabled`. No Supabase server CAPTCHA setting has been modified. No real Student/Auth sessions or test data were changed.
+
+**Next:** After operator confirms secret rotation, switch the STAGING frontend to `captchaMode: turnstile`, verify Admin and Student widgets, and only then enable Supabase Auth CAPTCHA using the newly rotated Secret Key inside the Supabase Dashboard. Keep the production `ANONYMOUS_AUTH_ABUSE` gate OPEN until validated token rejection, rate limits and RLS regression pass.
+
+Cloudflare official rotation guide: https://developers.cloudflare.com/turnstile/troubleshooting/rotate-secret-key/
