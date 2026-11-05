@@ -92,3 +92,47 @@ Expected new database state after running these checks: at least one new STAGING
 - Review and finalize retention/delete policy with authorization.
 - Monitor Supabase security advisors (anonymous sign-ins and leaked-password warning still pending). Implement stronger abuse mitigations as usage requires.
 - Do not promote database, queue client or STAGING fixture data to PRODUCTION yet.
+
+
+---
+
+## E2E verification — 2026-11-05
+
+**Phase 3C browser smoke tests: 4/4 PASS.**
+**Phase 3C STAGING acceptance for implemented offline-queue/sync flow: ACCEPTED.**
+**Data retention approval and Production release: NOT APPROVED.**
+
+The user provided a browser screenshot of `aura-staging-phase3c.html` showing:
+1. PASS Student/Auth/session/device check and successful IndexedDB initialization (initial queue empty).
+2. PASS queueing one `lesson_viewed` without sending to the server and duplicate local enqueue acknowledgment for the same event ID (`already_queued`).
+3. PASS manual flush/reconciliation of exactly one new server event; zero pending, retry, review or blocked queue rows afterwards.
+4. PASS progress query and exclusion of the `test:true` event from the learning counters; exactly one Phase3C event reported by the browser.
+
+### Independently verified database state
+
+- One `aura_learning_events` record with `payload.source='staging_phase3c'` and `payload.scenario='offline_queue'`; exactly one distinct event ID in that group.
+- Event type `lesson_viewed`, `schema_version=1`, `payload.test=true`; mapped to published Phase3B LESSON.
+- Event's actor UID, learner ID and device ID match the linked active Student; server received timestamp exists (approx. 15:41 Asia/Ho_Chi_Minh, Nov 5).
+- Exactly one active Student device, one learner and one household remain; two Phase3B linked events and two Phase3B published content items remain. Three revoked devices are historical staging test devices. No exam attempts or graded outcomes.
+- `aura_learning_progress_v1` still shows one `lesson_viewed` and one `practice_opened` across the two Phase3B items; daily count is two events. The Phase3C test event is excluded.
+- Under a simulated paired Student role, view access returns two progress groups, two counted events and zero visible Admin household records.
+- The Supabase API request logs include successful POST 201 for events and GET 200 reads, but they are aggregate logs and do not by themselves attribute individual requests to this phase.
+
+### Verification limits and follow-on requirements
+
+- The browser test verifies *offline enqueue simulation and manual synchronization while the page remained available*. It does **not** prove persistence after closing the browser, browser storage eviction, or a genuinely offline reload/recovery.
+- Browser-reported empty IndexedDB queue is not independently readable from the Supabase connector; trust level is the user's screenshot, supported by one server-side event.
+- Not yet tested in browser: multi-tab contention; eight-attempt retry exhaustion; large queue pressure; network disconnect during an HTTP request; forced logout/revocation with pending local events.
+- SQL rollback tests had previously passed for the 60/minute, 1000/day, 7-day-age, and +10-minute-clock-skew bounds; these were not stress-tested through the browser.
+- Phase 3C data governance code is read-only audit; **no retention deletion policy was approved or executed**.
+- Supabase advisor flags about anonymous sign-ins, password leak protection, and tables with intentionally no policies remain subject to formal security review.
+- Production is **blocked** until full release governance and security checks are complete.
+
+### Next stage
+
+Proceed to **Phase 3D — Offline Resilience & Operational Hardening**, if long-lived/offline devices are required, with:
+- actual disconnected browser/reload/reconnect persistence checks,
+- safe multi-tab reconciliation and timed retry tests,
+- test-account/event cleanup policy and permissioned dry-run,
+- monitoring/rate-limit telemetry,
+- threat model for shared Student devices.
