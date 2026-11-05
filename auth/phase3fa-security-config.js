@@ -15,7 +15,7 @@
 export const AURA_AUTH_SECURITY = Object.freeze({
   environment: "STAGING",
   captchaMode: "disabled", // "disabled" | "turnstile"
-  turnstileSiteKey: "",
+  turnstileSiteKey: "0x4AAAAAAF0s6GoYAG1_04uG",
   allowCreateAdminAuthUser: false,
   magicLinkCooldownMs: 60_000
 });
