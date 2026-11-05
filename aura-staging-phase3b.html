@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — Phase 3B Content-linked Progress (STAGING)</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;background:#f4f7fc;color:#152c4c}
+*{box-sizing:border-box}
+body{margin:0;padding:22px}main{max-width:930px;margin:auto}
+h1{font-size:1.65rem;margin:0 0 8px}h2{font-size:1.16rem}
+p{line-height:1.56}.note{background:#fff8e9;border:1px solid #ead8b5;border-radius:12px;padding:14px 16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:white;border:1px solid #d6e2ed;border-radius:16px;padding:20px}
+button{background:#2175b1;border:0;color:white;font-weight:700;border-radius:9px;padding:12px 16px;width:100%;margin:14px 0 0;cursor:pointer}
+button:disabled{opacity:.6;cursor:not-allowed}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:13px;border-radius:9px;background:#edf4fc;min-height:88px;font:0.87rem/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}
+small{font-size:.86rem;color:#667789}a{color:#1769a5}code{font-size:.9em}
+</style>
+</head>
+<body><main>
+<h1>AURA STUDY — PHASE 3B</h1>
+<p><strong>Content-linked Learning Progress</strong> — kiểm thử JWT Student thật trên Supabase STAGING.</p>
+<p class="note"><strong>STAGING ONLY.</strong> Dùng đúng thiết bị đã ghép đôi ở <a href="aura-staging-login.html">STAGING Auth</a>.
+Hai bài Toán 6 dưới đây là dữ liệu giả lập. Bước 2 sẽ ghi <strong>tối đa hai Learning Events giả lập</strong> vào database, không ghi bài làm hay điểm số. Các sự kiện này cố ý được tính vào bảng tiến độ STAGING để kiểm chứng pipeline. Không gửi JWT/OTP/mã ghép đôi vào chat hoặc GitHub.</p>
+<div class="grid">
+<section class="card">
+<h2>1. Kiểm tra Student + Knowledge Library</h2>
+<p>Chỉ chọn hai mục nội dung có <code>source_ref</code> được đánh dấu Phase 3B.</p>
+<button id="check-content">Kiểm tra hai nội dung PUBLISHED</button>
+<pre id="check-content-result" aria-live="polite">Chưa kiểm tra.</pre>
+</section>
+<section class="card">
+<h2>2. Ghi Learning Events đã liên kết</h2>
+<p>Ghi <code>lesson_viewed</code> cho bài học mẫu và <code>practice_opened</code> cho bài luyện tập mẫu. Gửi lại cùng <code>event_id</code> để kiểm tra chống ghi trùng; bỏ qua event đã tồn tại khi chạy lại.</p>
+<button id="write-linked">Ghi bài học + luyện tập</button>
+<pre id="write-linked-result" aria-live="polite">Chưa ghi.</pre>
+</section>
+<section class="card">
+<h2>3. Kiểm tra Learning Progress / Daily</h2>
+<p>Đọc lại ba view bằng JWT Student và xác nhận có sự kiện đúng nội dung, đúng môn học, không có điểm giả.</p>
+<button id="read-progress">Đối chiếu tiến độ và kết quả</button>
+<pre id="read-progress-result" aria-live="polite">Chưa kiểm tra.</pre>
+</section>
+<section class="card">
+<h2>Tiêu chí nghiệm thu Phase 3B</h2>
+<p><strong>PASS</strong> khi Student đọc đúng hai nội dung mẫu, ghi/đọc lại từng event qua RLS, Progress có đủ hai nội dung, Daily chứa các sự kiện vừa ghi và Verified Outcomes không hiển thị điểm giả.</p>
+<small>Không thu hồi thiết bị, không sửa/xóa nội dung, không tạo bài thi hoặc điểm số.</small>
+</section>
+</div>
+</main>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/+esm";
+import {
+  createLearningEvent,appendLearningEvent,
+  getContentProgress,getDailyActivity,getVerifiedOutcomes
+} from "./aura_learning_pipeline_v1.js";
+const supabase=createClient(
+ "https://ufqzuowjhdqpydqvcsob.supabase.co",
+ "sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p",
+ {auth:{storageKey:"aura-stage-student-v1",flowType:"pkce",detectSessionInUrl:false,persistSession:true,autoRefreshToken:true}}
+);
+const EXPECTED=[
+ {source_ref:"AURA_STAGING_PHASE3B:LESSON:v1",content_type:"LESSON",event_type:"lesson_viewed",kind:"lesson"},
+ {source_ref:"AURA_STAGING_PHASE3B:PRACTICE:v1",content_type:"PRACTICE",event_type:"practice_opened",kind:"practice"}
+];
+const e=id=>document.getElementById(id);
+const assert=(yes,reason)=>{if(!yes)throw new Error(reason);};
+let context=null;
+async function getContext(){
+ const {data:identity,error:authError}=await supabase.auth.getUser();
+ const user=identity?.user;
+ assert(!authError&&user?.is_anonymous===true,"Phiên Student chưa được xác thực");
+ const {data:devices,error:deviceError}=await supabase.from("aura_student_devices")
+  .select("id,learner_id,auth_uid").eq("auth_uid",user.id);
+ assert(!deviceError&&devices?.length===1,"Thiết bị không hợp lệ hoặc đã bị thu hồi");
+ const {data:items,error:itemError}=await supabase.from("aura_content_items")
+  .select("id,source_ref,subject,title,content_type,status")
+  .in("source_ref",EXPECTED.map(x=>x.source_ref));
+ assert(!itemError&&items?.length===2,"Chưa thấy đủ 2 nội dung mẫu Phase 3B");
+ const actual=new Map(items.map(item=>[item.source_ref,item]));
+ for(const spec of EXPECTED){
+  const item=actual.get(spec.source_ref);
+  assert(item?.status==="PUBLISHED"&&item.content_type===spec.content_type&&item.subject==="TOAN",
+   "Nội dung mẫu chưa đúng trạng thái/loại/môn học");
+ }
+ context={user,device:devices[0],items:actual};
+ return context;
+}
+async function getRecordedEvent(ctx,spec){
+ const content=ctx.items.get(spec.source_ref);
+ const {data,error}=await supabase.from("aura_learning_events")
+  .select("event_id,content_item_id,learner_id,device_id,actor_uid,event_type,received_at")
+  .eq("learner_id",ctx.device.learner_id)
+  .eq("device_id",ctx.device.id)
+  .eq("content_item_id",content.id)
+  .eq("event_type",spec.event_type)
+  .contains("payload",{source:"staging_phase3b",scenario:"linked_e2e",kind:spec.kind})
+  .limit(3);
+ assert(!error,"Không truy vấn được event đã liên kết");
+ return data??[];
+}
+async function writeSpec(ctx,spec){
+ const prior=await getRecordedEvent(ctx,spec);
+ if(prior.length>0){
+  assert(prior.every(x=>x.actor_uid===ctx.user.id),"Event cũ không thuộc Student hiện tại");
+  return "PASS — "+spec.kind+": đã có event hợp lệ, không ghi thêm";
+ }
+ const content=ctx.items.get(spec.source_ref);
+ const envelope=createLearningEvent({
+  learnerId:ctx.device.learner_id,
+  deviceId:ctx.device.id,
+  eventType:spec.event_type,
+  contentItemId:content.id,
+  payload:{source:"staging_phase3b",scenario:"linked_e2e",kind:spec.kind,synthetic:true}
+ });
+ const first=await appendLearningEvent(supabase,envelope);
+ assert(first.status==="created","Chưa ghi được event "+spec.kind);
+ const replay=await appendLearningEvent(supabase,envelope);
+ assert(replay.status==="already_recorded","Không xác nhận được lần gửi lại "+spec.kind);
+ const after=await getRecordedEvent(ctx,spec);
+ assert(after.length===1&&after[0].actor_uid===ctx.user.id&&
+  after[0].learner_id===ctx.device.learner_id&&after[0].received_at,
+  "Không đọc lại được event đúng chủ sở hữu");
+ return "PASS — "+spec.kind+": ghi mới + chống trùng + đọc lại";
+}
+async function run(buttonId,resultId,fn){
+ const b=e(buttonId);b.disabled=true;e(resultId).textContent="Đang kiểm tra...";
+ try{e(resultId).textContent=await fn();}
+ catch(ex){e(resultId).textContent="CHƯA ĐẠT: "+(ex?.message||"Có lỗi kiểm thử");}
+ finally{b.disabled=false;}
+}
+e("check-content").addEventListener("click",()=>run("check-content","check-content-result",async()=>{
+ const ctx=await getContext();
+ return "PASS — JWT Student hợp lệ và đúng thiết bị\n"+
+  "PASS — 2/2 mục PUBLISHED thuộc STAGING\n"+
+  EXPECTED.map(s=>ctx.items.get(s.source_ref).title+" ("+s.content_type+")").join("\n");
+}));
+e("write-linked").addEventListener("click",()=>run("write-linked","write-linked-result",async()=>{
+ const ctx=await getContext();
+ const result=[];
+ for(const spec of EXPECTED)result.push(await writeSpec(ctx,spec));
+ return result.join("\n")+"\nPASS — Không tạo điểm số hoặc bài làm.";
+}));
+e("read-progress").addEventListener("click",()=>run("read-progress","read-progress-result",async()=>{
+ const ctx=await getContext();
+ for(const spec of EXPECTED){
+  const records=await getRecordedEvent(ctx,spec);
+  assert(records.length>=1,"Chưa có event cho "+spec.kind+"; chạy bước 2 trước");
+ }
+ const [progress,daily,outcomes]=await Promise.all([
+  getContentProgress(supabase,ctx.device.learner_id),
+  getDailyActivity(supabase,ctx.device.learner_id),
+  getVerifiedOutcomes(supabase,ctx.device.learner_id)
+ ]);
+ const lesson=progress.find(p=>p.content_item_id===ctx.items.get(EXPECTED[0].source_ref).id);
+ const practice=progress.find(p=>p.content_item_id===ctx.items.get(EXPECTED[1].source_ref).id);
+ assert(lesson?.subject==="TOAN"&&Number(lesson.lesson_views)>=1,
+  "Learning Progress chưa có lesson_viewed");
+ assert(practice?.subject==="TOAN"&&Number(practice.practice_opens)>=1,
+  "Learning Progress chưa có practice_opened");
+ const dailyCount=daily.reduce((sum,row)=>sum+Number(row.event_count),0);
+ assert(dailyCount>=2,"Daily Activity chưa tổng hợp đủ hai sự kiện");
+ assert(outcomes.length===0,"Có Verified Outcomes ngoài dự kiến: cần kiểm tra trước khi nghiệm thu");
+ return "PASS — Learning Progress: đủ hai nội dung TOAN\n"+
+ "PASS — lesson_viewed: "+lesson.lesson_views+", practice_opened: "+practice.practice_opens+
+ "\nPASS — Daily Activity có "+dailyCount+" sự kiện\n"+
+ "PASS — Verified Outcomes: 0 kết quả, không có điểm giả.";
+}));
+</script>
+</body></html>
