@@ -32,14 +32,14 @@
     {
       "id": "ANONYMOUS_AUTH_ABUSE",
       "status": "OPEN",
-      "reason": "Configure bot protection and anonymous signup rate limits together with frontend CAPTCHA.",
+      "reason": "Phase3F-A Turnstile frontend adapter prepared but disabled by default; Supabase server CAPTCHA, anonymous sign-in rate limits and post-activation negative E2E remain OPEN.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
     {
       "id": "PASSWORD_BREACH_PROTECTION",
       "status": "OPEN",
-      "reason": "One email-provider Auth user has a password hash; enable leaked-password protection or approve a formal alternative.",
+      "reason": "One Admin email-provider Auth account has a password hash and advisor reports leaked-password protection OFF; confirm actual password sign-in configuration and enable protection/approved alternative.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
