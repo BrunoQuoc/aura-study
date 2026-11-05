@@ -1,0 +1,30 @@
+name: AURA STUDY - Phase 3F-A Auth Hardening Tests
+
+# Read-only, manual-only. No email, anonymous users, or pairing sessions created.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  auth-contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run offline Auth contract tests
+        run: node --test tests/phase3fa-auth-hardening.test.mjs
+      - name: Confirm production release remains blocked
+        run: |
+          node scripts/phase3f-release-gate.mjs --summary
+          if node scripts/phase3f-release-gate.mjs; then
+            echo "Unexpected production GO; require independent review" >&2
+            exit 1
+          fi
+          echo "Production remains NO-GO as intended"
