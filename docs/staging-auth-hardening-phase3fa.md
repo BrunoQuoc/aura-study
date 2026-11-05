@@ -122,3 +122,19 @@ These are **observed dashboard settings**, not evidence of configuration activat
 **Safe activation sequence:** Create a STAGING-only Cloudflare Turnstile widget, add its **public Site Key** to the public frontend and publish/verify functioning independent Admin and Student challenges; only then enable CAPTCHA in Supabase using the **private Secret Key** inside the Dashboard. Verify valid/invalid tokens for both signup and Magic Link, restore the STAGING CAPTCHA toggle to OFF first if it blocks onboarding. Do not disable RLS or revoke the original paired Student. For leaked password protection, inspect the email provider setting and plan availability without changing login methods by assumption.
 
 **Status:** `ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION` remain OPEN. Production NO-GO.
+
+
+---
+
+## 10. Email provider screenshot review — 2026-11-05
+
+Operator-provided Supabase STAGING Email provider screenshot shows:
+- Email provider **ON**; Secure email change **ON**.
+- Secure password change **OFF**, Require current password when updating **OFF**.
+- Prevent use of leaked passwords **OFF**; the UI labels the feature **Pro plan and above**.
+- Minimum password length **6**; password requirements not selected.
+- Email OTP expiration **3600 seconds (60 minutes)** and OTP length **8 digits**.
+
+This is an **observation only**: no setting was toggled or saved. Keep Email provider ON for the existing Admin Magic Link. The leak-protection warning remains OPEN. Before changing password-change controls, verify whether password update or recovery is in use and whether the frontend supports reauthentication/current-password prompts. Consider length >=8 and stronger password requirements with staged regression tests. A shorter OTP lifetime requires validating all email link/OTP workflows, not just sign-in.
+
+Plan eligibility is **not confirmed** by the screenshot. If leaked password protection is unavailable on the current plan, document approved alternatives and the release blocker rather than claiming remediation. CAPTCHA remains off until the public Turnstile widget and Supabase Auth are activated in coordinated order.
