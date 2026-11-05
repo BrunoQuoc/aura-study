@@ -26,7 +26,7 @@ No changes were made to Supabase Auth settings, existing learner records, paired
 | tests/phase3fa-auth-hardening.test.mjs | Offline contract tests for OTP, CAPTCHA, origin and token separation. |
 | .github/workflows/aura-phase3fa-auth-hardening.yml | Manual-only read-only tests. No deploy steps or Supabase secrets. |
 
-**Important:** CAPTCHA is not yet enforced at the server. A local cooldown is NOT a defense against direct API calls. A Site Key can be public; the private Turnstile Secret Key must never be committed to GitHub or shared in chat.
+**Important:** Server-side CAPTCHA enforcement was **not verified or changed** in this phase; do not infer activation from the frontend code. A local cooldown is NOT a defense against direct API calls. A Site Key can be public; the private Turnstile Secret Key must never be committed to GitHub or shared in chat.
 
 ## 3. Coordinated Turnstile activation (NOT YET EXECUTED)
 
