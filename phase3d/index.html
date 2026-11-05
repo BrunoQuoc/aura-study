@@ -175,7 +175,10 @@ e("offline").onclick=()=>run("offline","offline-output",async()=>{
  assert(first.status==="queued"&&second.status==="already_queued",
   "Không ghi/chống trùng cục bộ như mong đợi");
  const state=await q.summary();
- return "PASS — Ghi IndexedDB thành công (không gọi mạng)\n"+
+ return (navigator.onLine===false
+  ? "PASS — Đã tạo event khi trình duyệt báo mất mạng\n"
+  : "QUEUE PASS — Chưa xác minh mất mạng thật; hãy bật Network Offline và tải lại trang\n")+
+ "PASS — Ghi IndexedDB thành công, không gọi Supabase\n"+
  "PASS — Cùng event_id không tạo bản sao trong hàng đợi\n"+
  "Queue: "+state.total+" mục; chờ đồng bộ: "+state.pending+
  "\nTrạng thái navigator.onLine: "+String(navigator.onLine)+
@@ -192,15 +195,23 @@ e("sync").onclick=()=>run("sync","sync-output",async()=>{
   const q=new LearningOfflineQueue(supabase,verified);
   const before=await q.summary();
   if(before.total===0)return {status:"empty",before};
+  const beforeList=await q.list();
   const outcome=await q.flush({limit:10});
   const after=await q.summary();
+  const afterIds=new Set((await q.list()).map(x=>x.event_id));
+  const acknowledged=beforeList.filter(x=>!afterIds.has(x.event_id));
   const {data,error}=await supabase.from("aura_learning_events")
    .select("event_id,actor_uid,device_id,learner_id,payload")
-   .eq("learner_id",verified.learnerId)
-   .contains("payload",{source:"staging_phase3d",scenario:"offline_reload"});
-  if(error)throw Error("Không kiểm tra được event Phase3D trên server");
+   .in("event_id",acknowledged.map(x=>x.event_id).length?acknowledged.map(x=>x.event_id):[
+      "00000000-0000-4000-8000-000000000000"]);
+  if(error)throw Error("Không kiểm tra được các event vừa xác nhận");
   const accepted=(data||[]).filter(x=>x.device_id===verified.deviceId &&
-    x.actor_uid===verified.authUid && x.payload?.test===true);
+    x.actor_uid===verified.authUid && x.learner_id===verified.learnerId &&
+    x.payload?.test===true && x.payload?.source==="staging_phase3d");
+  const expectedIds=new Set(acknowledged.map(x=>x.event_id));
+  if(accepted.length!==expectedIds.size ||
+     accepted.some(x=>!expectedIds.has(x.event_id)))
+    throw Error("Số lượng hoặc ID đã xác nhận không khớp server");
   return {status:outcome.status,outcome,after,accepted:accepted.length};
  });
  if(result.status==="locked_by_another_tab"||result.status==="web_locks_unavailable")
@@ -209,8 +220,11 @@ e("sync").onclick=()=>run("sync","sync-output",async()=>{
  if(result.status!=="ok")return "CHƯA ĐẠT — "+result.status+
   "; hàng đợi được giữ và chưa được phép sử dụng danh tính khác.";
  const sent=result.outcome.created+result.outcome.replayed;
- assert(result.accepted>=sent,"Số event server khớp chưa đủ");
- return "PASS — Đồng bộ/đối chiếu "+sent+" event bằng JWT Student\n"+
+ if(sent===0)return "CHƯA HOÀN THÀNH — Chưa xác nhận event nào.\n"+
+   "Retry: "+result.outcome.retry+"; review: "+result.outcome.review+
+   "; blocked: "+result.outcome.blocked+". Hàng đợi vẫn được giữ.";
+ assert(result.accepted===sent,"Số event được xác nhận không khớp server");
+ return "PASS — Đồng bộ/đối chiếu đúng "+sent+" event_id bằng JWT Student\n"+
   "Ghi mới: "+result.outcome.created+", đã ghi trước đó: "+result.outcome.replayed+
   "\nCòn cục bộ: "+result.after.total+", cần retry: "+result.after.pending+
   "\nEvent STAGING test:true được server ghi nhận: "+result.accepted;
