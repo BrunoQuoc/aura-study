@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURA STUDY — Kiểm tra bản sao lưu cục bộ</title>
+<style>
+:root{font-family:system-ui,sans-serif;color-scheme:light;background:#f4f7fb;color:#172239}
+*{box-sizing:border-box}main{max-width:720px;margin:48px auto;padding:28px;background:white;border:1px solid #e0e7f2;border-radius:20px;box-shadow:0 8px 32px #1f315012}
+h1{font-size:1.4rem;margin:0 0 10px}p,li{line-height:1.5}small,.muted{color:#667891}
+input{display:block;width:100%;margin:20px 0;padding:12px;border:1px dashed #91a4bd;border-radius:12px}
+#result{margin-top:22px;background:#f3f7fc;border-radius:12px;padding:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+.tag{display:inline-block;padding:5px 8px;border-radius:7px;background:#e6f2ef;color:#12624d;font-size:.8rem}
+.err{color:#b42318}strong{font-weight:700}
+</style>
+</head>
+<body>
+<main>
+<div class="tag">CHẠY TRÊN MÁY · KHÔNG UPLOAD</div>
+<h1>AURA STUDY — Kiểm tra file sao lưu V2.4.2</h1>
+<p>Trên đúng thiết bị và trình duyệt đã học, mở giao diện Admin hiện tại và bấm <strong>Sao lưu</strong>. Chọn file JSON vừa tải để kiểm tra số lượng nhóm dữ liệu và SHA-256. Công cụ này <strong>không</strong> chỉnh sửa hay khôi phục dữ liệu.</p>
+<label for="backup">Chọn file <code>AURA_STUDY_BACKUP_....json</code></label>
+<input type="file" id="backup" accept=".json,application/json">
+<div id="result" role="status" aria-live="polite">Chưa chọn file.</div>
+<p class="muted"><small>Toàn bộ xử lý chỉ diễn ra trong trang này: không có thư viện, không có lệnh gửi dữ liệu qua mạng. Không đưa file JSON lên GitHub hay thư mục chia sẻ công khai. Giữ bản gốc trên thiết bị an toàn, sao lưu riêng từng máy/trình duyệt có lịch sử.</small></p>
+</main>
+<script>
+"use strict";
+const picker=document.getElementById("backup");
+const panel=document.getElementById("result");
+const groups=["aura_","exam_","review_"];
+const core=["aura_attempts","aura_local_students_v1","aura_library_index_v1","aura_wrong_book_v1","aura_report_reset_at"];
+const count=(keys,prefix)=>keys.filter(k=>k.startsWith(prefix)).length;
+const bytesToHex=buffer=>Array.from(new Uint8Array(buffer)).map(b=>b.toString(16).padStart(2,"0")).join("");
+picker.addEventListener("change",async()=>{
+  const file=picker.files?.[0];
+  if(!file){panel.textContent="Chưa chọn file.";return;}
+  panel.textContent="Đang kiểm tra file cục bộ...";
+  try{
+    if(file.size>100*1024*1024)throw Error("File quá lớn (>100 MB). Cần kiểm tra thủ công.");
+    const raw=await file.arrayBuffer();
+    const text=new TextDecoder("utf-8",{fatal:true}).decode(raw);
+    const data=JSON.parse(text);
+    if(!data||data.schema!=="aura-study-backup"||!data.storage||typeof data.storage!=="object"||Array.isArray(data.storage))throw Error("Không phải dạng sao lưu AURA đầy đủ từ backup.js.");
+    const entries=Object.entries(data.storage);
+    if(!entries.every(([k,v])=>typeof v==="string"))throw Error("Có trường dữ liệu không hợp lệ.");
+    const keys=entries.map(([k])=>k);
+    const unexpected=keys.filter(k=>!groups.some(p=>k.startsWith(p)));
+    if(unexpected.length)throw Error("File có khóa khác định dạng mong đợi.");
+    const sha=crypto?.subtle?bytesToHex(await crypto.subtle.digest("SHA-256",raw)):"Không khả dụng trong trình duyệt này";
+    const profiles=count(keys,"aura_student_profile_v1:");
+    let students="Chưa kiểm tra";
+    if(typeof data.storage.aura_local_students_v1==="string"){
+      try{
+        const list=JSON.parse(data.storage.aura_local_students_v1);
+        students=Array.isArray(list)?list.length+" hồ sơ trong danh sách":"Sai định dạng danh sách";
+      }catch(e){students="Không thể đọc danh sách học sinh";}
+    }else students="Không có danh sách học sinh cục bộ";
+    const lines=[
+      "KẾT QUẢ KIỂM TRA: FILE ĐỌC ĐƯỢC",
+      "Tên file: "+file.name,
+      "Kích thước: "+file.size+" byte",
+      "Schema: "+data.schema+" · Version: "+String(data.version||"không rõ"),
+      "Thời điểm xuất: "+String(data.exportedAt||"không rõ"),
+      "Tổng khóa: "+keys.length,
+      ...groups.map(p=>p+" : "+count(keys,p)),
+      "Hồ sơ học tập riêng: "+profiles,
+      "Số tài khoản: "+students,
+      ...core.map(k=>k+": "+(keys.includes(k)?"Có":"Không có (có thể hợp lệ khi chưa dùng)")),
+      "SHA-256: "+sha,
+      "",
+      "LƯU Ý: Kiểm tra cấu trúc không chứng minh nội dung đã đầy đủ hoặc khôi phục được.",
+      "KHÔNG tải file sao lưu lên repository công khai."
+    ];
+    panel.textContent=lines.join("\n");
+  }catch(e){panel.textContent="KHÔNG XÁC NHẬN ĐƯỢC FILE SAO LƯU: "+(e?.message||String(e));}
+});
+</script>
+</body>
+</html>
