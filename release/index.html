@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — Phase 3F Release Readiness</title>
+<style>
+:root{font:16px system-ui,-apple-system,sans-serif;background:#f4f7fc;color:#182f4d}
+*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:960px;margin:auto}
+h1{font-size:1.7rem;margin:0 0 9px}p{line-height:1.6}
+.note{padding:16px;border:1px solid #e1d2b7;background:#fff9ec;border-radius:12px}
+.head{background:#fff;border:1px solid #dce5ed;padding:20px;border-radius:15px;margin:20px 0}
+.status{font-weight:800;font-size:1.6rem;margin:0;color:#9a3d21}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.num{font-size:1.7rem;font-weight:750}
+.stat{border:1px solid #dce4ee;background:white;border-radius:12px;padding:15px}
+.list{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.list{grid-template-columns:1fr}}
+.item{background:white;border:1px solid #dce5ef;padding:15px;border-radius:13px}
+small,.sub{font-size:.87rem;color:#586d83}
+.pill{display:inline-block;font-size:.75rem;font-weight:700;background:#eaf0f7;color:#335a7f;border-radius:30px;padding:5px 10px}
+.pill.open{background:#f6e7e3;color:#8b3829}
+.pill.staging{background:#edf3ec;color:#345d37}
+a{color:#1765a1}
+</style></head>
+<body><main>
+<h1>AURA STUDY — PHASE 3F</h1>
+<p>Security Remediation &amp; Production Readiness Gates</p>
+<div class="note"><strong>Không thực hiện triển khai.</strong> Đây chỉ là trang đọc trạng thái từ file JSON đã lưu trên GitHub. Bất kể trạng thái hiển thị, việc phát hành vẫn cần đối chiếu trực tiếp bằng chứng, phê duyệt độc lập và workflow quản trị chính thức. Không tải JWT, OTP, mã ghép đôi hoặc dữ liệu học thật.</div>
+<section class="head" aria-live="polite">
+ <p class="status" id="decision">NO-GO — đang kiểm tra hồ sơ…</p>
+ <p id="detail" class="sub">Nếu file trạng thái không thể tải, mặc định NO-GO.</p>
+ <div class="grid" id="metrics"></div>
+</section>
+<section class="list" id="gates" aria-live="polite"></section>
+<p class="sub">Nguồn trạng thái: <a href="./phase3f-production-gates.json">phase3f-production-gates.json</a>. Tài liệu kiểm soát: <a href="../docs/staging-security-remediation-phase3f.md">Phase 3F Remediation &amp; Release Governance</a>.</p>
+<script type="module">
+const target=document.getElementById("gates");
+const decision=document.getElementById("decision");
+const detail=document.getElementById("detail");
+const metrics=document.getElementById("metrics");
+const required=13;
+function node(tag,text,cls){
+ const el=document.createElement(tag);el.textContent=text;
+ if(cls)el.className=cls;return el;
+}
+function tile(label,value){
+ const card=node("div","","stat");
+ card.append(node("div",String(value),"num"),node("small",label));
+ metrics.append(card);
+}
+try{
+ const response=await fetch("./phase3f-production-gates.json",{cache:"no-store"});
+ if(!response.ok)throw Error("Không đọc được release manifest.");
+ const data=await response.json();
+ if(data.product!=="AURA STUDY"||!Array.isArray(data.gates)||data.gates.length!==required)
+   throw Error("Manifest không hợp lệ.");
+ const passed=data.gates.filter(g=>g.status==="PROD_PASS").length;
+ const staging=data.gates.filter(g=>g.status==="STAGING_PASS").length;
+ const open=data.gates.filter(g=>g.status==="OPEN").length;
+ const approvals=data.approval?.security?.approved===true && data.approval?.product?.approved===true;
+ const releaseAllowed=data.target_environment==="PRODUCTION" &&
+  data.production_release_approved===true && passed===required && approvals &&
+  /^[0-9a-f]{40}$/.test(data.release_commit_sha||"");
+ // Display is conservative, not a substitute for CLI/CI gate verification.
+ decision.textContent=releaseAllowed?"REVIEW REQUIRED — manifest claims GO":"NO-GO — PRODUCTION BLOCKED";
+ if(releaseAllowed)decision.style.color="#935a14";
+ detail.textContent="Nguồn: "+data.source_environment+
+  " · Đích: "+data.target_environment+
+  " · Cần kiểm tra độc lập trước mọi phát hành.";
+ tile("PRODUCTION PASS",passed);
+ tile("STAGING PASS",staging);
+ tile("OPEN",open);
+ for(const gate of data.gates){
+   const card=node("section","","item");
+   card.append(node("strong",gate.id.replaceAll("_"," ")));
+   const label=node("span",gate.status,"pill "+(gate.status==="OPEN"?"open":"staging"));
+   card.append(document.createTextNode(" "),label,node("p",gate.reason||""));
+   target.append(card);
+ }
+}catch(err){
+ decision.textContent="NO-GO — KHÔNG CÓ MANIFEST HỢP LỆ";
+ detail.textContent=String(err?.message||"Không tải được trạng thái.");
+ tile("PRODUCTION PASS",0);tile("STAGING PASS","—");tile("OPEN",required);
+}
+</script>
+</main></body></html>
