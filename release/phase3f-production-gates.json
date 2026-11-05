@@ -65,6 +65,13 @@
       "verified_at_utc": null
     },
     {
+      "id": "PERFORMANCE_AND_CAPACITY",
+      "status": "OPEN",
+      "reason": "Performance Advisor lists 7 unindexed foreign keys; confirm workload/index plan and load tests before production.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
       "id": "BACKUP_RESTORE_RECOVERY",
       "status": "OPEN",
       "reason": "Complete restore drill, recovery-time and recovery-point evidence for production environment.",
