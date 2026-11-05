@@ -69,7 +69,10 @@ create table if not exists public.aura_attempts (
   submitted_at timestamptz not null default now(),
   graded_at timestamptz,
   released_at timestamptz,
-  check (score is null or (max_score is not null and score <= max_score))
+  check (score is null or (max_score is not null and score <= max_score)),
+  -- No release of unverified or provisional results.
+  check (state <> 'GRADED_FINAL' or score_verified),
+  check (released_at is null or (state = 'GRADED_FINAL' and score_verified))
 );
 create index if not exists aura_attempts_learner_idx
   on public.aura_attempts(learner_id, submitted_at desc);
