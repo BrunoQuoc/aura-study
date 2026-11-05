@@ -2,7 +2,7 @@
  * Never cache Supabase, auth sessions, JWTs, third-party CDNs or API responses.
  * Worker scope is ./phase3d/ only (not the rest of the AURA STUDY site).
  */
-const CACHE = "aura-study-phase3d-shell-v1";
+const CACHE = "aura-study-phase3d-shell-v2";
 const ROOT = self.registration.scope;
 const ASSETS = [
   "./index.html",
