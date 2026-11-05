@@ -101,3 +101,42 @@ Remaining true-browser chaos scenarios need a controlled runbook; never revoke t
 ### 8. Final decision
 
 **Phase 3E implementation for audit/readiness and mock chaos is delivered. The release review is NOT signed off; PRODUCTION stays BLOCKED.** No production switch is authorized by this document.
+
+
+---
+
+## Phase 3E browser mock-chaos acceptance — 2026-11-05
+
+**Decision: ACCEPTED — the implemented 4-case browser MOCK chaos suite on STAGING.**
+**Operational security / production readiness: NOT APPROVED; PRODUCTION BLOCKED.**
+
+### User-provided E2E screenshot evidence
+
+The browser diagnostic `phase3e/index.html` shows **MOCK SUITE PASS: 4/4** and `Supabase writes: 0`:
+
+1. Lost acknowledgment after commit → retry recognized exact existing event (`already_recorded`); one simulated server event, local queue empty.
+2. Eight simulated failures → original event marked `review`, no ninth upload.
+3. Account changed while a queue was pending → status `blocked`, zero mock API writes.
+4. Device revoked while a queue was pending → status `blocked`, zero mock API writes.
+
+The second screen section shows both authorization failure cases independently as PASS. Synthetic, random mock-owner IndexedDB records were removed after each case. Browser screenshot alone cannot prove browser storage internals were wiped, but the test code scopes its cleanup to those synthetic IDs.
+
+### Independently checked Supabase STAGING state after screenshot
+
+- 0 learning events have `payload.source='staging_phase3e'`.
+- Total events remain 13, with two counted progress activities.
+- 1 active Student device, 1 learner, 1 household, 2 STAGING synthetic content items and 0 exam attempts remain.
+- 3 historically revoked test devices unchanged.
+- Supabase Security Advisor still flags anonymous-sign-in risks and disabled leaked-password protection; internal allowlist/pairing tables with no client policies remain an INFO item under deliberate default-deny.
+
+### Scope and outstanding gates
+
+The 4/4 result completes **the browser execution of the mock chaos suite**, not real-session expiration, actual revocation, real network 503 errors, storage eviction, or operational disaster recovery. It does not authorize production promotion, data deletion, session termination or changing the existing paired Student.
+
+Remaining before any Production sign-off:
+- Auth and anonymous-account abuse mitigations, shared-device risk controls.
+- Formal retention/privacy and authorized cleanup of STAGING test records.
+- Recovery/backup and alerting/incident operational runbooks.
+- Controlled real-device failure scenarios with test-only accounts, plus independent review.
+
+Phase 3E mock chaos acceptance **PASS**; overall Production Readiness **BLOCKED**.
