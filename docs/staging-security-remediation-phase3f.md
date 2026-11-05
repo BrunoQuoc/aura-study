@@ -121,3 +121,14 @@ Only resume with a scope-approved security remediation and an independently revi
 A narrow GitHub code search for `sb_secret_`, `service_role`, and `SUPABASE_SERVICE_ROLE` returned no matching files at inspection time.
 
 **This is not a full secret audit.** Search indexing can lag, and credentials can appear in other formats, histories, build artifacts, logs or external configuration. The dependency/secret audit gate therefore remains **OPEN**. Before production, scan the full Git history and built GitHub Pages assets with an approved scanner, review exposed publishable keys versus service keys, and rotate any credential that has been exposed.
+
+
+### Phase 3F-A STAGING addendum — 2026-11-05
+
+The public GitHub Pages STAGING login now uses **shouldCreateUser:false** for Admin email Magic Link and a simple client-side resend cooldown. An optional Cloudflare Turnstile frontend adapter was added for the Admin/Student signup flows, but the feature is **disabled** by default; no Supabase Auth CAPTCHA or rate-limit setting was changed.
+
+A read-only Auth session/RLS regression page and manual-only no-network tests were added. Internal syntax/contract validations passed 13/13 in a simulated environment; true GitHub Pages browser tests and manual GitHub Actions have not been executed as part of this addendum.
+
+Auth Advisor warnings for anonymous sign-in access and leaked-password protection remain **OPEN**. The release manifest remains **NO-GO**, and production approval remains false. Full Phase3F-A runbook:
+
+- docs/staging-auth-hardening-phase3fa.md
