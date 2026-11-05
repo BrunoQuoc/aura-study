@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — Phase 3D Offline Resilience STAGING</title>
+<style>
+:root{font:16px system-ui,-apple-system,sans-serif;background:#f3f7fc;color:#19334f}
+*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:1010px;margin:auto}
+h1{font-size:1.65rem;margin:0 0 8px}h2{font-size:1.12rem}
+p{line-height:1.55}.note{padding:16px;border:1px solid #e8d7ad;border-radius:13px;background:#fff8eb}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:19px}
+@media(max-width:750px){.grid{grid-template-columns:1fr}}
+.card{padding:19px;border:1px solid #d9e4ee;border-radius:13px;background:white}
+button{display:block;width:100%;margin-top:11px;border:0;border-radius:9px;padding:12px 15px;background:#2877b3;color:white;font-weight:700;cursor:pointer}
+button.secondary{background:#e8f2fc;color:#154f7a}button:disabled{opacity:.6;cursor:wait}
+pre{background:#eef5fe;border-radius:9px;padding:13px;white-space:pre-wrap;overflow-wrap:anywhere;min-height:65px;font:.85rem/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}
+small,.muted{color:#59718a}code{font-size:.89em}a{color:#135e91}
+</style>
+</head>
+<body><main>
+<h1>AURA STUDY — PHASE 3D</h1>
+<p>Offline Resilience &amp; Operational Hardening — <strong>Supabase STAGING ONLY</strong></p>
+<div class="note">
+<strong>Không dùng dữ liệu học thật.</strong> Chỉ tạo sự kiện <code>lesson_viewed</code> giả lập có
+<code>test:true</code>; không ghi điểm hoặc bài làm. Trang có thể tải lại khi mất mạng sau khi đã cài Service Worker
+và xác minh Student lúc online. Dữ liệu IndexedDB có thể bị trình duyệt xóa.
+<p class="muted">Không nhập hoặc chia sẻ mật khẩu, JWT, OTP, mã ghép đôi. Giao diện chỉ lưu cache
+mã nhận diện thiết bị đã xác minh tối đa 24 giờ để tạo hàng đợi offline; không coi cache là bằng chứng còn quyền truy cập.</p>
+</div>
+<div class="grid">
+<section class="card">
+<h2>1. Chuẩn bị tải lại khi offline</h2>
+<p>Đang online: cài cache các tệp tĩnh và xác minh Student qua Supabase thật. Thử offline chỉ sau khi cả hai bước PASS.</p>
+<button id="install">Cài trang offline (Service Worker)</button>
+<button id="online" class="secondary">Xác minh Student + lưu ngữ cảnh 24 giờ</button>
+<pre id="setup-output" aria-live="polite">Chưa chuẩn bị.</pre>
+</section>
+<section class="card">
+<h2>2. Mất mạng thật / tải lại trang</h2>
+<p>Trong DevTools → Network → Offline (hoặc tắt mạng), tải lại trang.
+Sau đó bấm nút này để lưu event vào IndexedDB, <strong>không gọi Supabase</strong>.</p>
+<button id="offline">Tạo một sự kiện khi offline</button>
+<pre id="offline-output" aria-live="polite">Chưa thử.</pre>
+</section>
+<section class="card">
+<h2>3. Kết nối lại và đồng bộ</h2>
+<p>Bật lại mạng, xác minh lại Student, gửi những event đang chờ. Các tab Phase 3D cùng thiết bị sử dụng Web Locks để chỉ một tab gửi tại một thời điểm.</p>
+<button id="sync">Đồng bộ / đối chiếu với server</button>
+<pre id="sync-output" aria-live="polite">Chưa đồng bộ.</pre>
+</section>
+<section class="card">
+<h2>4. Thử khóa đồng bộ nhiều tab</h2>
+<p>Mở trang trong hai tab. Ở tab A giữ khóa 8 giây; trong lúc đó bấm đồng bộ ở tab B — phải hiện <code>locked_by_another_tab</code>, không gửi dữ liệu.</p>
+<button id="hold" class="secondary">Giữ khóa 8 giây ở tab này</button>
+<pre id="lock-output" aria-live="polite">Chưa thử.</pre>
+</section>
+<section class="card">
+<h2>5. Kiểm kê cục bộ / Data Governance</h2>
+<p>Đếm event cục bộ, trạng thái retry/block/review và tổng tiến độ trên server. Không có nút xóa học sinh, thiết bị hoặc sự kiện.</p>
+<button id="audit" class="secondary">Kiểm tra queue và Learning Progress</button>
+<pre id="audit-output" aria-live="polite">Chưa kiểm tra.</pre>
+</section>
+<section class="card">
+<h2>Quy tắc nghiệm thu</h2>
+<p>PASS khi (1) tải lại offline thành công, (2) có thể tạo event khi offline sau tải lại,
+(3) có mạng trở lại gửi và nhận xác nhận đúng <code>event_id</code>, (4) hai tab không gửi đồng thời,
+(5) event <code>test:true</code> không làm tăng Learning Progress.</p>
+<small>Không hỗ trợ sync khi đóng ứng dụng; hạn lưu cache ngữ cảnh 24 giờ. Chưa phê duyệt production.</small>
+</section>
+</div>
+</main>
+<script type="module">
+import { createLearningEvent,getContentProgress } from "../aura_learning_pipeline_v1.js";
+import { LearningOfflineQueue,verifyAndCreateScope } from "../aura_offline_queue_v1.js";
+import { saveVerifiedScope,readOfflineScope,OFFLINE_SCOPE_TTL_HOURS } from "./offline-context.js";
+import { withSyncLock,testLockHeld,webLocksSupported } from "./resilient-sync.js";
+
+const e=id=>document.getElementById(id);
+const output=(id,msg)=>{e(id).textContent=msg};
+const assert=(cond,msg)=>{if(!cond)throw new Error(msg)};
+const STUDENT_SOURCE="AURA_STAGING_PHASE3B:LESSON:v1";
+let client=null;
+let currentScope=null;
+const noNetwork={
+  auth:{getUser(){throw Error("NO_AUTH_NETWORK_WHILE_OFFLINE")}},
+  from(){throw Error("NO_SUPABASE_NETWORK_WHILE_OFFLINE")}
+};
+
+async function offlineScope() {
+ const context=await readOfflineScope();
+ assert(context.status==="cached","Chưa có ngữ cảnh Student còn hiệu lực. Khi online phải chạy Bước 1.");
+ return context.scope;
+}
+
+async function onlineClient() {
+ if(navigator.onLine===false)throw Error("Trình duyệt đang offline");
+ if(client)return client;
+ // Only imported on demand while online: offline reload requires no CDN.
+ const {createClient}=await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/+esm");
+ client=createClient(
+  "https://ufqzuowjhdqpydqvcsob.supabase.co",
+  "sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p",
+  {auth:{storageKey:"aura-stage-student-v1",flowType:"pkce",
+    detectSessionInUrl:false,persistSession:true,autoRefreshToken:true}}
+ );
+ return client;
+}
+
+async function verifyOnline({save=false}={}) {
+ const supabase=await onlineClient();
+ const scope=await verifyAndCreateScope(supabase);
+ const previous=await readOfflineScope();
+ if(previous.status==="cached" && (previous.scope.authUid!==scope.authUid ||
+   previous.scope.deviceId!==scope.deviceId || previous.scope.learnerId!==scope.learnerId)){
+  throw Error("Tài khoản hoặc thiết bị đã thay đổi; không thể sử dụng hàng đợi của chủ cũ.");
+ }
+ const {data, error}=await supabase.from("aura_content_items")
+   .select("id,status,content_type").eq("source_ref",STUDENT_SOURCE);
+ assert(!error && data?.length===1 && data[0].status==="PUBLISHED" &&
+   data[0].content_type==="LESSON","Nội dung mẫu STAGING không tồn tại/không được phép truy cập");
+ if(previous.status==="cached" && previous.scope.lessonId!==data[0].id)
+   throw Error("Nội dung mẫu đã thay đổi; không ghi bằng cache cũ.");
+ currentScope={...scope,lessonId:data[0].id};
+ if(save)await saveVerifiedScope(scope,data[0].id);
+ return {supabase,scope:currentScope};
+}
+
+async function queueOffline(scope) {
+ const q=new LearningOfflineQueue(noNetwork,scope);
+ await q.summary();
+ return q;
+}
+
+async function run(btnId,outId,fn) {
+ const btn=e(btnId);btn.disabled=true;output(outId,"Đang kiểm tra...");
+ try{output(outId,await fn());}
+ catch(error){output(outId,"CHƯA ĐẠT: "+String(error?.message||"Lỗi"));}
+ finally{btn.disabled=false;}
+}
+
+e("install").onclick=()=>run("install","setup-output",async()=>{
+ assert("serviceWorker" in navigator,"Trình duyệt không hỗ trợ Service Worker");
+ const reg=await navigator.serviceWorker.register("./sw.js",{scope:"./"});
+ await navigator.serviceWorker.ready;
+ const cache=await caches.open("aura-study-phase3d-shell-v1");
+ const cached=await cache.match(new URL("./index.html",location.href).href);
+ assert(Boolean(cached),"Service Worker chưa cache được trang");
+ return "PASS — Service Worker đã cài và trang offline được cache\n"+
+ "Cache chỉ gồm HTML/JS tĩnh, không chứa API/JWT.\n"+
+ "Lưu ý: mở trang lại khi online để chắc chắn worker đã điều khiển tab.";
+});
+
+e("online").onclick=()=>run("online","setup-output",async()=>{
+ const {scope}=await verifyOnline({save:true});
+ const context=await readOfflineScope();
+ assert(context.status==="cached","Không lưu được ngữ cảnh offline");
+ return "PASS — Student/JWT và thiết bị ghép đôi đã xác minh qua server\n"+
+  "PASS — Đã lưu ngữ cảnh tối thiểu, có hiệu lực "+OFFLINE_SCOPE_TTL_HOURS+" giờ\n"+
+  "Web Locks: "+(webLocksSupported()?"SUPPORTED":"NOT SUPPORTED; sync sẽ bị chặn")+"\n"+
+  "Ngắt mạng rồi tải lại trang để thử Bước 2.";
+});
+
+e("offline").onclick=()=>run("offline","offline-output",async()=>{
+ const scope=await offlineScope();
+ // No network access here. The cached scope is not an API credential.
+ const q=await queueOffline(scope);
+ const event=createLearningEvent({
+  learnerId:scope.learnerId,deviceId:scope.deviceId,
+  contentItemId:scope.lessonId,eventType:"lesson_viewed",
+  payload:{test:true,source:"staging_phase3d",scenario:"offline_reload",synthetic:true}
+ });
+ const first=await q.enqueue(event);
+ const second=await q.enqueue(event);
+ assert(first.status==="queued"&&second.status==="already_queued",
+  "Không ghi/chống trùng cục bộ như mong đợi");
+ const state=await q.summary();
+ return "PASS — Ghi IndexedDB thành công (không gọi mạng)\n"+
+ "PASS — Cùng event_id không tạo bản sao trong hàng đợi\n"+
+ "Queue: "+state.total+" mục; chờ đồng bộ: "+state.pending+
+ "\nTrạng thái navigator.onLine: "+String(navigator.onLine)+
+ "\nSau khi có mạng, thử Bước 3.";
+});
+
+e("sync").onclick=()=>run("sync","sync-output",async()=>{
+ const scope=await offlineScope();
+ if(navigator.onLine===false)return "OFFLINE — Không gửi; hàng đợi được giữ nguyên.";
+ const result=await withSyncLock(scope,async()=>{
+  const {supabase,scope:verified}=await verifyOnline();
+  assert(scope.authUid===verified.authUid && scope.deviceId===verified.deviceId &&
+    scope.learnerId===verified.learnerId,"Thiết bị không còn khớp ngữ cảnh offline");
+  const q=new LearningOfflineQueue(supabase,verified);
+  const before=await q.summary();
+  if(before.total===0)return {status:"empty",before};
+  const outcome=await q.flush({limit:10});
+  const after=await q.summary();
+  const {data,error}=await supabase.from("aura_learning_events")
+   .select("event_id,actor_uid,device_id,learner_id,payload")
+   .eq("learner_id",verified.learnerId)
+   .contains("payload",{source:"staging_phase3d",scenario:"offline_reload"});
+  if(error)throw Error("Không kiểm tra được event Phase3D trên server");
+  const accepted=(data||[]).filter(x=>x.device_id===verified.deviceId &&
+    x.actor_uid===verified.authUid && x.payload?.test===true);
+  return {status:outcome.status,outcome,after,accepted:accepted.length};
+ });
+ if(result.status==="locked_by_another_tab"||result.status==="web_locks_unavailable")
+  return "CHƯA ĐẠT / ĐANG BẬN — "+result.status+"; không gửi dữ liệu.";
+ if(result.status==="empty")return "Hàng đợi đang trống; có thể đã được tab khác đồng bộ.";
+ if(result.status!=="ok")return "CHƯA ĐẠT — "+result.status+
+  "; hàng đợi được giữ và chưa được phép sử dụng danh tính khác.";
+ const sent=result.outcome.created+result.outcome.replayed;
+ assert(result.accepted>=sent,"Số event server khớp chưa đủ");
+ return "PASS — Đồng bộ/đối chiếu "+sent+" event bằng JWT Student\n"+
+  "Ghi mới: "+result.outcome.created+", đã ghi trước đó: "+result.outcome.replayed+
+  "\nCòn cục bộ: "+result.after.total+", cần retry: "+result.after.pending+
+  "\nEvent STAGING test:true được server ghi nhận: "+result.accepted;
+});
+
+e("hold").onclick=()=>run("hold","lock-output",async()=>{
+ const scope=await offlineScope();
+ const result=await testLockHeld(scope,8_000);
+ return result.status==="released_after_test"
+ ? "PASS — Đã giữ khóa 8 giây, sau đó giải phóng.\n"+
+   "Trong lúc khóa còn hiệu lực, tab thứ hai phải nhận locked_by_another_tab."
+ : "CHƯA ĐẠT — "+result.status;
+});
+
+e("audit").onclick=()=>run("audit","audit-output",async()=>{
+ const scope=await offlineScope();
+ const q=await queueOffline(scope);
+ const local=await q.summary();
+ let outputText="PASS — Hàng đợi cục bộ: "+local.total+
+  "; pending "+local.pending+"; blocked "+local.blocked+"; review "+local.review+
+  "\nKhông có chức năng xóa dữ liệu trong bài kiểm thử.";
+ if(navigator.onLine!==false){
+  const {supabase,scope:verified}=await verifyOnline();
+  const progress=await getContentProgress(supabase,verified.learnerId);
+  const lesson=progress.find(x=>x.content_item_id===verified.lessonId);
+  const {data,error}=await supabase.from("aura_learning_events")
+    .select("event_id,payload").eq("learner_id",verified.learnerId)
+    .eq("content_item_id",verified.lessonId).eq("event_type","lesson_viewed");
+  assert(!error,"Không đọc được sự kiện gốc để đối chiếu");
+  const expected=(data||[]).filter(x=>x.payload?.test!==true &&
+    x.payload?.source!=="staging_phase2c").length;
+  assert(Number(lesson?.lesson_views)===expected,
+    "Progress bị tăng bởi event test:true");
+  outputText+="\nPASS — Progress không tính các sự kiện test:true"+
+    "\nSố lượt xem bài tính vào tiến độ: "+expected;
+ } else {
+  outputText+="\nOFFLINE — Chỉ kiểm kê queue, không xác minh Progress server.";
+ }
+ return outputText;
+});
+
+// Startup makes no network calls: offline cached app is always usable if the
+// browser retained the Service Worker, metadata and event database.
+readOfflineScope().then(r=>{
+ if(r.status==="cached")output("offline-output","Ngữ cảnh offline còn hiệu lực.\nCó thể tạo event khi mất mạng hoặc sau tải lại trang.");
+ else output("offline-output","Chưa có ngữ cảnh offline còn hiệu lực ("+r.status+").\nCần xác minh Student lúc online.");
+}).catch(()=>output("offline-output","IndexedDB chưa sẵn sàng."));
+</script>
+</body></html>
