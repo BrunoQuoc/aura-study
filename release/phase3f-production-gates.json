@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "product": "AURA STUDY",
+  "project": "aura-study",
+  "source_environment": "STAGING",
+  "target_environment": "STAGING",
+  "production_release_approved": false,
+  "recorded_at_utc": "2026-11-05T09:45:00Z",
+  "release_commit_sha": null,
+  "gates": [
+    {
+      "id": "RLS_AND_TENANT_ISOLATION",
+      "status": "STAGING_PASS",
+      "reason": "SQL & browser STAGING authorization tests passed; production policy audit remains required.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "VERIFIED_OUTCOMES_INTEGRITY",
+      "status": "STAGING_PASS",
+      "reason": "SQL grading/visibility regression passed on STAGING.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "OFFLINE_IDEMPOTENCY",
+      "status": "STAGING_PASS",
+      "reason": "Phase 3D browser offline sync and Phase 3E mocked chaos passed; release-grade chaos pending.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "ANONYMOUS_AUTH_ABUSE",
+      "status": "OPEN",
+      "reason": "Configure bot protection and anonymous signup rate limits together with frontend CAPTCHA.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "PASSWORD_BREACH_PROTECTION",
+      "status": "OPEN",
+      "reason": "One email-provider Auth user has a password hash; enable leaked-password protection or approve a formal alternative.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "SHARED_DEVICE_SESSION_PRIVACY",
+      "status": "OPEN",
+      "reason": "Define cache isolation, logout/session expiration, offline queued events and local device privacy.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "REAL_FAULT_INJECTION",
+      "status": "OPEN",
+      "reason": "Test token expiration, device revocation, real 429/503, network lost after commit, offline storage eviction.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "RETENTION_AND_CLEANUP",
+      "status": "OPEN",
+      "reason": "Approve classification, review dates, data subject controls and authorized cleanup with backup evidence.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "BACKUP_RESTORE_RECOVERY",
+      "status": "OPEN",
+      "reason": "Complete restore drill, recovery-time and recovery-point evidence for production environment.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "ALERTING_AND_INCIDENT_RESPONSE",
+      "status": "OPEN",
+      "reason": "Define SLOs, owner, dashboards, alert thresholds, security incident response and escalation.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "DEPENDENCY_AND_SECRET_AUDIT",
+      "status": "OPEN",
+      "reason": "Confirm no secret keys in GitHub Pages, pin audited dependencies and review API keys.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "SECURITY_SIGNOFF",
+      "status": "OPEN",
+      "reason": "Independent security approver must sign a dated release record.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    },
+    {
+      "id": "PRODUCT_SIGNOFF",
+      "status": "OPEN",
+      "reason": "Product owner must approve migration, learner-data entry, rollback and launch plan.",
+      "production_evidence_url": null,
+      "verified_at_utc": null
+    }
+  ],
+  "approval": {
+    "security": {
+      "approved": false,
+      "record_url": null
+    },
+    "product": {
+      "approved": false,
+      "record_url": null
+    }
+  },
+  "note": "This is a STAGING evidence register. A release is NO-GO until all gates are PROD_PASS with independent approvals. Do not copy STAGING learner/test data into PRODUCTION."
+}
