@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AURA STUDY — Staging Identity</title>
+<style>
+:root{font-family:system-ui,sans-serif;background:#f4f7fc;color:#1d2c44}
+*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:820px;margin:24px auto}
+h1{font-size:1.6rem;margin:0 0 12px}.muted{color:#65748a;font-size:.9rem;line-height:1.55}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}@media(max-width:650px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #d9e2ee;border-radius:16px;padding:20px;box-shadow:0 5px 18px #101e3010}
+h2{margin:0 0 10px;font-size:1.15rem}label{display:block;font-size:.88rem;font-weight:600;margin-top:16px}
+input{width:100%;padding:12px;border:1px solid #b7c6d7;border-radius:9px;font:inherit;margin-top:6px}
+button{border:0;border-radius:9px;padding:11px 14px;background:#2476ae;color:white;font-weight:600;cursor:pointer;margin-top:12px;width:100%}
+button.secondary{background:#eaf2f9;color:#164b72}button:disabled{opacity:.6}
+.code{font-family:ui-monospace,monospace;background:#edf5ff;padding:10px;border-radius:8px;word-break:break-all}
+.status{font-size:.88rem;margin-top:10px;min-height:36px;white-space:pre-wrap;overflow-wrap:anywhere}
+.warn{padding:13px;border-radius:12px;background:#fff8e9;border:1px solid #eedcb9;font-size:.89rem}
+footer{margin-top:20px;color:#62738a;font-size:.8rem}
+</style></head>
+<body><main><h1>AURA STUDY — Xác thực thử nghiệm (GitHub Pages)</h1>
+<p class="warn"><strong>STAGING · Không nhập dữ liệu học thật.</strong> Chỉ kiểm tra đăng nhập Admin và ghép đôi một Student. Không gửi mật khẩu, mã OTP, JWT hoặc mã ghép đôi vào ChatGPT hay GitHub.</p>
+<div class="grid">
+<section class="card"><h2>Admin · Phụ huynh</h2>
+<p class="muted">Nhập email đã đăng ký với AURA. Supabase gửi liên kết xác thực; hãy mở email trên cùng trình duyệt đã yêu cầu.</p>
+<label>Email Admin<input id="admin-email" type="email" autocomplete="email" placeholder="you@example.com"></label>
+<button id="send-magic">Gửi liên kết đăng nhập</button>
+<button id="activate" class="secondary">Kiểm tra và kích hoạt quyền Admin</button>
+<button id="new-code" class="secondary">Tạo mã ghép đôi Student</button>
+<div class="status" id="admin-status" aria-live="polite">Chưa xác minh email.</div>
+<div id="code-wrap" hidden><strong>Mã ghép đôi (hết hạn sau 10 phút):</strong>
+<p class="code" id="pair-code"></p><small>Chuyển mã này trực tiếp sang thiết bị của con. Không đăng công khai.</small></div>
+</section>
+<section class="card"><h2>Student · Thiết bị học</h2>
+<p class="muted">Ở thiết bị của con, mở đúng trang này. Đăng nhập ẩn danh tạo một phiên thiết bị; chỉ sau khi nhập mã do Admin cấp mới được truy cập hồ sơ học.</p>
+<button id="student-start">Tạo phiên Student thử nghiệm</button>
+<label>Tên thiết bị (tùy chọn)<input id="device-label" maxlength="80" placeholder="iPad học tập"></label>
+<label>Mã ghép đôi<input id="pair-input" autocomplete="off" spellcheck="false" maxlength="32" placeholder="Mã 32 ký tự"></label>
+<button id="student-pair" class="secondary">Ghép đôi với hồ sơ học sinh</button>
+<button id="student-check" class="secondary">Kiểm tra trạng thái Student</button>
+<div class="status" id="student-status" aria-live="polite">Chưa ghép đôi.</div>
+</section>
+</div>
+<footer>Không có nút khôi phục/sửa/xóa dữ liệu học. Admin và Student dùng phiên Auth riêng trên cùng trình duyệt hoặc trên hai thiết bị. Đăng nhập chỉ hoạt động sau khi Supabase Auth Redirect URLs được cấu hình đúng.</footer>
+</main>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/+esm";
+const cfg={"url":"https://ufqzuowjhdqpydqvcsob.supabase.co","key":"sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p","gateway":"https://ufqzuowjhdqpydqvcsob.supabase.co/functions/v1/aura-identity-pair"};
+const parent = createClient(cfg.url,cfg.key,{auth:{storageKey:"aura-stage-parent-v1",flowType:"pkce",detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});
+const student = createClient(cfg.url,cfg.key,{auth:{storageKey:"aura-stage-student-v1",flowType:"pkce",detectSessionInUrl:false,persistSession:true,autoRefreshToken:true}});
+const byId=id=>document.getElementById(id);
+const status=(id,message)=>{byId(id).textContent=message;};
+async function action(client,method,params={}) {
+  const {data:{session},error} = await client.auth.getSession();
+  if(error||!session?.access_token)throw Error("Phiên đăng nhập chưa sẵn sàng");
+  const response=await fetch(cfg.gateway,{method:"POST",cache:"no-store",headers:{
+    "apikey":cfg.key,"Authorization":"Bearer "+session.access_token,
+    "Content-Type":"application/json"
+  },body:JSON.stringify({action:method,...params})});
+  const body=await response.json().catch(()=>({error:"Máy chủ chưa sẵn sàng"}));
+  if(!response.ok)throw Error(body.error||"Yêu cầu bị từ chối");
+  return body;
+}
+function bind(id,callback,statusId) {
+  byId(id).addEventListener("click",async()=>{
+    const button=byId(id);button.disabled=true;
+    try {await callback();}
+    catch(error){status(statusId,error?.message||"Thao tác không thành công");}
+    finally{button.disabled=false;}
+  });
+}
+bind("send-magic",async()=>{
+  const email=byId("admin-email").value.trim();
+  if(!email.includes("@"))throw Error("Nhập email Admin hợp lệ");
+  const redirectTo=location.origin+location.pathname;
+  const {error}=await parent.auth.signInWithOtp({email,options:{
+    emailRedirectTo:redirectTo, shouldCreateUser:true
+  }});
+  if(error)throw error;
+  status("admin-status","Đã yêu cầu gửi email xác thực. Hãy kiểm tra hộp thư và mở liên kết trên cùng trình duyệt.");
+},"admin-status");
+bind("activate",async()=>{
+  const x=await action(parent,"bootstrap_parent");
+  status("admin-status","Đã xác minh quyền Admin và hồ sơ một học sinh trên Staging.");
+},"admin-status");
+bind("new-code",async()=>{
+  const x=await action(parent,"create_pairing_code");
+  byId("pair-code").textContent=x.pairing_code;
+  byId("code-wrap").hidden=false;
+  status("admin-status","Đã tạo mã mới. Mã cũ chưa dùng sẽ hết hiệu lực.");
+},"admin-status");
+bind("student-start",async()=>{
+  const {data:{session}}=await student.auth.getSession();
+  if(session?.user?.is_anonymous){status("student-status","Phiên Student đã tồn tại.");return;}
+  if(session) throw Error("Phiên này không phải Student ẩn danh");
+  const {data,error}=await student.auth.signInAnonymously();
+  if(error)throw error;
+  status("student-status",data?.user?"Đã tạo phiên Student; nhập mã ghép đôi.":"Chưa tạo được phiên Student.");
+},"student-status");
+bind("student-pair",async()=>{
+  const code=byId("pair-input").value.trim();
+  if(!/^[A-Za-z0-9_-]{32}$/.test(code)) throw Error("Mã ghép đôi cần đủ 32 ký tự");
+  const x=await action(student,"redeem_pairing_code",{pairing_code:code,device_label:byId("device-label").value});
+  byId("pair-input").value="";
+  status("student-status","Đã ghép đôi Student với hồ sơ học sinh hiện có trên Staging.");
+},"student-status");
+bind("student-check",async()=>{
+  const x=await action(student,"status");
+  status("student-status","Trạng thái: "+x.role);
+},"student-status");
+try{
+ const {data:{session}}=await parent.auth.getSession();
+ if(session?.user)status("admin-status","Đã có phiên đăng nhập; bấm Kiểm tra và kích hoạt quyền Admin.");
+}catch(_){}
+</script></body></html>
