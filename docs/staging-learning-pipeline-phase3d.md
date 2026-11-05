@@ -137,3 +137,36 @@ During an overlapping two-tab test, tab B must return `locked_by_another_tab` wh
 
 ### Remaining production blockers
 Final data retention/deletion approval, real storage-eviction and expired-session tests, retry error-chaos testing, compatibility/security review for shared devices and Supabase Security Advisor warnings. No cleanup or production deployment performed.
+
+
+---
+
+## Phase 3D STAGING E2E sign-off — 2026-11-05 (multi-tab confirmation)
+
+**Decision: ACCEPTED — Phase 3D E2E smoke test scope on STAGING.**  
+**Production deployment: NOT APPROVED. Data Governance retention/deletion policy: NOT APPROVED.**
+
+### Evidence received
+- The user supplied a separate screenshot of **tab B**, captured during the two-tab Web Locks test. Step 3 reports exactly:
+  `PASS — locked_by_another_tab: tab này không được cấp khóa và không gửi dữ liệu.`
+- Combined with the previously supplied tab A result showing a held/released eight-second lock and the earlier logic test confirming only one holder, the browser-level contention check is **PASS**.
+- Prior Phase 3D offline test screenshot shows `navigator.onLine: false`, event stored without network, and subsequently three unique event IDs synced when online. We rely on the user-run browser test for the offline reload step; neither Supabase SQL nor this screenshot alone independently proves the browser reload gesture.
+- Prior test: local queue 0 after acknowledgement, Progress excluding `test:true` events.
+
+### Post-submission database snapshot
+- 1 active Student device.
+- 13 total Learning Events; 6 Phase3D-tagged events with 6 distinct IDs.
+- 0 persisted attempts.
+- The progress view continues to count 2 activities (one original Phase3B lesson view + one practice open).
+- These are aggregate observations after the multi-tab evidence was submitted. They do not attribute additional events to the tab B lock attempt.
+
+### Scope of sign-off
+The documented browser acceptance suite is complete: offline queue under `navigator.onLine=false`, reconnection, exact-event reconciliation, testing data excluded from progress, and cross-tab exclusion reported by tab B. This is **STAGING E2E sign-off for the specific flows tested**, not a certification of full offline or security resilience.
+
+### Outstanding release blockers
+- Data-retention and cleanup plan with explicit authorization; no deletions were carried out.
+- Storage eviction, session expiry and device revocation during queued activity, interrupted-network error/retry exhaustion, and more comprehensive multi-tab/real-device stress testing.
+- Security review of cached shared-device metadata, external dependency policy, Supabase Auth anonymous user abuse, rate limiting and leaked password protection.
+- Production deployment remains blocked.
+
+**Next proposed focus:** Phase 3E — Operational Security, Test-data Lifecycle & Production Readiness Gates. Do not begin production promotion until all release blockers are resolved.
