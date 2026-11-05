@@ -1,0 +1,27 @@
+name: AURA STUDY - Phase 3F production readiness gate
+
+# Manual-only. Never deploys or mutates Supabase, GitHub Pages or user data.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-release-evidence:
+    name: Validate governance records (NO-GO until approved)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout release candidate
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run fail-closed gate unit tests
+        run: node --test tests/phase3f-release-gate.test.mjs
+      - name: Show current gate summary (read-only)
+        run: node scripts/phase3f-release-gate.mjs --summary
+      - name: Enforce production NO-GO until all records pass
+        run: node scripts/phase3f-release-gate.mjs
