@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — Phase 3F-A Positive Anonymous & Unpaired RLS (STAGING)</title>
+<style>
+:root{font:16px system-ui,-apple-system,Segoe UI,sans-serif;background:#f3f7fc;color:#17324e}
+*{box-sizing:border-box}
+body{margin:0;padding:22px}
+main{max-width:950px;margin:auto}
+h1{font-size:1.65rem;margin-bottom:6px}h2{font-size:1.14rem}
+p{line-height:1.56}
+.notice{border:1px solid #e7d19f;background:#fff8e8;padding:16px;border-radius:12px}
+.card{background:white;border:1px solid #d5e2ef;border-radius:13px;padding:20px;margin-top:18px}
+.check{display:flex;align-items:flex-start;gap:10px;margin:14px 0}
+.check input{margin-top:5px;flex:none}
+#turnstile-slot{min-height:68px;margin:15px 0}
+button{width:100%;border:0;border-radius:9px;background:#2877ac;color:white;padding:14px;font-weight:700;font-size:1rem;margin-top:12px;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#e9f2fc;border-radius:9px;padding:14px;font:.87rem/1.55 ui-monospace,SFMono-Regular,Consolas,monospace;min-height:130px}
+small{color:#647489}
+</style>
+</head>
+<body><main>
+<h1>AURA STUDY — PHASE 3F-A</h1>
+<p><strong>Positive Anonymous Signup & Unpaired RLS Isolation — STAGING ONLY</strong></p>
+<div class="notice">
+<strong>Thao tác này thực sự tạo tối đa một Auth user ẩn danh thử nghiệm.</strong>
+Chỉ thử trên profile ẩn danh/riêng biệt, KHÔNG phải trình duyệt đang sử dụng Student ghép đôi chính.
+Sau khi tạo, tài khoản vẫn tồn tại trên Supabase cho tới khi được xử lý theo quy trình quản trị;
+đóng tab hoặc đăng xuất không xóa tài khoản.
+Không có nút xóa/thu hồi hoặc ghép đôi. Không ghi bài làm, điểm số hay Learning Events.
+Không gửi JWT, OTP, mã ghép đôi hoặc Secret Key vào ChatGPT/GitHub.
+</div>
+<section class="card">
+<h2>1. Tạo đúng một phiên anonymous với CAPTCHA hợp lệ</h2>
+<p>Đây là bài thử Positive E2E sau khi Admin và Student Negative CAPTCHA đã PASS.
+Token Turnstile chỉ lưu trong bộ nhớ để gửi trực tiếp tới Supabase Auth;
+không hiển thị và không ghi vào localStorage/sessionStorage.</p>
+<div id="turnstile-slot" aria-label="Cloudflare Turnstile STAGING"></div>
+<label class="check"><input type="checkbox" id="consent-auth">
+<span>Tôi xác nhận đây là Supabase STAGING, chấp thuận tạo tối đa một tài khoản
+anonymous mới để thử RLS, không dùng hồ sơ học sinh thật và không ghép đôi.</span></label>
+<label class="check"><input type="checkbox" id="consent-lifecycle">
+<span>Tôi chấp thuận đánh dấu tài khoản là dữ liệu thử nghiệm để kiểm kê;
+lưu giữ và xem xét thủ công sau 30 ngày theo quy trình được phê duyệt.
+Không xóa tự động và không thay đổi Student đang ghép đôi.</span></label>
+<button id="create" disabled>Tạo 1 anonymous Student và kiểm tra RLS</button>
+<pre id="result" role="status" aria-live="polite">Chưa chạy. Chưa tạo Auth user mới.</pre>
+<small>Trang có khóa một lần theo browser profile. Không tự retry sau lỗi. Nếu FAIL,
+không bấm lại hoặc mở profile khác trước khi kiểm kê Auth users.</small>
+</section>
+<section class="card">
+<h2>2. Điều kiện PASS</h2>
+<p>Supabase phải chấp nhận Turnstile hợp lệ, Auth server xác nhận
+<code>is_anonymous=true</code>, và tất cả truy vấn <strong>chỉ đọc / chỉ đếm</strong>
+đều trả về 0 dòng hoặc lỗi từ chối quyền truy cập.</p>
+<p>Đối chiếu 9 nguồn: Household, Learner, Device, Knowledge Library,
+Learning Events, Attempts, Learning Progress, Daily Activity, Verified Outcomes.
+Các bảng Attempts và Verified Outcomes đang không có dữ liệu mẫu, nên kết quả
+0 ở đó <strong>chưa chứng minh khả năng cách ly với bản ghi có thật</strong>.</p>
+<p><small>Nếu một truy vấn cho thấy bất kỳ bản ghi nào của learner/household chưa được ghép đôi,
+trang sẽ dừng ngay và báo FAIL mà không hiển thị dữ liệu. Các trường hợp lỗi mạng,
+không có số đếm hoặc không xác nhận được phiên đều là INCONCLUSIVE.</small></p>
+</section>
+<script type="module">
+import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/+esm";
+import {AURA_AUTH_SECURITY} from "./phase3fa-security-config.js";
+import {
+  isExpectedHost,buildPositiveAnonymousOptions,validNewAnonymousAuth,
+  classifyRead,RLS_READ_MATRIX,STAGING_SUPABASE_URL,ATTEMPT_GUARD
+} from "./phase3fa-positive-unpaired-policy.js";
+
+const PUBLISHABLE_KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
+const slot=document.getElementById("turnstile-slot");
+const create=document.getElementById("create");
+const status=document.getElementById("result");
+const authConsent=document.getElementById("consent-auth");
+const lifeConsent=document.getElementById("consent-lifecycle");
+const validOrigin=isExpectedHost(location.origin,location.pathname);
+const validConfig=AURA_AUTH_SECURITY.environment==="STAGING" &&
+  AURA_AUTH_SECURITY.captchaMode==="turnstile" &&
+  /^[A-Za-z0-9_-]{12,120}$/.test(AURA_AUTH_SECURITY.turnstileSiteKey);
+let captchaToken=null,widgetId=null,attempted=false,guardFailed=false;
+let priorAttempt=false;
+const say=lines=>{status.textContent=Array.isArray(lines)?lines.join("\n"):lines;};
+
+// Store only a one-shot boolean. NEVER store JWTs, email, PII or CAPTCHA tokens.
+try{priorAttempt=localStorage.getItem(ATTEMPT_GUARD)==="attempted";}
+catch(_){guardFailed=true;}
+function updateButton(){
+ create.disabled=!validOrigin||!validConfig||guardFailed||priorAttempt||
+   attempted||!captchaToken||!authConsent.checked||!lifeConsent.checked;
+}
+authConsent.addEventListener("change",updateButton);
+lifeConsent.addEventListener("change",updateButton);
+updateButton();
+if(!validOrigin||!validConfig||guardFailed||priorAttempt){
+ say(!validOrigin?"BLOCKED — Không phải đúng trang STAGING chính thức.":
+   !validConfig?"BLOCKED — Turnstile STAGING chưa sẵn sàng.":
+   guardFailed?"BLOCKED — Browser không hỗ trợ one-shot guard.":
+   "BLOCKED — Profile này đã thử tạo anonymous trong Phase 3F-A. Không chạy lại.");
+} else {
+ const script=document.createElement("script");
+ script.src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+ script.async=true;
+ script.onload=()=>{
+   if(!globalThis.turnstile?.render){
+     say("BLOCKED — Turnstile API chưa sẵn sàng.");return;
+   }
+   widgetId=globalThis.turnstile.render("#turnstile-slot",{
+     sitekey:AURA_AUTH_SECURITY.turnstileSiteKey,theme:"auto",
+     "response-field":false,
+     "callback":token=>{
+       captchaToken=token;updateButton();
+       say("Turnstile Success! Chỉ khi đã xác nhận hai điều kiện, anh mới có thể tạo một Auth user thử.");
+     },
+     "expired-callback":()=>{
+       captchaToken=null;updateButton();
+       say("CAPTCHA đã hết hạn. Hoàn thành thử thách lại trước khi thử.");
+     },
+     "error-callback":()=>{
+       captchaToken=null;updateButton();
+       say("BLOCKED — Turnstile có lỗi. Không gửi Auth request.");return true;
+     }
+   });
+ };
+ script.onerror=()=>say("BLOCKED — Không tải được Cloudflare Turnstile.");
+ document.head.appendChild(script);
+}
+create.addEventListener("click",async()=>{
+ if(!validOrigin||!validConfig||guardFailed||priorAttempt||attempted||
+    !captchaToken||!authConsent.checked||!lifeConsent.checked)return;
+ try{
+   // Commit the guard BEFORE any Auth request, so a reload cannot create
+   // another test user. A blocked storage write fails closed.
+   localStorage.setItem(ATTEMPT_GUARD,"attempted");
+   priorAttempt=true;
+ } catch(_){
+   say("BLOCKED — Không thiết lập được one-shot guard. Không gọi Supabase.");return;
+ }
+ attempted=true;updateButton();
+ const validCaptchaToken=captchaToken;captchaToken=null;
+ if(widgetId!==null)globalThis.turnstile?.reset?.(widgetId);
+ const lines=["STAGING / Positive Anonymous / ONE ATTEMPT / NO PAIRING"];
+ say([...lines,"Đang gửi CAPTCHA hợp lệ tới Supabase Auth..."]);
+ const client=createClient(STAGING_SUPABASE_URL,PUBLISHABLE_KEY,{
+   auth:{
+     storageKey:"aura-phase3fa-unpaired-isolated-memory",
+     persistSession:false,autoRefreshToken:false,detectSessionInUrl:false
+   }
+ });
+ let data=null;
+ try{
+   const reply=await client.auth.signInAnonymously(buildPositiveAnonymousOptions(validCaptchaToken));
+   if(reply.error){
+     lines.push("INCONCLUSIVE — Auth server không cấp phiên; mã "+(
+       typeof reply.error.code==="string" &&
+       /^[a-z0-9_]{1,60}$/.test(reply.error.code)?
+       reply.error.code:"unrecognized")+"; không tự retry.");
+     say(lines);return;
+   }
+   data=reply.data;
+   lines.push("AUTH — Server đã phản hồi tạo phiên; đang xác minh danh tính...");
+   say(lines);
+   const actual=await client.auth.getUser();
+   if(actual.error || !validNewAnonymousAuth(data,actual.data?.user)){
+     lines.push("INCONCLUSIVE — Không xác minh được phiên anonymous qua Auth server.");
+     lines.push("Có thể đã tạo Auth user. Kiểm kê trên Supabase; không tự retry.");
+     say(lines);return;
+   }
+   lines.push("PASS — Auth server xác nhận is_anonymous=true.");
+   lines.push("PASS — Đã gắn nhãn test trong user_metadata (không dùng cấp quyền).");
+   lines.push("RLS — Bắt đầu 9 truy vấn chỉ đếm, không trả về nội dung...");
+   say(lines);
+   let passed=0,seeded=0;
+   for(const item of RLS_READ_MATRIX){
+     const {count,error}=await client.from(item.table).select(item.column,{
+       count:"exact",head:true
+     });
+     const verdict=classifyRead(count,error,item.nonEmptyBaseline);
+     const prefix=item.label+" — ";
+     if(verdict.state==="PASS"){
+       passed++;
+       if(item.nonEmptyBaseline)seeded++;
+       lines.push(prefix+"PASS ("+verdict.reason+")");
+       say(lines);
+       continue;
+     }
+     lines.push(prefix+verdict.state+" ("+verdict.reason+")");
+     lines.push("DỪNG — Không đọc thêm nguồn dữ liệu khác.");
+     lines.push("Tài khoản thử đã được tạo; cần kiểm kê và đánh giá thủ công.");
+     say(lines);return;
+   }
+   lines.push("KẾT LUẬN — PASS: Auth positive và "+passed+"/9 truy vấn RLS không thấy dữ liệu.");
+   lines.push("Đã kiểm thử "+seeded+"/9 nguồn có dữ liệu nền; 2 nguồn trống cần test riêng.");
+   lines.push("Auth user STAGING đã được tạo và lưu trên server; KHÔNG tự xóa.");
+   lines.push("Không ghép đôi, không ghi Learning Event hoặc điểm số.");
+   say(lines);
+ }catch(_){
+   lines.push("INCONCLUSIVE — network/client_error sau khi bắt đầu Auth; có thể đã tạo tài khoản.");
+   lines.push("Kiểm kê số Auth users trước khi thử lại. Không tự retry.");
+   say(lines);
+ }
+});
+</script>
+</main></body></html>
