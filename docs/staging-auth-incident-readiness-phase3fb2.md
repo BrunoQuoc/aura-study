@@ -99,3 +99,8 @@ Other references: [Phase 3F-B tracker #12](https://github.com/BrunoQuoc/aura-stu
 ### 8. Operator browser tabletop acceptance
 
 2026-11-06: Operator screenshot shows **3/3 PASS** for P0 unpaired-data exposure, P1 unexpected test-user pairing and P1 Auth 5xx in a static STAGING rehearsal. Each case reports zero Auth API calls, zero database writes and no automatic deletion. This is **mock-only** acceptance. The result also explicitly states **actual alert delivery not verified** and **monitoring owner unassigned**. No real incident, human notification acknowledgement, or on-call readiness is established. PRODUCTION NO-GO.
+
+
+### 9. Ownership & receipt verification protocol
+
+As of 2026-11-06, the connected GitHub account `BrunoQuoc` has been recorded as a **proposed Primary candidate only**, without appointment or acceptance. Backup remains UNASSIGNED. Owner/Backup self-authored acknowledgements and human receipt of a synthetic Issue #13 notification are pending. Candidate identity must never imply on-call duty. Source of truth: `release/phase3fb2-monitoring-ownership.json`. The safe, no-PII protocol and receipt evidence requirements are in `docs/staging-auth-ownership-alert-receipt-phase3fb2.md`. Offline guard is `scripts/phase3fb2-receipt-gate.mjs`. GitHub Issue #12 contains the operator participation instructions. No live Supabase alert, real 429 or production change is implied.
