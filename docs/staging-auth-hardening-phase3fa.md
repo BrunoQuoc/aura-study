@@ -169,3 +169,17 @@ The STAGING Turnstile widget **AURA-STUDY-STAGING** was created for `brunoquoc.g
 **Next:** After operator confirms secret rotation, switch the STAGING frontend to `captchaMode: turnstile`, verify Admin and Student widgets, and only then enable Supabase Auth CAPTCHA using the newly rotated Secret Key inside the Supabase Dashboard. Keep the production `ANONYMOUS_AUTH_ABUSE` gate OPEN until validated token rejection, rate limits and RLS regression pass.
 
 Cloudflare official rotation guide: https://developers.cloudflare.com/turnstile/troubleshooting/rotate-secret-key/
+
+---
+
+## 13. Frontend Turnstile activation after operator Secret Key rotation — 2026-11-06
+
+The operator confirmed that the previously exposed Cloudflare Turnstile **Secret Key has been rotated**. Rotation is operator-reported; the server-side rotation status and old-key retirement were not independently verified. The new Secret Key has **not** been requested, stored or committed.
+
+Frontend STAGING configuration `auth/phase3fa-security-config.js` was changed from `captchaMode: disabled` to `captchaMode: turnstile` using the already supplied **PUBLIC Site Key**. The login page includes independent Admin and Student widgets and consumes `options.captchaToken` during new Auth requests. The Auth UI informs the operator that server-side CAPTCHA has not been verified. Auth contract tests were updated for the active frontend mode.
+
+**SERVER CAPTCHA IS STILL NOT ENABLED BY THIS CHANGE.** The Supabase Dashboard must remain OFF until the operator verifies both widgets on the deployed GitHub Pages page. No server-side Auth config, credentials, RLS, student pairing or production release settings were changed.
+
+Required operator evidence: open `https://brunoquoc.github.io/aura-study/aura-staging-login.html` in the existing STAGING browser and confirm both CAPTCHA widgets render (Admin and Student); capture only the UI with any email/OTP/pairing codes obscured. Do not submit a fresh anonymous login or Admin OTP merely to test the widget before rollout planning.
+
+Only after frontend acceptance: enable Cloudflare Turnstile under Supabase STAGING → Authentication → Attack Protection using the **new private Secret Key in Supabase only**, then test valid/invalid challenges with temporary test accounts and document rollback. `ANONYMOUS_AUTH_ABUSE` production gate remains OPEN until server proof and Auth throttling review.
