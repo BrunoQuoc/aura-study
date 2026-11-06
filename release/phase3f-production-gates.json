@@ -32,7 +32,7 @@
     {
       "id": "ANONYMOUS_AUTH_ABUSE",
       "status": "OPEN",
-      "reason": "STAGING Phase3F-A: Admin CAPTCHA positive E2E and OTP negative 2/2 PASS; anonymous Student invalid/missing CAPTCHA negative 2/2 PASS; read-only Rate Limits inventory completed (anonymous 30/h/IP, email 2/h, verify 30/5min/IP, refresh 150/5min/IP). Positive valid-CAPTCHA anonymous signup + unpaired RLS isolation, 429/abuse monitoring, governed temporary Auth-user lifecycle and production sign-off remain OPEN.",
+      "reason": "STAGING Phase3F-A: Admin and anonymous CAPTCHA negative tests PASS; Auth Rate Limits reviewed. New read-only SQL unpaired RLS preflight 9/9 zero (7 nonempty seeded objects); positive single-use anonymous signup and browser JWT/RLS harness committed but NOT YET RUN. Account lifecycle audit dry-run baseline 0 tagged tests, 5 Auth users. Positive browser E2E, post-test audit, abuse/429 monitoring and independently approved production policy still OPEN.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
