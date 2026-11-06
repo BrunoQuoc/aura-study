@@ -444,3 +444,18 @@ Read-only lifecycle audit SQL run **before** user browser test: 5 total Auth use
 **Limits:** Both negative anonymous CAPTCHA tests and this positive anonymous browser test now PASS on STAGING. Rate Limits configuration has been inventoried, but threshold/429 enforcement and abuse monitoring are untested; graded Attempts/Verified Outcomes need populated negative-isolation evidence; leaked-password protection remains plan-restricted. Do NOT clear the overall `ANONYMOUS_AUTH_ABUSE` gate. **PRODUCTION NO-GO**.
 
 Detailed report: `docs/staging-auth-positive-unpaired-phase3fa.md`.
+
+
+---
+
+## 29. Phase 3F-A Security Closure & Test-data Lifecycle Review — 2026-11-06
+
+**STAGING EVIDENCE REVIEW COMPLETE; PRODUCTION NO-GO.** The independent live audit confirmed one tagged positive anonymous test account (6 total Auth, 5 anonymous), no device or Learning Event links, one remaining Auth session and one refresh token. The test account reaches its **30-day manual retention review on 2026-12-06 07:14 UTC**; there was no deletion, pairing, revocation or event mutation in this phase.
+
+A controlled, rollback-only synthetic graded attempt verified that an authorized Admin could read **one Exam Attempt and one Verified Outcome**, whereas the unpaired anonymous identity could read **zero attempts, zero outcomes and zero learner records**. A subsequent independent SQL snapshot confirmed **0 persisted attempts and 0 persisted verified outcomes**. This supplies scored-data isolation evidence where earlier live tables were empty; the fixture did not persist.
+
+Read-only 24-hour Auth log aggregation found **4 captcha_failed**, **2 HTTP 400 on /auth/v1/otp**, **2 HTTP 400 on /auth/v1/signup**, **0 observed 429**, and **0 Auth HTTP 5xx**. Monitoring *visibility* is verified, but actual 429 enforcement, alert delivery, on-call routing and incident escalation are NOT certified. Do not treat zero observed 429 as a PASS for rate limits.
+
+Remaining release gates include the plan-gated leaked-password warning, production-specific independent audit, cleanup/retention approval and incident alerting. Security Advisor continues to report six anonymous-sign-in WARN findings plus one leaked-password WARN, without a formal waiver. Production release manifest remains **11 OPEN / 3 STAGING_PASS / production_release_approved=false**.
+
+Full evidence package: `docs/staging-auth-security-closure-phase3fa.md`. Reproducible aggregate SQL: `supabase/audits/aura_phase3fa_security_closure_readonly.sql`, `supabase/audits/aura_phase3fa_graded_isolation_rollback.sql` and `supabase/audits/aura_phase3fa_auth_logs_monitor.sql`. Run only under the stated STAGING/Log Explorer contracts.
