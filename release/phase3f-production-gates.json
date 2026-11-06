@@ -32,7 +32,7 @@
     {
       "id": "ANONYMOUS_AUTH_ABUSE",
       "status": "OPEN",
-      "reason": "Phase3F-A Turnstile frontend adapter prepared but disabled by default; Supabase server CAPTCHA, anonymous sign-in rate limits and post-activation negative E2E remain OPEN.",
+      "reason": "Phase3F-A STAGING: corrected Turnstile frontend 2/2 widget PASS, Admin Magic Link+PKCE+bootstrap positive E2E PASS, and OTP endpoint invalid/missing CAPTCHA negative E2E 2/2 PASS. Anonymous Student signup enforcement, server rate limits/abuse monitoring, and production-config security review remain OPEN.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
