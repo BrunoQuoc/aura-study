@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "project": "AURA STUDY",
+  "environment": "STAGING",
+  "monitoring_mode": "MANUAL_PROVISIONAL",
+  "automation_enabled": false,
+  "primary_owner_github": null,
+  "backup_reviewer_github": null,
+  "owner_acceptance": false,
+  "backup_acceptance": false,
+  "review_cadence": "PROPOSED_DAILY_NOT_APPROVED",
+  "incident_intake": {
+    "provider": "GitHub Issues",
+    "tracker": "https://github.com/BrunoQuoc/aura-study/issues/12",
+    "synthetic_receipt": "https://github.com/BrunoQuoc/aura-study/issues/13",
+    "receipt_persisted": true,
+    "notification_received": false,
+    "no_sensitive_identifiers": true
+  },
+  "severities": [
+    {
+      "id": "P0",
+      "signal": "unpaired_data_exposure",
+      "actions": "stop STAGING tests; preserve sanitized evidence; escalate to owner"
+    },
+    {
+      "id": "P1",
+      "signal": "unexpected_test_user_pairing",
+      "actions": "freeze pairing tests; audit dependencies; owner review"
+    },
+    {
+      "id": "P1",
+      "signal": "auth_5xx_degradation",
+      "actions": "inspect provider and status; report sanitized aggregate"
+    },
+    {
+      "id": "P2",
+      "signal": "sustained_captcha_fail_or_429",
+      "actions": "compare baseline before classifying"
+    }
+  ],
+  "thresholds_confirmed": false,
+  "live_alerts_enabled": false,
+  "synthetic_tabletop_browser_accepted": false,
+  "rate_limit_429_server_e2e_confirmed": false,
+  "production_release_approved": false
+}
