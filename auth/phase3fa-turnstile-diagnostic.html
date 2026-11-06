@@ -41,9 +41,9 @@ small{color:#62768d}
 </article>
 </main>
 <script type="module">
-import {AURA_AUTH_SECURITY} from "./phase3fa-security-config.js";
 const get=id=>document.getElementById(id);
-get("sitekey").value=AURA_AUTH_SECURITY.turnstileSiteKey;
+// Do not pre-fill: operator must copy the authoritative public Site Key
+// from Cloudflare Dashboard rather than repeat a possibly mistyped key.
 const scriptUrl="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 const output=message=>{get("result").textContent=message;};
 let widgetId=null,loadPromise=null;
