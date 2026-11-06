@@ -123,3 +123,8 @@ Full evidence: `docs/staging-auth-monitoring-baseline-phase3fb1.md`. Monitoring 
 ### Phase 3F-B2 operator tabletop acceptance — 2026-11-06
 
 User-supplied GitHub Pages screenshot verifies **3/3 PASS** across P0 unpaired learner exposure, P1 unintended test-user pairing and P1 Auth 5xx; zero Auth API requests, zero database writes, zero auto deletion. This accepts only the *mock tabletop browser test*. The same screenshot explicitly labels actual alert delivery NOT VERIFIED and monitoring owner UNASSIGNED. Issue #13 is a sanitized ticket receipt only, not an email/push notification or human acknowledgement. Retain production alerting and incident-response gate OPEN and PRODUCTION NO-GO. Reference: `docs/staging-auth-incident-readiness-phase3fb2.md`.
+
+
+### Phase 3F-B2 next gate — Ownership & Alert Receipt
+
+The GitHub-connected login `BrunoQuoc` is **candidate only** for Primary; no official assignment or explicit acceptance exists. A distinct Backup is required. Human GitHub notification receipt must be verified through each recipient's own Issue #12 comments after a safe synthetic notification from Issue #13. Ticket persistence alone is insufficient. Full protocol: `docs/staging-auth-ownership-alert-receipt-phase3fb2.md`. Owner/Backup, delivery acknowledgement and live Supabase alert pipeline remain OPEN; PRODUCTION NO-GO.
