@@ -142,7 +142,8 @@ create.addEventListener("click",async()=>{
  }
  attempted=true;updateButton();
  const validCaptchaToken=captchaToken;captchaToken=null;
- if(widgetId!==null)globalThis.turnstile?.reset?.(widgetId);
+ // Do not reset the solved Turnstile challenge before Supabase validates
+ // its one-time token. The page is permanently one-shot after this request.
  const lines=["STAGING / Positive Anonymous / ONE ATTEMPT / NO PAIRING"];
  say([...lines,"Đang gửi CAPTCHA hợp lệ tới Supabase Auth..."]);
  const client=createClient(STAGING_SUPABASE_URL,PUBLISHABLE_KEY,{
