@@ -41,7 +41,9 @@
   ],
   "thresholds_confirmed": false,
   "live_alerts_enabled": false,
-  "synthetic_tabletop_browser_accepted": false,
+  "synthetic_tabletop_browser_accepted": true,
   "rate_limit_429_server_e2e_confirmed": false,
-  "production_release_approved": false
+  "production_release_approved": false,
+  "synthetic_tabletop_browser_evidence": "Operator-supplied STAGING screenshot 2026-11-06; 3/3 PASS; zero Auth API, zero DB writes, no auto deletion; actual alert delivery NOT VERIFIED",
+  "last_tabletop_status": "STAGING_MOCK_PASS_ONLY"
 }
