@@ -10,14 +10,14 @@
  * (3) enable matching Supabase Auth server-side CAPTCHA using private secret
  * (4) test parent Magic Link and a fresh test Student anonymous session.
  *
- * STAGING rollback: sitekey rejected by Cloudflare on both Admin/Student.
- * Re-enable only after direct dashboard copy of current public Site Key
- * and independent Turnstile diagnostic shows success. Server CAPTCHA remains OFF.
+ * STAGING frontend: direct Cloudflare-copied public Site Key verified through
+ * standalone diagnostic; now show both Admin and Student challenges.
+ * Supabase Auth server-side CAPTCHA is separately controlled and NOT yet enabled.
  */
 export const AURA_AUTH_SECURITY = Object.freeze({
   environment: "STAGING",
-  captchaMode: "disabled", // "disabled" | "turnstile"
-  turnstileSiteKey: "0x4AAAAAAF0s6GoYAG1_04uG",
+  captchaMode: "turnstile", // "disabled" | "turnstile"
+  turnstileSiteKey: "0x4AAAAAAF0s6GoYAG1_O4uG",
   allowCreateAdminAuthUser: false,
   magicLinkCooldownMs: 60_000
 });
