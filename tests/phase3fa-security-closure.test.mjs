@@ -53,5 +53,5 @@ test("release gate stays blocked pending 429 alerts and plan-gated password scre
  assert.match(report,/PRODUCTION.*NO-GO/i);
  assert.match(report,/429/);
  assert.match(report,/2026-12-06 07:14 UTC/);
- assert.match(report,/1.*refresh token/i);
+ assert.match(report,/Tagged account: refresh token records \| \*\*1\*\*/);
 });
