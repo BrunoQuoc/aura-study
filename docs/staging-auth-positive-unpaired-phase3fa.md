@@ -81,3 +81,14 @@ Tagged user created **2026-11-06 07:14 UTC** (operator-identifying UID deliberat
 **Lifecycle:** retain the isolated test identity for a manually approved review at the 30-day milestone, unless a documented exception is authorized. Do not automatically delete or revoke Auth sessions. Any future cleanup requires an authorized operator to verify the exact identity and dependencies privately, retention obligations and approval trail. Closing the private window does not delete the server-side Auth account.
 
 **Scope not covered:** Attempts and Verified Outcomes currently lack seeded records, so RLS denial against a nonempty graded dataset remains untested; threshold-based 429 enforcement and monitoring; production-auth account policies; plan-gated leaked-password protection. `ANONYMOUS_AUTH_ABUSE` stays **OPEN**, and production release remains **NO-GO**.
+
+
+---
+
+## Security Closure follow-up — session/refresh token retention review
+
+Phase 3F-A positive signup and 9-source unpaired browser RLS were accepted. A subsequent independent tagged-identity lifecycle audit found **one Auth session and one refresh token**, while device links, learning events, identities and MFA factors for the test identity remained zero. This requires session/token review before any separately approved deletion; closing a browser or deleting a user alone does not assure immediate invalidation of already-issued JWTs.
+
+The exact manual 30-day review due date is **2026-12-06 07:14 UTC**, subject to retention owner sign-off. No cleanup has been executed or scheduled automatically; only the inventory/review evidence is complete.
+
+A PostgreSQL exception-subtransaction seeded and rolled back one synthetic graded result: Admin saw 1 Attempt and 1 Verified Outcome, and the unpaired anonymous user saw 0 of each. Persisted counts were independently rechecked as zero. Detailed Security Closure report: `docs/staging-auth-security-closure-phase3fa.md`.
