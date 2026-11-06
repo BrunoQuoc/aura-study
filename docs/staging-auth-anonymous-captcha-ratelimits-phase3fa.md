@@ -43,11 +43,11 @@ https://supabase.com/dashboard/project/ufqzuowjhdqpydqvcsob/auth/rate-limits
 
 | Protection | Endpoint | Supabase documentation | Config evidence |
 |---|---|---|---|
-| Anonymous sign-ins | `/auth/v1/signup` (without email/phone) | IP-based; documentation lists as **not customizable**; built-in limit and burst. | **PENDING DASHBOARD REVIEW** |
+| Anonymous sign-ins | `/auth/v1/signup` (without email/phone) | IP-based; October 26, 2026 docs indicate **customizable**; verify actual Dashboard values and limits before changes. | **PENDING DASHBOARD REVIEW** |
 | OTP sends | `/auth/v1/otp` | Project-wide limit; **customizable**. | **PENDING** |
 | OTP/email resend cooldown | `/auth/v1/otp` | Per-user interval; **customizable**. | **PENDING** |
 | Built-in outbound email quota | `/auth/v1/signup`, `/auth/v1/recover`, etc. | Project-wide built-in quota; customization generally requires custom SMTP. | **PENDING** |
-| Verification | `/auth/v1/verify` | IP-based; documentation lists as **not customizable**. | **PENDING** |
+| Verification | `/auth/v1/verify` | IP-based; October 26, 2026 docs indicate **customizable** for verify/token limits, subject to available project settings. | **PENDING** |
 | Refresh token | `/auth/v1/token` | IP-based; documentation lists as **not customizable**. | **PENDING** |
 
 The Dashboard and provider configuration are the authoritative sources for current project-specific values, not generic documentation defaults. Connected Supabase tools in this session do **not** provide a read method for the Auth management configuration, and no access token for the Management API should be supplied to ChatGPT. A screenshot of the Rate Limits page with secrets/redacted account data is the next required evidence.
@@ -68,3 +68,54 @@ References:
 - **D — Final security review:** Supabase Security Advisor, leaked-password Pro-only warning disposition, secure device handling and independent sign-off.
 
 **No phase or production release gate is marked PASS until its own evidence is received. PRODUCTION NO-GO.**
+
+
+### 5. Operator evidence: anonymous CAPTCHA and Rate Limits — 2026-11-06
+
+**Evidence accepted: STAGING anonymous CAPTCHA negative E2E 2/2 PASS; Auth Rate Limits dashboard inventory REVIEWED.**
+
+The operator provided two screenshots:
+
+1. STAGING `phase3fa-student-captcha-negative.html` output:
+   - `1. INVALID CAPTCHA TOKEN — PASS: captcha_failed (Auth server)`
+   - `2. MISSING CAPTCHA TOKEN — PASS: captcha_failed (Auth server)`
+   - `KẾT LUẬN — 2/2 PASS: STUDENT ANONYMOUS CAPTCHA NEGATIVE`
+   - The output explicitly indicates no pairing, Learning Event or score requests were issued by the harness.
+2. Supabase STAGING Authentication → Rate Limits dashboard screenshot, read-only, showing the current settings below.
+
+| Auth setting | Observed STAGING value | Unit / scope |
+|---|---:|---|
+| Outbound emails | **2** | emails per hour, project |
+| Outbound SMS | 30 | SMS per hour, project |
+| Token refresh | 150 | requests per 5 minutes per IP (UI also indicates 1800/hour) |
+| Token verification | 30 | requests per 5 minutes per IP (UI also indicates 360/hour) |
+| Anonymous sign-ins | **30** | requests per hour per IP |
+| Other signup/sign-in | 30 | requests per 5 minutes per IP (excludes anonymous) |
+| Web3 signup/sign-in | 30 | requests per 5 minutes per IP |
+| Minimum email resend interval | 60 | seconds; UI labels this as applicable when custom SMTP is configured |
+| IP Address Forwarding | OFF | no forwarded IP override |
+
+**Independent post-test read-only database check:** 5 Auth users (4 anonymous), 1 household, 1 learner, 1 active paired Student device, 13 Learning Events, 0 attempts. Counts unchanged from before the two negative requests. No account deletion or change was performed.
+
+**Scope/limitations:** Both anonymous negative requests returned `captcha_failed` from the Auth server. This establishes enforcement on the tested anonymous signup path, not a successful new anonymous login, a complete RLS-negative cross-tenant test, or evidence of IP rate limiting at a threshold. The Rate Limits screenshot establishes the UI settings only; it is **not** a load test or proof of 429 behavior. There was **no rate-limit stress testing**.
+
+**Operational evaluation:**
+- The built-in project email quota of **2/hour** is restrictive for multiple Admin Magic Link tests; preserve this and sequence requests rather than increasing unrelated limits blindly. Moving to custom SMTP / Send Email hook is a separate approved decision.
+- **30 anonymous sign-ins/hour/IP** plus CAPTCHA provides useful layered protection but not a complete anti-abuse or device admission policy. Continue to enforce device pairing and tenant-scoped RLS.
+- **IP Address Forwarding OFF** is not an immediate blocker for this direct GitHub Pages client with a public Supabase publishable key; forwarded client-IP handling is a separate trusted-server/secret-key feature. Do not enable it for the browser client.
+- Supabase documentation updated **2026-10-26** indicates that several rate limits, including anonymous sign-ins and token verification/refresh, are customizable in relevant project settings. Earlier guidance declaring them categorically immutable was outdated. The review did **not** change any setting; avoid promoting any test value as a recommended new setting without a tested workload and security owner sign-off.
+
+**Remaining gates:** one controlled positive fresh anonymous signup using valid Turnstile and an approved temporary Auth-user lifecycle, an unpaired RLS denial check, Auth abuse monitoring and independent release review. `ANONYMOUS_AUTH_ABUSE` remains **OPEN**, and **PRODUCTION NO-GO**. Password leak-protection remains unavailable under the current plan without a formally approved alternative.
+
+Updated docs: https://supabase.com/docs/guides/auth/rate-limits
+
+### 6. Next bounded acceptance — not yet executed
+
+After an operator approves a lifecycle for **one temporary unpaired anonymous test identity**, use an isolated browser profile (not the active Student device) to confirm:
+1. Valid Turnstile challenge permits at most one new anonymous Auth sign-in and `is_anonymous=true`.
+2. The new unpaired identity cannot query learner records, published learner content, learning events or other learners' household information.
+3. No pairing code is generated, no learning/score event is written; original Student pairing and existing counts except the approved temporary Auth user remain intact.
+4. Record exact candidate account ownership, expiration, audit dependencies and authorized eventual cleanup; **no automatic deletes**.
+5. Review production-readiness evidence and Auth abuse monitoring before considering clearance.
+
+**Do not perform these steps automatically as a side effect of negative-test acceptance.**
