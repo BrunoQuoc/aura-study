@@ -345,3 +345,26 @@ The operator previously completed Admin Turnstile → Magic Link → PKCE sessio
 **Operator runbook:** wait at least 60 seconds since the previous Magic Link send to reduce OTP rate limit interference; open `https://brunoquoc.github.io/aura-study/auth/phase3fa-server-captcha-negative.html`; enter the existing STAGING Admin email locally, tick the explicit side-effect consent and click once. Screenshot only the result panel (not the email input). If results are inconclusive, do not auto-retry. After the screenshot, a read-only Supabase count can confirm no new Auth users/events; no cleanup is authorized.
 
 **Release:** `ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION` remain OPEN, and `production_release_approved:false`. PRODUCTION NO-GO.
+
+---
+
+## 24. Server CAPTCHA negative OTP verification — 2/2 PASS — 2026-11-06
+
+**ACCEPTED — STAGING / ADMIN OTP CAPTCHA SERVER NEGATIVE TESTS 2/2 PASS.**
+
+The operator supplied a screenshot from `auth/phase3fa-server-captcha-negative.html`. The page ran two real `supabase-js` `signInWithOtp` calls for a pre-existing Admin email with `shouldCreateUser:false`, a deliberately invalid `captchaToken` and then no `captchaToken` at all. Both returned Supabase Auth **`captcha_failed`**, which the diagnostic accepts as PASS and distinguishes from 429/rate limits or any other error.
+
+Evidence from the supplied screenshot:
+- `1. INVALID CAPTCHA TOKEN — PASS: captcha_failed (Auth server)`
+- `2. MISSING CAPTCHA TOKEN — PASS: captcha_failed (Auth server)`
+- `KẾT LUẬN — 2/2 PASS: CAPTCHA SERVER NEGATIVE TEST`
+
+**Acceptance scope:** Supabase server CAPTCHA was demonstrated to reject invalid and missing challenge tokens on the **Admin Magic Link / OTP sign-in endpoint**. Combined with prior Admin positive challenge + Magic Link delivered + PKCE session + Admin bootstrap authorization PASS, the tested Admin Auth CAPTCHA flow is **positive/negative E2E PASS in STAGING**.
+
+**Independent read-only Supabase snapshot after evidence:** 5 Auth users (4 anonymous), 1 household, 1 learner, 1 active paired Student device, 3 previously revoked devices, 13 Learning Events, 0 `staging_phase3fa_negative` events, 0 attempts, 2 counted progress events. Counts match the pre-test baseline. No user, pairing/device, learning event or attempt was created by this diagnostic.
+
+**Residual gaps:** This proves neither new Student anonymous sign-in CAPTCHA enforcement nor rate-limit effectiveness, per-device anti-abuse, shared-device privacy or the plan-gated leaked-password setting. Supabase Security Advisor still reports six `auth_allow_anonymous_sign_ins` warnings and the `auth_leaked_password_protection` warning; these are not automatically resolved by the OTP CAPTCHA test. Do not mark the overall `ANONYMOUS_AUTH_ABUSE` release gate as PROD_PASS.
+
+**Next bounded acceptance:** validate that `signInAnonymously` rejects a missing/invalid CAPTCHA token **without creating users**, then plan a single approved temporary Student positive signup and cleanup lifecycle if required. Review real STAGING Auth rate limits. Do not alter the existing paired Student or create pairing codes just to repeat the Admin test.
+
+**Release remains PRODUCTION NO-GO.**
