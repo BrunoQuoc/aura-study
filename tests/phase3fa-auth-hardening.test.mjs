@@ -15,9 +15,10 @@ const {
 }=challenge;
 const config=configModule.AURA_AUTH_SECURITY;
 
-test("STAGING UI rollback keeps Site Key but disables broken Turnstile before server rollout",()=>{
+test("STAGING frontend uses dashboard-copied public Site Key and Turnstile mode",()=>{
   assert.equal(config.environment,"STAGING");
-  assert.equal(config.captchaMode,"disabled");
+  assert.equal(config.captchaMode,"turnstile");
+  assert.equal(config.turnstileSiteKey,"0x4AAAAAAF0s6GoYAG1_O4uG");
   assert.match(config.turnstileSiteKey,/^[A-Za-z0-9_-]{12,120}$/);
   assert.equal(config.allowCreateAdminAuthUser,false);
   assert.equal(assertAuthSecurityConfig(config),true);
