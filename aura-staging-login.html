@@ -65,7 +65,10 @@ captcha.init().then(({enabled})=>{
 const status=(id,message)=>{byId(id).textContent=message;};
 async function action(client,method,params={}) {
   const {data:{session},error} = await client.auth.getSession();
-  if(error||!session?.access_token)throw Error("Phiên đăng nhập chưa sẵn sàng");
+  if(error)throw Error("Không kiểm tra được phiên đăng nhập; vui lòng thử lại sau khi trang tải xong.");
+  if(!session?.access_token)throw Error(client===parent
+    ? "Chưa có phiên Admin. Hãy mở nút Sign in trong email ở đúng trình duyệt/cửa sổ đã yêu cầu Magic Link, quay về trang AURA STUDY rồi thử lại."
+    : "Chưa có phiên Student. Hãy tạo phiên Student thử nghiệm trước khi ghép đôi hoặc kiểm tra trạng thái.");
   const response=await fetch(cfg.gateway,{method:"POST",cache:"no-store",headers:{
     "apikey":cfg.key,"Authorization":"Bearer "+session.access_token,
     "Content-Type":"application/json"
