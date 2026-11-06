@@ -32,7 +32,7 @@
     {
       "id": "ANONYMOUS_AUTH_ABUSE",
       "status": "OPEN",
-      "reason": "STAGING Phase3F-A: Admin and anonymous CAPTCHA negative tests PASS; Auth Rate Limits reviewed. New read-only SQL unpaired RLS preflight 9/9 zero (7 nonempty seeded objects); positive single-use anonymous signup and browser JWT/RLS harness committed but NOT YET RUN. Account lifecycle audit dry-run baseline 0 tagged tests, 5 Auth users. Positive browser E2E, post-test audit, abuse/429 monitoring and independently approved production policy still OPEN.",
+      "reason": "Phase3F-A STAGING ACCEPTED: Admin CAPTCHA positive + OTP negatives 2/2; Student anonymous CAPTCHA negatives 2/2; positive Turnstile anonymous signInAnonymously successful, Auth is_anonymous verified and 9/9 real-browser count-only RLS zero (7 seeded, 2 empty). Read-only audit confirms 5->6 Auth users, 4->5 anonymous, exactly 1 tagged test account, no device pairing or Learning Events, original active Student still 1. Rate Limits dashboard inventory reviewed. RELEASE BLOCKERS still OPEN: 429/abuse monitoring, populated graded/outcomes isolation, test-account 30-day lifecycle/cleanup review, production independent approvals.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
