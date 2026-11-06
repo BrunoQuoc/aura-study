@@ -71,7 +71,7 @@ Three fabricated scenarios:
 2. **P1** — a tagged test identity receives unexpected device pairing.
 3. **P1** — Auth server 5xx appears.
 
-The offline policy proposes escalation and preserves evidence. It intentionally makes **zero Auth calls, database writes, session mutations, account deletions or outbound notifications**. This proves the logic of the draft tabletop only, not actual incident readiness. The operator must run the browser page once and return a screenshot of the result panel; expected **3/3 PASS**.
+The offline policy proposes escalation and preserves evidence. It intentionally makes **zero Auth calls, database writes, session mutations, account deletions or outbound notifications**. This proves the logic of the draft tabletop only, not actual incident readiness. The operator screenshot confirms **3/3 PASS**. This verifies mock-only tabletop handling, not alert delivery.
 
 ### 6. Phase 3F-B2 acceptance
 
@@ -80,7 +80,7 @@ The offline policy proposes escalation and preserves evidence. It intentionally 
 | Read-only STAGING baseline | SQL and Log Explorer aggregates | **PASS** |
 | Severity / response playbook draft | Version-controlled policy and runbook | **IMPLEMENTED, OWNER REVIEW OPEN** |
 | Safe tabletop source tests | Pure JS tests and static page | **IMPLEMENTED** |
-| Tabletop browser run | 3/3 screenshot | **PENDING** |
+| Tabletop browser run | Operator screenshot: 3/3 | **PASS — MOCK ONLY** |
 | Sanitized incident issue intake | Issue #13 created and re-found | **PASS — TICKET INBOX ONLY** |
 | Real email/push/automated alert delivery | A named recipient acknowledges receipt | **OPEN** |
 | Primary/backup monitoring ownership | Two named accounts/roles explicitly accept | **OPEN** |
@@ -94,3 +94,8 @@ The offline policy proposes escalation and preserves evidence. It intentionally 
 The one Phase3F-A anonymous test user remains under manual 30-day review ([Issue #11](https://github.com/BrunoQuoc/aura-study/issues/11)) due **2026-12-06 07:14 UTC (14:14 Vietnam time)**. It has no device/event links, but prior audits found one Auth session and refresh token. No deletion or session revocation authorized.
 
 Other references: [Phase 3F-B tracker #12](https://github.com/BrunoQuoc/aura-study/issues/12), [Phase 3F release gates](https://github.com/BrunoQuoc/aura-study/blob/main/release/phase3f-production-gates.json), [Supabase Log Drains](https://supabase.com/docs/guides/observability/log-drains).
+
+
+### 8. Operator browser tabletop acceptance
+
+2026-11-06: Operator screenshot shows **3/3 PASS** for P0 unpaired-data exposure, P1 unexpected test-user pairing and P1 Auth 5xx in a static STAGING rehearsal. Each case reports zero Auth API calls, zero database writes and no automatic deletion. This is **mock-only** acceptance. The result also explicitly states **actual alert delivery not verified** and **monitoring owner unassigned**. No real incident, human notification acknowledgement, or on-call readiness is established. PRODUCTION NO-GO.
