@@ -15,10 +15,10 @@ const {
 }=challenge;
 const config=configModule.AURA_AUTH_SECURITY;
 
-test("STAGING leaves server CAPTCHA activation gated until coordinated rollout",()=>{
+test("STAGING frontend Turnstile enabled; server rollout remains independently gated",()=>{
   assert.equal(config.environment,"STAGING");
-  assert.equal(config.captchaMode,"disabled");
-  assert.equal(config.turnstileSiteKey,"");
+  assert.equal(config.captchaMode,"turnstile");
+  assert.match(config.turnstileSiteKey,/^[A-Za-z0-9_-]{12,120}$/);
   assert.equal(config.allowCreateAdminAuthUser,false);
   assert.equal(assertAuthSecurityConfig(config),true);
 });
@@ -41,7 +41,7 @@ test("unsafe redirection rejected; official and localhost accepted",()=>{
 });
 
 test("Turnstile mode without site key fails closed",()=>{
-  assert.throws(()=>createCaptchaAdapter({...config,captchaMode:"turnstile"}),
+  assert.throws(()=>createCaptchaAdapter({...config,captchaMode:"turnstile",turnstileSiteKey:""}),
     /TURNSTILE_SITE_KEY_MISSING_OR_INVALID/);
 });
 
@@ -53,7 +53,7 @@ test("Unknown mode or enabled Admin auto-signup fails closed",()=>{
 });
 
 test("when disabled, no SDK or token is required",async()=>{
-  const adapter=createCaptchaAdapter(config);
+  const adapter=createCaptchaAdapter({...config,captchaMode:"disabled"});
   assert.deepEqual(await adapter.init(),{enabled:false});
   assert.equal(adapter.tokenFor("admin"),null);
   assert.equal(adapter.tokenFor("student"),null);
