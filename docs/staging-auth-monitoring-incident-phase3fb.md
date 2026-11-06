@@ -111,10 +111,15 @@ Full evidence: `docs/staging-auth-monitoring-baseline-phase3fb1.md`. Monitoring 
 
 **B1 browser evidence:** 4/4 offline 429 mock PASS, 0 real Auth API requests, 0 retries, 0 new users. The second B1 log snapshot ~10 minutes later was unchanged; no real 429 evidence.
 
-**B2 implementation:** three draft tabletop cases (P0 unpaired learner exposure, P1 unexpected test-identity pairing, P1 Auth 5xx) have pure decision code, a STAGING-only browser harness and manual GitHub Actions contract tests. Development source/pure-function checks **19/19 PASS**, but a user browser screenshot of the tabletop is still PENDING. All actions are simulated with 0 Auth API calls, 0 database writes and 0 automatic deletion.
+**B2 implementation:** three draft tabletop cases (P0 unpaired learner exposure, P1 unexpected test-identity pairing, P1 Auth 5xx) have pure decision code, a STAGING-only browser harness and manual GitHub Actions contract tests. Development source/pure-function checks **19/19 PASS**, and the operator's browser screenshot now confirms **3/3 PASS**. All actions are simulated with 0 Auth API calls, 0 database writes and 0 automatic deletion.
 
 **Incident inbox delivery verified:** synthetic, sanitized GitHub Issue [#13](https://github.com/BrunoQuoc/aura-study/issues/13) was created and found through the GitHub issue search. This proves that a ticket was persisted in GitHub; it does NOT prove delivery of a notification to a human, a live Supabase alert, or an automated on-call system. A sanitized issue form was added under `.github/ISSUE_TEMPLATE/aura-staging-incident.yml`.
 
 **Ownership:** `release/phase3fb2-monitoring-ownership.json` has **primary owner UNASSIGNED**, **backup UNASSIGNED**, **no approved monitoring cadence**, and **live alerts OFF**. These must be explicitly accepted before operational readiness can be declared. Tracking and evidence: `docs/staging-auth-incident-readiness-phase3fb2.md`; GitHub Issue [#12](https://github.com/BrunoQuoc/aura-study/issues/12).
 
 **Release:** Alerting and Incident Response, Anonymous Auth Abuse, and all other incomplete production gates remain OPEN; **PRODUCTION NO-GO**.
+
+
+### Phase 3F-B2 operator tabletop acceptance — 2026-11-06
+
+User-supplied GitHub Pages screenshot verifies **3/3 PASS** across P0 unpaired learner exposure, P1 unintended test-user pairing and P1 Auth 5xx; zero Auth API requests, zero database writes, zero auto deletion. This accepts only the *mock tabletop browser test*. The same screenshot explicitly labels actual alert delivery NOT VERIFIED and monitoring owner UNASSIGNED. Issue #13 is a sanitized ticket receipt only, not an email/push notification or human acknowledgement. Retain production alerting and incident-response gate OPEN and PRODUCTION NO-GO. Reference: `docs/staging-auth-incident-readiness-phase3fb2.md`.
