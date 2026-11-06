@@ -60,7 +60,7 @@
     {
       "id": "RETENTION_AND_CLEANUP",
       "status": "OPEN",
-      "reason": "STAGING Phase3F-A test account inventoried (1 tagged anonymous, no device/event links, 1 Auth session and 1 refresh token); operator 30-day manual review due 2026-12-06 07:14 UTC. Retention classification, approved deletion procedure, evidence preservation/backups and owner/reviewer signoff still OPEN; no automatic deletion.",
+      "reason": "STAGING Phase3F-A test account inventoried (1 tagged anonymous, no device/event links, 1 Auth session and 1 refresh token); operator 30-day manual review due 2026-12-06 07:14 UTC. Retention classification, approved deletion procedure, evidence preservation/backups and owner/reviewer signoff still OPEN; no automatic deletion. Tracked manually in https://github.com/BrunoQuoc/aura-study/issues/11 (no automatic deletion).",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
