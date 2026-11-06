@@ -293,3 +293,17 @@ The operator supplied two screenshots from STAGING:
 Next operator step: open the single-use link **within the same browser profile where the Magic Link was requested** before expiry, then return to the STAGING login page and run **Kiểm tra và kích hoạt quyền Admin**. Report only success/failure text with secrets, emails, tokens and pairing codes redacted. Avoid asking for or sharing the sign-in link; do not generate unnecessary extra magic-link requests.
 
 Separate server-side negative-token rejection and fresh anonymous Student onboarding tests still remain outstanding. `ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION` release gates stay OPEN. **PRODUCTION NO-GO.**
+
+---
+
+## 21. Admin session not ready after Magic Link request — 2026-11-06
+
+The operator supplied a STAGING login screenshot showing both Turnstile widgets successful but the Admin action returned `Phiên đăng nhập chưa sẵn sàng`. In the login source this message came from `action(parent,"bootstrap_parent")` after `parent.auth.getSession()` returned no session access token. This is a **missing Admin session**, not evidence of CAPTCHA failure or failed RLS.
+
+The current login source uses `flowType:"pkce"` and `detectSessionInUrl:true` for the parent Supabase client. Supabase PKCE requires the same browser storage context holding the code verifier when redeeming a magic link; links are single-use and the code expires quickly.
+
+Likely next diagnostic is whether the email's **Sign in** link was actually clicked, whether it opened in the **same browser profile** as the original request, and whether it redirected to the exact STAGING login path. The screenshot alone cannot distinguish these possibilities. Never request or share the sign-in URL, query/hash tokens, OTP or session JWT. If the link was consumed/expired, request one new Magic Link in a single browser profile and open it there.
+
+Code change: improved the no-session message to explain what to do for Admin vs Student; no new Auth calls or session storage changes. The Admin PKCE/session exchange logic and server CAPTCHA/RLS settings were left unchanged.
+
+Acceptance remains **Admin Magic Link delivery PASS; Admin post-link session and bootstrap authorization PENDING**. Production remains NO-GO.
