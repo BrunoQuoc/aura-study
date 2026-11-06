@@ -368,3 +368,17 @@ Evidence from the supplied screenshot:
 **Next bounded acceptance:** validate that `signInAnonymously` rejects a missing/invalid CAPTCHA token **without creating users**, then plan a single approved temporary Student positive signup and cleanup lifecycle if required. Review real STAGING Auth rate limits. Do not alter the existing paired Student or create pairing codes just to repeat the Admin test.
 
 **Release remains PRODUCTION NO-GO.**
+
+---
+
+## 25. Anonymous Student CAPTCHA negatives & rate limits — implementation
+
+**Date:** 2026-11-06. **Status: harness delivered, NOT yet executed by the operator.** No production promotion.
+
+A dedicated STAGING-only browser page `auth/phase3fa-student-captcha-negative.html` and pure policy file `auth/phase3fa-anonymous-captcha-policy.js` have been committed. The page uses `supabase.auth.signInAnonymously()` with a deliberately invalid CAPTCHA token first, followed by a missing token only if the first request returns `captcha_failed`. Strict classification counts only explicit CAPTCHA rejection as PASS; 429/rate-limit and unrelated errors are inconclusive. A successful anonymous sign-in is a FAIL and **could create one durable Auth user**, requiring human review. The suite is opt-in, one-shot, fail-closed and avoids the original paired Student session.
+
+An offline unit test `tests/phase3fa-anonymous-captcha.test.mjs` was added to the manual-only GitHub workflow. No actual browser/Auth negative request has been executed by the assistant because the connected Supabase tools do not expose this Auth client operation. Baseline before UI test: five Auth accounts, four anonymous, one active device, 13 learning events, no attempts.
+
+Supabase official Rate Limits documentation identifies anonymous sign-in, verify and token-refresh protections as IP-scoped and not customizable via the usual dashboard controls, while OTP limits and per-user resend interval are customizable. Actual project-specific values have **not** been read in this session. Review Authentication → Rate Limits directly; collect a redacted screenshot, not an access token or rate-limit stress traffic. Documented 429 alone is not CAPTCHA verification.
+
+Full operator runbook: `docs/staging-auth-anonymous-captcha-ratelimits-phase3fa.md`. Both anonymous Student negative verification and Rate Limits configuration inventory remain PENDING. The existing `ANONYMOUS_AUTH_ABUSE` gate stays OPEN. Leaked-password warning is still plan-gated, and Production remains NO-GO.
