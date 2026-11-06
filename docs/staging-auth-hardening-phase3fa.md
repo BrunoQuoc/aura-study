@@ -430,3 +430,17 @@ New files: auth/phase3fa-positive-unpaired-policy.js, auth/phase3fa-positive-unp
 Read-only lifecycle audit SQL run **before** user browser test: 5 total Auth users, 4 anonymous, 1 paired Student device, 13 Learning Events, 0 attempts, and **0 tagged Phase3F-A positive test accounts**. The next authorized operator step is one browser signup in a separate private profile and a screenshot of only the result panel, followed by independent database count/dependency reconciliation.
 
 **PRODUCTION NO-GO.** Anonymous abuse gate remains OPEN until positive browser evidence, retention reconciliation, monitoring and release governance requirements are fulfilled. Leaked-password control remains plan-gated.
+
+---
+
+## 28. Positive Anonymous Signup / Unpaired RLS browser E2E — 2026-11-06
+
+**ACCEPTED (STAGING):** Operator screenshot of one-time browser test shows Turnstile Success, signed-in anonymous Supabase user verified through Auth server (`is_anonymous=true`) and nine count-only RLS sources all returning PASS/zero visible rows. Seven sources have seeded data; Attempts and Verified Outcomes have no seed records and cannot be counted as full nonempty-isolation coverage.
+
+**Independent Supabase database reconciliation** after the screenshot: total Auth users **5 → 6**, anonymous users **4 → 5**, tagged Phase3F-A positive accounts **0 → 1**. The new tagged account's recorded creation timestamp is 2026-11-06 07:14 UTC. Original active paired Student devices remain **1**; the tagged test account has **0 device records** (including historical revoked) and **0 Learning Events**. Total Learning Events **13**, Attempts **0**, households **1**, learners **1**, content items **2**.
+
+**Data governance:** The newly created anonymous user remains on the STAGING Auth server. Its test metadata is an editable inventory hint, never an authorization or sole deletion basis. Lifecycle review is manual after 30 days, with separately approved cleanup only after confirming exact identity, sessions, dependencies and retention requirements. No Auth user deletion, device revocation, event mutation or pairing occurred during this audit.
+
+**Limits:** Both negative anonymous CAPTCHA tests and this positive anonymous browser test now PASS on STAGING. Rate Limits configuration has been inventoried, but threshold/429 enforcement and abuse monitoring are untested; graded Attempts/Verified Outcomes need populated negative-isolation evidence; leaked-password protection remains plan-restricted. Do NOT clear the overall `ANONYMOUS_AUTH_ABUSE` gate. **PRODUCTION NO-GO**.
+
+Detailed report: `docs/staging-auth-positive-unpaired-phase3fa.md`.
