@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: "20"
       - name: No-network tabletop policy tests
-        run: node --test tests/phase3fb2-incident-drill.test.mjs
+        run: node --test tests/phase3fb2-incident-drill.test.mjs tests/phase3fb2-ownership-receipt.test.mjs
       - name: Verify release remains NO-GO
         run: |
           node scripts/phase3f-release-gate.mjs --summary
