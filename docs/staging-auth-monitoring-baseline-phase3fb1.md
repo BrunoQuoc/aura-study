@@ -73,9 +73,9 @@ Send a screenshot of the result panel only. No email/JWT/OTP, Supabase API keys 
 - [x] PII-free 24h Auth log baseline queried and committed as a reproducible aggregate query.
 - [x] Read-only Auth + learner event inventory checked without mutation.
 - [x] Safe 429 simulation and offline contract suite committed; 16/16 local checks PASS.
-- [ ] GitHub Pages browser evidence for `4/4 PASS`.
+- [x] GitHub Pages browser evidence for `4/4 PASS` (operator screenshot).
 - [ ] Integrate reviewed 429 handling into the real AURA STAGING Auth client (separate guarded change and regression test).
-- [ ] Second **later** timestamped Auth snapshot reviewed against baseline.
+- [x] Second snapshot read approximately ten minutes later: 349 rows and identical Auth errors. A repeatability check, not operational monitoring.
 - [ ] Named monitoring owner, independent backup and reporting cadence accepted.
 - [ ] Delivered alert and/or approved interim manual-monitoring exception.
 - [ ] Real Supabase 429 threshold test only with an independently approved bounded plan.
@@ -93,3 +93,10 @@ References:
 - https://supabase.com/docs/guides/auth/rate-limits
 - https://supabase.com/docs/guides/auth/debugging/error-codes
 - https://supabase.com/docs/guides/observability/log-drains
+
+
+### 6. B1 browser result accepted
+
+Operator screenshot confirms **4/4 PASS** in mock-only STAGING browser: Admin OTP, anonymous signup, refresh token and CAPTCHA-vs-429 differentiation. Simulated flows report no Auth API calls, no automatic retries and no new accounts. This does not certify actual Supabase 429 or live login UI integration.
+
+A second Auth snapshot at 2026-11-06 08:02:41 UTC had the same 349 rows as 07:52:51 UTC and no new underlying log timestamp. B2 ownership and notification receipt remain OPEN. Tracking: [Issue #12](https://github.com/BrunoQuoc/aura-study/issues/12). PRODUCTION NO-GO.
