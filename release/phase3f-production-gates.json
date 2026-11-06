@@ -81,7 +81,7 @@
     {
       "id": "ALERTING_AND_INCIDENT_RESPONSE",
       "status": "OPEN",
-      "reason": "Phase3F-B2 STAGING: read-only Auth snapshot (4 captcha_failed, 0 Auth 429/5xx; 6 Auth users, 1 active paired Student) and safe 3-scenario tabletop code verified. Synthetic sanitized GitHub incident ticket created and re-found (#13), confirming issue inbox delivery only. NOT accepted: designated primary/backup owner, actual recipient acknowledgement, live alert pipeline, approved cadence, incident drill browser result, real 429 threshold test. Production NO-GO.",
+      "reason": "Phase3F-B2 STAGING: operator screenshot confirms synthetic incident tabletop 3/3 PASS (P0 unpaired RLS, P1 unexpected test-user pairing, P1 Auth 5xx), zero Auth calls/writes/deletions; sanitized GitHub issue #13 persisted. Actual alert delivery NOT VERIFIED, primary/backup owners UNASSIGNED, monitoring cadence/response SLA unapproved, real 429/alert escalation not tested. Production NO-GO.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
