@@ -183,3 +183,19 @@ Frontend STAGING configuration `auth/phase3fa-security-config.js` was changed fr
 Required operator evidence: open `https://brunoquoc.github.io/aura-study/aura-staging-login.html` in the existing STAGING browser and confirm both CAPTCHA widgets render (Admin and Student); capture only the UI with any email/OTP/pairing codes obscured. Do not submit a fresh anonymous login or Admin OTP merely to test the widget before rollout planning.
 
 Only after frontend acceptance: enable Cloudflare Turnstile under Supabase STAGING → Authentication → Attack Protection using the **new private Secret Key in Supabase only**, then test valid/invalid challenges with temporary test accounts and document rollback. `ANONYMOUS_AUTH_ABUSE` production gate remains OPEN until server proof and Auth throttling review.
+
+---
+
+## 14. Turnstile invalid sitekey — STAGING safe rollback
+
+The operator's new GitHub Pages screenshot showed **Cloudflare Invalid sitekey** on both Admin and Student widgets. The prior Phase3F-A UI rendered its widgets using the configured public Site Key, but the actual Cloudflare challenge rejected it. Causes to check include a transcription error when copying the public Site Key from a screenshot, a disabled/removed key, or a widget hostname mismatch. Cloudflare distinguishes Invalid sitekey (110100 / 400020), Sitekey not found (110110), and Unauthorized domain (110200). Do not attribute an exact error code without browser evidence.
+
+**Safe code response completed:** `auth/phase3fa-security-config.js` was rolled back to `captchaMode: disabled`, retaining the public Site Key value for diagnostics. **No Supabase Auth server CAPTCHA setting was enabled or changed.** The existing Admin/Student Auth sessions, database RLS and original paired Student were not modified.
+
+Added `auth/phase3fa-turnstile-diagnostic.html`, a standalone page which renders only a Cloudflare challenge, without accessing Supabase Auth or writing new users/events. It accepts a **PUBLIC Site Key** pasted directly from Cloudflare Dashboard and displays Cloudflare client error codes or challenge success. It does not print or persist challenge tokens. Never paste the Turnstile Secret Key.
+
+**Next required evidence:** operator copies the actual PUBLIC Site Key by clicking the copy control in Cloudflare Turnstile widget settings and pastes it into the diagnostic page; send screenshot of the diagnostic output **without displaying the key**. Once the correct public key is confirmed, replace the GitHub configuration from the authoritative copy, rerun tests, activate frontend widgets and repeat the Admin/Student browser rendering check. Only after both pass should the rotated Secret Key be entered in the **private** Supabase STAGING Attack Protection UI and server CAPTCHA be enabled.
+
+Documentation: https://developers.cloudflare.com/turnstile/troubleshooting/client-side-errors/error-codes/
+
+Release gates `ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION` remain OPEN; production NO-GO.
