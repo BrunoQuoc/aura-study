@@ -382,3 +382,33 @@ An offline unit test `tests/phase3fa-anonymous-captcha.test.mjs` was added to th
 Supabase official Rate Limits documentation identifies anonymous sign-in, verify and token-refresh protections as IP-scoped and not customizable via the usual dashboard controls, while OTP limits and per-user resend interval are customizable. Actual project-specific values have **not** been read in this session. Review Authentication → Rate Limits directly; collect a redacted screenshot, not an access token or rate-limit stress traffic. Documented 429 alone is not CAPTCHA verification.
 
 Full operator runbook: `docs/staging-auth-anonymous-captcha-ratelimits-phase3fa.md`. Both anonymous Student negative verification and Rate Limits configuration inventory remain PENDING. The existing `ANONYMOUS_AUTH_ABUSE` gate stays OPEN. Leaked-password warning is still plan-gated, and Production remains NO-GO.
+
+---
+
+## 26. Anonymous Student CAPTCHA negative 2/2 PASS and Auth rate limits reviewed — 2026-11-06
+
+**Operator evidence received:** STAGING anonymous Student negative CAPTCHA harness output shows **2/2 PASS**, specifically `captcha_failed` from the Supabase Auth server for both an intentionally invalid token and a missing token. This is live evidence for the `signInAnonymously()` negative enforcement path. It does not verify a new Student sign-in using a valid CAPTCHA token.
+
+The second screenshot captures Supabase Authentication → Rate Limits values for the STAGING project:
+
+| Setting | Actual screenshot value |
+|---|---:|
+| Email sending | 2 emails/hour |
+| SMS sending | 30 SMS/hour |
+| Token refresh | 150 requests/5 minutes/IP |
+| Token verification | 30 requests/5 minutes/IP |
+| Anonymous sign-ins | 30 requests/hour/IP |
+| Non-anonymous signup/sign-in | 30 requests/5 minutes/IP |
+| Web3 signup/sign-in | 30 requests/5 minutes/IP |
+| Minimum per-user email interval | 60 seconds (UI labels custom SMTP only) |
+| IP Address Forwarding | OFF |
+
+**Independent read-only Supabase SQL verification after screenshots:** 5 Auth accounts (4 anonymous), 1 household, 1 learner, 1 active Student device, 13 Learning Events and 0 attempts. No unplanned Auth user or event appeared, and no cleanup or revocation was performed.
+
+**Evidence interpretation:** Anonymous CAPTCHA negative E2E **PASS**, Auth Rate Limits *configuration inventory* **REVIEWED**. Actual 429 threshold enforcement, security monitoring and rate-limit capacity testing **NOT EXECUTED**. 2 emails/hour is a restrictive built-in SMTP quota for repeated Admin Magic Link tests; do not stress email sending. Direct GitHub Pages browser calls using a publishable key do not require changing the `IP Address Forwarding` setting.
+
+**Documentation correction:** Recent Supabase Auth Rate Limits docs (updated 2026-10-26) show configurability for anonymous signup and other IP-based limits in supported project settings. Earlier notes in Section 25 describing these limits as categorically non-customizable are outdated. Treat this Section 26 and the updated dedicated runbook as authoritative. No settings were changed in the Dashboard by the assistant.
+
+**Still OPEN:** valid-CAPTCHA anonymous signup positive E2E with one temporary unpaired test identity under an approved account lifecycle, unpaired RLS denial, attack monitoring / 429 enforcement strategy, and leaked-password-protection Pro-plan disposition. `ANONYMOUS_AUTH_ABUSE` stays OPEN, and **PRODUCTION NO-GO**.
+
+Detailed acceptance: `docs/staging-auth-anonymous-captcha-ratelimits-phase3fa.md`.
