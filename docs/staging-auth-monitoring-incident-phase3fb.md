@@ -1,7 +1,7 @@
 # AURA STUDY — PHASE 3F-B
 ## Auth Abuse Monitoring & Incident Response Readiness
 
-**Status (2026-11-06): B1 monitoring baseline captured; offline 429 mock implemented; browser confirmation and operational alerting still PENDING.**  
+**Status (2026-11-06): B1 mock browser 4/4 PASS; B2 offline tabletop and sanitized GitHub issue intake implemented; monitoring owner and real alert delivery PENDING.**  
 **Environment: STAGING ONLY.**  
 **Production approval: NO-GO.**
 
@@ -103,3 +103,18 @@ A reproducible **rolling-24h Auth log snapshot** was queried on Supabase STAGING
 For a separate user browser acceptance test, open `https://brunoquoc.github.io/aura-study/auth/phase3fb1-safe-429-simulation.html` and run once; collect only a screenshot of the expected **4/4 PASS** result. Browser proof remains PENDING, as do later Auth log comparison, owner/cadence approval, real 429 enforcement and delivered alert evidence.
 
 Full evidence: `docs/staging-auth-monitoring-baseline-phase3fb1.md`. Monitoring SQL: `supabase/audits/aura_phase3fb1_auth_monitor_24h.sql`. Phase3F-B issue #12 remains open; all production release controls remain unchanged and **NO-GO**.
+
+
+---
+
+### Phase 3F-B2 implementation checkpoint — 2026-11-06
+
+**B1 browser evidence:** 4/4 offline 429 mock PASS, 0 real Auth API requests, 0 retries, 0 new users. The second B1 log snapshot ~10 minutes later was unchanged; no real 429 evidence.
+
+**B2 implementation:** three draft tabletop cases (P0 unpaired learner exposure, P1 unexpected test-identity pairing, P1 Auth 5xx) have pure decision code, a STAGING-only browser harness and manual GitHub Actions contract tests. Development source/pure-function checks **19/19 PASS**, but a user browser screenshot of the tabletop is still PENDING. All actions are simulated with 0 Auth API calls, 0 database writes and 0 automatic deletion.
+
+**Incident inbox delivery verified:** synthetic, sanitized GitHub Issue [#13](https://github.com/BrunoQuoc/aura-study/issues/13) was created and found through the GitHub issue search. This proves that a ticket was persisted in GitHub; it does NOT prove delivery of a notification to a human, a live Supabase alert, or an automated on-call system. A sanitized issue form was added under `.github/ISSUE_TEMPLATE/aura-staging-incident.yml`.
+
+**Ownership:** `release/phase3fb2-monitoring-ownership.json` has **primary owner UNASSIGNED**, **backup UNASSIGNED**, **no approved monitoring cadence**, and **live alerts OFF**. These must be explicitly accepted before operational readiness can be declared. Tracking and evidence: `docs/staging-auth-incident-readiness-phase3fb2.md`; GitHub Issue [#12](https://github.com/BrunoQuoc/aura-study/issues/12).
+
+**Release:** Alerting and Incident Response, Anonymous Auth Abuse, and all other incomplete production gates remain OPEN; **PRODUCTION NO-GO**.
