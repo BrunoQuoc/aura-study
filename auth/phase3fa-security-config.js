@@ -12,7 +12,9 @@
  *
  * STAGING frontend: direct Cloudflare-copied public Site Key verified through
  * standalone diagnostic; now show both Admin and Student challenges.
- * Supabase Auth server-side CAPTCHA is separately controlled and NOT yet enabled.
+ * Supabase server CAPTCHA is independently controlled in its Auth Dashboard;
+ * STAGING server enforcement was confirmed by prior Admin and anonymous
+ * negative CAPTCHA tests. Do not infer server settings from this file.
  */
 export const AURA_AUTH_SECURITY = Object.freeze({
   environment: "STAGING",
