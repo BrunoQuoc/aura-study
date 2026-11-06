@@ -32,7 +32,7 @@
     {
       "id": "ANONYMOUS_AUTH_ABUSE",
       "status": "OPEN",
-      "reason": "Phase3F-A STAGING closure review completed: Admin and anonymous positive/negative CAPTCHA E2E PASS, unpaired browser RLS 9/9 zero, transient graded attempt/outcome isolation Admin 1/1 vs unpaired 0/0 with rollback; 24h auth log inspection shows 4 captcha_failed and no observed 429/5xx. Tagged test Auth identity inventoried with no pairing or events; 1 session and 1 refresh token remain, 30-day manual review due 2026-12-06 07:14 UTC. OPEN for enforcement and delivered alerts, abuse owner, production signoff and retention/cleanup approval.",
+      "reason": "Phase3F-A STAGING CAPTCHA and unpaired RLS E2E PASS. Phase3F-B1 monitoring baseline captured; safe mock 429 logic implemented but no real 429, alert delivery or independent abuse/incident readiness signoff. One tagged anonymous test account retains 1 Auth session and 1 refresh token; 30-day human review due 2026-12-06 07:14 UTC. Production gate OPEN.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
@@ -53,7 +53,7 @@
     {
       "id": "REAL_FAULT_INJECTION",
       "status": "OPEN",
-      "reason": "Test token expiration, device revocation, real 429/503, network lost after commit, offline storage eviction.",
+      "reason": "Phase3F-B1 pure mock HTTP 429 for Admin OTP, anonymous signup and token refresh passes source checks, with 0 Auth network requests, 0 retries and 0 new users. Real Auth UI integration, real Supabase 429/503, token expiry/device revocation, network loss after commit and offline eviction remain unverified.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
@@ -81,7 +81,7 @@
     {
       "id": "ALERTING_AND_INCIDENT_RESPONSE",
       "status": "OPEN",
-      "reason": "Phase3F-A read-only Supabase auth_logs/edge_logs observability verified (4 captcha_failed, 0 observed 429, 0 Auth 5xx last 24h) and aggregate monitor query committed. OPEN for configured alerts, recipients/on-call ownership, threshold validation, escalation and 429 response exercise.",
+      "reason": "STAGING Phase3F-B1: timestamped read-only 24h Auth baseline captured (4 captcha_failed, 2 OTP HTTP 400, 2 signup HTTP 400, 0 observed 429, 0 Auth 5xx; 6 Auth users and 1 active Student). Reproducible aggregate SQL and safe offline mock committed. Still OPEN: monitoring owner, later comparative snapshot, actual alert delivery and incident escalation, or formally approved manual monitoring exception.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
