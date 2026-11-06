@@ -43,12 +43,12 @@ https://supabase.com/dashboard/project/ufqzuowjhdqpydqvcsob/auth/rate-limits
 
 | Protection | Endpoint | Supabase documentation | Config evidence |
 |---|---|---|---|
-| Anonymous sign-ins | `/auth/v1/signup` (without email/phone) | IP-based; October 26, 2026 docs indicate **customizable**; verify actual Dashboard values and limits before changes. | **SCREENSHOT REVIEWED (30 requests/hour/IP)** |
+| Anonymous sign-ins | `/auth/v1/signup` (without email/phone) | IP-based; newer docs indicate configurable but no change has been approved. | **30 requests/hour/IP** |
 | OTP sends | `/auth/v1/otp` | Subject to signup/sign-in and email quota. Actual provider settings documented separately. | **30 requests/5 min/IP for non-anonymous signup/sign-in; 2 built-in emails/hour** |
 | OTP/email resend cooldown | `/auth/v1/otp` | 60-second field shown as applying with Custom SMTP; exact runtime interpretation requires provider review. | **60 seconds (UI field)** |
 | Built-in outbound email quota | `/auth/v1/signup`, `/auth/v1/recover`, etc. | Project-wide built-in quota; custom SMTP or send-email hook required to modify supported quota. | **2 emails/hour** |
 | Verification | `/auth/v1/verify` | IP-based; provider settings vary by project. | **30 requests/5 min/IP** |
-| Refresh token | `/auth/v1/token` | IP-based; documentation lists as **not customizable**. | **PENDING** |
+| Refresh token | `/auth/v1/token` | IP-based; newer docs indicate configurable; no change has been approved. | **150 requests/5 minutes/IP** |
 
 The Dashboard and provider configuration are the authoritative sources for current project-specific values, not generic documentation defaults. Connected Supabase tools in this session do **not** provide a read method for the Auth management configuration, and no access token for the Management API should be supplied to ChatGPT. A screenshot of the Rate Limits page with secrets/redacted account data is the next required evidence.
 
