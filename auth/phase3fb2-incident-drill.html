@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — Phase 3F-B2 Incident Drill (STAGING)</title>
+<style>
+:root{font:16px system-ui,-apple-system,Segoe UI,sans-serif;background:#f3f7fc;color:#173454}
+*{box-sizing:border-box}body{margin:0;padding:24px}
+main{max-width:900px;margin:auto}h1{font-size:1.65rem}h2{font-size:1.15rem}
+p,li{line-height:1.6}
+.notice{background:#fff7e8;border:1px solid #e3cc9c;border-radius:12px;padding:16px}
+.card{background:#fff;border:1px solid #d6e3f0;border-radius:14px;padding:20px;margin-top:16px}
+button{width:100%;padding:14px;border:0;border-radius:9px;background:#2478ad;color:#fff;font:700 1rem system-ui;cursor:pointer}
+button:disabled{opacity:.56}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eaf2fc;border-radius:9px;padding:14px;min-height:140px;font:.87rem/1.55 ui-monospace,Consolas,monospace}
+small{color:#5b7189}a{color:#206b9b}
+</style>
+</head>
+<body>
+<main>
+<h1>AURA STUDY — PHASE 3F-B2</h1>
+<p><strong>Monitoring Ownership, Alert Delivery & Incident Drill — STAGING</strong></p>
+<div class="notice">
+<strong>DIỄN TẬP OFFLINE — KHÔNG PHẢI CẢNH BÁO THẬT.</strong>
+Trang chỉ chạy ba tình huống tổng hợp bằng JavaScript. Không gửi Auth API,
+không truy cập Supabase, không gửi email/thông báo, không mở GitHub Issue,
+không sửa RLS, không thu hồi thiết bị và không xóa tài khoản.
+Các nhãn P0/P1 là đề xuất, chưa được người chịu trách nhiệm phê duyệt.
+</div>
+<section class="card">
+<h2>1. Chạy diễn tập phân loại và phản ứng</h2>
+<p>Mô phỏng (a) tài khoản chưa ghép đôi nhìn thấy learner, (b) tài khoản test
+bị ghép đôi ngoài ý muốn, và (c) xuất hiện Auth 5xx.
+Kiểm tra rằng quy trình dừng đúng thao tác rủi ro, bảo toàn bằng chứng tổng hợp
+và yêu cầu phê duyệt của người phụ trách.</p>
+<button id="run">Chạy 3 kịch bản diễn tập an toàn</button>
+<pre id="result" role="status" aria-live="polite">Chưa chạy. Không có thông báo hay yêu cầu mạng được gửi.</pre>
+<small>Đầu ra không chứa email, JWT, token, IP, User ID hoặc dữ liệu học.</small>
+</section>
+<section class="card">
+<h2>2. Bằng chứng gửi cảnh báo và sở hữu trách nhiệm</h2>
+<p>Diễn tập trên trình duyệt không xác minh được việc gửi cảnh báo.
+Kênh tiếp nhận dự kiến trên STAGING:
+<a href="https://github.com/BrunoQuoc/aura-study/issues/12"
+ target="_blank" rel="noopener noreferrer">GitHub Issue #12</a>.
+Cần người chịu trách nhiệm xác nhận đã nhìn thấy hồ sơ thử, chấp nhận quy trình,
+chọn kênh thông báo và chỉ định người dự phòng trước khi nghiệm thu alert delivery.</p>
+<p><strong>Owner:</strong> chưa được chỉ định.
+<strong>Backup:</strong> chưa được chỉ định.
+<strong>Live alert:</strong> chưa được kích hoạt.</p>
+</section>
+<section class="card">
+<h2>3. Ranh giới nghiệm thu</h2>
+<p><strong>PASS diễn tập:</strong> ba kịch bản có mức nghiêm trọng và các bước xử lý
+an toàn; 0 Auth API, 0 database writes, 0 auto deletion.</p>
+<p><strong>Chưa PASS:</strong> thông báo đã tới người phụ trách, ứng phó thật,
+kiểm chứng rate-limit 429, monitoring tự động và PRODUCTION.</p>
+</section>
+<script type="module">
+import {runTabletop} from "./phase3fb2-incident-policy.js";
+const btn=document.getElementById("run");
+const output=document.getElementById("result");
+const valid=location.origin==="https://brunoquoc.github.io" &&
+ location.pathname==="/aura-study/auth/phase3fb2-incident-drill.html";
+let attempted=false;
+if(!valid){btn.disabled=true;output.textContent="BLOCKED — Chỉ chạy trên GitHub Pages STAGING chính thức.";}
+btn.addEventListener("click",()=>{
+ if(!valid||attempted)return;
+ attempted=true;btn.disabled=true;
+ const report=runTabletop();
+ const lines=["AURA STUDY / PHASE 3F-B2 / SYNTHETIC ONLY"];
+ for(const item of report.cases){
+   lines.push("PASS — "+item.id+" | Severity "+item.severity+
+     " | "+item.action);
+   for(const step of item.steps)lines.push("  - "+step);
+   lines.push("  Auth API: "+item.authApiCalls+"; DB writes: "+item.databaseWrites+
+     "; auto-deletion: "+item.automaticAccountDeletion);
+ }
+ lines.push("KẾT LUẬN — "+(report.passed?"3/3 PASS: TABLETOP LOGIC":"TABLETOP FAIL"));
+ lines.push("ACTUAL ALERT DELIVERY: NOT VERIFIED; monitoring owner: UNASSIGNED");
+ lines.push("KHÔNG có yêu cầu Auth, không gửi email, không thông báo GitHub.");
+ output.textContent=lines.join("\n");
+});
+</script>
+</main>
+</body></html>
