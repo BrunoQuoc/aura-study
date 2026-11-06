@@ -10,11 +10,12 @@
  * (3) enable matching Supabase Auth server-side CAPTCHA using private secret
  * (4) test parent Magic Link and a fresh test Student anonymous session.
  *
- * This stays "disabled" until coordinated rollout is ready.
+ * Frontend Turnstile enabled for STAGING; Supabase server CAPTCHA remains separate.
+ * Do not enable Supabase CAPTCHA until both widgets are verified on GitHub Pages.
  */
 export const AURA_AUTH_SECURITY = Object.freeze({
   environment: "STAGING",
-  captchaMode: "disabled", // "disabled" | "turnstile"
+  captchaMode: "turnstile", // "disabled" | "turnstile"
   turnstileSiteKey: "0x4AAAAAAF0s6GoYAG1_04uG",
   allowCreateAdminAuthUser: false,
   magicLinkCooldownMs: 60_000
