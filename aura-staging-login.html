@@ -57,7 +57,7 @@ const captcha=createCaptchaAdapter(AURA_AUTH_SECURITY);
 let lastMagicLinkSentAt=0;
 captcha.init().then(({enabled})=>{
   byId("auth-security-status").textContent=enabled
-    ? "STAGING: Yêu cầu xác minh CAPTCHA trước khi đăng nhập mới."
+    ? "STAGING: Turnstile đã bật trên giao diện. CAPTCHA phía Supabase chưa được xác minh là đã bật."
     : "STAGING: CAPTCHA phía giao diện chưa được kích hoạt; chưa coi là biện pháp chống bot hoàn chỉnh.";
 }).catch(()=>{
   byId("auth-security-status").textContent="Cấu hình CAPTCHA chưa sẵn sàng. Tạm dừng tạo phiên mới.";
