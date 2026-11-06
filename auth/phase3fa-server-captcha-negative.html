@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — Phase 3F-A Server CAPTCHA Negative Tests</title>
+<style>
+:root{font:16px system-ui,sans-serif;color:#193454;background:#f3f7fc}
+*{box-sizing:border-box}body{margin:0;padding:22px}
+main{max-width:850px;margin:0 auto}
+h1{font-size:1.62rem}h2{font-size:1.18rem}
+p,li{line-height:1.65}
+.notice{padding:15px;border:1px solid #e8d4a5;background:#fff8e9;border-radius:13px}
+.card{background:white;border:1px solid #d4e3f1;border-radius:14px;padding:20px;margin-top:16px}
+label{display:block;font-weight:650;margin:12px 0 8px}
+input[type=email]{display:block;width:100%;border-radius:9px;border:1px solid #aebfd2;padding:13px;font:inherit}
+.consent{display:flex;gap:10px;align-items:start;font-weight:500}
+.consent input{margin-top:5px}
+button{background:#2477ad;color:white;border:0;border-radius:9px;padding:13px 16px;font-weight:700;width:100%;margin-top:14px;cursor:pointer}
+button:disabled{opacity:.55;cursor:default}
+pre{background:#eaf3fb;border-radius:9px;padding:14px;white-space:pre-wrap;overflow-wrap:anywhere;font:0.88rem/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;min-height:110px}
+small{color:#546d86}
+</style>
+</head>
+<body><main>
+<h1>AURA STUDY — PHASE 3F-A</h1>
+<p><strong>Server CAPTCHA — Negative Verification (STAGING)</strong></p>
+<div class="notice">
+<strong>Chỉ dành cho tài khoản Admin đã đăng ký trên STAGING.</strong>
+Bài thử gửi tối đa hai yêu cầu Magic Link tới Supabase:
+(1) token CAPTCHA cố ý sai; (2) không gửi token CAPTCHA.
+Bài thử chỉ PASS nếu Supabase trả lỗi <code>captcha_failed</code> cho từng yêu cầu.
+Không tạo Auth user mới vì <code>shouldCreateUser:false</code>.
+Nếu CAPTCHA trên server bị tắt hoặc cấu hình sai, tối đa hai email Magic Link
+có thể được gửi; bài thử sẽ dừng ngay khi phát hiện một yêu cầu không bị từ chối.
+Không sử dụng email học sinh, email lạ hoặc dữ liệu học thật.
+</div>
+<div class="card">
+<h2>Kiểm thử âm tính qua Supabase Auth thật</h2>
+<p>Không cần đăng nhập hay mở Magic Link. Không dùng Secret Key, JWT,
+mã ghép đôi hoặc tài khoản Student. Nếu vừa yêu cầu Magic Link, hãy đợi
+ít nhất 60 giây để tránh nhầm lỗi rate limit với CAPTCHA.</p>
+<label for="registered-admin">Email Admin đã đăng ký trên STAGING</label>
+<input id="registered-admin" type="email" autocomplete="off" autocapitalize="none"
+spellcheck="false" placeholder="Nhập trên thiết bị của anh; không gửi vào chat">
+<label class="consent" for="consent">
+<input id="consent" type="checkbox">
+<span>Tôi đồng ý chạy tối đa hai yêu cầu OTP thử nghiệm tới email Admin đã đăng ký,
+hiểu rằng nếu cấu hình server sai thì có thể nhận email mới. Không cần sử dụng email đó.</span>
+</label>
+<button id="run" disabled>Chạy 2 bài kiểm thử âm tính</button>
+<pre id="results" role="status" aria-live="polite">Chưa chạy. Không có yêu cầu Auth nào được gửi.</pre>
+<small>Chỉ hiển thị mã kết quả Auth, không bao giờ hiển thị địa chỉ email,
+OTP, URL đăng nhập, token hay chi tiết phản hồi chứa dữ liệu cá nhân.
+Trang chỉ chạy một lượt mỗi lần tải và không tự retry.</small>
+</div>
+<div class="card">
+<h2>Điều kiện nghiệm thu</h2>
+<ul>
+<li><strong>2/2 PASS:</strong> Supabase từ chối cả token sai và token bị thiếu với mã <code>captcha_failed</code>.</li>
+<li><strong>INCONCLUSIVE:</strong> lỗi <code>429</code>, kết nối hoặc mã khác — không tính PASS, không tự retry.</li>
+<li><strong>FAIL:</strong> server chấp nhận yêu cầu không có CAPTCHA hợp lệ; dừng, kiểm tra lại Auth Protection trên STAGING.</li>
+</ul>
+<p><small>Kết quả chỉ xác minh endpoint Admin Magic Link/OTP. Bài thử anonymous Student phải được nghiệm thu riêng với tài khoản thử có quy trình quản lý vòng đời rõ ràng. PRODUCTION luôn NO-GO cho tới khi các release gates khác đạt yêu cầu.</small></p>
+</div>
+<script type="module">
+import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/+esm";
+import {classifyCaptchaNegative,buildNegativeOtpRequest}
+ from "./phase3fa-negative-captcha-policy.js";
+
+const URL_SUPABASE="https://ufqzuowjhdqpydqvcsob.supabase.co";
+const PUBLIC_KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
+const LOGIN_REDIRECT="https://brunoquoc.github.io/aura-study/aura-staging-login.html";
+const emailField=document.getElementById("registered-admin");
+const consent=document.getElementById("consent");
+const button=document.getElementById("run");
+const results=document.getElementById("results");
+
+const onExpectedOrigin=location.origin==="https://brunoquoc.github.io" &&
+ location.pathname==="/aura-study/auth/phase3fa-server-captcha-negative.html";
+let attempted=false;
+function validEmail() {
+ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value.trim());
+}
+function updateButton(){
+ button.disabled=attempted || !onExpectedOrigin || !consent.checked || !validEmail();
+}
+emailField.addEventListener("input",updateButton);
+consent.addEventListener("change",updateButton);
+updateButton();
+if(!onExpectedOrigin)
+ results.textContent="BLOCKED — Chỉ chạy trên đường dẫn GitHub Pages STAGING chính thức.";
+
+function errorDisplay(error) {
+ if(!error)return "none";
+ const code=typeof error.code==="string"&&/^[a-z0-9_]{1,64}$/.test(error.code)
+  ?error.code:"unrecognized";
+ const status=Number.isInteger(error.status)?String(error.status):"n/a";
+ return code+" (HTTP "+status+")";
+}
+
+button.addEventListener("click",async()=>{
+ if(attempted||!onExpectedOrigin||!consent.checked||!validEmail())return;
+ attempted=true;button.disabled=true;consent.disabled=true;
+ const email=emailField.value.trim();
+ emailField.value="";emailField.disabled=true;
+ // Stateless isolated client. NEVER touches parent/student storage keys.
+ const client=createClient(URL_SUPABASE,PUBLIC_KEY,{
+   auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false,
+     flowType:"implicit"}
+ });
+ const lines=["STAGING / negative-only / no new Auth users / one-shot"];
+ let pass=0;
+ for(const kind of ["invalid","missing"]){
+   const label=kind==="invalid"?"1. INVALID CAPTCHA TOKEN":"2. MISSING CAPTCHA TOKEN";
+   lines.push(label+" — Đang kiểm tra...");
+   results.textContent=lines.join("\n");
+   try {
+     const args=buildNegativeOtpRequest(email,kind,LOGIN_REDIRECT);
+     const {error}=await client.auth.signInWithOtp(args);
+     const classification=classifyCaptchaNegative(error);
+     lines.pop();
+     if(classification.state==="PASS"){
+       pass++;
+       lines.push(label+" — PASS: captcha_failed (Auth server)");
+       continue;
+     }
+     const tag=classification.state==="FAIL"?"FAIL":"INCONCLUSIVE";
+     lines.push(label+" — "+tag+": "+classification.reason+
+       " / "+errorDisplay(error));
+     lines.push("ĐÃ DỪNG — không gửi thêm yêu cầu.");
+     break;
+   } catch(_){
+     lines.pop();
+     lines.push(label+" — INCONCLUSIVE: network_or_client_error");
+     lines.push("ĐÃ DỪNG — không tự retry.");
+     break;
+   }
+ }
+ // Do not persist or display email, tokens, links or any raw server message.
+ lines.push(pass===2?"KẾT LUẬN — 2/2 PASS: CAPTCHA SERVER NEGATIVE TEST"
+   :"KẾT LUẬN — CHƯA NGHIỆM THU ("+pass+"/2 PASS).");
+ lines.push("Bài thử KHÔNG tạo phiên Student, Learning Event hay bài làm.");
+ results.textContent=lines.join("\n");
+});
+</script>
+</main></body></html>
