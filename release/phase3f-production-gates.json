@@ -32,7 +32,7 @@
     {
       "id": "ANONYMOUS_AUTH_ABUSE",
       "status": "OPEN",
-      "reason": "Phase3F-A STAGING: Admin Turnstile positive Auth E2E PASS and OTP invalid/missing CAPTCHA 2/2 PASS. Anonymous Student invalid/missing CAPTCHA test page deployed to repo but live E2E still PENDING; anonymous-positive signup requires approved test account lifecycle. Auth Rate Limits dashboard values/enforcement and abuse alerting are PENDING. Do not infer production readiness.",
+      "reason": "STAGING Phase3F-A: Admin CAPTCHA positive E2E and OTP negative 2/2 PASS; anonymous Student invalid/missing CAPTCHA negative 2/2 PASS; read-only Rate Limits inventory completed (anonymous 30/h/IP, email 2/h, verify 30/5min/IP, refresh 150/5min/IP). Positive valid-CAPTCHA anonymous signup + unpaired RLS isolation, 429/abuse monitoring, governed temporary Auth-user lifecycle and production sign-off remain OPEN.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
