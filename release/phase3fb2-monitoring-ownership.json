@@ -45,5 +45,21 @@
   "rate_limit_429_server_e2e_confirmed": false,
   "production_release_approved": false,
   "synthetic_tabletop_browser_evidence": "Operator-supplied STAGING screenshot 2026-11-06; 3/3 PASS; zero Auth API, zero DB writes, no auto deletion; actual alert delivery NOT VERIFIED",
-  "last_tabletop_status": "STAGING_MOCK_PASS_ONLY"
+  "last_tabletop_status": "STAGING_MOCK_PASS_ONLY",
+  "primary_owner_candidate_github": "BrunoQuoc",
+  "primary_owner_candidate_status": "PROPOSED_ONLY_NOT_ACCEPTED",
+  "primary_owner_candidate_source": "Connected GitHub account; not a consent or incident-duty assignment",
+  "ownership_receipt_gate": "OPEN",
+  "ack_protocol_document": "docs/staging-auth-ownership-alert-receipt-phase3fb2.md",
+  "ack_required_from_distinct_accounts": true,
+  "notification_delivery_evidence": {
+    "mechanism": "GitHub issue notification or email or push; chosen by recipient",
+    "test_issue_number": 13,
+    "primary_received": false,
+    "backup_received": false,
+    "primary_ack_comment_url": null,
+    "backup_ack_comment_url": null,
+    "verified_comment_authors": false,
+    "approved_by_independent_reviewer": false
+  }
 }
