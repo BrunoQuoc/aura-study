@@ -92,3 +92,6 @@ Phase 3F-A positive signup and 9-source unpaired browser RLS were accepted. A su
 The exact manual 30-day review due date is **2026-12-06 07:14 UTC**, subject to retention owner sign-off. No cleanup has been executed or scheduled automatically; only the inventory/review evidence is complete.
 
 A PostgreSQL exception-subtransaction seeded and rolled back one synthetic graded result: Admin saw 1 Attempt and 1 Verified Outcome, and the unpaired anonymous user saw 0 of each. Persisted counts were independently rechecked as zero. Detailed Security Closure report: `docs/staging-auth-security-closure-phase3fa.md`.
+
+
+**Manual lifecycle follow-up:** [GitHub Issue #11](https://github.com/BrunoQuoc/aura-study/issues/11) — due 2026-12-06; no automatic deletion or reminder implied.
