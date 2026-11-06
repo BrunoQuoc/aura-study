@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>AURA STUDY — Phase 3F-A Anonymous Student CAPTCHA Negative</title>
+<style>
+:root{font:16px system-ui,-apple-system,sans-serif;background:#f3f7fc;color:#173452}
+*{box-sizing:border-box}body{margin:0;padding:24px}
+main{max-width:880px;margin:auto}
+h1{font-size:1.65rem;margin:0 0 10px}h2{font-size:1.18rem;margin-top:0}
+p,li{line-height:1.6}
+.notice{background:#fff8e9;border:1px solid #e6cc9e;border-radius:12px;padding:16px}
+.card{background:white;border:1px solid #d7e4f0;border-radius:14px;padding:20px;margin:18px 0}
+.check{display:flex;align-items:flex-start;gap:10px;margin-top:12px}
+.check input{margin-top:5px;flex:none}
+button{width:100%;background:#257aaf;color:white;border:0;border-radius:9px;padding:14px;font-weight:700;font-size:1rem;margin:14px 0 10px}
+button:disabled{opacity:.5;cursor:default}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eaf3fd;border-radius:10px;padding:14px;min-height:105px;font:0.87rem/1.55 ui-monospace,Consolas,monospace}
+a{color:#17639c}small{color:#596e86}
+</style>
+</head>
+<body><main>
+<h1>AURA STUDY — PHASE 3F-A</h1>
+<p><strong>Anonymous Student CAPTCHA — Negative Verification (STAGING)</strong></p>
+<div class="notice">
+<strong>Không phải bài thử tạo Student mới.</strong>
+Bài thử gửi tối đa hai yêu cầu <code>signInAnonymously()</code> tới
+Supabase STAGING: (1) CAPTCHA token cố ý sai và (2) không gửi CAPTCHA token.
+Chỉ tính PASS khi Auth server trả <code>captcha_failed</code> cho từng yêu cầu.
+<strong>CẢNH BÁO:</strong> Nếu CAPTCHA phía server bị tắt hoặc sai cấu hình, một yêu cầu
+bị chấp nhận <strong>có thể tạo tài khoản Auth ẩn danh mới</strong>.
+Bài thử sẽ dừng ngay, nhưng không tự xóa tài khoản. Không chạy nếu chưa
+đồng ý kiểm kê và xử lý tài khoản thử ngoài ý muốn.
+</div>
+<section class="card">
+<h2>1. Kiểm thử âm tính — tối đa 2 yêu cầu</h2>
+<p>Trang này không sử dụng email, JWT, OTP, Secret Key, mã ghép đôi,
+không ghi Learning Events và không thay thế phiên Student đã ghép đôi.
+Nếu cần thử lại sau lỗi bất thường, phải rà soát nguyên nhân và Auth user count trước.</p>
+<label class="check"><input id="consent" type="checkbox">
+<span>Tôi xác nhận đây là project AURA STUDY STAGING, đồng ý gửi tối đa hai yêu cầu
+Auth âm tính; hiểu rằng nếu server vô tình chấp nhận, có thể phát sinh
+một Auth user mới cần kiểm kê thủ công.</span></label>
+<button id="run" disabled>Chạy 2 kiểm thử CAPTCHA âm tính</button>
+<pre id="result" role="status" aria-live="polite">Chưa chạy. Chưa gửi yêu cầu Auth nào.</pre>
+<small>Chỉ hiển thị loại lỗi và HTTP status; không hiển thị token, user ID, session hoặc raw response.
+Chỉ chạy một lượt mỗi lần tải, không tự retry.</small>
+</section>
+<section class="card">
+<h2>2. Rate Limits — Kiểm kê chỉ đọc</h2>
+<p>Mở <a href="https://supabase.com/dashboard/project/ufqzuowjhdqpydqvcsob/auth/rate-limits"
+target="_blank" rel="noopener noreferrer">Supabase STAGING → Authentication → Rate Limits</a>
+và ghi nhận giới hạn của <strong>Anonymous sign-ins, OTP, email sends,
+Verify/Refresh</strong> cùng đơn vị áp dụng ở từng mục. Không thay đổi thiết lập
+và không gửi lặp để ép xuất hiện lỗi 429.</p>
+<p>Rate limits cần được kiểm tra độc lập bằng cấu hình thật và kế hoạch tải có phê duyệt.
+<strong>Một lỗi 429 không chứng minh CAPTCHA bảo vệ thành công.</strong>
+Chỉ chia sẻ ảnh cấu hình đã che thông tin nhạy cảm; không gửi khóa truy cập.</p>
+</section>
+<section class="card">
+<h2>Điều kiện nghiệm thu</h2>
+<ul>
+<li><strong>2/2 PASS</strong>: hai yêu cầu đều trả <code>captcha_failed</code>.</li>
+<li><strong>INCONCLUSIVE</strong>: gặp 429, lỗi mạng hoặc mã lỗi khác — dừng.</li>
+<li><strong>FAIL</strong>: server chấp nhận yêu cầu không có CAPTCHA hợp lệ. Dừng ngay,
+kiểm tra lại Attack Protection và tài khoản Auth. Không tạo mã ghép đôi.</li>
+</ul>
+<small>Bài thử chỉ xác nhận đường đi anonymous signup âm tính, không thay thế thử
+Student có CAPTCHA hợp lệ hoặc kiểm tra RLS sau cấp phiên. PRODUCTION NO-GO.</small>
+</section>
+<script type="module">
+import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.102.0/+esm";
+import {
+  buildAnonymousNegative,classifyAnonymousCaptcha,
+  EXACT_STAGING_ORIGIN,EXACT_STAGING_PATH,EXPECTED_SUPABASE_URL
+} from "./phase3fa-anonymous-captcha-policy.js";
+
+const PUBLIC_KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
+const consent=document.getElementById("consent");
+const run=document.getElementById("run");
+const result=document.getElementById("result");
+const originOkay=location.origin===EXACT_STAGING_ORIGIN &&
+  location.pathname===EXACT_STAGING_PATH;
+let attempted=false;
+function ready(){run.disabled=attempted||!consent.checked||!originOkay;}
+consent.addEventListener("change",ready);
+ready();
+if(!originOkay){
+  result.textContent="BLOCKED — Chỉ chạy trên GitHub Pages STAGING chính thức.";
+}
+const errorView=e=>{
+ if(!e)return "none";
+ const code=typeof e.code==="string" && /^[a-z0-9_]{1,64}$/.test(e.code)
+   ?e.code:"unrecognized";
+ const status=Number.isInteger(e.status)?e.status:"n/a";
+ return code+" (HTTP "+status+")";
+};
+run.addEventListener("click",async()=>{
+ if(attempted||!originOkay||!consent.checked)return;
+ attempted=true;ready();consent.disabled=true;
+ const client=createClient(EXPECTED_SUPABASE_URL,PUBLIC_KEY,{
+   auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false,
+     storageKey:"aura-phase3fa-negative-isolated-only"}
+ });
+ const lines=["STAGING / anonymous-negative-only / one-shot / no paired devices"];
+ let count=0;
+ for(const kind of ["invalid","missing"]){
+   const label=kind==="invalid"?"1. INVALID CAPTCHA TOKEN":"2. MISSING CAPTCHA TOKEN";
+   lines.push(label+" — Đang kiểm tra...");
+   result.textContent=lines.join("\n");
+   try{
+     const options=buildAnonymousNegative(kind);
+     const {data,error}=await client.auth.signInAnonymously(options);
+     const verdict=classifyAnonymousCaptcha(error,data);
+     lines.pop();
+     if(verdict.state==="PASS"){
+       count++;
+       lines.push(label+" — PASS: captcha_failed (Auth server)");
+       continue;
+     }
+     lines.push(label+" — "+verdict.state+": "+verdict.reason+
+       " / "+errorView(error));
+     if(verdict.state==="FAIL"){
+       lines.push("CẢNH BÁO: Supabase CÓ THỂ đã tạo Auth user ẩn danh mới.");
+       lines.push("Không ghép đôi hoặc xóa tự động. Kiểm kê Auth users qua Dashboard.");
+     }
+     lines.push("ĐÃ DỪNG — Không gửi yêu cầu tiếp theo.");
+     break;
+   }catch(_error){
+     lines.pop();
+     lines.push(label+" — INCONCLUSIVE: network_or_client_error");
+     lines.push("ĐÃ DỪNG — Không tự retry.");
+     break;
+   }
+ }
+ lines.push(count===2
+    ?"KẾT LUẬN — 2/2 PASS: STUDENT ANONYMOUS CAPTCHA NEGATIVE"
+    :"KẾT LUẬN — CHƯA NGHIỆM THU ("+count+"/2 PASS)");
+ lines.push("Không phát sinh yêu cầu ghép đôi, Learning Events hay điểm số từ trang thử.");
+ result.textContent=lines.join("\n");
+});
+</script>
+</main></body></html>
