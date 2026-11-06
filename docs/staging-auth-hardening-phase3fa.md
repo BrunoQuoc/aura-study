@@ -277,3 +277,19 @@ The operator provided a subsequent Supabase Attack Protection screenshot, follow
 **Next E2E gate (Admin):** using a separate private browser profile on STAGING, open `aura-staging-login.html`, enter only an already registered Admin email, solve Turnstile, request exactly one Magic Link (the frontend uses `shouldCreateUser:false`), and open the email link in that **same** private profile. Verify `getUser()` and the Admin authorization function; do not use the generic message indicating an email was requested as proof of actual delivery. Do not paste emails, OTPs, JWTs or pairing codes into chat/screenshots. Do not create a new Student or alter the original paired device as part of this gate.
 
 **After Admin PASS:** run negative no-token/invalid-token test with test-only authorized clients and carefully controlled anonymous Student onboarding, rate-limit review and RLS assertions. Password leak protection remains plan-gated. Production NO-GO.
+
+
+---
+
+## 20. Admin Turnstile + Magic Link delivery PASS — 2026-11-06
+
+The operator supplied two screenshots from STAGING:
+
+- On `aura-staging-login.html`, Cloudflare Turnstile showed **Success!** in the Admin pane, and the UI displayed the generic post-request message for existing registered Admin accounts.
+- The corresponding mailbox screenshot showed an actual **Your sign-in link** message received from Supabase Auth, with a **Sign in** action. The tokenized destination was not disclosed.
+
+**Acceptance decision:** Admin **CAPTCHA-rendered Magic Link request + email delivery PASS**. This is stronger than the UI's generic message alone. It does **not** demonstrate that the single-use link was clicked, that PKCE/session exchange succeeded, that `getUser()` confirmed the Admin account, or that Admin authorization succeeded. Those remain **PENDING**.
+
+Next operator step: open the single-use link **within the same browser profile where the Magic Link was requested** before expiry, then return to the STAGING login page and run **Kiểm tra và kích hoạt quyền Admin**. Report only success/failure text with secrets, emails, tokens and pairing codes redacted. Avoid asking for or sharing the sign-in link; do not generate unnecessary extra magic-link requests.
+
+Separate server-side negative-token rejection and fresh anonymous Student onboarding tests still remain outstanding. `ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION` release gates stay OPEN. **PRODUCTION NO-GO.**
