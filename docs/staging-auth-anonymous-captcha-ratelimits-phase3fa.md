@@ -3,7 +3,7 @@
 
 **Environment:** Supabase `aura-study-staging`, GitHub Pages `brunoquoc.github.io/aura-study`  
 **Date:** 2026-11-06  
-**Current decision:** **NEGATIVE TEST IMPLEMENTED, BROWSER E2E PENDING. RATE LIMIT CONFIG REVIEW PENDING. PRODUCTION NO-GO.**
+**Current decision (updated 2026-11-06):** **ANONYMOUS CAPTCHA NEGATIVE E2E 2/2 PASS; RATE LIMITS DASHBOARD INVENTORY ACCEPTED; POSITIVE ANONYMOUS SIGNUP / RLS NEGATIVE / 429 ENFORCEMENT PENDING; PRODUCTION NO-GO.**
 
 ### 1. Baseline and inherited acceptance
 
@@ -36,18 +36,18 @@ It uses a **new isolated Auth client** with `persistSession:false`, `autoRefresh
 
 **Acceptance requires 2/2 PASS**, a screenshot containing only the output panel, and a post-test Supabase Auth user/device/event count cross-check.
 
-### 3. Rate limits — READ-ONLY review, actual values not yet captured
+### 3. Rate limits — READ-ONLY dashboard review (completed; see Section 5)
 
 Supabase Dashboard → **Authentication → Rate Limits**:
 https://supabase.com/dashboard/project/ufqzuowjhdqpydqvcsob/auth/rate-limits
 
 | Protection | Endpoint | Supabase documentation | Config evidence |
 |---|---|---|---|
-| Anonymous sign-ins | `/auth/v1/signup` (without email/phone) | IP-based; October 26, 2026 docs indicate **customizable**; verify actual Dashboard values and limits before changes. | **PENDING DASHBOARD REVIEW** |
-| OTP sends | `/auth/v1/otp` | Project-wide limit; **customizable**. | **PENDING** |
-| OTP/email resend cooldown | `/auth/v1/otp` | Per-user interval; **customizable**. | **PENDING** |
-| Built-in outbound email quota | `/auth/v1/signup`, `/auth/v1/recover`, etc. | Project-wide built-in quota; customization generally requires custom SMTP. | **PENDING** |
-| Verification | `/auth/v1/verify` | IP-based; October 26, 2026 docs indicate **customizable** for verify/token limits, subject to available project settings. | **PENDING** |
+| Anonymous sign-ins | `/auth/v1/signup` (without email/phone) | IP-based; October 26, 2026 docs indicate **customizable**; verify actual Dashboard values and limits before changes. | **SCREENSHOT REVIEWED (30 requests/hour/IP)** |
+| OTP sends | `/auth/v1/otp` | Subject to signup/sign-in and email quota. Actual provider settings documented separately. | **30 requests/5 min/IP for non-anonymous signup/sign-in; 2 built-in emails/hour** |
+| OTP/email resend cooldown | `/auth/v1/otp` | 60-second field shown as applying with Custom SMTP; exact runtime interpretation requires provider review. | **60 seconds (UI field)** |
+| Built-in outbound email quota | `/auth/v1/signup`, `/auth/v1/recover`, etc. | Project-wide built-in quota; custom SMTP or send-email hook required to modify supported quota. | **2 emails/hour** |
+| Verification | `/auth/v1/verify` | IP-based; provider settings vary by project. | **30 requests/5 min/IP** |
 | Refresh token | `/auth/v1/token` | IP-based; documentation lists as **not customizable**. | **PENDING** |
 
 The Dashboard and provider configuration are the authoritative sources for current project-specific values, not generic documentation defaults. Connected Supabase tools in this session do **not** provide a read method for the Auth management configuration, and no access token for the Management API should be supplied to ChatGPT. A screenshot of the Rate Limits page with secrets/redacted account data is the next required evidence.
@@ -62,9 +62,9 @@ References:
 
 ### 4. Acceptance roadmap
 
-- **A — Anonymous CAPTCHA negative:** 2/2 `captcha_failed` using STAGING browser test and post-test Auth count unchanged.
+- **A — Anonymous CAPTCHA negative: ACCEPTED 2/2 PASS**, observed `captcha_failed`, with post-test Auth count unchanged.
 - **B — Anonymous CAPTCHA positive:** isolated single-use temporary Student `signInAnonymously({options:{captchaToken}})`, confirm `is_anonymous`, verify **no unpaired access** under RLS. Requires approved test-user retention/cleanup plan. Do not pair with the active learner.
-- **C — Rate limit configuration inventory:** review Dashboard values, units, bursts and operator ownership for OTP, anonymous, verification and refresh. No stress testing without approval.
+- **C — Rate limit configuration inventory: REVIEWED**, Dashboard screenshot and units recorded in Section 5; threshold/429 enforcement and alerting still pending. No stress testing without approval.
 - **D — Final security review:** Supabase Security Advisor, leaked-password Pro-only warning disposition, secure device handling and independent sign-off.
 
 **No phase or production release gate is marked PASS until its own evidence is received. PRODUCTION NO-GO.**
