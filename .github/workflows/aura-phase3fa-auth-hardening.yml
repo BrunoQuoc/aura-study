@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: "20"
       - name: Run offline Auth contract tests
-        run: node --test tests/phase3fa-auth-hardening.test.mjs
+        run: node --test tests/phase3fa-auth-hardening.test.mjs tests/phase3fa-negative-captcha.test.mjs
       - name: Confirm production release remains blocked
         run: |
           node scripts/phase3f-release-gate.mjs --summary
