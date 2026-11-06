@@ -259,3 +259,21 @@ An independent Supabase database snapshot after the screenshot found **5 Auth us
 **Decision:** Screenshot evidence for **server CAPTCHA configuration visible as ON**, but **AUTH SERVER ENFORCEMENT E2E PENDING**. Requirements: reload persisted ON; existing Admin Magic Link with solved challenge; isolated temporary Student signup with solved challenge and explicit test-account lifecycle approval; server rejects absent/invalid CAPTCHA token; check counts, RLS and non-disruption of existing Student; rate limits and leaked-password still open. No production go-live is permitted. The GitHub frontend already passes 2/2 Turnstile widget checks.
 
 **Rollback:** If new login is unexpectedly blocked, first disable CAPTCHA on this STAGING project in Supabase Attack Protection, confirm Admin and Student login recovery; do not disable RLS or change the active paired Student identity.
+
+---
+
+## 19. CAPTCHA setting remains ON after Dashboard reload — operator screenshot
+
+The operator provided a subsequent Supabase Attack Protection screenshot, following instructions to reload the page, showing:
+
+- **Enable Captcha protection: ON**.
+- **Choose Captcha Provider: Turnstile by Cloudflare**.
+- The private CAPTCHA secret field is populated and masked.
+- No unsaved modifications are apparent (Save changes disabled).
+- **Prevent use of leaked passwords: DISABLED** (plan-gated, still OPEN).
+
+**Decision:** operator-supplied post-reload UI is consistent with server CAPTCHA configuration persisting; configuration persistence **PASS by screenshot evidence**. The available connector does not independently read the Auth setting, and this screenshot alone does **not** prove that login requests are enforced against Turnstile tokens.
+
+**Next E2E gate (Admin):** using a separate private browser profile on STAGING, open `aura-staging-login.html`, enter only an already registered Admin email, solve Turnstile, request exactly one Magic Link (the frontend uses `shouldCreateUser:false`), and open the email link in that **same** private profile. Verify `getUser()` and the Admin authorization function; do not use the generic message indicating an email was requested as proof of actual delivery. Do not paste emails, OTPs, JWTs or pairing codes into chat/screenshots. Do not create a new Student or alter the original paired device as part of this gate.
+
+**After Admin PASS:** run negative no-token/invalid-token test with test-only authorized clients and carefully controlled anonymous Student onboarding, rate-limit review and RLS assertions. Password leak protection remains plan-gated. Production NO-GO.
