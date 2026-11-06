@@ -307,3 +307,19 @@ Likely next diagnostic is whether the email's **Sign in** link was actually clic
 Code change: improved the no-session message to explain what to do for Admin vs Student; no new Auth calls or session storage changes. The Admin PKCE/session exchange logic and server CAPTCHA/RLS settings were left unchanged.
 
 Acceptance remains **Admin Magic Link delivery PASS; Admin post-link session and bootstrap authorization PENDING**. Production remains NO-GO.
+
+---
+
+## 22. Admin PKCE session and bootstrap authorization PASS — 2026-11-06
+
+Operator provided a new screenshot of the AURA STUDY STAGING login after following the Magic Link. Both Turnstile widgets show `Success!`. Crucially, the Admin pane now reports **`Đã xác minh quyền Admin và hồ sơ một học sinh trên Staging.`** This message appears in the client only after `action(parent, "bootstrap_parent")` receives a successful API response with the authenticated Admin session access token.
+
+**STAGING E2E acceptance:** Admin Magic Link delivery PASS; PKCE session recovery PASS by authenticated gateway action; Admin bootstrap authorization and linked learner profile PASS by the success response. This resolves the prior `Phiên đăng nhập chưa sẵn sàng` observation for this tested Admin flow.
+
+The Student pane in this private/isolated browser reports `Chưa ghép đôi.` That is expected and must NOT be interpreted as revocation or loss of the separately paired Student; do not pair a new device or create a new pairing code solely for this Admin test.
+
+Independent read-only Supabase STAGING snapshot after the screenshot: **1 household, 1 learner, 1 active paired Student device, 13 learning events, 0 attempts, 5 Auth accounts**. These counts are unchanged relative to the prior audit.
+
+**Limits:** The screenshot does not prove that Supabase Auth rejects missing/invalid Turnstile tokens or that anonymous Student signup under server CAPTCHA succeeds. The configured Turnstile widgets show success, but server-side negative CAPTCHA tests, Auth rate-limit review and plan-gated leaked-password protection remain unresolved. Supabase Security Advisor continues to flag anonymous sign-in policies and leaked-password protection.
+
+**Release decision:** Admin positive E2E flow **PASS in STAGING**; Phase 3F-A Auth hardening overall **PARTIAL**, `ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION` **OPEN**, **PRODUCTION NO-GO**.
