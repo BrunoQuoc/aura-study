@@ -1,0 +1,57 @@
+name: "AURA STAGING: sanitized security incident"
+description: "STAGING-only incident intake; do not post tokens or learner PII"
+title: "[AURA STAGING][INCIDENT] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Only aggregate, non-identifying evidence.**
+        Never include Auth emails, JWT/OTP, Turnstile secrets, pairing codes, IP addresses,
+        learner IDs, raw logs or screenshots containing private data.
+        A GitHub Issue is a ticket, not proof that anyone received an alert.
+  - type: dropdown
+    id: severity
+    attributes:
+      label: "Provisional severity (requires owner review)"
+      options: ["P0 — suspected learner isolation failure", "P1 — auth availability or test account incident", "P2 — anomaly / review"]
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: "Signal (aggregates only)"
+      options: ["Unpaired learner/score visible", "Unexpected test identity pairing", "Auth 5xx", "Auth 429 spike", "CAPTCHA failure spike", "Manual test / tabletop"]
+    validations:
+      required: true
+  - type: input
+    id: time
+    attributes:
+      label: "Observation time (UTC, no identities)"
+      placeholder: "YYYY-MM-DD HH:MM UTC"
+    validations:
+      required: true
+  - type: textarea
+    id: aggregates
+    attributes:
+      label: "Sanitized aggregate observations and affected system"
+      description: "Only counts, generalized impact, and read-only evidence links."
+      placeholder: "Example: 0 Auth 429, 1 synthetic alarm — no user identifiers."
+    validations:
+      required: true
+  - type: checkboxes
+    id: safeguards
+    attributes:
+      label: "Privacy and change-control checks"
+      options:
+        - label: "No tokens, emails, IP addresses, Auth UIDs, secrets or learner data included"
+          required: true
+        - label: "No RLS relaxation, bulk deletion, session revocation or production release authorized by this ticket"
+          required: true
+  - type: textarea
+    id: next
+    attributes:
+      label: "Owner escalation and next safe step"
+      description: "Use role names if the operator has not been confirmed."
+      placeholder: "Owner: UNASSIGNED. Next: assign owner/reviewer; preserve minimal evidence."
+    validations:
+      required: true
