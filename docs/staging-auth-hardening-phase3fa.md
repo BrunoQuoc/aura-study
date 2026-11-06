@@ -199,3 +199,18 @@ Added `auth/phase3fa-turnstile-diagnostic.html`, a standalone page which renders
 Documentation: https://developers.cloudflare.com/turnstile/troubleshooting/client-side-errors/error-codes/
 
 Release gates `ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION` remain OPEN; production NO-GO.
+
+
+---
+
+## 15. Standalone Turnstile challenge PASS — 2026-11-06
+
+The operator provided a browser screenshot of the **standalone Phase3F-A Site Key diagnostic** showing Cloudflare **Success!** and the local output:
+
+> PASS — Cloudflare đã chấp nhận Site Key và trả lời challenge tại brunoquoc.github.io.
+
+This verifies that a **public Site Key manually pasted from Cloudflare** could render and complete a Turnstile challenge on the GitHub Pages hostname. The diagnostic page deliberately did not display or retain the key, so **the exact successfully tested Site Key is not available to this repository review**; it must not be inferred from the screenshot or assumed identical to the previously stored suspect value.
+
+Current repository status independently rechecked: `auth/phase3fa-security-config.js` still has `captchaMode: "disabled"`. Two production release gates (`ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION`) remain **OPEN**. No server CAPTCHA enablement or Auth write has been performed.
+
+**Next controlled action:** obtain the exact **PUBLIC Site Key** copied from the widget's Cloudflare Dashboard (do not request the Secret Key), compare and update the frontend configuration, then enable and test both Admin and Student widgets with that verified value. If the original public Site Key is actually identical, investigate browser cache/site loading and Cloudflare widget configuration before altering the key. Only after both widgets work should the operator enable Supabase server-side CAPTCHA using the rotated private Secret Key in the Dashboard.
