@@ -1,0 +1,96 @@
+# AURA STUDY — PHASE 3F-B2
+## Monitoring Ownership, Alert Delivery & Incident Drill
+
+**Review date:** 2026-11-06 (Asia/Ho_Chi_Minh).  
+**Environment:** Supabase `aura-study-staging` + GitHub Pages.  
+**Decision:** SOURCE/TICKET INTAKE IMPLEMENTED; OPERATOR TABLETOP PENDING; REAL NOTIFICATION & OWNER ACCEPTANCE PENDING. **PRODUCTION NO-GO.**
+
+### 1. Read-only evidence and scope
+
+The previous B1 mock browser test showed **4/4 PASS** (Admin OTP, anonymous signup, token refresh, CAPTCHA/429 differentiation), without Auth API calls or new users. This is not a real Auth threshold test.
+
+Latest B2 read-only checkpoint at **2026-11-06 08:07:12 UTC**:
+- Auth users: **6** (anonymous **5**).
+- Active paired Student: **1**, Learning Events: **13**, Attempts: **0**, tagged test identity: **1**.
+- Rolling 24-hour available log records: **352**.
+- `captcha_failed`: **4**; Auth edge 429: **0**; Auth 5xx: **0**.
+- B1 snapshot recorded **349** available rows. Differences in total log count are not sufficient evidence of Auth abuse or actual 429 threshold enforcement.
+
+Source log query: `supabase/audits/aura_phase3fb1_auth_monitor_24h.sql`. Data inventory: `supabase/audits/aura_phase3fa_security_closure_readonly.sql`.
+
+### 2. Ownership registry — NOT YET APPROVED
+
+Machine-readable registry: `release/phase3fb2-monitoring-ownership.json`.
+
+| Responsibility | Proposed scope | Assigned/accepted |
+|---|---|---|
+| Primary monitoring owner | Reviews aggregate Auth metrics, creates/triages incident, records decisions | **UNASSIGNED** |
+| Independent backup/reviewer | Covers absence and verifies P0/P1 handling; cannot self-approve destructive actions | **UNASSIGNED** |
+| Security approval authority | Approves emergency actions and release/exception evidence | **UNASSIGNED** |
+| Ticket intake | GitHub Issue #12 tracker; sanitized incident template | **AVAILABLE** |
+| Daily monitoring cadence | Example: 09:00 Vietnam time during STAGING acceptance | **PROPOSAL ONLY — NOT ACTIVE** |
+| External email/push channel | Confirm reachable recipient and test delivery | **NOT CONFIGURED** |
+
+Do not infer that the GitHub repository owner is on-call. Assignment requires explicit consent, a named responsible account/role, a backup and an agreed schedule. The system must fail closed for any `owner_accepted=false` production gate.
+
+### 3. Incident priority and minimum response
+
+Draft severity below has **not** been signed off by an incident owner.
+
+| Trigger | Severity | Initial safe action |
+|---|---|---|
+| Unpaired learner/score exposure | **P0** | Stop STAGING tests, preserve sanitized evidence, escalate; **never disable RLS as workaround** |
+| Test identity unexpectedly paired | **P1** | Pause pairing tests, verify authorized actions/dependencies, escalate |
+| Auth 5xx / persistent login outage | **P1** (impact dependent) | Compare time window to baseline, check provider, escalate before any rollback |
+| Sustained CAPTCHA rejects / 429 | **P2** initially | Compare threshold and rate-limit observations, investigate; no request floods |
+
+Proposed response workflow: **Detect → Classify → Contain testing → Preserve privacy-safe evidence → Escalate to primary + backup → Authorize remediation → Verify recovery → Close with owner-approved retrospective**.
+
+The incident ticket must include only the UTC window, source, severity, aggregate counts and a non-sensitive decision. Do not paste JWT, OTP, Turnstile secret, pairing code, user IDs, IP addresses, account emails or learner records. Do not perform bulk deletion, device revocation or changes to Supabase Auth and RLS without authorization.
+
+### 4. Synthetic delivery: GitHub Issue inbox, not actual notification
+
+**Ticket delivery to the GitHub Issues inbox: VERIFIED.** A fabricated P0/unpaired learner exposure scenario was written as [Issue #13](https://github.com/BrunoQuoc/aura-study/issues/13); subsequent GitHub issue search independently returned it. Its title clearly says `DRILL ONLY`, and content confirms **no real exposure**.
+
+This only demonstrates that a **sanitized ticket was created and persisted on GitHub**. It is **NOT evidence** of an automatic Supabase alert, webhook, email/push receipt, human acknowledgement, or incident-response SLA.
+
+The [sanitized issue template](https://github.com/BrunoQuoc/aura-study/blob/main/.github/ISSUE_TEMPLATE/aura-staging-incident.yml) provides a standard ticket format with required privacy and authorization acknowledgements. Treat repository visibility as potentially public; minimize metadata accordingly.
+
+Official Supabase Log Drains support external alert pipelines but require Pro/Team/Enterprise and separate add-on charges. No paid log drain, third-party vendor, notification channel or credential was configured as part of B2.
+
+### 5. Offline incident tabletop (browser)
+
+Browser page: `auth/phase3fb2-incident-drill.html`  
+Pure decision module: `auth/phase3fb2-incident-policy.js`  
+Unit tests: `tests/phase3fb2-incident-drill.test.mjs`  
+Manual-only workflow: `.github/workflows/aura-phase3fb2-incident-drill.yml`
+
+Three fabricated scenarios:
+
+1. **P0** — an unpaired Student would see a learner row.
+2. **P1** — a tagged test identity receives unexpected device pairing.
+3. **P1** — Auth server 5xx appears.
+
+The offline policy proposes escalation and preserves evidence. It intentionally makes **zero Auth calls, database writes, session mutations, account deletions or outbound notifications**. This proves the logic of the draft tabletop only, not actual incident readiness. The operator must run the browser page once and return a screenshot of the result panel; expected **3/3 PASS**.
+
+### 6. Phase 3F-B2 acceptance
+
+| Gate | Evidence | Status |
+|---|---|---|
+| Read-only STAGING baseline | SQL and Log Explorer aggregates | **PASS** |
+| Severity / response playbook draft | Version-controlled policy and runbook | **IMPLEMENTED, OWNER REVIEW OPEN** |
+| Safe tabletop source tests | Pure JS tests and static page | **IMPLEMENTED** |
+| Tabletop browser run | 3/3 screenshot | **PENDING** |
+| Sanitized incident issue intake | Issue #13 created and re-found | **PASS — TICKET INBOX ONLY** |
+| Real email/push/automated alert delivery | A named recipient acknowledges receipt | **OPEN** |
+| Primary/backup monitoring ownership | Two named accounts/roles explicitly accept | **OPEN** |
+| Monitoring cadence / incident SLA | Owner-approved schedule and escalation | **OPEN** |
+| Real Supabase HTTP 429 / alert response | Bounded test and independent evidence | **OPEN** |
+
+**Closure criteria:** After owner + backup accept, choose a supported alerting path; perform one no-sensitive-data notification delivery exercise with actual acknowledgement; record an approved tabletop decision; establish a monitoring cadence; and verify either approved manual-monitoring exception or actual automated alerting. Production remains NO-GO until every relevant release condition passes.
+
+### 7. Account lifecycle cross-check
+
+The one Phase3F-A anonymous test user remains under manual 30-day review ([Issue #11](https://github.com/BrunoQuoc/aura-study/issues/11)) due **2026-12-06 07:14 UTC (14:14 Vietnam time)**. It has no device/event links, but prior audits found one Auth session and refresh token. No deletion or session revocation authorized.
+
+Other references: [Phase 3F-B tracker #12](https://github.com/BrunoQuoc/aura-study/issues/12), [Phase 3F release gates](https://github.com/BrunoQuoc/aura-study/blob/main/release/phase3f-production-gates.json), [Supabase Log Drains](https://supabase.com/docs/guides/observability/log-drains).
