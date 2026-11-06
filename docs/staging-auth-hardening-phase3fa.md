@@ -228,3 +228,15 @@ The source of the prior `Invalid sitekey` message was an **uppercase letter `O` 
 **Boundary:** the successfully completed standalone challenge verifies the key and hostname on the diagnostic page, **NOT** that both Admin/Student widgets on the login page have passed browser smoke testing. No Supabase Auth server CAPTCHA setting was enabled during this code update. The authenticated pairing/RLS and existing Student session were not modified.
 
 **Next user E2E:** hard-refresh `https://brunoquoc.github.io/aura-study/aura-staging-login.html`, verify both Turnstile widgets no longer say `Invalid sitekey` and complete their challenges if prompted. Do not send Admin OTP or create a new Student solely for this rendering test. Capture a screenshot with email/pairing fields redacted. After frontend PASS, the operator may activate Supabase STAGING CAPTCHA with the freshly rotated **private** Secret Key exclusively inside Supabase, and must then run valid/invalid token and rate-limit tests. Until then, `ANONYMOUS_AUTH_ABUSE` remains OPEN; Production NO-GO.
+
+---
+
+## 17. Two-widget frontend PASS on AURA STAGING GitHub Pages — 2026-11-06
+
+Operator screenshot of `aura-staging-login.html` after corrected Cloudflare public Site Key shows **Success!** in both independent Turnstile widgets: Admin/Parent and Student/Device. The previous `Invalid sitekey` is no longer displayed. `captchaMode` is verified as `turnstile` in the STAGING source. No OTP, pairing code or secret was shown in this screenshot.
+
+**Decision:** FRONTEND WIDGET RENDER/CHALLENGE 2/2 PASS. This does not test Supabase Auth server-side CAPTCHA or login request token validation. Continue to treat `ANONYMOUS_AUTH_ABUSE` as **OPEN** and PRODUCTION as **NO-GO**.
+
+**Next controlled operator step:** Supabase STAGING Dashboard → Authentication → Attack Protection → Enable Captcha protection → provider Cloudflare Turnstile → paste **rotated PRIVATE Secret Key only into Supabase Dashboard** → Save changes. Never paste the key into GitHub, ChatGPT, screenshots or client HTML. Confirm toggle remains ON after refreshing Dashboard, then test pre-existing Admin Magic Link and a temporary new anonymous Student session with a solved challenge, and negative requests without valid challenge tokens. Preserve the original paired Student account. If onboarding fails, revert the STAGING server CAPTCHA toggle OFF first while investigating; retain RLS.
+
+**Security note:** An already-solved Turnstile challenge can expire; reset and solve again before a new sign-in attempt as needed. Future server-side throttling and leaked-password plan limitation remain separate unresolved gates.
