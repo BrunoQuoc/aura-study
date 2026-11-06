@@ -323,3 +323,25 @@ Independent read-only Supabase STAGING snapshot after the screenshot: **1 househ
 **Limits:** The screenshot does not prove that Supabase Auth rejects missing/invalid Turnstile tokens or that anonymous Student signup under server CAPTCHA succeeds. The configured Turnstile widgets show success, but server-side negative CAPTCHA tests, Auth rate-limit review and plan-gated leaked-password protection remain unresolved. Supabase Security Advisor continues to flag anonymous sign-in policies and leaked-password protection.
 
 **Release decision:** Admin positive E2E flow **PASS in STAGING**; Phase 3F-A Auth hardening overall **PARTIAL**, `ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION` **OPEN**, **PRODUCTION NO-GO**.
+
+---
+
+## 23. Server CAPTCHA negative-verification harness — 2026-11-06
+
+**Status: IMPLEMENTED, NOT YET RUN AGAINST AUTH SERVER.** This entry does not assert negative-verification PASS.
+
+The operator previously completed Admin Turnstile → Magic Link → PKCE session → authenticated bootstrap Parent E2E with PASS. Supabase Dashboard screenshot after reload showed CAPTCHA ON with Cloudflare Turnstile, but a challenge-negative case is still required.
+
+**Read-only baseline before running negative tests:** 5 Auth users, including 4 anonymous; 1 active paired Student device; 13 Learning Events; 0 attempts. This count was read directly from STAGING. No Supabase Auth configuration, RLS, devices or user accounts were modified while creating the test page.
+
+**New browser diagnostic:** `auth/phase3fa-server-captcha-negative.html`, using strict shared rules in `auth/phase3fa-negative-captcha-policy.js` and a local/offline test suite in `tests/phase3fa-negative-captcha.test.mjs`. The manual-only CI workflow includes the offline tests. The diagnostic uses the public Supabase publishable key and `supabase-js` with `persistSession:false`, `autoRefreshToken:false`, `detectSessionInUrl:false`, and the implicit flow to avoid altering an existing Admin/Student PKCE or browser session.
+
+**Safety model:** The operator types the **already registered Admin email only on their own browser** and confirms consent. The browser sends up to two one-shot `signInWithOtp` requests with `shouldCreateUser:false` (never creates users): first deliberately invalid `options.captchaToken`, then absent `captchaToken`. If the first request is accepted or returns any other error, the suite stops immediately. Accepted requests may send an extra Magic Link email; no link is used. The page clears the input before sending and never displays or persists email, OTP, access token, error body, URL params, or credentials. The diagnostic will only run on the exact STAGING GitHub Pages URL.
+
+**Acceptance:** a test PASS requires an actual Supabase Auth API error with **code `captcha_failed`**. A `429` or error `over_email_send_rate_limit` is **INCONCLUSIVE**, not CAPTCHA PASS. Unexpected API acceptance is **FAIL**, not PASS. Two explicit `captcha_failed` responses are needed for `2/2 PASS`. No retries, CAPTCHA bypass, anonymous signups or pairing operations are performed.
+
+**Boundary:** this suite validates **Admin OTP sign-in endpoint** negative protection, not anonymous Student sign-in, password reset or all possible Auth endpoints. Those require their own bounded/approved E2E test; never claim overall anonymous Auth abuse gate resolved from 2/2 OTP results.
+
+**Operator runbook:** wait at least 60 seconds since the previous Magic Link send to reduce OTP rate limit interference; open `https://brunoquoc.github.io/aura-study/auth/phase3fa-server-captcha-negative.html`; enter the existing STAGING Admin email locally, tick the explicit side-effect consent and click once. Screenshot only the result panel (not the email input). If results are inconclusive, do not auto-retry. After the screenshot, a read-only Supabase count can confirm no new Auth users/events; no cleanup is authorized.
+
+**Release:** `ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION` remain OPEN, and `production_release_approved:false`. PRODUCTION NO-GO.
