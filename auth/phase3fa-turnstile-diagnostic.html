@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — Turnstile Site Key Diagnostic (STAGING)</title>
+<style>
+:root{font:16px system-ui,sans-serif;background:#f3f7fc;color:#1b3550}
+*{box-sizing:border-box}body{margin:0;padding:22px}
+main{max-width:760px;margin:auto}
+article{padding:19px;border-radius:14px;border:1px solid #d7e4ef;background:white}
+h1{font-size:1.5rem;line-height:1.3}p{line-height:1.6}
+label{font-weight:650;display:block;margin-top:14px}
+input{display:block;width:100%;padding:12px;border:1px solid #b8cadc;border-radius:8px;font:inherit;margin-top:6px}
+button{width:100%;padding:13px;border:0;border-radius:8px;background:#2278b1;color:white;font-weight:700;margin:12px 0;cursor:pointer}
+button:disabled{opacity:.5}
+.notice{padding:14px;background:#fff7e7;border:1px solid #e5d2ac;border-radius:12px}
+#widget{min-height:72px;margin:14px 0}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eef5fd;padding:13px;border-radius:9px;font:0.88rem/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}
+small{color:#62768d}
+</style>
+</head>
+<body><main>
+<h1>AURA STUDY — Site Key Diagnostic</h1>
+<p>Kiểm tra Cloudflare Turnstile độc lập với Supabase STAGING.</p>
+<div class="notice">
+ <strong>Chỉ dùng Public Site Key.</strong> Trong Cloudflare Dashboard → Turnstile →
+ AURA-STUDY-STAGING, bấm <strong>Copy Site Key</strong> và dán dưới đây.
+ <strong>Không dán Secret Key</strong>, OTP, JWT hay mã ghép đôi.
+ Không có thao tác đăng nhập, tạo tài khoản hoặc gửi dữ liệu lên Supabase.
+</div>
+<article>
+<label for="sitekey">Public Site Key — chỉ sao chép trực tiếp từ Cloudflare</label>
+<input id="sitekey" type="text" autocomplete="off" autocapitalize="none" spellcheck="false"
+  placeholder="Paste the PUBLIC Site Key">
+<button id="run">Kiểm tra Site Key</button>
+<div id="widget" aria-label="Cloudflare Turnstile thử nghiệm"></div>
+<pre id="result" role="status" aria-live="polite">Chưa kiểm tra.</pre>
+<small>Thử nghiệm chỉ gửi Site Key và challenge tới Cloudflare. Không hiển thị, lưu trữ hay gửi token challenge vào chat. Nếu lỗi, chụp phần thông báo mã lỗi.</small>
+</article>
+</main>
+<script type="module">
+import {AURA_AUTH_SECURITY} from "./phase3fa-security-config.js";
+const get=id=>document.getElementById(id);
+get("sitekey").value=AURA_AUTH_SECURITY.turnstileSiteKey;
+const scriptUrl="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+const output=message=>{get("result").textContent=message;};
+let widgetId=null,loadPromise=null;
+
+function getMeaning(code) {
+ const value=String(code);
+ if(value==="110100"||value==="400020") return "Invalid sitekey: kiểm tra khóa PUBLIC trong Cloudflare Dashboard.";
+ if(value==="110110")return "Sitekey not found: khóa đã gõ sai hoặc widget không tồn tại.";
+ if(value==="110200")return "Domain not authorized: kiểm tra hostname của GitHub Pages trong widget.";
+ if(value==="400021")return "Sitekey domain mismatch: đối chiếu tên miền / vùng cấu hình.";
+ if(value==="400070")return "Sitekey disabled: widget không còn hoạt động.";
+ if(value==="200500")return "Iframe load error: kiểm tra trình chặn quảng cáo hoặc mạng.";
+ return "Xem mã lỗi trong tài liệu Cloudflare.";
+}
+
+async function loadTurnstile() {
+ if(globalThis.turnstile?.render)return;
+ if(loadPromise)return loadPromise;
+ loadPromise=new Promise((resolve,reject)=>{
+  const script=document.createElement("script");
+  script.async=true;
+  script.src=scriptUrl;
+  script.onload=()=>{
+    if(globalThis.turnstile?.render)resolve();
+    else reject(Error("SDK loaded but Turnstile API unavailable"));
+  };
+  script.onerror=()=>reject(Error("Cannot load Cloudflare Turnstile script"));
+  document.head.appendChild(script);
+ });
+ return loadPromise;
+}
+
+get("run").addEventListener("click",async()=>{
+ const b=get("run");b.disabled=true;
+ try {
+  const key=get("sitekey").value.trim();
+  if(!/^[A-Za-z0-9_-]{12,120}$/.test(key)) {
+   throw Error("Site Key format không hợp lệ. Dán đúng PUBLIC Site Key từ Cloudflare.");
+  }
+  output("Đang tải Turnstile / kiểm tra widget trên hostname: "+location.hostname);
+  await loadTurnstile();
+  if(widgetId!==null){
+    globalThis.turnstile.remove(widgetId);
+    widgetId=null;
+  }
+  widgetId=globalThis.turnstile.render("#widget",{
+    sitekey:key,theme:"auto",
+    "response-field":false,
+    "error-callback":code=>{
+      output("FAILED — Cloudflare code "+String(code)+"\n"+getMeaning(code)+
+        "\nChưa bật CAPTCHA phía Supabase.");
+      return true;
+    },
+    "callback":()=>{
+      output("PASS — Cloudflare đã chấp nhận Site Key và trả lời challenge tại "+
+       location.hostname+".\nKhông lưu hoặc hiển thị token. Có thể tiếp tục kiểm tra giao diện Admin/Student.");
+    },
+    "expired-callback":()=>{
+      output("CHALLENGE EXPIRED — thử lại widget. Không có yêu cầu Auth nào được gửi.");
+    }
+  });
+ } catch(error){
+   output("FAILED — "+String(error?.message||"Không thể chạy Turnstile."));
+ } finally {b.disabled=false;}
+});
+</script>
+</body></html>
