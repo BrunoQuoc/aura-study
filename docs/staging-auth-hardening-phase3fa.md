@@ -240,3 +240,22 @@ Operator screenshot of `aura-staging-login.html` after corrected Cloudflare publ
 **Next controlled operator step:** Supabase STAGING Dashboard → Authentication → Attack Protection → Enable Captcha protection → provider Cloudflare Turnstile → paste **rotated PRIVATE Secret Key only into Supabase Dashboard** → Save changes. Never paste the key into GitHub, ChatGPT, screenshots or client HTML. Confirm toggle remains ON after refreshing Dashboard, then test pre-existing Admin Magic Link and a temporary new anonymous Student session with a solved challenge, and negative requests without valid challenge tokens. Preserve the original paired Student account. If onboarding fails, revert the STAGING server CAPTCHA toggle OFF first while investigating; retain RLS.
 
 **Security note:** An already-solved Turnstile challenge can expire; reset and solve again before a new sign-in attempt as needed. Future server-side throttling and leaked-password plan limitation remain separate unresolved gates.
+
+---
+
+## 18. Supabase Attack Protection toggle ON — operator screenshot — 2026-11-06
+
+The operator supplied a Supabase Dashboard screenshot for project `aura-study-staging`, Authentication → Attack Protection, showing the following **visible UI state**:
+
+- **Enable Captcha protection: ON** (green).
+- **Choose Captcha Provider: Turnstile by Cloudflare**.
+- Captcha secret input is populated and masked in the screenshot. No private secret was copied, requested or committed.
+- Save changes appears disabled, consistent with no pending edits, **but not independent confirmation of server persistence**. The operator should reload Dashboard and confirm the toggle remains ON.
+- Prevent use of leaked passwords remains **DISABLED** (plan-limited security issue still OPEN).
+- Header says `main` with `PRODUCTION` branch badge, while selected Supabase project is named `aura-study-staging`. This is the main branch classification within that project, **not evidence of an AURA production release**.
+
+An independent Supabase database snapshot after the screenshot found **5 Auth users**, **1 active Student device**, **13 Learning Events** and **0 attempts**. The existing Supabase Security Advisor continues to report anonymous-sign-in policy warnings and leaked-password protection. Advisor warnings cannot prove whether server CAPTCHA has been activated; the management configuration itself was not read by the available connector.
+
+**Decision:** Screenshot evidence for **server CAPTCHA configuration visible as ON**, but **AUTH SERVER ENFORCEMENT E2E PENDING**. Requirements: reload persisted ON; existing Admin Magic Link with solved challenge; isolated temporary Student signup with solved challenge and explicit test-account lifecycle approval; server rejects absent/invalid CAPTCHA token; check counts, RLS and non-disruption of existing Student; rate limits and leaked-password still open. No production go-live is permitted. The GitHub frontend already passes 2/2 Turnstile widget checks.
+
+**Rollback:** If new login is unexpectedly blocked, first disable CAPTCHA on this STAGING project in Supabase Attack Protection, confirm Admin and Student login recovery; do not disable RLS or change the active paired Student identity.
