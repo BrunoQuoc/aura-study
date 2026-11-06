@@ -32,7 +32,7 @@
     {
       "id": "ANONYMOUS_AUTH_ABUSE",
       "status": "OPEN",
-      "reason": "Phase3F-A STAGING: corrected Turnstile frontend 2/2 widget PASS, Admin Magic Link+PKCE+bootstrap positive E2E PASS, and OTP endpoint invalid/missing CAPTCHA negative E2E 2/2 PASS. Anonymous Student signup enforcement, server rate limits/abuse monitoring, and production-config security review remain OPEN.",
+      "reason": "Phase3F-A STAGING: Admin Turnstile positive Auth E2E PASS and OTP invalid/missing CAPTCHA 2/2 PASS. Anonymous Student invalid/missing CAPTCHA test page deployed to repo but live E2E still PENDING; anonymous-positive signup requires approved test account lifecycle. Auth Rate Limits dashboard values/enforcement and abuse alerting are PENDING. Do not infer production readiness.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
