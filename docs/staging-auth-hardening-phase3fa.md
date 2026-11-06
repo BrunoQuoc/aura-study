@@ -412,3 +412,21 @@ The second screenshot captures Supabase Authentication → Rate Limits values fo
 **Still OPEN:** valid-CAPTCHA anonymous signup positive E2E with one temporary unpaired test identity under an approved account lifecycle, unpaired RLS denial, attack monitoring / 429 enforcement strategy, and leaked-password-protection Pro-plan disposition. `ANONYMOUS_AUTH_ABUSE` stays OPEN, and **PRODUCTION NO-GO**.
 
 Detailed acceptance: `docs/staging-auth-anonymous-captcha-ratelimits-phase3fa.md`.
+
+---
+
+## 27. Positive anonymous signup and unpaired RLS isolation — 2026-11-06
+
+**Current state: preflight PASS; positive browser E2E NOT YET EXECUTED.**
+
+Direct read-only SQL with an existing unpaired anonymous Auth identity (role authenticated, correct JWT sub claim) produced **0 visible rows across nine objects**: households, learners, student_devices, content_items, learning_events, attempts, learning_progress_v1, learning_daily_v1 and verified_outcomes_v1. Seven have nonempty seeded data. Attempts and Verified Outcomes are empty and this zero result cannot independently prove a cross-learner isolation boundary for populated outcomes. All three summary views are configured security_invoker=true.
+
+New browser STAGING test `auth/phase3fa-positive-unpaired.html` uses the already confirmed Cloudflare public Site Key, two explicit operator consents and one direct Supabase signInAnonymously request with valid Turnstile token. It uses an isolated nonpersisting Auth client, a one-shot localStorage boolean guard, a nonprivileged metadata tag for future audit, and nine sequential RLS count-only reads; it stops at the first unexpected exposure. No pairing or Learning Event writes; no JWT, email, user ID, CAPTCHA token or raw response is printed.
+
+**Risk explicitly accepted by user action only:** successful positive signup persists a new anonymous Auth user in STAGING even if the page is closed. There is NO automatic cleanup or session revocation. Retention marked for manual review at 30 days; authorization of any earlier deletion requires owner approval and verification. Test metadata is editable and must not be used as a security decision or sole cleanup criterion.
+
+New files: auth/phase3fa-positive-unpaired-policy.js, auth/phase3fa-positive-unpaired.html, tests/phase3fa-positive-unpaired.test.mjs, supabase/audits/aura_phase3fa_unpaired_positive_lifecycle_dry_run.sql, docs/staging-auth-positive-unpaired-phase3fa.md. The manual-only GitHub Actions workflow includes the offline unit tests. Source/JavaScript checks pass, but a real browser positive signup has not been run by the assistant.
+
+Read-only lifecycle audit SQL run **before** user browser test: 5 total Auth users, 4 anonymous, 1 paired Student device, 13 Learning Events, 0 attempts, and **0 tagged Phase3F-A positive test accounts**. The next authorized operator step is one browser signup in a separate private profile and a screenshot of only the result panel, followed by independent database count/dependency reconciliation.
+
+**PRODUCTION NO-GO.** Anonymous abuse gate remains OPEN until positive browser evidence, retention reconciliation, monitoring and release governance requirements are fulfilled. Leaked-password control remains plan-gated.
