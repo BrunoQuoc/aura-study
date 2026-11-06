@@ -1,7 +1,7 @@
 # AURA STUDY — PHASE 3F-B
 ## Auth Abuse Monitoring & Incident Response Readiness
 
-**Status (2026-11-06): PLANNED AND DOCUMENTED — NOT OPERATIONAL OR ACCEPTED.**  
+**Status (2026-11-06): B1 monitoring baseline captured; offline 429 mock implemented; browser confirmation and operational alerting still PENDING.**  
 **Environment: STAGING ONLY.**  
 **Production approval: NO-GO.**
 
@@ -90,3 +90,16 @@ Phase 3F-B is **not PASS** until:
 - https://supabase.com/docs/guides/observability/logs
 - https://supabase.com/docs/guides/observability/log-drains
 - https://supabase.com/docs/guides/auth/audit-logs
+
+
+---
+
+### Phase 3F-B1 implementation evidence — 2026-11-06
+
+A reproducible **rolling-24h Auth log snapshot** was queried on Supabase STAGING: 349 available log rows, **4 captcha_failed**, **2 OTP HTTP 400**, **2 signup HTTP 400**, **0 Auth HTTP 429** and **0 Auth HTTP 5xx**. Snapshot anchoring query at **2026-11-06 07:52:51 UTC**; these are diagnostic counts, not automated notifications or attack-rate baselines. Post-query DB counts remain 6 Auth users / 5 anonymous, 1 active paired Student, 13 Learning Events, 0 attempts, and one tagged Phase3F-A test account.
+
+**Offline HTTP 429 mock** now exists at `auth/phase3fb1-safe-429-simulation.html`, backed by `auth/phase3fb1-rate-limit-policy.js`, `tests/phase3fb1-auth-monitoring.test.mjs` and the manual-only workflow `.github/workflows/aura-phase3fb1-auth-monitoring.yml`. Source/parser/pure-function checks **16/16 PASS**. Three simulated flows (OTP, anonymous signup, refresh) receive a synthetic 429/Retry-After=60; no Supabase SDK, Auth API calls, retries, new users or session storage modifications occur. This **does not demonstrate that the real login UI handles 429**.
+
+For a separate user browser acceptance test, open `https://brunoquoc.github.io/aura-study/auth/phase3fb1-safe-429-simulation.html` and run once; collect only a screenshot of the expected **4/4 PASS** result. Browser proof remains PENDING, as do later Auth log comparison, owner/cadence approval, real 429 enforcement and delivered alert evidence.
+
+Full evidence: `docs/staging-auth-monitoring-baseline-phase3fb1.md`. Monitoring SQL: `supabase/audits/aura_phase3fb1_auth_monitor_24h.sql`. Phase3F-B issue #12 remains open; all production release controls remain unchanged and **NO-GO**.
