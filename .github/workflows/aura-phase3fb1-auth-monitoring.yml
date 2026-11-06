@@ -1,0 +1,30 @@
+name: AURA STUDY - Phase 3F-B1 Offline 429 Simulation
+
+# Manual-only; no Supabase credentials, no Auth calls, no test-account writes.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  auth-429-offline-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Pure offline Auth 429 tests
+        run: node --test tests/phase3fb1-auth-monitoring.test.mjs
+      - name: Confirm release remains blocked
+        run: |
+          node scripts/phase3f-release-gate.mjs --summary
+          if node scripts/phase3f-release-gate.mjs; then
+            echo "Unexpected production GO; independent review required" >&2
+            exit 1
+          fi
+          echo "PRODUCTION NO-GO as intended"
