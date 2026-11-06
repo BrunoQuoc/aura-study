@@ -32,7 +32,7 @@
     {
       "id": "ANONYMOUS_AUTH_ABUSE",
       "status": "OPEN",
-      "reason": "Phase3F-A STAGING CAPTCHA and unpaired RLS E2E PASS. Phase3F-B1 monitoring baseline captured; safe mock 429 logic implemented but no real 429, alert delivery or independent abuse/incident readiness signoff. One tagged anonymous test account retains 1 Auth session and 1 refresh token; 30-day human review due 2026-12-06 07:14 UTC. Production gate OPEN.",
+      "reason": "Phase3F-A CAPTCHA positive/negative and unpaired RLS E2E PASS; Phase3F-B1 429 mock browser PASS and Phase3F-B2 incident tabletop source checks pass. No real threshold 429 evidence or alert delivery, owner and reviewer not assigned. Tagged test identity remains for manual review 2026-12-06 07:14 UTC. Production gate OPEN.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
@@ -81,7 +81,7 @@
     {
       "id": "ALERTING_AND_INCIDENT_RESPONSE",
       "status": "OPEN",
-      "reason": "STAGING Phase3F-B1: timestamped read-only 24h Auth baseline captured (4 captcha_failed, 2 OTP HTTP 400, 2 signup HTTP 400, 0 observed 429, 0 Auth 5xx; 6 Auth users and 1 active Student). Reproducible aggregate SQL and safe offline mock committed. Still OPEN: monitoring owner, later comparative snapshot, actual alert delivery and incident escalation, or formally approved manual monitoring exception.",
+      "reason": "Phase3F-B2 STAGING: read-only Auth snapshot (4 captcha_failed, 0 Auth 429/5xx; 6 Auth users, 1 active paired Student) and safe 3-scenario tabletop code verified. Synthetic sanitized GitHub incident ticket created and re-found (#13), confirming issue inbox delivery only. NOT accepted: designated primary/backup owner, actual recipient acknowledgement, live alert pipeline, approved cadence, incident drill browser result, real 429 threshold test. Production NO-GO.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
