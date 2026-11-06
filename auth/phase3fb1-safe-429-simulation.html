@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — Phase 3F-B1 Safe 429 Simulation</title>
+<style>
+:root{font:16px system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f7fc;color:#172f4c}
+*{box-sizing:border-box}body{margin:0;padding:24px}
+main{max-width:860px;margin:auto}
+h1{font-size:1.6rem;margin:0 0 10px}
+h2{font-size:1.14rem}
+p{line-height:1.55}
+.card{background:white;border:1px solid #d8e4f1;border-radius:14px;padding:20px;margin:16px 0}
+.notice{padding:15px;border:1px solid #decba0;border-radius:12px;background:#fff7e7}
+button{background:#287cb4;color:white;border:0;border-radius:9px;padding:15px;font-size:1rem;font-weight:700;width:100%;cursor:pointer}
+button:disabled{opacity:.6}
+pre{background:#eaf2fd;border-radius:10px;padding:15px;white-space:pre-wrap;overflow-wrap:anywhere;font:.87rem/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;min-height:110px}
+small{color:#5a6f84}
+strong{font-weight:750}
+</style>
+</head>
+<body>
+<main>
+<h1>AURA STUDY — Phase 3F-B1</h1>
+<p><strong>Auth Monitoring Baseline & Safe HTTP 429 Simulation</strong></p>
+<div class="notice">
+<strong>MOCK ONLY — STAGING. Không gọi Supabase Auth.</strong>
+Trang này mô phỏng phản hồi <code>429 Too Many Requests</code> trong JavaScript,
+không gửi yêu cầu đăng nhập, không tạo tài khoản Student, không thay đổi phiên
+Admin/Student, không gọi API, không đọc hoặc ghi JWT/OTP/mã ghép đôi.
+Nó chỉ chứng minh logic mô phỏng; chưa xác minh ngưỡng 429 thật của Supabase.
+</div>
+<section class="card">
+<h2>1. Mô phỏng an toàn ba luồng Auth</h2>
+<p>Admin OTP, anonymous Student signup và refresh token đều nhận phản hồi
+429 giả lập. Bộ kiểm tra xác nhận mỗi stub được gọi một lần,
+tự động retry bằng 0, tài khoản tạo mới bằng 0 và ngữ cảnh Student được giữ nguyên.</p>
+<button id="run">Chạy mô phỏng 429 (không gọi mạng Auth)</button>
+<pre id="results" role="status" aria-live="polite">Chưa chạy. 0 Auth API requests.</pre>
+<small>Trang chỉ tải mã kiểm thử tĩnh cùng thư mục. Không sử dụng Supabase SDK,
+không phát sinh request tới endpoint Auth hoặc thay đổi browser storage.</small>
+</section>
+<section class="card">
+<h2>2. Ranh giới nghiệm thu</h2>
+<p><strong>PASS:</strong> ba tình huống mock đều phân loại là
+<code>RATE_LIMITED</code>, không tự retry và không tạo Auth user.</p>
+<p><strong>Chưa nghiệm thu:</strong> ứng dụng đăng nhập thật có sử dụng
+logic phân loại này hay chưa; Supabase có trả 429 khi đạt hạn mức thật hay không;
+cảnh báo giám sát có được gửi và nhận đúng người hay không.</p>
+<p>Chỉ gửi ảnh khung kết quả. Không chia sẻ access token, email hoặc dữ liệu học.</p>
+</section>
+<script type="module">
+import {MOCK_CASES,simulateRateLimitedClient,interpretAuthFailure} from "./phase3fb1-rate-limit-policy.js";
+
+const button=document.getElementById("run");
+const results=document.getElementById("results");
+let attempted=false;
+const allowed=location.origin==="https://brunoquoc.github.io" &&
+ location.pathname==="/aura-study/auth/phase3fb1-safe-429-simulation.html";
+if(!allowed){
+ button.disabled=true;
+ results.textContent="BLOCKED — Chỉ chạy trên đường dẫn GitHub Pages STAGING chính thức.";
+}
+button.addEventListener("click",()=>{
+ if(!allowed || attempted)return;
+ attempted=true;button.disabled=true;
+ const lines=["AURA STUDY / PHASE 3F-B1 / MOCK ONLY / NO AUTH NETWORK"];
+ let passed=0;
+ for(const item of MOCK_CASES){
+  const r=simulateRateLimitedClient(item.id);
+  if(r.passed)passed++;
+  lines.push((r.passed?"PASS":"FAIL")+" — "+r.label);
+  lines.push("  429 → "+r.errorKind+"; Retry-After (giả lập): "+r.retryAfterSeconds+" giây");
+  lines.push("  Stub calls: "+r.authResponseStubCalls+"; Auth API: "+r.actualAuthRequests+
+    "; auto-retry: "+r.automaticRetries+"; new users: "+r.newAuthUsers);
+  lines.push("  Paired Student session preserved: "+r.pairedStudentSessionPreserved);
+ }
+ const captcha=interpretAuthFailure({status:400,code:"captcha_failed"});
+ const separated=captcha.kind==="CAPTCHA_REJECTED";
+ lines.push((separated?"PASS":"FAIL")+" — CAPTCHA_ERROR không bị nhầm với RATE_LIMIT");
+ lines.push("KẾT LUẬN — "+(passed===MOCK_CASES.length && separated?"4/4 PASS":"NOT ACCEPTED"));
+ lines.push("KHÔNG gửi API Auth; KHÔNG chứng minh Supabase thực tế đã trả HTTP 429.");
+ results.textContent=lines.join("\n");
+});
+</script>
+</main>
+</body>
+</html>
