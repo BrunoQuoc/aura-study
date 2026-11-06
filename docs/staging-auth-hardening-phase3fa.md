@@ -214,3 +214,17 @@ This verifies that a **public Site Key manually pasted from Cloudflare** could r
 Current repository status independently rechecked: `auth/phase3fa-security-config.js` still has `captchaMode: "disabled"`. Two production release gates (`ANONYMOUS_AUTH_ABUSE` and `PASSWORD_BREACH_PROTECTION`) remain **OPEN**. No server CAPTCHA enablement or Auth write has been performed.
 
 **Next controlled action:** obtain the exact **PUBLIC Site Key** copied from the widget's Cloudflare Dashboard (do not request the Secret Key), compare and update the frontend configuration, then enable and test both Admin and Student widgets with that verified value. If the original public Site Key is actually identical, investigate browser cache/site loading and Cloudflare widget configuration before altering the key. Only after both widgets work should the operator enable Supabase server-side CAPTCHA using the rotated private Secret Key in the Dashboard.
+
+---
+
+## 16. Corrected public Site Key and Turnstile frontend re-enabled — 2026-11-06
+
+The operator supplied the exact **PUBLIC** Turnstile Site Key copied from the Cloudflare widget after a standalone challenge had passed on `brunoquoc.github.io`.
+
+The source of the prior `Invalid sitekey` message was an **uppercase letter `O` vs digit `0`** mismatch in the previously committed public key (after the underscore). This was corrected directly in `auth/phase3fa-security-config.js` and the frontend was re-enabled with `captchaMode: "turnstile"`. Corresponding tests now assert the exact corrected public key.
+
+**Do not publish or reuse any Secret Key in this repository.** The operator previously stated that the exposed private Secret Key was rotated; this is operator attestation, not independent Cloudflare-secret lifecycle verification.
+
+**Boundary:** the successfully completed standalone challenge verifies the key and hostname on the diagnostic page, **NOT** that both Admin/Student widgets on the login page have passed browser smoke testing. No Supabase Auth server CAPTCHA setting was enabled during this code update. The authenticated pairing/RLS and existing Student session were not modified.
+
+**Next user E2E:** hard-refresh `https://brunoquoc.github.io/aura-study/aura-staging-login.html`, verify both Turnstile widgets no longer say `Invalid sitekey` and complete their challenges if prompted. Do not send Admin OTP or create a new Student solely for this rendering test. Capture a screenshot with email/pairing fields redacted. After frontend PASS, the operator may activate Supabase STAGING CAPTCHA with the freshly rotated **private** Secret Key exclusively inside Supabase, and must then run valid/invalid token and rate-limit tests. Until then, `ANONYMOUS_AUTH_ABUSE` remains OPEN; Production NO-GO.
