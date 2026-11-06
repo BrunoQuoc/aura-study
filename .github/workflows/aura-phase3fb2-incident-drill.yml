@@ -1,0 +1,29 @@
+name: AURA STUDY - Phase 3F-B2 Offline Incident Drill
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  incident-drill-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: No-network tabletop policy tests
+        run: node --test tests/phase3fb2-incident-drill.test.mjs
+      - name: Verify release remains NO-GO
+        run: |
+          node scripts/phase3f-release-gate.mjs --summary
+          if node scripts/phase3f-release-gate.mjs; then
+            echo "Unexpected production approval" >&2
+            exit 1
+          fi
+          echo "PRODUCTION NO-GO"
