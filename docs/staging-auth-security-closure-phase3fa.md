@@ -114,3 +114,7 @@ Do not start Phase 3F production release from this report. Treat this Phase3F-A 
 - [Supabase Rate Limits](https://supabase.com/docs/guides/auth/rate-limits)
 - [Supabase Auth Security](https://supabase.com/docs/guides/auth/auth-captcha)
 - [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security)
+
+### 7. Tracked review
+
+**GitHub Issue #11** tracks the STAGING anonymous test-account 30-day review due 2026-12-06: https://github.com/BrunoQuoc/aura-study/issues/11. This ticket is for operator tracking only: it does not schedule a reminder, trigger a cleanup job, or pre-authorize a delete.
