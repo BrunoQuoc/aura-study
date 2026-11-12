@@ -223,6 +223,7 @@ test('Two synthetic local Student profiles reject a wrong PIN and isolate progre
     const document={
       body:{
         classList:{contains:name=>name===shell},
+        dataset:{},
         appendChild(){}
       },
       head:{appendChild(){}},
