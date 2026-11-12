@@ -7,6 +7,7 @@ on:
       - 'admin_mvp_v2.css'
       - 'admin_mvp_v2.js'
       - 'tests/admin-mvp-v2.test.mjs'
+      - 'tests/admin-mvp-browser.mjs'
       - '.github/workflows/aura-admin-ux-smoke.yml'
   workflow_dispatch:
 
@@ -28,4 +29,30 @@ jobs:
           node --check admin_mvp_v2.js
           node --test tests/admin-mvp-v2.test.mjs
 
-# Offline checks only. No Google Drive, Supabase, user data, or deployment access.
+  admin-browser-local:
+    name: Admin touch navigation (isolated Chromium)
+    needs: admin-ux-offline
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Run synthetic localhost test
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/aura-admin-local-http.log 2>&1 &
+          sleep 2
+          node tests/admin-mvp-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aura-admin-mvp-browser-screenshots
+          path: test-results/admin-mvp/
+          retention-days: 7
+
+# Synthetic localhost only. Third-party requests blocked; no Drive, Supabase, real data, or production writes.
