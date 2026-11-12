@@ -5,8 +5,8 @@
   "monitoring_mode": "MANUAL_PROVISIONAL",
   "automation_enabled": false,
   "primary_owner_github": "BrunoQuoc",
-  "backup_reviewer_github": null,
-  "owner_acceptance": false,
+  "backup_reviewer_github": "Sonic-2015",
+  "owner_acceptance": true,
   "backup_acceptance": false,
   "review_cadence": "PROPOSED_DAILY_NOT_APPROVED",
   "incident_intake": {
@@ -47,7 +47,7 @@
   "synthetic_tabletop_browser_evidence": "Operator-supplied STAGING screenshot 2026-11-06; 3/3 PASS; zero Auth API, zero DB writes, no auto deletion; actual alert delivery NOT VERIFIED",
   "last_tabletop_status": "STAGING_MOCK_PASS_ONLY",
   "primary_owner_candidate_github": "BrunoQuoc",
-  "primary_owner_candidate_status": "USER_CONFIRMED_NOMINATION_AWAITING_GITHUB_ACK",
+  "primary_owner_candidate_status": "GITHUB_SELF_ACK_VERIFIED",
   "primary_owner_candidate_source": "Connected GitHub account; not a consent or incident-duty assignment",
   "ownership_receipt_gate": "OPEN",
   "ack_protocol_document": "docs/staging-auth-ownership-alert-receipt-phase3fb2.md",
@@ -62,5 +62,11 @@
     "verified_comment_authors": false,
     "approved_by_independent_reviewer": false
   },
-  "primary_owner_user_confirmation": "Explicit confirmation in AURA STUDY conversation on 2026-11-06; not GitHub self-acknowledgement"
+  "primary_owner_user_confirmation": "Explicit confirmation in AURA STUDY conversation on 2026-11-06; not GitHub self-acknowledgement",
+  "primary_owner_ack_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6680960922",
+  "primary_owner_preferred_channel": "GitHub Inbox",
+  "backup_reviewer_status": "NOMINATED_PENDING_SELF_ACK",
+  "backup_reviewer_github_profile": "https://github.com/Sonic-2015",
+  "backup_reviewer_repository_permission": "read",
+  "backup_nomination_source": "Explicit user designation in AURA STUDY chat; not backup's acceptance"
 }
