@@ -21,7 +21,9 @@
   };
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const state = {subject:'ALL', period:'ALL', view:'ALL'};
+  const COMPLETE_KEY = 'aura_metadata_completed_v1';
+  // The completion marker is view-only. It never changes underlying source or question bank.
+  const state = {subject:'ALL', period:'ALL', view:'pending', notice:''};
   const app = document.getElementById('app');
   if (!app) return;
 
@@ -49,6 +51,36 @@
     return row;
   }
   const list = x => Array.isArray(x) ? x : [];
+  function completionId(item) {return item.group+':'+item.key;}
+  function completedRecords() {
+    try {
+      const v=JSON.parse(localStorage.getItem(COMPLETE_KEY)||'{}');
+      return v&&typeof v==='object'&&!Array.isArray(v)?v:{};
+    } catch(_){return {};}
+  }
+  function completionSignature(item,meta) {
+    const ov=meta.override;
+    if (!ov) return '';
+    const row=item.row;
+    return JSON.stringify({
+      registry:registry().version, group:item.group, key:item.key,
+      sourceFile:row.sourceFile, sourcePeriods:list(row.sourcePeriods),
+      sourceTerm:row.sourceTerm, defaultPeriods:list(row.periods),
+      basis:row.assignmentBasis, scope:row.scope, confidence:row.confidence,
+      mode:ov.mode, periods:list(ov.periods), reason:ov.reason, updatedAt:ov.updatedAt
+    });
+  }
+  function isCompleted(item,meta=effective(item)) {
+    if(isBlockedBank(item)||!meta.override||!list(meta.effectivePeriods||meta.periods).length)return false;
+    const entry=completedRecords()[completionId(item)];
+    return !!entry&&typeof entry==='object'&&entry.signature===completionSignature(item,meta);
+  }
+  function storeCompletion(item,entry) {
+    const records=completedRecords(),key=completionId(item);
+    if(entry) records[key]=entry;else delete records[key];
+    try {localStorage.setItem(COMPLETE_KEY,JSON.stringify(records));return true;}
+    catch(_){fail('Không lưu được trạng thái hoàn thành trên trình duyệt này. Hãy kiểm tra bộ nhớ.');return false;}
+  }
   function periodNames(xs) {
     const ids=list(xs);
     return ids.length ? ids.map(id=>PERIODS.find(x=>x.id===id)?.name || id).join(' · ') : 'Chưa gán kỳ';
@@ -59,6 +91,7 @@
     return 'Nguồn không ghi rõ kỳ hoặc học kỳ';
   }
   function status(item, meta) {
+    if (isCompleted(item,meta)) return {name:'Đã hoàn thành',kind:'completed'};
     if (meta.override) return {name:'Đã chỉnh thủ công',kind:'manual'};
     if (!list(meta.effectivePeriods || meta.periods).length ||
       ['insufficient_source_evidence','mixed_scope_requires_split'].includes(item.row.assignmentBasis))
@@ -113,6 +146,8 @@
     const current=periodNames(activePeriods);
     const note = row.note || '';
     const original=row.sourceFile || '';
+    const completed=isCompleted(item,meta);
+    const canComplete=editable&&!!ov&&activePeriods.length>0;
     return '<article class="period-v2-item" data-group="'+esc(item.group)+'" data-key="'+esc(item.key)+'">' +
       '<div class="period-v2-item-head">' +
       '<div class="period-v2-heading"><small>'+ (item.group==='banks'?'NGÂN HÀNG CÂU HỎI':'TÀI LIỆU ÔN TẬP') +
@@ -144,6 +179,13 @@
       : '<div class="period-v2-blocked"><b>Cần tách ngân hàng nguồn trước khi phân kỳ.</b> Kho này chưa cho phép tạo đề theo kỳ. '+
         'Đừng gán thủ công để che tình trạng trộn phạm vi.'+
         (ov?'<button type="button" class="btn soft" data-action="reset">Bỏ phân kỳ thủ công hiện có</button>':'')+'</div>')+
+      (canComplete ? '<div class="period-v2-completion '+(completed?'is-done':'')+'">'+
+        (completed ?
+          '<div><b>✓ Phân kỳ đã hoàn thành</b><small>Mục này được ẩn khỏi danh sách cần xử lý. Nội dung và phân kỳ đã lưu vẫn nguyên vẹn.</small></div>'+
+          '<button type="button" class="btn soft" data-action="reopen">Đưa lại vào xử lý</button>' :
+          '<div><b>Đã lưu phân kỳ?</b><small>Nếu đã kiểm tra và xác nhận xong, bấm Hoàn thành để ẩn mục này khỏi danh sách cần xử lý.</small></div>'+
+          '<button type="button" class="btn primary" data-action="complete">✓ Hoàn thành</button>')+
+        '</div>' : '')+
       '<details class="period-v2-provenance"><summary>Thông tin nguồn & kỹ thuật</summary>'+
       '<div><b>Tệp:</b> '+esc(original)+' · <b>Độ tin cậy:</b> '+esc(row.confidence||'chưa xác định')+
       ' · <b>Mã nguồn:</b> '+esc(item.key)+'</div></details>'+
@@ -154,6 +196,9 @@
       const meta=effective(item),assigned=list(meta.effectivePeriods||meta.periods);
       if(state.subject!=='ALL'&&item.row.subject!==state.subject)return false;
       if(state.period!=='ALL'&&!assigned.includes(state.period))return false;
+      const done=isCompleted(item,meta);
+      if(state.view==='completed'){if(!done)return false;}
+      else if(state.view!=='ALL'&&done)return false;
       if(state.view==='manual'&&!meta.override)return false;
       if(state.view==='review'&&status(item,meta).kind!=='review')return false;
       if(state.view==='unassigned'&&assigned.length)return false;
@@ -169,6 +214,7 @@
     const all=rows(),filtered=filteredRows(all);
     const manual=all.filter(item=>!!effective(item).override).length;
     const review=all.filter(item=>status(item,effective(item)).kind==='review').length;
+    const done=all.filter(item=>isCompleted(item)).length;
     const subjects=registry().subjects || {};
     const selected=state.subject==='ALL'?all:all.filter(i=>i.row.subject===state.subject);
     const validation=typeof window.auraValidateExamMetadata==='function'?
@@ -181,7 +227,8 @@
       '<div class="period-v2-stats">'+
       '<div><span>Mục có trong registry</span><strong>'+all.length+'</strong><small>Tài liệu và ngân hàng</small></div>'+
       '<div><span>Đã chỉnh thủ công</span><strong>'+manual+'</strong><small>Chỉ trên trình duyệt này</small></div>'+
-      '<div><span>Cần rà soát kỳ</span><strong>'+review+'</strong><small>Không tự gán khi thiếu căn cứ</small></div></div>'+
+      '<div><span>Cần rà soát kỳ</span><strong>'+review+'</strong><small>Không tự gán khi thiếu căn cứ</small></div>'+
+      '<div><span>Đã hoàn thành</span><strong>'+done+'</strong><small>Ẩn khỏi danh sách cần xử lý</small></div></div>'+
       '<div class="period-v2-filters"><div class="period-v2-filter-head"><h2>01 · Tìm tài liệu cần phân kỳ</h2><p>Chọn lần lượt môn, kỳ và trạng thái. Bộ lọc chỉ thay đổi danh sách hiển thị.</p></div>'+
       '<div class="period-v2-filter-grid">'+
       '<label><b>Môn học</b><select data-filter="subject">'+
@@ -189,7 +236,9 @@
       '<label><b>Kỳ đang sử dụng</b><select data-filter="period">'+
       options([{id:'ALL',label:'Tất cả các kỳ'},...PERIODS.map(p=>({id:p.id,label:p.name}))],state.period)+'</select></label>'+
       '<label><b>Trạng thái</b><select data-filter="view">'+options([
-        {id:'ALL',label:'Tất cả mục'},
+        {id:'pending',label:'Cần xử lý (mặc định)'},
+        {id:'completed',label:'Đã hoàn thành'},
+        {id:'ALL',label:'Tất cả mục (kể cả đã hoàn thành)'},
         {id:'review',label:'Cần rà soát'},
         {id:'manual',label:'Đã chỉnh thủ công'},
         {id:'unassigned',label:'Chưa gán kỳ'}
@@ -197,6 +246,7 @@
       subjectReadiness(state.subject,selected)+
       (validation.ok?'':'<div class="period-v2-warning"><b>Registry có lỗi cần kiểm tra:</b><ul>'+
       list(validation.errors).map(err=>'<li>'+esc(err)+'</li>').join('')+'</ul></div>')+
+      (state.notice?'<div class="period-v2-notice" role="status" aria-live="polite">'+esc(state.notice)+'</div>':'')+
       '<section class="period-v2-results"><div class="period-v2-results-head"><h2>02 · Xem nguồn và chỉnh kỳ sử dụng</h2>'+
       '<span>'+filtered.length+' / '+all.length+' mục hiển thị</span></div>'+
       '<p class="period-v2-description">Mỗi thẻ cho biết ba lớp: <b>nguồn gốc → thiết lập mặc định → kỳ AURA đang dùng</b>. Chạm “Chỉnh kỳ sử dụng” khi cần thay đổi.</p>'+
@@ -204,7 +254,8 @@
         '<div class="period-v2-empty"><b>Chưa có mục phù hợp.</b><p>'+
         (state.subject!=='ALL'&&selected.length===0?
           'Môn này chưa có tài liệu/ngân hàng đủ điều kiện trong registry. Hãy bổ sung nguồn qua INBOX trước khi phân kỳ.':
-          'Không có tài liệu khớp bộ lọc. Thử chọn “Tất cả các kỳ” hoặc “Tất cả mục”.')+
+          (state.view==='pending' && done ? 'Các mục đã xác nhận được ẩn. Chọn “Đã hoàn thành” để xem lại hoặc đưa vào xử lý.' :
+          'Không có tài liệu khớp bộ lọc. Thử chọn “Tất cả các kỳ” hoặc “Tất cả mục”.'))+
         '</p><button type="button" class="btn soft" data-action="clear">Đặt lại bộ lọc</button></div>')+
       '</section>'+
       '<div class="period-v2-footer"><b>Cần phân biệt:</b> phân kỳ không đồng nghĩa tài liệu đã đủ dữ kiện để chấm tự động. '+
@@ -230,15 +281,48 @@
     const item=rows().find(x=>x.group===card.dataset.group&&x.key===card.dataset.key);
     if(!item || isBlockedBank(item)){fail('Ngân hàng chưa được tách nguồn, không thể gán kỳ thủ công.');return;}
     if(typeof window.auraSetMetadataOverride!=='function'){fail('Chức năng phân kỳ chưa sẵn sàng.');return;}
-    apply(window.auraSetMetadataOverride(item.group,item.key,{
+    const result=window.auraSetMetadataOverride(item.group,item.key,{
       periods:ids,mode,reason,assignmentBasis:'manual_admin_override'
-    }));
+    });
+    if(result?.ok===false){fail(result.error||'Không thể lưu kỳ sử dụng.');return;}
+    // A newly saved change must be reviewed/completed again, even if this item was done before.
+    storeCompletion(item,null);
+    state.notice='Đã lưu kỳ sử dụng. Sau khi kiểm tra xong, bấm “Hoàn thành” tại tài liệu này để ẩn khỏi danh sách.';
+    draw(false);
+  }
+  function complete(card) {
+    if(!card)return;
+    const item=rows().find(x=>x.group===card.dataset.group&&x.key===card.dataset.key);
+    if(!item)return;
+    const meta=effective(item);
+    if(isBlockedBank(item)||!meta.override||!list(meta.effectivePeriods||meta.periods).length){
+      fail('Anh cần lưu một quyết định phân kỳ hợp lệ trước khi đánh dấu hoàn thành.');
+      return;
+    }
+    if(typeof window.confirm==='function' &&
+      !window.confirm('Xác nhận đã hoàn thành phân kỳ và ẩn mục này khỏi danh sách cần xử lý? Tài liệu và phân kỳ sẽ không bị xóa.'))return;
+    if(!storeCompletion(item,{signature:completionSignature(item,meta),completedAt:new Date().toISOString()}))return;
+    state.notice='Đã hoàn thành: '+item.title+'. Mục được ẩn khỏi danh sách cần xử lý; có thể xem lại tại bộ lọc “Đã hoàn thành”.';
+    draw(false);
+  }
+  function reopen(card) {
+    if(!card)return;
+    const item=rows().find(x=>x.group===card.dataset.group&&x.key===card.dataset.key);
+    if(!item)return;
+    if(!storeCompletion(item,null))return;
+    state.notice='Đã đưa “'+item.title+'” về danh sách cần xử lý. Phân kỳ đã lưu vẫn giữ nguyên.';
+    draw(false);
   }
   function reset(card) {
     if(!card || typeof window.auraClearMetadataOverride!=='function')return;
     if(typeof window.confirm==='function' &&
       !window.confirm('Trả tài liệu về kỳ sử dụng mặc định của AURA? Kỳ trong nguồn gốc vẫn giữ nguyên.'))return;
-    apply(window.auraClearMetadataOverride(card.dataset.group,card.dataset.key));
+    const result=window.auraClearMetadataOverride(card.dataset.group,card.dataset.key);
+    if(result?.ok===false){fail(result.error||'Không thể trả về mặc định.');return;}
+    const item=rows().find(x=>x.group===card.dataset.group&&x.key===card.dataset.key);
+    if(item)storeCompletion(item,null);
+    state.notice='Đã trả tài liệu về kỳ mặc định của AURA.';
+    draw(false);
   }
   function useSource(card) {
     if(!card)return;
@@ -247,11 +331,15 @@
     if(typeof window.auraSetMetadataOverride!=='function'){fail('Chức năng phân kỳ chưa sẵn sàng.');return;}
     if(typeof window.confirm==='function' &&
        !window.confirm('Sử dụng đúng kỳ được ghi rõ trong nguồn cho tài liệu này?'))return;
-    apply(window.auraSetMetadataOverride(item.group,item.key,{
+    const result=window.auraSetMetadataOverride(item.group,item.key,{
       periods:item.row.sourcePeriods,mode:'replace',
       reason:'Admin chọn sử dụng theo kỳ được ghi rõ trong tài liệu nguồn.',
       assignmentBasis:'manual_admin_override'
-    }));
+    });
+    if(result?.ok===false){fail(result.error||'Không thể lưu kỳ nguồn.');return;}
+    storeCompletion(item,null);
+    state.notice='Đã chọn kỳ trong nguồn. Bấm “Hoàn thành” sau khi kiểm tra xong.';
+    draw(false);
   }
 
   app.addEventListener('change',event=>{
@@ -260,23 +348,27 @@
     const field=filter.dataset.filter;
     if(!['subject','period','view'].includes(field))return;
     state[field]=filter.value;
+    state.notice='';
     draw(false);
   });
   app.addEventListener('click',event=>{
     const button=event.target.closest('[data-action]');
     if(!button || !app.contains(button))return;
     const action=button.dataset.action;
-    if(action==='clear'){state.subject='ALL';state.period='ALL';state.view='ALL';draw(false);return;}
+    if(action==='clear'){state.subject='ALL';state.period='ALL';state.view='pending';state.notice='';draw(false);return;}
     const card=itemOf(button);
     if(action==='save')save(card);
     if(action==='reset')reset(card);
     if(action==='source')useSource(card);
+    if(action==='complete')complete(card);
+    if(action==='reopen')reopen(card);
   });
   window.auraMetadataManager=()=>draw(true);
   window.addEventListener('aura:metadata-overrides-changed',()=>{
     if(document.body.dataset.auraPage==='metadata')draw(false);
   });
   window.addEventListener('storage',event=>{
-    if(event.key===registry().overrideStorageKey && document.body.dataset.auraPage==='metadata')draw(false);
+    if([registry().overrideStorageKey,COMPLETE_KEY].includes(event.key) &&
+      document.body.dataset.auraPage==='metadata')draw(false);
   });
 })();

@@ -59,8 +59,8 @@ function harness(preloaded={}) {
 }
 
 test('Runtime V2 scripts are wired with cache version and guided touch layout',()=>{
-  assert.match(html,/admin_metadata_manager\.js\?v=metadata-workflow-v2/);
-  assert.match(html,/admin_metadata_manager\.css\?v=metadata-workflow-v2/);
+  assert.match(html,/admin_metadata_manager\.js\?v=metadata-complete-20261112/);
+  assert.match(html,/admin_metadata_manager\.css\?v=metadata-complete-20261112/);
   assert.match(css,/\.period-v2-filter-grid/);
   assert.match(css,/min-height:48px/);
   assert.match(css,/@media\(max-width:600px\)/);
@@ -140,4 +140,70 @@ test('Existing local override loads unchanged from browser storage',()=>{
   assert.match(h.app.innerHTML,/Quyết định cũ/);
   assert.equal(h.store.get('aura_metadata_overrides_v1'),old);
   assert.equal(h.window.auraMetadataOverrides().resources['review:TIENGANH:en_u1_3'].mode,'add');
+});
+
+
+test('Hoàn thành requires a saved/confirmed assignment and hides only the card',()=>{
+  const h=harness(),key='review:TOAN:toan_gk1_thucte';
+  h.action('complete','resources',key);
+  assert.match(h.notices.join(''),/cần lưu một quyết định phân kỳ/);
+  assert.equal(h.store.has('aura_metadata_completed_v1'),false);
+  h.action('save','resources',key,{periods:['GK2'],mode:'add',reason:'Dùng ôn nền tảng',ack:true});
+  assert.match(h.app.innerHTML,/data-action="complete"/);
+  h.action('complete','resources',key);
+  const record=JSON.parse(h.store.get('aura_metadata_completed_v1'));
+  assert.ok(record['resources:'+key].signature);
+  assert.equal(h.app.innerHTML.includes('data-key="'+key+'"'),false,'completed item should not remain in default queue');
+  assert.match(h.app.innerHTML,/Đã hoàn thành:/);
+  const assignment=JSON.parse(h.store.get('aura_metadata_overrides_v1'));
+  assert.equal(assignment.resources[key].reason,'Dùng ôn nền tảng','completion cannot delete the approved override');
+  assert.deepEqual([...h.window.AURA_EXAM_METADATA.resources[key].sourcePeriods],['GK1'],'source must be untouched');
+});
+
+test('Completed filter exposes item and reopen puts it back without deleting assignment',()=>{
+  const h=harness(),key='review:TOAN:toan_gk1_thucte';
+  h.action('save','resources',key,{periods:['GK2'],reason:'Ôn chương cũ',ack:true});
+  h.action('complete','resources',key);
+  h.filter('view','completed');
+  assert.match(h.app.innerHTML,/data-key="review:TOAN:toan_gk1_thucte"/);
+  assert.match(h.app.innerHTML,/data-action="reopen"/);
+  h.action('reopen','resources',key);
+  assert.equal(h.app.innerHTML.includes('data-key="'+key+'"'),false,'item leaves completed list when reopened');
+  h.filter('view','pending');
+  assert.match(h.app.innerHTML,/data-key="review:TOAN:toan_gk1_thucte"/);
+  const record=JSON.parse(h.store.get('aura_metadata_completed_v1'));
+  assert.equal(record['resources:'+key],undefined);
+  assert.equal(JSON.parse(h.store.get('aura_metadata_overrides_v1')).resources[key].reason,'Ôn chương cũ');
+});
+
+test('Changing an assignment invalidates a previous complete marker',()=>{
+  const h=harness(),key='review:TOAN:toan_gk1_thucte';
+  h.action('save','resources',key,{periods:['GK2'],reason:'Một',ack:true});
+  h.action('complete','resources',key);
+  h.window.auraSetMetadataOverride('resources',key,{periods:['CK2'],mode:'replace',reason:'Hai'});
+  assert.match(h.app.innerHTML,/data-key="review:TOAN:toan_gk1_thucte"/,'changed item must return to pending');
+  h.filter('view','completed');
+  assert.equal(h.app.innerHTML.includes('data-key="'+key+'"'),false);
+});
+
+test('Blocked question banks cannot be completed to conceal missing sources',()=>{
+  const h=harness();
+  h.action('complete','banks','NGUVAN:reviews');
+  assert.match(h.notices.join(''),/cần lưu một quyết định phân kỳ/);
+  assert.equal(h.store.has('aura_metadata_completed_v1'),false);
+});
+
+test('Legacy browser overrides are shown as incomplete until explicitly marked done',()=>{
+  const id='review:TIENGANH:en_u1_3';
+  const old=JSON.stringify({resources:{[id]:{
+    periods:['CK1'],mode:'add',reason:'Lịch sử',
+    assignmentBasis:'manual_admin_override',updatedAt:'2026-11-01T00:00:00Z'
+  }},banks:{}});
+  const h=harness({aura_metadata_overrides_v1:old});
+  assert.match(h.app.innerHTML,/Lịch sử/);
+  assert.equal(h.store.has('aura_metadata_completed_v1'),false);
+  h.action('complete','resources',id);
+  h.filter('view','completed');
+  assert.match(h.app.innerHTML,/Lịch sử/);
+  assert.equal(h.store.get('aura_metadata_overrides_v1'),old);
 });

@@ -147,3 +147,27 @@
   .admin-shell .period-v2-actions .btn{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.admin-shell .period-v2 *{transition:none}}
+
+
+/* Completed metadata is hidden from the default queue, not deleted from storage or source. */
+.admin-shell .period-v2-stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+.admin-shell .period-v2-pill.completed{background:#e8f7ed;color:#1a754b}
+.admin-shell .period-v2-completion{
+  display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;
+  margin:0 17px 14px;padding:14px 16px;border:1px solid #cfe1f5;
+  border-radius:14px;background:#f4f9ff;
+}
+.admin-shell .period-v2-completion.is-done{background:#f0fbf5;border-color:#bfe4cf}
+.admin-shell .period-v2-completion>div{flex:1 1 240px}
+.admin-shell .period-v2-completion b{display:block;font-size:13px;color:#20568f;margin-bottom:4px}
+.admin-shell .period-v2-completion.is-done b{color:#166c43}
+.admin-shell .period-v2-completion small{display:block;max-width:600px;color:#62758d;font-size:12px;line-height:1.55}
+.admin-shell .period-v2-completion .btn{min-height:46px;white-space:normal}
+.admin-shell .period-v2-notice{padding:14px 17px;border:1px solid #badfd1;background:#effbf4;border-radius:13px;color:#256746;font-size:13px;line-height:1.55}
+@media(max-width:1050px){
+ .admin-shell .period-v2-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+ .admin-shell .period-v2-completion{margin:0 12px 14px;padding:13px}
+ .admin-shell .period-v2-completion .btn{width:100%}
+}
