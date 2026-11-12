@@ -93,7 +93,8 @@ def build_packet(capture_zip):
                         "sourceLabel": label, "type": item_type,
                         "grade": 6, "subject": "TOAN", "period": "GK1",
                         "textBlocks": [line], "options": [], "images": [],
-                        "issueFlags": list(EXPECTED_ISSUES.get((exam, label), [])),
+                        "issueFlags": list(EXPECTED_ISSUES.get((exam, label), [])) +
+                                      (["ORIGINAL_HAS_NO_SCORING_RUBRIC"] if item_type == "ESSAY" else []),
                         "sourceAnswerProvided": False, "sourceRubricProvided": False,
                         "answerStatus": "NOT_SOURCE_VERIFIED",
                         "rubricStatus": "NOT_SOURCE_VERIFIED",
