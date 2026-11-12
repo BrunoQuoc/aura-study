@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   MIME_FOLDER, GATE_STATUS, deriveHints, compareSource, buildInventory,
-  makeDriveClient, scanFolderTree
+  makeDriveClient, scanFolderTree, diffInventories
 } from '../scripts/drive-inbox-discovery.mjs';
 
 const root='INBOXROOT1000';
@@ -139,4 +139,27 @@ test('No shared Drive IDs, tokens or credentials are hardcoded in script',async(
   assert.doesNotMatch(source,/1efdGfFM4bXrnNrIPuvEFRhyX9M5rUkBZ/);
   assert.doesNotMatch(source,/704823170664-vkldvvlh4qp4jrkhg630tnaea6riv8vk/);
   assert.doesNotMatch(source,/AURA_DRIVE_ACCESS_TOKEN=eyJ/);
+});
+
+
+test('Private scan comparison detects additions, edits, moves and missing files without touching content',()=>{
+  const base=buildInventory([
+    {file:file(1,'L6_TOAN_GK1_DE_01_20261027.docx'),path:['00_INBOX','01_TOAN','01_DE_KIEM_TRA']},
+    {file:file(2,'L6_TOAN_GK1_DE_02_20261027.docx'),path:['00_INBOX','01_TOAN','01_DE_KIEM_TRA']},
+    {file:file(3,'L6_TOAN_GK1_DE_03_20261027.docx'),path:['00_INBOX','01_TOAN','01_DE_KIEM_TRA']},
+    {file:file(4,'L6_TOAN_GK1_DE_04_20261027.docx'),path:['00_INBOX','01_TOAN','01_DE_KIEM_TRA']}
+  ],[]);
+  const newer=buildInventory([
+    {file:file(1,'L6_TOAN_GK1_DE_01_20261027.docx'),path:['00_INBOX','01_TOAN','01_DE_KIEM_TRA']},
+    {file:file(2,'L6_TOAN_GK1_DE_02_20261027.docx','2026-11-12T12:00:00Z'),path:['00_INBOX','01_TOAN','01_DE_KIEM_TRA']},
+    {file:file(3,'L6_TOAN_GK1_DE_03_20261027.docx'),path:['00_INBOX','01_TOAN','02_ON_TAP']},
+    {file:file(5,'L6_TOAN_GK1_DE_05_20261027.docx'),path:['00_INBOX','01_TOAN','01_DE_KIEM_TRA']}
+  ],[]);
+  assert.deepEqual(diffInventories(base,newer),{
+    previousCount:4,currentCount:4,added:1,modified:1,moved:1,unchanged:1,missing:1,baseline:false
+  });
+  const first=diffInventories(null,newer);
+  assert.equal(first.baseline,true);
+  assert.equal(first.added,0,'first scan has no baseline; do not claim all files are newly uploaded');
+  assert.throws(()=>diffInventories(base,{files:[]}),/Inventory mới không hợp lệ/);
 });
