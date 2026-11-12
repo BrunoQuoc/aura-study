@@ -3,7 +3,7 @@
   "project": "AURA STUDY",
   "environment": "STAGING",
   "scope": "Phase 3F-B2",
-  "status": "DRAFT_NOT_APPROVED",
+  "status": "ACKS_RECEIVED_SLA_DETAILS_PENDING",
   "mode": "MANUAL_READ_ONLY_PROPOSED",
   "automation_enabled": false,
   "timezone": "Asia/Ho_Chi_Minh",
@@ -44,8 +44,8 @@
   "service_level_classification": "DRAFT_RESPONSE_TARGETS_NOT_AN_ENFORCED_OR_24_7_SLA",
   "missed_review_rule": "At 09:15 if Primary has not posted a sanitized daily review, Backup follows up; at 09:30 log a missed review and pause any high-risk STAGING security test pending human approval. No automatic follow-up is enabled.",
   "approval": {
-    "primary_cadence_ack_comment_url": null,
-    "backup_cadence_ack_comment_url": null,
+    "primary_cadence_ack_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813565895",
+    "backup_cadence_ack_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813579412",
     "independent_policy_signoff_comment_url": null,
     "accepted_by_primary": false,
     "accepted_by_backup": false,
@@ -53,7 +53,16 @@
     "approved": false,
     "approved_at_utc": null,
     "effective_from_local_date": null,
-    "review_due_local_date": null
+    "review_due_local_date": null,
+    "short_form_cadence_intent": {
+      "primary_verified": true,
+      "backup_verified": true,
+      "source_issue": "https://github.com/BrunoQuoc/aura-study/issues/12",
+      "interpretation": "Both users posted the role-specific APPROVE CADENCE keyword in the thread containing the detailed 09:00 proposal; this establishes agreement-in-principle, not independently confirmed coverage/SLA terms."
+    },
+    "sla_and_coverage_terms_confirmed_by_primary": false,
+    "sla_and_coverage_terms_confirmed_by_backup": false,
+    "approval_scope": "SHORT_FORM_CADENCE_INTENT_ONLY_PENDING_FULL_SLA_TERMS"
   },
   "exercise": {
     "first_real_manual_check_completed": false,
