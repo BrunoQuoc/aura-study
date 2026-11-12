@@ -6,7 +6,10 @@
 .admin-shell .aura-source-hero h1{font-size:clamp(23px,3vw,32px);margin:8px 0 11px;line-height:1.2}
 .admin-shell .aura-source-hero p{font-size:13px;color:#e2effe;margin:0;line-height:1.7;max-width:800px}
 .admin-shell .aura-source-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
-.admin-shell .aura-source-metrics>div{padding:16px 15px;background:#fff;border:1px solid #dce6ef;border-radius:15px;min-width:0}
+.admin-shell .aura-source-metrics>button{appearance:none;-webkit-appearance:none;display:block;text-align:left;padding:16px 15px;background:#fff;border:2px solid #dce6ef;border-radius:15px;min-width:0;min-height:106px;cursor:pointer;color:inherit;font:inherit;transition:border-color .15s,background-color .15s,box-shadow .15s}
+.admin-shell .aura-source-metrics>button:hover{border-color:#7ca9d9;background:#f7fbff}
+.admin-shell .aura-source-metrics>button.is-selected{border-color:#2375be;background:#edf6ff;box-shadow:0 0 0 1px rgba(35,117,190,.12)}
+.admin-shell .aura-source-metrics>button small{display:block;font-size:11px;font-weight:700;color:#236cac;margin-top:8px;line-height:1.35}
 .admin-shell .aura-source-metrics span{display:block;font-size:12px;color:#667d95;line-height:1.4}
 .admin-shell .aura-source-metrics b{display:block;font-size:27px;color:#164877;margin-top:6px}
 .admin-shell .aura-source-panel{display:grid;gap:13px;padding:20px;border:1px solid #dce6f0;background:#fff;border-radius:18px}
@@ -58,6 +61,8 @@
 .admin-shell .aura-source-empty p{font-size:12px;line-height:1.6}
 .admin-shell .aura-source-pagination{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px;font-size:12px;color:#72859b}
 .admin-shell .aura-source-ui :is(input,select,textarea,button,a):focus-visible{outline:3px solid #267aca;outline-offset:2px}
+.admin-shell .aura-source-results{scroll-margin-top:24px}
+@media(prefers-reduced-motion:reduce){.admin-shell .aura-source-metrics>button{transition:none}}
 @media(max-width:1050px){
   .admin-shell .aura-source-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
   .admin-shell .aura-source-form{grid-template-columns:repeat(2,minmax(0,1fr))}
