@@ -39,8 +39,8 @@ test('Explicit unresolved contradiction blocks review despite checked answer and
  assert.equal(gate.eligibleForQuestionBank,false);
  draft.issueResolutions.CONTRADICTORY_SQUARE_SIDE_AND_DIAGONAL='Giữ chặn cho đến khi đề gốc sửa số liệu hình vuông.';
  gate=c.evaluate(item,draft);
- assert.equal(gate.status,'LOCAL_REVIEW_COMPLETE_NOT_AUTHORIZED');
- assert.equal(gate.readyForStaging,true);
+ assert.equal(gate.readyForStaging,false,'source contradiction cannot be cleared by a browser note');
+ assert.ok(gate.blockers.some(x=>x.includes('Nguồn còn cảnh báo')));
  assert.equal(gate.eligibleForQuestionBank,false,'No local approval may publish to bank');
  assert.equal(gate.autoGradingAllowed,false);
 });
@@ -72,4 +72,22 @@ test('HTML CSP forbids network connections and references dedicated review scrip
  assert.match(html,/admin_question_review_ui\.js\?v=/);
  assert.match(html,/admin_question_review_core\.js\?v=/);
  assert.doesNotMatch(readFileSync('admin_question_review_ui.js','utf8'),/auraApproveInboxFile|aura_inbox_queue_v1|api\.github\.com|fetch\(/);
+});
+
+test('Clean item can be reviewed LOCALLY only when rubric steps sum to declared points',()=>{
+ const c=core();
+ const clean={...packet().items[0],itemId:'M6-GK1-DE01-MCQ01',sourceLabel:'Câu 1',
+   type:'MCQ',images:[],issueFlags:[],
+   options:[{key:'A',text:'Đúng'},{key:'B',text:'Sai B'},{key:'C',text:'Sai C'},{key:'D',text:'Sai D'}]};
+ const item=c.sanitizePacket({...packet(),items:[clean]}).items[0];
+ const d={...c.emptyDecision(),answer:'A',
+   answerEvidence:'Đã giải và đối chiếu A là phương án duy nhất đúng.',
+   rubric:'Đáp án đúng: 0,25 điểm',maxPoints:'0.25',
+   rubricEvidence:'Đối chiếu thang điểm nháp 0,25 một câu; cần duyệt từ giáo viên.',
+   imageEvidence:'Không có ảnh trong câu.',
+   checkImage:true,checkAnswer:true,checkRubric:true,reviewerLabel:'Reviewer'};
+ assert.equal(c.evaluate(item,d).readyForStaging,true);
+ assert.equal(c.evaluate(item,d).eligibleForQuestionBank,false);
+ d.maxPoints='0.5';
+ assert.ok(c.evaluate(item,d).blockers.some(x=>x.includes('Tổng điểm')));
 });
