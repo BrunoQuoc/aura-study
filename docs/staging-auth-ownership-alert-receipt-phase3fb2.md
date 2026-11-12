@@ -79,3 +79,14 @@ References: [GitHub issue assignment](https://docs.github.com/en/issues/tracking
 - A safe alert-delivery test needs an independent authorized sender to post `DRILL ONLY` with both approved @mentions on synthetic [Issue #13](https://github.com/BrunoQuoc/aura-study/issues/13). Using the Primary's own GitHub account as sender would not establish notification delivery to that same account.
 - Each participant must confirm the received notification on Issue #12 from their own account, specifying the chosen channel and UTC receipt time. Reviewer verifies comment author and links before updating receipt evidence.
 - The owner-approved monitoring cadence, actual Supabase alert pipeline, escalation and real 429 thresholds remain OPEN. **PRODUCTION NO-GO**.
+
+
+### Alternative two-account GitHub notification drill
+
+If no independent third sender is available, an explicitly approved **cross-notification test** using the two different accepted accounts can verify the GitHub channel for both, but it does **not** replace independent incident review or prove a Supabase-generated alert:
+
+1. While signed in as `Sonic-2015`, post one `DRILL ONLY — @BrunoQuoc ...` comment on synthetic Issue #13. BrunoQuoc observes their actual GitHub Inbox notification and self-comments `ACK RECEIPT PRIMARY — GitHub Inbox; observed time UTC: ...; source Issue #13; DRILL ONLY` on Issue #12.
+2. While signed in as `BrunoQuoc`, post a separate `DRILL ONLY — @Sonic-2015 ...` comment on Issue #13. Sonic-2015 observes their GitHub Inbox notification and self-comments `ACK RECEIPT BACKUP — GitHub Inbox; observed time UTC: ...; source Issue #13; DRILL ONLY` on Issue #12.
+3. A reviewer independently verifies sender/recipient account distinctions, comment authors and timestamps via GitHub. Notification observation may fail due to per-user settings; never assume a mention guarantees delivery. No accounts, RLS policies or Supabase settings change.
+
+Use **one message per target**, no mention spamming or repeated notifications. The acceptance registry remains PENDING until both recipient acknowledgements are verified. Monitoring cadence, automated alert integration and full production gates remain OPEN.
