@@ -1,0 +1,63 @@
+name: AURA Drive Source Review UI QA
+
+on:
+  pull_request:
+    paths:
+      - 'aura_drive_auth_core.js'
+      - 'admin_drive_source_core.js'
+      - 'admin_drive_source_ui.js'
+      - 'admin_drive_source_ui.css'
+      - 'admin_mvp_v2.js'
+      - 'admin-direct.html'
+      - 'tests/drive-source-review.test.mjs'
+      - 'tests/drive-source-browser.mjs'
+      - '.github/workflows/aura-drive-source-review-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-intake-unit:
+    name: Read-only consent and queue safety (offline)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check syntax and safety test suite
+        run: |
+          node --check aura_drive_auth_core.js
+          node --check admin_drive_source_core.js
+          node --check admin_drive_source_ui.js
+          node --test tests/drive-source-review.test.mjs
+
+  source-intake-browser:
+    name: iPad/phone/desktop review flow (mock Google APIs)
+    needs: source-intake-unit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium (pinned)
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test local browser with synthetic Google API
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/aura-source-intake-http.log 2>&1 &
+          sleep 2
+          node tests/drive-source-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aura-drive-source-ui-screenshots
+          path: test-results/drive-source-ui/
+          retention-days: 7
+
+# No live Google calls, tokens, source bytes, question-bank publish or user data in tests.
