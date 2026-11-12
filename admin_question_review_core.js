@@ -79,7 +79,18 @@ function evaluate(item,data){
     issues.push('Chưa có điểm tối đa hợp lệ (0–10, lớn hơn 0).');
   if(!d.checkRubric||rubric.length<15||rubricEvidence.length<12)
     issues.push('Chưa kiểm tra thang điểm từng bước và tổng điểm.');
+  // Accept a step only when its number follows ':' or '='; do not treat
+  // question indices, years or measurements within descriptions as marks.
+  const stepPoints=[...rubric.matchAll(/[:=]\\s*(\\d+(?:[.,]\\d+)?)(?=\\s*(?:điểm|đ\\b|[;.\\n]|$))/gi)]
+    .map(m=>Number(m[1].replace(',','.')));
+  const rubricSum=stepPoints.reduce((a,b)=>a+b,0);
+  if(!stepPoints.length||!Number.isFinite(rubricSum)||Math.abs(rubricSum-points)>0.0001)
+    issues.push('Tổng điểm các bước trong rubric không khớp điểm tối đa.');
+
   if(item.issueFlags.length){
+    // A text comment is not evidence that the original source was corrected.
+    // Refuse to clear a source quality defect until source SHA is replaced.
+    issues.push('Nguồn còn cảnh báo; phải sửa/đối chiếu lại bản gốc và tạo hồ sơ SHA mới trước khi hoàn thành.');
     for(const flag of item.issueFlags){
       if(trim(d.issueResolutions?.[flag],900).length<20)
         issues.push('Chưa xử lý/giải trình cảnh báo: '+flag);
