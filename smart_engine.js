@@ -130,7 +130,7 @@ function auraMathCandidatePool(rng,keywords='',count=60){
     }
   }
   const src=auraMathSourcePool();
-  src.forEach(q=>arr.push({...auraShuffleMc(q,rng),id:`ms_${auraSeedHash(q.stem).toString(36)}`,level:auraSmartLevel(q,'TOAN'),skill:auraSmartSkill(q,'TOAN'),_type:'mc'}));
+  src.forEach(q=>{const shuffled=auraShuffleMc(q,rng);if(shuffled)arr.push({...shuffled,id:q.approvedLearning===true?q.id:`ms_${auraSeedHash(q.stem).toString(36)}`,level:auraSmartLevel(q,'TOAN'),skill:auraSmartSkill(q,'TOAN'),_type:'mc',approvedLearning:q.approvedLearning===true,contentVersion:q.contentVersion||'',itemSha256:q.itemSha256||''})});
   for(let i=0;i<18;i++){
     const q=auraMathWritten(rng);
     arr.push({...q,id:`mw_${auraSeedHash(q.prompt).toString(36)}`,level:auraSmartLevel(q,'TOAN'),skill:auraSmartSkill(q,'TOAN'),_type:'written',_new:true});
