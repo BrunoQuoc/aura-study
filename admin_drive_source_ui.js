@@ -107,11 +107,15 @@
       '<h1>Đồng bộ nguồn từ Google Drive</h1>'+
       '<p>Quét các thư mục con của <b>00_INBOX</b>, đưa metadata tài liệu vào hàng chờ kiểm tra. '+
       'Tài liệu gốc vẫn ở Google Drive; chưa tải nội dung hoặc đưa câu hỏi vào đề thi.</p></section>'+
-      '<div class="aura-source-metrics">'+
-      '<div><span>Chờ kiểm tra</span><b>'+stats.pending+'</b></div>'+
-      '<div><span>Nguồn bị chặn</span><b>'+stats.blocked+'</b></div>'+
-      '<div><span>Đã xem thông tin</span><b>'+stats.reviewed+'</b></div>'+
-      '<div><span>Không còn trong INBOX</span><b>'+stats.missing+'</b></div></div>'+
+      '<div class="aura-source-metrics" aria-label="Lọc nhanh theo trạng thái nguồn">'+
+      [['pending','Chờ kiểm tra',stats.pending],['blocked','Nguồn bị chặn',stats.blocked],
+        ['reviewed','Đã xem thông tin',stats.reviewed],['missing','Không còn trong INBOX',stats.missing]]
+      .map(([key,label,count])=>
+        '<button type="button" class="aura-source-metric'+(state.filter===key?' is-selected':'')+
+        '" data-source-metric="'+key+'" aria-pressed="'+(state.filter===key)+'" '+
+        'aria-label="'+esc(label)+': '+count+' file. Xem danh sách">'+
+        '<span>'+esc(label)+'</span><b>'+count+'</b><small>Chạm để xem danh sách →</small></button>'
+      ).join('')+'</div>'+
       '<section class="aura-source-panel"><h2>01 · Kết nối quyền đọc nguồn</h2>'+
       '<p>Google sẽ yêu cầu quyền <b>đọc metadata của các file Drive mà tài khoản có quyền truy cập</b>. '+
       'Đây là quyền rộng ở cấp tài khoản Google; AURA chỉ thực hiện quét trong thư mục 00_INBOX anh chọn. '+
@@ -135,7 +139,7 @@
       '</section>'+
       (state.error?'<div class="aura-source-error" role="alert">'+esc(state.error)+'</div>':'')+
       (state.notice?'<div class="aura-source-success" role="status">'+esc(state.notice)+'</div>':'')+
-      '<section class="aura-source-panel"><div class="aura-source-sectionhead"><div>'+
+      '<section class="aura-source-panel aura-source-results" id="aura-source-review-results"><div class="aura-source-sectionhead"><div>'+
       '<h2>02 · Hàng chờ kiểm tra nguồn</h2>'+
       '<p>Kiểm tra môn, loại tài liệu, thông tin gốc. Hạng mục bị chặn phải bổ sung nguồn rồi quét lại.</p></div>'+
       '<b>'+matches.length+' / '+rows.length+' file</b></div>'+
@@ -267,6 +271,19 @@
     render();
   }
   app.addEventListener('click',event=>{
+    const metric=event.target.closest('[data-source-metric]');
+    if(metric&&app.contains(metric)){
+      const filter=metric.dataset.sourceMetric;
+      if(!['pending','blocked','reviewed','missing'].includes(filter))return;
+      state.filter=filter;
+      state.subject='ALL'; // metrics reflect every subject, so show the same overall count
+      state.offset=0;
+      state.error='';
+      state.notice='';
+      render();
+      document.getElementById('aura-source-review-results')?.scrollIntoView({behavior:'smooth',block:'start'});
+      return;
+    }
     const button=event.target.closest('[data-source-action]');
     if(!button||!app.contains(button))return;
     const action=button.dataset.sourceAction;
