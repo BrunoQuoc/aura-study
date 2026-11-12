@@ -1,0 +1,31 @@
+name: AURA Drive INBOX Discovery QA
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/drive-inbox-discovery.mjs'
+      - 'tests/drive-inbox-discovery.test.mjs'
+      - 'docs/drive-inbox-intake-stage1.md'
+      - '.gitignore'
+      - '.github/workflows/aura-drive-inbox-discovery-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drive-inbox-dry-run-tests:
+    name: Recursive discovery, pagination, provenance and blocking rules
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax + isolated synthetic Drive tests
+        run: |
+          node --check scripts/drive-inbox-discovery.mjs
+          node --test tests/drive-inbox-discovery.test.mjs
+
+# No access tokens or folder IDs, no Google requests, no live folder writes.
