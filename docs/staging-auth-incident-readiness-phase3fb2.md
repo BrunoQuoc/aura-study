@@ -125,3 +125,8 @@ No independent GitHub inbox delivery telemetry or provider timestamps available 
 **DRAFT, NOT APPROVED:** Proposed manual STAGING review daily at 09:00 Asia/Ho_Chi_Minh, Primary BrunoQuoc, Backup Sonic-2015, sanitized evidence by 09:30, Backup handoff at 09:15 if missing. P0 proposed ACK target 15 min from human detection, P1 60 min, P2 4h; these are not 24/7 promises.
 
 Runbook: [`docs/staging-auth-monitoring-cadence-sla-phase3fb2.md`](https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-monitoring-cadence-sla-phase3fb2.md). Policy: `release/phase3fb2-monitoring-cadence-sla.json`. Required next evidence: distinct approval comments from Primary and Backup, approved coverage/response windows and independent reviewer signoff, at least one real read-only daily check, and missed-check tabletop handoff. Neither scheduled monitoring nor alerts were activated. Alerting & Incident Response production gate remains OPEN; production NO-GO.
+
+
+### 13. Short-form cadence intent verified — 2026-11-12
+
+Both role-specific short-form cadence comments are present on Issue #12: [BrunoQuoc](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813565895) and [Sonic-2015](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813579412). Authors independently checked. Since neither comment specifies 09:00 weekend coverage, P0/P1/P2 targets or Backup takeover, these are **in-principle approvals only**, not completed operational SLA consent. Full terms, independent policy sign-off, first real manual read-only check and handoff rehearsal remain OPEN; live Supabase alerts off and PRODUCTION NO-GO.
