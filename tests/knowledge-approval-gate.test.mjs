@@ -42,7 +42,7 @@ test('All 96 questions built automatically with SHA provenance; no answer reentr
 test('Initial policy is fail-closed and cannot publish based on machine QA alone',()=>{
  const pending=JSON.parse(fs.readFileSync('aura_data/knowledge_approval/math6_v2_policy.json'));
  assert.equal(pending.batchReview.status,'PENDING_QUALIFIED_REVIEW');
- assert.throws(()=>validateApprovalPolicy(pending,snapshot),/educator attestation/);
+ assert.throws(()=>validateApprovalPolicy(pending,snapshot),/teacher attestation/);
  const pointer=JSON.parse(fs.readFileSync('aura_data/approved_knowledge/active.json'));
  assert.equal(pointer.status,'NO_APPROVED_RELEASE');
  const trust=JSON.parse(fs.readFileSync('aura_data/approved_knowledge/trust.json'));
