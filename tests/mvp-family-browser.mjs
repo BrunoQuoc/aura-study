@@ -45,6 +45,16 @@ async function login(page,id,pin){
     document.querySelector('.aura-account')?.textContent?.includes('Đăng xuất') &&
     typeof window.exam==='function',null,{timeout:25000});
 }
+async function settleStudent(page){
+  // Student loads additional scripts dynamically after HTML load.
+  await page.waitForLoadState('networkidle',{timeout:20000});
+  await page.waitForFunction(()=>
+    typeof window.startRandom15Exam==='function'&&
+    typeof window.auraRecordExamLearning==='function'&&
+    typeof window.AURA_RESULTS==='object',
+    null,{timeout:20000});
+  await page.waitForTimeout(350);
+}
 async function main(){
  const browser=await chromium.launch({headless:true});
  const first=await isolated(browser);
@@ -63,6 +73,7 @@ async function main(){
   await page.waitForFunction(()=>document.querySelector('.aura-login-error')?.textContent.includes('PIN không đúng'));
   assert.equal(await page.locator('.aura-login-overlay').count(),1);
   await login(page,firstId,'6542');
+  await settleStudent(page);
 
   const sel=await page.evaluate(()=>{
     const e=(window.AURA_MATH_EXAMS||[]).find(x=>x.ready&&(x.mc||[]).some(q=>q.answer&&Array.isArray(q.options)&&(!q.needsImage||q.image)));
@@ -86,6 +97,7 @@ async function main(){
   await page.locator('input[name="mc'+sel.index+'"][value="'+sel.wrong+'"]').evaluate(input=>input.click());
   if(await page.locator('#es0').count())await page.locator('#es0').fill('Synthetic essay for QA only');
   await page.reload({waitUntil:'load'});
+  await settleStudent(page);
   await page.waitForFunction(()=>typeof window.exam==='function');
   assert.equal(await page.locator('.aura-login-overlay').count(),0);
   const draft=await page.evaluate(id=>JSON.parse(localStorage.getItem('exam_'+id)||'{}'),sel.id);
@@ -114,6 +126,7 @@ async function main(){
   await page.waitForFunction(()=>typeof window.auraStudentLogout==='function');
   await page.evaluate(()=>window.auraStudentLogout());
   await login(page,secondId,'7529');
+  await settleStudent(page);
   const secondCounts=await page.evaluate(()=>({
     attempts:JSON.parse(localStorage.getItem('aura_attempts')||'[]').length,
     wrong:Object.keys(JSON.parse(localStorage.getItem('aura_wrong_book_v1')||'{}')).length
@@ -122,6 +135,7 @@ async function main(){
   assert.equal(secondCounts.wrong,0);
   await page.evaluate(()=>window.auraStudentLogout());
   await login(page,firstId,'6542');
+  await settleStudent(page);
   assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('aura_attempts')||'[]').length),1);
 
   // Real browser download and separate-context restore, both synthetic.
