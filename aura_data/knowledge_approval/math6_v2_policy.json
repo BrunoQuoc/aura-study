@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "kind": "aura_math6_v2_batch_pedagogical_review_policy_v1",
+  "libraryId": "AURA-KNTT6-MATH-VOLUME1",
+  "batchReview": {
+    "status": "PENDING_QUALIFIED_REVIEW",
+    "educatorName": null,
+    "evidenceReference": null,
+    "reviewedSourceSha256": {
+      "lessonData": null,
+      "chapterData": null
+    },
+    "notes": "The system has machine-checked 96 answers but no authorized educator has attested to pedagogy/grade suitability."
+  },
+  "exclusions": [],
+  "scope": "Batch review of non-exception items; do not manually re-enter 96 questions or 96 answers.",
+  "readyForPublish": false
+}

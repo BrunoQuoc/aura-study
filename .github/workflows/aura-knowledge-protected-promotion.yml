@@ -1,0 +1,98 @@
+name: AURA Knowledge — Protected Batch Approval & Signed Promotion
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Immutable signed Knowledge Library release version, e.g. v1.0.0"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aura-learning-approval-release
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    name: 96 answers, source hashes and qualified educator evidence
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify existing math preflight and batch evidence
+        run: |
+          node scripts/qa-knowledge-math6-v2.mjs >/dev/null
+          node scripts/knowledge-approval-pipeline.mjs status --output=/tmp/aura-approval-status.json
+          node - <<'NODE'
+          const fs=require('fs');
+          const s=JSON.parse(fs.readFileSync('/tmp/aura-approval-status.json'));
+          if(s.candidateCount!==96 || s.teacherStatus!=='APPROVED_BY_QUALIFIED_REVIEWER' ||
+             !s.sourceHashesMatchAttestation || !s.batchEvidencePresent)
+            throw Error('FAIL CLOSED: qualified educator must approve this exact source version');
+          console.log('Source/educator evidence PASS; independent protected review still required.');
+          NODE
+
+  signed-release:
+    name: Protected independent approval, P-256 signature and versioned release
+    needs: preflight
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: aura-learning-approval
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Recheck source, mandatory environment reviewers and protected signing key
+        env:
+          AURA_VERSION: ${{ inputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AURA_KNOWLEDGE_P256_PRIVATE_KEY_PEM: ${{ secrets.AURA_KNOWLEDGE_P256_PRIVATE_KEY_PEM }}
+        run: |
+          node scripts/qa-knowledge-math6-v2.mjs >/dev/null
+          node scripts/knowledge-approval-pipeline.mjs publish --version="$AURA_VERSION"
+          git diff --name-only
+      - name: Create signed approved release PR and request auto merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AURA_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          RELEASE_BRANCH="knowledge-approved-$AURA_VERSION-$GITHUB_RUN_ID"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git switch -c "$RELEASE_BRANCH"
+          git add aura_data/approved_knowledge/active.json aura_data/approved_knowledge/releases/
+          git commit -m "release(knowledge): signed approved Math6 $AURA_VERSION (run $GITHUB_RUN_ID)"
+          git push origin "$RELEASE_BRANCH"
+          PR_URL="$(gh pr create --base main --head "$RELEASE_BRANCH" \
+            --title "release(knowledge): authorized Math6 $AURA_VERSION" \
+            --body "Generated after protected Environment review; P-256 signed questions and original source SHA. Practice-only; official Question Bank/Exam Engine disabled. GitHub approval run $GITHUB_RUN_ID.")"
+          echo "Signed release PR: $PR_URL"
+          gh pr merge "$PR_URL" --auto --squash || echo "Auto merge disallowed by branch rules; signed PR remains pending."
+
+# No public Admin clicks / localStorage switches can grant trusted approval.
+# Environment MUST require an independent reviewer; run will reject missing
+# required-reviewer protection, missing approval event or missing P-256 secret.
+# Approved release goes live only when merged into main AND verified in browser.

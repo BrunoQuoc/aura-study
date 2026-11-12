@@ -159,7 +159,11 @@
         '<span>'+Math.min(state.offset+1,matches.length)+'–'+Math.min(state.offset+35,matches.length)+' / '+matches.length+'</span>'+
         '<button class="btn soft" data-source-action="next" '+(state.offset+35>=matches.length?'disabled':'')+'>Tiếp</button></div>':'')+
       '</section>'+
-      '<section class="aura-source-panel"><h2>03 · Kiểm định hình, đáp án và thang điểm</h2>'+
+      '<section class="aura-source-panel"><h2>03 · Phê duyệt học liệu theo phiên bản</h2>'+
+      '<p>Thư viện Toán 6 V2 có 96 câu tự tách từ 22 bài và 5 bộ ôn. AURA kiểm tra mã câu, đáp án, dấu vết nguồn; chỉ ngoại lệ hoặc xác nhận theo lô cần người có thẩm quyền. Không nhập lại từng câu hay đáp án.</p>'+
+      '<a class="btn primary" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-height:46px" '+
+      'href="knowledge-approval.html">Xem cổng duyệt học liệu V2 →</a></section>'+
+      '<section class="aura-source-panel"><h2>04 · Công cụ kiểm định Word thủ công (dự phòng)</h2>'+
       '<p>Giai đoạn 2C có bàn duyệt câu hỏi riêng. Anh cần nạp hồ sơ JSON nguồn đã khôi phục từ Word; '+
       'hệ thống chưa tự tải nội dung file qua OAuth metadata và không tự đưa câu hỏi vào ngân hàng.</p>'+
       '<a class="btn primary" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-height:46px" '+

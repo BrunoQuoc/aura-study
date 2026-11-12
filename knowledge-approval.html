@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#163d65">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; object-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'self'">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="knowledge_approval.css?v=20261113">
+<title>AURA STUDY — Cổng kiểm định học liệu theo phiên bản</title>
+</head>
+<body>
+<main class="approval-shell">
+<header class="approval-hero">
+  <div><p class="eyebrow">AURA STUDY · KNOWLEDGE LIBRARY · APPROVAL GATE</p>
+  <h1>Kiểm định và phát hành học liệu</h1>
+  <p>96 câu Toán 6 được lấy trực tiếp từ bài học và ôn tập. Không phải nhập lại câu hỏi, đáp án hay file JSON. Nguồn được ký và phát hành theo phiên bản sau kiểm định có thẩm quyền.</p></div>
+  <a class="back" href="admin-direct.html">← Về Admin</a>
+</header>
+<div class="safety-note"><strong>Lưu ý:</strong> đây là trang giám sát công khai, <strong>không phải nút phê duyệt Admin</strong>. Chỉ quy trình GitHub Actions có người duyệt độc lập, bằng chứng sư phạm và chữ ký riêng mới được cấp quyền xuất bản vào luyện tập. Đề thi chính thức vẫn bị khóa.</div>
+<div class="approval-metrics">
+<div><strong id="totalSource">—</strong><span>Câu nhận diện từ nguồn</span></div>
+<div><strong id="machineQA">—</strong><span>Câu có đáp án/lời giải nháp</span></div>
+<div><strong id="signedApproved">0</strong><span>Câu có bản phát hành ký số</span></div>
+<div><strong id="exceptions">0</strong><span>Ngoại lệ cần xử lý</span></div>
+</div>
+<section class="approval-card">
+<h2>01 · Trạng thái phiên bản và phê duyệt</h2>
+<div id="approvalState" role="status" class="approval-state">Đang kiểm tra nguồn và chữ ký…</div>
+<dl id="approvalDetails" class="approval-details"></dl>
+</section>
+<section class="approval-card">
+<h2>02 · Nguồn câu đã tách tự động theo chương</h2>
+<p class="subtitle">Dùng lại các câu đã biên soạn; kiểm định theo lô, không duyệt lại từng câu nếu không có ngoại lệ.</p>
+<div id="approvalChapters" class="approval-chapters"></div>
+</section>
+<section class="approval-card">
+<h2>03 · Các ngoại lệ và việc còn cần phê duyệt</h2>
+<div id="exceptionList" class="approval-exceptions"></div>
+<p class="subtitle">Nếu thay đổi một câu, phiên bản SHA-256 nguồn thay đổi và xác nhận trước sẽ không còn áp dụng cho bản mới.</p>
+</section>
+<section class="approval-card">
+<h2>04 · Quy trình phê duyệt có kiểm soát</h2>
+<p>Người được phân quyền xác nhận tính đúng đắn sư phạm của cả lô theo dấu vết nguồn, bổ sung bằng chứng và ngoại lệ nếu có. Sau đó kích hoạt workflow có GitHub Environment bảo vệ. Hệ thống tự tạo bản phát hành đã ký và Pull Request; khi bản đó vào nhánh chính, Practice Generator tự đọc câu hợp lệ.</p>
+<div class="approval-actions">
+<a href="https://github.com/BrunoQuoc/aura-study/actions/workflows/aura-knowledge-protected-promotion.yml" target="_blank" rel="noopener noreferrer">Mở quy trình phát hành được bảo vệ</a>
+<a href="https://github.com/BrunoQuoc/aura-study/blob/main/docs/knowledge-approval-versioned-promotion.md" target="_blank" rel="noopener noreferrer">Đọc hướng dẫn thiết lập và kiểm định</a>
+</div>
+<p class="subtitle">Không cần làm thủ công với 96 câu; chỉ một xác nhận theo lô cho bản nguồn và xử lý danh sách ngoại lệ. Khi chưa có tài khoản người kiểm định hợp lệ, trang này giữ trạng thái chờ.</p>
+</section>
+</main>
+<script src="approved_knowledge_runtime.js?v=20261113"></script>
+<script src="knowledge_approval_status.js?v=20261113"></script>
+</body>
+</html>

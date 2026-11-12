@@ -29,7 +29,7 @@ function sample(){
 test('HTML exposes separate Drive sources, read-only module wiring and cache versions',()=>{
   assert.match(html,/auraDriveSourceInbox\(\)/);
   assert.match(html,/admin_drive_source_core\.js\?v=drive-review-/);
-  assert.match(html,/admin_drive_source_ui\.js\?v=(?:drive-review-|question-review-)/);
+  assert.match(html,/admin_drive_source_ui\.js\?v=(?:drive-review-|question-review-|knowledge-batch-gate-)/);
   assert.match(html,/admin_drive_source_ui\.css\?v=drive-review-/);
   assert.match(html,/aura_drive_auth_core\.js\?v=metadata-oauth-/);
   assert.doesNotMatch(readFileSync('admin_drive_source_ui.js','utf8'),/auraApproveInboxFile|auraSetMetadataOverride|aura_inbox_queue_v1/);

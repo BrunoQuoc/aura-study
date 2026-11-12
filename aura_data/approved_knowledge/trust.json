@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "kind": "aura_knowledge_release_public_trust_v1",
+  "activeKeyId": null,
+  "publicKeys": [],
+  "setupRequired": true,
+  "note": "Fail-closed: add P-256 SPKI public key only after generating private key on a trusted operator device; private key must be stored only in protected GitHub environment secrets."
+}
