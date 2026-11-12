@@ -29,7 +29,16 @@ export function assessCadenceSla(policy, ownership) {
    /^\d{4}-\d\d-\d\d$/.test(a.review_due_local_date||""),
   actual_read_only_review:x.first_real_manual_check_completed===true&&isEvidenceLink(x.first_real_manual_check_issue_comment_url),
   backup_handoff_rehearsal:x.missed_review_handoff_tabletop_completed===true&&
-   isEvidenceLink(x.missed_review_handoff_evidence_url),
+   x.missed_review_handoff_participants_verified===true&&
+   x.missed_review_handoff_correct_order===true&&
+   x.missed_review_handoff_tabletop_only===true&&
+   isEvidenceLink(x.missed_review_handoff_evidence_url)&&
+   isEvidenceLink(x.missed_review_handoff_primary_scenario_comment_url)&&
+   isEvidenceLink(x.missed_review_handoff_backup_takeover_comment_url)&&
+   isEvidenceLink(x.missed_review_handoff_primary_review_comment_url)&&
+   x.missed_review_handoff_primary_scenario_comment_url!==x.missed_review_handoff_backup_takeover_comment_url&&
+   x.missed_review_handoff_backup_takeover_comment_url!==x.missed_review_handoff_primary_review_comment_url&&
+   x.missed_review_handoff_primary_scenario_comment_url!==x.missed_review_handoff_primary_review_comment_url,
   time_bounded_manual_monitoring_approved:policy?.exceptions?.time_bounded_manual_monitoring_exception_approved===true&&
    typeof policy?.exceptions?.expires_at_utc==="string"&&
    !Number.isNaN(Date.parse(policy.exceptions.expires_at_utc))&&
