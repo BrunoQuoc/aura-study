@@ -1,0 +1,35 @@
+name: AURA Blocked DOCX Source Capture QA
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/extract-docx-for-review.py'
+      - 'tests/test_docx_source_capture.py'
+      - 'docs/docx-source-content-qa.md'
+      - '.github/workflows/aura-docx-source-capture-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  safe-ooxml-capture:
+    name: Offline DOCX media, table, text and QA gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and run fully synthetic DOCX tests
+        run: |
+          python -m py_compile scripts/extract-docx-for-review.py
+          python -m unittest discover -s tests -p test_docx_source_capture.py -v
+      - name: Assert no source content leaves private path
+        run: |
+          test -f .gitignore
+          grep -q '^\.aura_private/$' .gitignore
+          test ! -f aura_data/source_capture/blocks.json
+
+# No Google token, no real DOCX, no Google Drive writes, no Question Bank auto publish.
