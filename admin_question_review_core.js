@@ -81,7 +81,7 @@ function evaluate(item,data){
     issues.push('Chưa kiểm tra thang điểm từng bước và tổng điểm.');
   // Accept a step only when its number follows ':' or '='; do not treat
   // question indices, years or measurements within descriptions as marks.
-  const stepPoints=[...rubric.matchAll(/[:=]\\s*(\\d+(?:[.,]\\d+)?)(?=\\s*(?:điểm|đ\\b|[;.\\n]|$))/gi)]
+  const stepPoints=[...rubric.matchAll(/[:=]\s*(\d+(?:[.,]\d+)?)(?=\s*(?:điểm|đ\b|[;.\n]|$))/gi)]
     .map(m=>Number(m[1].replace(',','.')));
   const rubricSum=stepPoints.reduce((a,b)=>a+b,0);
   if(!stepPoints.length||!Number.isFinite(rubricSum)||Math.abs(rubricSum-points)>0.0001)
