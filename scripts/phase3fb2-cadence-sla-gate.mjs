@@ -21,6 +21,7 @@ export function assessCadenceSla(policy, ownership) {
   explicit_backup_cadence_ack:a.accepted_by_backup===true&&isIssueComment(a.backup_cadence_ack_comment_url),
   primary_sla_terms_confirmed:a.sla_and_coverage_terms_confirmed_by_primary===true,
   backup_sla_terms_confirmed:a.sla_and_coverage_terms_confirmed_by_backup===true,
+  cadence_comment_authors_verified:a.cadence_comment_authors_verified===true,
   independent_reviewer_signoff:a.independent_reviewer_approved===true&&isIssueComment(a.independent_policy_signoff_comment_url),
   approved_and_effective:a.approved===true&&typeof a.approved_at_utc==="string"&&
    !Number.isNaN(Date.parse(a.approved_at_utc))&&
