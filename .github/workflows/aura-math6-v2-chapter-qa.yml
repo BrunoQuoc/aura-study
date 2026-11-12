@@ -1,0 +1,81 @@
+name: AURA Math6 V2.1 Chapter Review & Pedagogy Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'aura_data/knowledge_math6_kntt_volume1_v2.json'
+      - 'aura_data/knowledge_math6_kntt_v2_chapter_reviews.json'
+      - 'knowledge-math6-v2.html'
+      - 'knowledge-math6-chapters.html'
+      - 'knowledge_math6_chapters.js'
+      - 'knowledge_math6_chapters.css'
+      - 'scripts/qa-knowledge-math6-v2.mjs'
+      - 'tests/knowledge-math6-chapter-review.test.mjs'
+      - 'tests/knowledge-math6-chapter-review-browser.mjs'
+      - 'docs/knowledge-math6-v2-chapter-qa-visuals.md'
+      - '.github/workflows/aura-math6-v2-chapter-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  content-preflight:
+    name: All 96 answers, 22-lesson coverage and closed promotion gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and structural content audit
+        run: |
+          node --check knowledge_math6_chapters.js
+          node --check knowledge_math6_v2.js
+          node --check scripts/qa-knowledge-math6-v2.mjs
+          node --test tests/knowledge-math6-volume1-v2.test.mjs tests/knowledge-math6-chapter-review.test.mjs
+      - name: Independent answer cross-check and pedagogical gate report
+        run: |
+          mkdir -p test-results
+          node scripts/qa-knowledge-math6-v2.mjs --output=test-results/qa-math6-v2.json
+      - name: Keep machine QA audit for review (not teacher signoff)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aura-math6-v2-pedagogy-preflight
+          path: test-results/qa-math6-v2.json
+          if-no-files-found: warn
+          retention-days: 14
+
+  ipad-interaction:
+    name: Five visuals and quiz remediation on iPad / phone / desktop Chromium
+    needs: content-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test existing lessons and new chapter review as static local pages
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/aura-math6-v2-chapters-http.log 2>&1 &
+          sleep 2
+          node tests/knowledge-math6-volume1-browser.mjs
+          node tests/knowledge-math6-chapter-review-browser.mjs
+      - name: Retain only synthetic screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aura-math6-v2-chapter-visuals
+          path: |
+            test-results/knowledge-math6-chapter-review/
+            test-results/knowledge-math6-volume1/
+          retention-days: 7
+
+# No textbook scans, private student scores, API tokens, official grading or Question Bank writes.
