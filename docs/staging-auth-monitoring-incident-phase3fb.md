@@ -128,3 +128,8 @@ User-supplied GitHub Pages screenshot verifies **3/3 PASS** across P0 unpaired l
 ### Phase 3F-B2 next gate — Ownership & Alert Receipt
 
 The GitHub-connected login `BrunoQuoc` is **candidate only** for Primary; no official assignment or explicit acceptance exists. A distinct Backup is required. Human GitHub notification receipt must be verified through each recipient's own Issue #12 comments after a safe synthetic notification from Issue #13. Ticket persistence alone is insufficient. Full protocol: `docs/staging-auth-ownership-alert-receipt-phase3fb2.md`. Owner/Backup, delivery acknowledgement and live Supabase alert pipeline remain OPEN; PRODUCTION NO-GO.
+
+
+### Phase 3F-B2 Monitoring Cadence and SLA draft — 2026-11-12
+
+Both roles accepted (BrunoQuoc Primary, Sonic-2015 Backup) and reciprocal synthetic GitHub Inbox receipt was human self-ACKed 2/2. Daily manual **09:00 Asia/Ho_Chi_Minh** review and P0/P1/P2 response targets are now documented as **proposals, not approved or enabled**. See `docs/staging-auth-monitoring-cadence-sla-phase3fb2.md` and `release/phase3fb2-monitoring-cadence-sla.json`. Manual-only CI guard/tests now cover missing approvals and first daily review evidence. The 09:00 review is NOT automatically scheduled. GitHub Inbox test does not prove Supabase-generated alerts or 24/7 coverage. PRODUCTION NO-GO.
