@@ -81,7 +81,7 @@
     {
       "id": "ALERTING_AND_INCIDENT_RESPONSE",
       "status": "OPEN",
-      "reason": "Phase3F-B2 STAGING: Primary BrunoQuoc and Backup Sonic-2015 self-ACK verified. Cross-account GitHub Issue #13 synthetic @mention drills both posted; both recipients self-attested GitHub Inbox receipt on Issue #12; authors independently checked against GitHub comments. GitHub notification test is human-attested only, provider delivery telemetry unavailable; NOT evidence of real Supabase-to-GitHub automatic alerting. Independent review sign-off, approved monitoring cadence and SLA, escalation, alert integration and server 429 evidence remain OPEN. PRODUCTION NO-GO.",
+      "reason": "STAGING Phase3F-B2: BrunoQuoc Primary and Sonic-2015 Backup each verified full daily 09:00 VN (including weekends), 09:15 Backup takeover, 09:30 evidence and P0/P1/P2 human ACK targets (15/60/240 minutes from actual detection). Reciprocal synthetic GitHub Inbox receipt self-ACK 2/2 PASS. Operational governance still OPEN: independent policy signoff, first actual aggregate-only manual check, missed-review handoff exercise, effective/review dates and proof of live Supabase-triggered alerts / real 429. No 24/7 coverage or automated monitoring; PRODUCTION NO-GO.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
