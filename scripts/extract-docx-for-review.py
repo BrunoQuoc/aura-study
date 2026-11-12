@@ -226,7 +226,7 @@ def extract_source(docx_path: Path, private_dir: Path, *, source_id: str = "") -
             digest = hashlib.sha256(data).hexdigest()
             if extension not in ALLOWED_MEDIA_EXT:
                 asset_warnings.append("Unsupported media extension: " + extension)
-            basename = digest[:20] + (_safe_component(extension, 8) if extension else ".bin")
+            basename = digest[:20] + (extension if extension in ALLOWED_MEDIA_EXT else ".bin")
             target = assets_dir / basename
             if target.exists():
                 if hashlib.sha256(target.read_bytes()).hexdigest() != digest:
