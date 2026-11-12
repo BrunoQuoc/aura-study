@@ -87,3 +87,15 @@ Ownership registry: `release/phase3fb2-monitoring-ownership.json`; policy record
 - The source policy records these comment URLs but keeps `accepted_by_primary=false`, `accepted_by_backup=false`, `sla_and_coverage_terms_confirmed_by_primary=false`, `sla_and_coverage_terms_confirmed_by_backup=false`, `approval.approved=false`.
 - To record full agreement, each author **edits their own comment or adds a new self-authored comment** repeating the specific approval sentence from §5. Independent reviewer must verify the final author and contents; no assistant-authored comments or inferred intent may substitute.
 - After explicit agreement, the runbook still requires initial live **read-only** aggregate monitoring check, availability/handoff exercise, independent sign-off and review date before manual cadence is operational. No scheduled reminder, GitHub Action cron or Supabase live alert is active. **PRODUCTION NO-GO**.
+
+
+### Full cadence terms accepted by both roles — 2026-11-12
+
+The two short comments were **edited in place**. Verified through GitHub Issue #12 after edit:
+
+- [BrunoQuoc full Primary approval](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813565895): daily manual review 09:00 Asia/Ho_Chi_Minh including weekends; evidence by 09:30; Backup follow-up at 09:15; P0/P1/P2 ACK targets 15m/60m/4h from actual human detection during coverage; no 24/7 promise or automation.
+- [Sonic-2015 full Backup approval](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813579412): same coverage, Backup cover at 09:15, evidence 09:30, P0/P1/P2 acknowledgement targets and no automation.
+
+**PASS — two role-level approvals and explicit response-target consent.** Registry `release/phase3fb2-monitoring-cadence-sla.json` now sets both accepted flags, both terms-confirmed flags and author verification to true, while keeping `approval.approved=false` and `independent_reviewer_approved=false`.
+
+**Still OPEN:** independent playbook/reviewer signoff; first real aggregate-only daily monitoring evidence (not a copied historical sample); missed-Primary Backup handoff tabletop; effective and next-review dates; verification of any actual alert source. These are required before claiming active/manual readiness. Neither a daily reminder nor 24/7 incident monitoring has been activated. PRODUCTION NO-GO.
