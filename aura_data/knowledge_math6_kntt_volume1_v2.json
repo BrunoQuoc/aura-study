@@ -959,6 +959,377 @@
       "status": "DRAFT_ORIGINAL_AURA",
       "requiresPedagogicalReview": true,
       "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-13",
+      "number": 13,
+      "chapter": 3,
+      "title": "Tập hợp các số nguyên",
+      "objectives": [
+        "Nhận biết số nguyên âm và số đối",
+        "Biểu diễn, so sánh số nguyên trên trục số"
+      ],
+      "concepts": [
+        {
+          "heading": "Số nguyên",
+          "body": "Tập số nguyên ℤ gồm 0, các số nguyên dương và các số nguyên âm −1, −2, ... Ví dụ: nhiệt độ −3°C."
+        },
+        {
+          "heading": "Trục số",
+          "body": "Số nằm bên trái nhỏ hơn số bên phải. Mọi số âm nhỏ hơn 0; −7 < −3 dù 7 > 3."
+        },
+        {
+          "heading": "Số đối, giá trị tuyệt đối",
+          "body": "Số đối của a là −a. Giá trị tuyệt đối |a| là khoảng cách từ điểm a đến 0 trên trục số."
+        }
+      ],
+      "workedExample": {
+        "prompt": "So sánh −7, −3, 2 và tìm |−7|.",
+        "steps": [
+          "Trên trục số, −7 nằm bên trái −3, còn 2 nằm bên phải 0.",
+          "Vậy −7 < −3 < 2.",
+          "Khoảng cách từ −7 tới 0 là 7."
+        ],
+        "conclusion": "−7 < −3 < 2 và |−7| = 7."
+      },
+      "commonMistake": "Đừng nhầm −8 > −3 chỉ vì 8 > 3.",
+      "practice": [
+        {
+          "prompt": "Số nào nhỏ nhất?",
+          "choices": [
+            "−9",
+            "−2",
+            "0",
+            "3"
+          ],
+          "correct": 0,
+          "explanation": "−9 nằm xa bên trái nhất.",
+          "skill": "so-sanh-so-nguyen"
+        },
+        {
+          "prompt": "Số đối của −12 là gì?",
+          "choices": [
+            "−12",
+            "0",
+            "12",
+            "1/12"
+          ],
+          "correct": 2,
+          "explanation": "Số đối của −12 là 12.",
+          "skill": "so-doi"
+        },
+        {
+          "prompt": "Giá trị tuyệt đối |−5| bằng?",
+          "choices": [
+            "−5",
+            "0",
+            "5",
+            "10"
+          ],
+          "correct": 2,
+          "explanation": "Khoảng cách từ −5 đến 0 là 5.",
+          "skill": "gia-tri-tuyet-doi"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-14",
+      "number": 14,
+      "chapter": 3,
+      "title": "Phép cộng và phép trừ số nguyên",
+      "objectives": [
+        "Cộng hai số nguyên cùng dấu hoặc khác dấu",
+        "Trừ bằng cộng số đối"
+      ],
+      "concepts": [
+        {
+          "heading": "Cộng cùng dấu",
+          "body": "Hai số âm: cộng trị tuyệt đối rồi đặt dấu âm. Hai số dương: cộng như số tự nhiên."
+        },
+        {
+          "heading": "Cộng khác dấu",
+          "body": "Lấy trị tuyệt đối lớn trừ nhỏ; giữ dấu của số có trị tuyệt đối lớn. Hai số đối nhau có tổng 0."
+        },
+        {
+          "heading": "Phép trừ",
+          "body": "a − b = a + (−b)."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính −18 + 7 − (−5).",
+        "steps": [
+          "−18 + 7 = −11 vì 18 lớn hơn 7.",
+          "Trừ −5 là cộng 5: −11 + 5 = −6."
+        ],
+        "conclusion": "−6."
+      },
+      "commonMistake": "Trừ số âm thì đổi thành cộng số dương.",
+      "practice": [
+        {
+          "prompt": "−6 + (−8) bằng?",
+          "choices": [
+            "2",
+            "−2",
+            "−14",
+            "14"
+          ],
+          "correct": 2,
+          "explanation": "−(6 + 8) = −14.",
+          "skill": "cong-cung-dau"
+        },
+        {
+          "prompt": "−15 + 9 bằng?",
+          "choices": [
+            "24",
+            "−24",
+            "−6",
+            "6"
+          ],
+          "correct": 2,
+          "explanation": "15 − 9 = 6, giữ dấu âm.",
+          "skill": "cong-khac-dau"
+        },
+        {
+          "prompt": "4 − (−7) bằng?",
+          "choices": [
+            "−3",
+            "3",
+            "11",
+            "−11"
+          ],
+          "correct": 2,
+          "explanation": "4 + 7 = 11.",
+          "skill": "tru-so-nguyen"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-15",
+      "number": 15,
+      "chapter": 3,
+      "title": "Quy tắc dấu ngoặc",
+      "objectives": [
+        "Bỏ ngoặc và đổi dấu đúng",
+        "Nhóm các số nguyên để tính nhanh"
+      ],
+      "concepts": [
+        {
+          "heading": "Dấu cộng trước ngoặc",
+          "body": "Giữ nguyên dấu các số hạng: a + (b − c) = a + b − c."
+        },
+        {
+          "heading": "Dấu trừ trước ngoặc",
+          "body": "Đổi dấu mọi số hạng: a − (b − c) = a − b + c."
+        },
+        {
+          "heading": "Nhóm thuận tiện",
+          "body": "Sau khi bỏ ngoặc đúng, nhóm các số tạo số tròn chục hoặc các số đối nhau."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính 12 − (7 − 15) + (−4).",
+        "steps": [
+          "Bỏ ngoặc: 12 − 7 + 15 − 4.",
+          "Nhóm (12 − 7) + (15 − 4) = 5 + 11."
+        ],
+        "conclusion": "16."
+      },
+      "commonMistake": "Không chỉ đổi dấu số hạng đầu khi bỏ ngoặc có dấu trừ.",
+      "practice": [
+        {
+          "prompt": "9 − (2 + 6) bằng?",
+          "choices": [
+            "1",
+            "13",
+            "17",
+            "−1"
+          ],
+          "correct": 0,
+          "explanation": "9 − 8 = 1.",
+          "skill": "dau-ngoac"
+        },
+        {
+          "prompt": "8 − (−5 + 2) bằng?",
+          "choices": [
+            "5",
+            "11",
+            "15",
+            "1"
+          ],
+          "correct": 1,
+          "explanation": "Trong ngoặc là −3; 8 − (−3) = 11.",
+          "skill": "dau-ngoac"
+        },
+        {
+          "prompt": "Bỏ ngoặc 6 − (a − b) được?",
+          "choices": [
+            "6 − a − b",
+            "6 + a − b",
+            "6 − a + b",
+            "6 + a + b"
+          ],
+          "correct": 2,
+          "explanation": "Đổi dấu cả a lẫn −b.",
+          "skill": "quy-tac"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-16",
+      "number": 16,
+      "chapter": 3,
+      "title": "Phép nhân số nguyên",
+      "objectives": [
+        "Nhân số nguyên theo dấu",
+        "Nhân nhiều thừa số"
+      ],
+      "concepts": [
+        {
+          "heading": "Quy tắc dấu",
+          "body": "Nhân hai số cùng dấu cho kết quả dương, khác dấu cho kết quả âm."
+        },
+        {
+          "heading": "Tính chất",
+          "body": "Phép nhân có giao hoán, kết hợp và phân phối với phép cộng. Nhân với 0 cho kết quả 0."
+        },
+        {
+          "heading": "Nhiều thừa số",
+          "body": "Nếu không có số 0, có số chẵn thừa số âm thì tích dương; số lẻ thì tích âm."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính (−4) × 5 × (−3).",
+        "steps": [
+          "(−4) × 5 = −20.",
+          "(−20) × (−3) = 60."
+        ],
+        "conclusion": "60."
+      },
+      "commonMistake": "Không áp dụng quy tắc cộng số nguyên vào phép nhân.",
+      "practice": [
+        {
+          "prompt": "(−6) × 7 bằng?",
+          "choices": [
+            "−42",
+            "42",
+            "−13",
+            "13"
+          ],
+          "correct": 0,
+          "explanation": "Khác dấu thì tích âm.",
+          "skill": "nhan-khac-dau"
+        },
+        {
+          "prompt": "(−8) × (−5) bằng?",
+          "choices": [
+            "−40",
+            "40",
+            "−13",
+            "13"
+          ],
+          "correct": 1,
+          "explanation": "Cùng dấu thì tích dương.",
+          "skill": "nhan-cung-dau"
+        },
+        {
+          "prompt": "Tích (−2) × (−3) × (−4) có dấu gì?",
+          "choices": [
+            "Dương",
+            "Âm",
+            "Bằng 0",
+            "Không xác định"
+          ],
+          "correct": 1,
+          "explanation": "Có ba thừa số âm nên tích âm.",
+          "skill": "nhan-nhieu-so"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-17",
+      "number": 17,
+      "chapter": 3,
+      "title": "Phép chia hết. Ước và bội của một số nguyên",
+      "objectives": [
+        "Thực hiện chia hết hai số nguyên",
+        "Xác định ước và bội nguyên"
+      ],
+      "concepts": [
+        {
+          "heading": "Quy tắc chia",
+          "body": "Khi chia hết, hai số cùng dấu cho thương dương, khác dấu cho thương âm."
+        },
+        {
+          "heading": "Điều kiện",
+          "body": "Số chia phải khác 0. a chia hết cho b khi a = b × q với q là số nguyên."
+        },
+        {
+          "heading": "Ước và bội",
+          "body": "Nếu a = b × q (b ≠ 0), thì b là ước của a; a là bội của b. Ước của số nguyên có thể âm."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Xét 36 : (−9), rồi xét −9 có là ước của 36 không.",
+        "steps": [
+          "36 : 9 = 4; khác dấu nên thương bằng −4.",
+          "36 = (−9) × (−4), do đó −9 là ước của 36."
+        ],
+        "conclusion": "36 : (−9) = −4 và −9 là ước của 36."
+      },
+      "commonMistake": "Không thực hiện phép chia với số chia bằng 0.",
+      "practice": [
+        {
+          "prompt": "(−24) : 6 bằng?",
+          "choices": [
+            "−4",
+            "4",
+            "−18",
+            "18"
+          ],
+          "correct": 0,
+          "explanation": "Khác dấu nên thương −4.",
+          "skill": "chia-so-nguyen"
+        },
+        {
+          "prompt": "Số nào là ước của 20?",
+          "choices": [
+            "−4",
+            "3",
+            "6",
+            "7"
+          ],
+          "correct": 0,
+          "explanation": "20 = (−4) × (−5).",
+          "skill": "uoc-so-nguyen"
+        },
+        {
+          "prompt": "Mệnh đề nào đúng?",
+          "choices": [
+            "8 : 0 = 0",
+            "0 : (−5) = 0",
+            "−7 : 0 = −7",
+            "0 : 0 = 1"
+          ],
+          "correct": 1,
+          "explanation": "0 chia số khác 0 bằng 0.",
+          "skill": "dieu-kien-chia"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
     }
   ],
   "expectedLessonCount": 22,
