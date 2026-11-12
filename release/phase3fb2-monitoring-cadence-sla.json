@@ -137,7 +137,30 @@
       "auth_edge_first_log_ts": "2026-11-12T04:31:57.791000",
       "auth_edge_last_log_ts": "2026-11-12T04:32:03.981000",
       "interpretation": "Edge logs present but no auth_logs observed; only narrow request sample with health/readiness checks, therefore Auth coverage/health and alerting not verified"
-    }
+    },
+    "operator_ad_hoc_database_inventory_screenshot_evidence": {
+      "source": "Operator-supplied Supabase STAGING SQL Editor SELECT results screenshot in AURA STUDY conversation; screenshot is not independently re-executed from this issue",
+      "snapshot_utc": "2026-11-12T05:14:43Z",
+      "snapshot_local": "2026-11-12 12:14:43 Asia/Ho_Chi_Minh",
+      "issue_evidence_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6815347992",
+      "counts": {
+        "auth_users_total": 6,
+        "auth_users_anonymous": 5,
+        "auth_users_nonanonymous": 1,
+        "auth_sessions_total": 4,
+        "refresh_tokens_not_revoked": 4,
+        "device_rows_total": 4,
+        "devices_actively_paired": 1,
+        "learning_events_total": 13,
+        "attempts_total": 0,
+        "pairing_requests_total": 6,
+        "pairing_requests_pending_unexpired": 0
+      },
+      "core_baseline_counts_unchanged": true,
+      "interpretation": "Aggregate-only counts match earlier 2026-11-12 snapshot and 2026-11-06 baseline where directly comparable; no real 09:00 attendance or Auth log coverage established."
+    },
+    "ad_hoc_three_query_operator_screenshots_received": true,
+    "ad_hoc_three_query_scope": "2026-11-12 operator screenshots for Auth-edge aggregate, 24h log source coverage, PostgreSQL count inventory; not the planned 2026-11-13 09:00 manual review"
   },
   "exceptions": {
     "time_bounded_manual_monitoring_exception_approved": false,
