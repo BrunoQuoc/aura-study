@@ -73,7 +73,8 @@ async function main(){
     examFunction:String(window.exam).slice(0,140)
   }),sel.id);
   console.log('EXAM_OPEN_DIAG',JSON.stringify(examDiagnostic));
-  await page.locator('input[name="mc'+sel.index+'"][value="'+sel.wrong+'"]').check({timeout:8000});
+  // Radio visuals use an overlay span; invoke the radio's DOM click/change path without a fragile pointer-location assumption.
+  await page.locator('input[name="mc'+sel.index+'"][value="'+sel.wrong+'"]').evaluate(input=>input.click());
   if(await page.locator('#es0').count())await page.locator('#es0').fill('Synthetic essay for QA only');
   await page.reload({waitUntil:'load'});
   await page.waitForFunction(()=>typeof window.exam==='function');
