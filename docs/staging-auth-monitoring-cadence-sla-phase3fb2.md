@@ -77,3 +77,13 @@ The operator records verified comment URLs and decision timestamp, effective dat
 - Stage D: live Supabase-to-alert integration and bounded server 429 tests — **OPEN**.
 
 Ownership registry: `release/phase3fb2-monitoring-ownership.json`; policy record: `release/phase3fb2-monitoring-cadence-sla.json`; workflow remains manual-only. Release: 3 STAGING_PASS / 11 OPEN; PRODUCTION NO-GO.
+
+
+### Short-form cadence acknowledgements — 2026-11-12
+
+- `BrunoQuoc` posted [APPROVE CADENCE PRIMARY](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813565895).
+- `Sonic-2015` posted [APPROVE CADENCE BACKUP](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813579412).
+- Source author and exact text verified through GitHub. Both comments are **short-form intent only**: neither explicitly confirms weekend coverage, response targets, Backup takeover or no-24/7 scope.
+- The source policy records these comment URLs but keeps `accepted_by_primary=false`, `accepted_by_backup=false`, `sla_and_coverage_terms_confirmed_by_primary=false`, `sla_and_coverage_terms_confirmed_by_backup=false`, `approval.approved=false`.
+- To record full agreement, each author **edits their own comment or adds a new self-authored comment** repeating the specific approval sentence from §5. Independent reviewer must verify the final author and contents; no assistant-authored comments or inferred intent may substitute.
+- After explicit agreement, the runbook still requires initial live **read-only** aggregate monitoring check, availability/handoff exercise, independent sign-off and review date before manual cadence is operational. No scheduled reminder, GitHub Action cron or Supabase live alert is active. **PRODUCTION NO-GO**.
