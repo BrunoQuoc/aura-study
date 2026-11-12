@@ -70,6 +70,10 @@ async function scenario(browser,name,mode,view){
    await r.fulfill({status:200,contentType:'application/json',
     body:JSON.stringify(fixture.release,null,2)+'\n'});return;
   }
+  if(mode==='sourcechanged'&&p==='aura_data/knowledge_math6_kntt_volume1_v2.json'){
+   await r.fulfill({status:200,contentType:'application/json',
+    body:source.toString('utf8')+'\n'});return;
+  }
   await r.continue();
  };
  await ctx.route('**/*',route);
@@ -129,4 +133,5 @@ try{
  await scenario(browser,'phone','missing',{width:390,height:844});
  await scenario(browser,'desktop','tampered',{width:1366,height:900});
  await scenario(browser,'desktop','itemhash',{width:1366,height:900});
+ await scenario(browser,'desktop','sourcechanged',{width:1366,height:900});
 }finally{await browser.close();}
