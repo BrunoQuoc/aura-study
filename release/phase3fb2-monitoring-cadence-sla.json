@@ -82,7 +82,7 @@
     "primary_daily_review_issue_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814311117",
     "backup_snapshot_review_attested": true,
     "backup_snapshot_review_issue_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814290472",
-    "auth_log_coverage_status": "EDGE_LOGS_PRESENT_5_AUTH_LOGS_ABSENT_OPERATOR_SCREENSHOT_2026_11_12",
+    "auth_log_coverage_status": "AUTH_AND_AUTH_AUDIT_SOURCES_ABSENT_IN_24H_WITH_EDGE_HEALTH_ONLY_CAUSE_UNDETERMINED",
     "auth_log_coverage_review_required": true,
     "snapshot_review_ack_scope": "Both users posted self-authored short-form ACKs in Issue #12; this records review self-attestation only, without substantive analysis or independent verification of log telemetry coverage.",
     "snapshot_review_content_detail": "KEYWORD_ONLY_ACK_NO_METRIC_OR_LOG_COVERAGE_COMMENTARY",
@@ -171,6 +171,39 @@
       "reason": "Operator requested to skip first scheduled 09:00 monitoring acceptance step and proceed to independent operational review",
       "replacement_evidence_url": null,
       "review_packet_url": "https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-independent-operational-review-phase3fb2-2026-11-12.md"
+    },
+    "auth_telemetry_read_only_investigation": {
+      "project": "aura-study-staging",
+      "project_status": "ACTIVE_HEALTHY",
+      "investigation_date": "2026-11-12",
+      "issue_evidence_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6816021020",
+      "report_path": "docs/staging-auth-log-coverage-investigation-phase3fb2-2026-11-12.md",
+      "query_paths": [
+        "supabase/audits/aura_phase3fb2_auth_telemetry_coverage_24h.sql",
+        "supabase/audits/aura_phase3fb2_auth_audit_activity_24h.sql"
+      ],
+      "verified_both_queries_executed_read_only": true,
+      "source_counts_24h": {
+        "pgbouncer_logs": 81,
+        "postgres_logs": 20,
+        "postgrest_logs": 15,
+        "edge_logs": 5,
+        "realtime_logs": 4,
+        "storage_logs": 1,
+        "auth_logs": 0,
+        "auth_audit_logs": 0
+      },
+      "gateway_auth_health_rows_24h": 2,
+      "gateway_selected_auth_interaction_rows_24h": 0,
+      "audit_db_rows_all_time": 0,
+      "auth_users_created_24h": 0,
+      "auth_sessions_created_24h": 0,
+      "auth_sessions_updated_24h": 0,
+      "refresh_tokens_created_24h": 0,
+      "root_cause_verified": false,
+      "auth_telemetry_healthy_verified": false,
+      "plausible_explanation": "Low or absent interactive Auth traffic during sample; cannot exclude logs source ingestion/configuration/retention issues",
+      "next_approved_action": "Read-only inspect Authentication > Configuration > Audit Logs; compare with independently known Auth event time, avoid test traffic or changing storage settings"
     }
   },
   "exceptions": {
