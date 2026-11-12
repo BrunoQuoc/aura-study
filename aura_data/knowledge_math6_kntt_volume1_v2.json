@@ -1,0 +1,1708 @@
+{
+  "schemaVersion": 2,
+  "libraryId": "AURA-KNTT6-MATH-VOLUME1",
+  "series": "Kết nối tri thức với cuộc sống",
+  "grade": 6,
+  "subject": "TOAN",
+  "volume": 1,
+  "language": "vi-VN",
+  "source": {
+    "basis": "PUBLIC_TOC_ALIGNMENT_ONLY",
+    "tocVerifiedAgainst": [
+      "https://ihoc.vn/sgk/lop-6/toan-hoc-lop-6/sach-giao-khoa-toan-lop-6-tap-1-ket-noi-tri-thuc-voi-cuoc-song.html",
+      "https://sgkvn.com/lop-6-3/ket-noi-tri-thuc-voi-cuoc-song-3/toan-6-tap-1-90.html"
+    ],
+    "userSource": "https://giaokhoaonline.com/ket-noi-tri-thuc-voi-cuoc-song-lop-6/",
+    "verifiedFullText": false,
+    "verifiedPublisherEdition": false
+  },
+  "rights": "Independently authored AURA explanations, original examples and quizzes; no verbatim textbook copying",
+  "rollout": {
+    "status": "DRAFT_PREVIEW",
+    "teacherReviewed": false,
+    "questionBankPromotionEnabled": false,
+    "examEngineLinkEnabled": false
+  },
+  "chapters": [
+    {
+      "number": 1,
+      "title": "Tập hợp các số tự nhiên",
+      "range": [
+        1,
+        7
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Tính chia hết trong tập hợp các số tự nhiên",
+      "range": [
+        8,
+        12
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Số nguyên",
+      "range": [
+        13,
+        17
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Một số hình phẳng trong thực tiễn",
+      "range": [
+        18,
+        20
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Tính đối xứng của hình phẳng trong tự nhiên",
+      "range": [
+        21,
+        22
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "KNTT6-MATH-V1-01",
+      "number": 1,
+      "chapter": 1,
+      "title": "Tập hợp",
+      "objectives": [
+        "Viết và đọc tập hợp",
+        "Phân biệt phần tử thuộc hoặc không thuộc tập hợp"
+      ],
+      "concepts": [
+        {
+          "heading": "Tập hợp là gì?",
+          "body": "Ta gom các đối tượng xác định thành một tập hợp, ví dụ tập hợp các số chẵn nhỏ hơn 10. Mỗi đối tượng là một phần tử."
+        },
+        {
+          "heading": "Cách viết",
+          "body": "Dùng ngoặc nhọn và liệt kê các phần tử, cách nhau bằng dấu chấm phẩy: A = {2; 4; 6; 8}. Có thể mô tả bằng tính chất đặc trưng."
+        },
+        {
+          "heading": "Kí hiệu",
+          "body": "a ∈ A là a thuộc A; b ∉ A là b không thuộc A. Không cần viết một phần tử hai lần."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Cho A gồm các số tự nhiên lớn hơn 1 và nhỏ hơn 6. Viết A và xét 4, 7.",
+        "steps": [
+          "Các số thỏa điều kiện là 2, 3, 4, 5.",
+          "Viết A = {2; 3; 4; 5}.",
+          "Số 4 có mặt nên 4 ∈ A; số 7 không có nên 7 ∉ A."
+        ],
+        "conclusion": "A = {2; 3; 4; 5}; 4 ∈ A; 7 ∉ A."
+      },
+      "commonMistake": "Không nhầm kí hiệu ∈ (thuộc tập hợp) với dấu ⊂ (quan hệ giữa hai tập hợp).",
+      "practice": [
+        {
+          "prompt": "Cho A = {1; 3; 5}. Khẳng định nào đúng?",
+          "choices": [
+            "2 ∈ A",
+            "3 ∈ A",
+            "7 ∈ A",
+            "5 ∉ A"
+          ],
+          "correct": 1,
+          "explanation": "Số 3 được liệt kê trong A.",
+          "skill": "tap-hop"
+        },
+        {
+          "prompt": "Các số tự nhiên nhỏ hơn 4 tạo tập hợp nào?",
+          "choices": [
+            "{1; 2; 3; 4}",
+            "{0; 1; 2; 3}",
+            "{0; 1; 2; 3; 4}",
+            "{1; 2}"
+          ],
+          "correct": 1,
+          "explanation": "Số tự nhiên gồm cả 0 và điều kiện nhỏ hơn 4 loại 4.",
+          "skill": "tap-hop"
+        },
+        {
+          "prompt": "Cách viết nào đúng cho tập hợp B gồm 2 và 6?",
+          "choices": [
+            "B = 2 + 6",
+            "B = (2; 6)",
+            "B = {2; 6}",
+            "B = 26"
+          ],
+          "correct": 2,
+          "explanation": "Liệt kê phần tử dùng ngoặc nhọn.",
+          "skill": "ky-hieu"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-02",
+      "number": 2,
+      "chapter": 1,
+      "title": "Cách ghi số tự nhiên",
+      "objectives": [
+        "Hiểu giá trị theo hàng",
+        "Đọc số lớn, sử dụng số La Mã đơn giản"
+      ],
+      "concepts": [
+        {
+          "heading": "Hệ thập phân",
+          "body": "Ta dùng mười chữ số 0 đến 9; giá trị một chữ số phụ thuộc hàng đơn vị, chục, trăm, nghìn..."
+        },
+        {
+          "heading": "Phân tích theo hàng",
+          "body": "Số 43 205 = 40 000 + 3 000 + 200 + 5. Chữ số 3 có giá trị 3 000."
+        },
+        {
+          "heading": "Số La Mã",
+          "body": "Trong các trường hợp quen thuộc: I = 1, V = 5, X = 10; IV = 4, IX = 9."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Phân tích số 70 306 thành tổng theo hàng.",
+        "steps": [
+          "Chữ số 7 ở hàng chục nghìn: 70 000.",
+          "Chữ số 3 ở hàng trăm: 300.",
+          "Chữ số 6 ở hàng đơn vị: 6."
+        ],
+        "conclusion": "70 306 = 70 000 + 300 + 6."
+      },
+      "commonMistake": "Không viết thêm hàng có chữ số 0 thành giá trị khác 0.",
+      "practice": [
+        {
+          "prompt": "Trong số 52 419, chữ số 2 có giá trị nào?",
+          "choices": [
+            "2",
+            "20",
+            "2 000",
+            "20 000"
+          ],
+          "correct": 2,
+          "explanation": "Chữ số 2 ở hàng nghìn.",
+          "skill": "gia-tri-hang"
+        },
+        {
+          "prompt": "Số 10 405 bằng tổng nào?",
+          "choices": [
+            "10 000 + 400 + 5",
+            "1 000 + 400 + 5",
+            "10 000 + 40 + 5",
+            "10 000 + 4 000 + 5"
+          ],
+          "correct": 0,
+          "explanation": "Hàng trăm là 4 và hàng đơn vị là 5.",
+          "skill": "he-thap-phan"
+        },
+        {
+          "prompt": "Số La Mã XIV là số nào?",
+          "choices": [
+            "9",
+            "12",
+            "14",
+            "16"
+          ],
+          "correct": 2,
+          "explanation": "X + IV = 10 + 4 = 14.",
+          "skill": "la-ma"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-03",
+      "number": 3,
+      "chapter": 1,
+      "title": "Thứ tự trong tập hợp các số tự nhiên",
+      "objectives": [
+        "So sánh số tự nhiên",
+        "Xác định số liền trước, liền sau"
+      ],
+      "concepts": [
+        {
+          "heading": "Tập hợp số tự nhiên",
+          "body": "ℕ = {0; 1; 2; 3; ...}; các số này có thể biểu diễn trên tia số bắt đầu từ 0."
+        },
+        {
+          "heading": "So sánh",
+          "body": "Trên tia số tăng từ trái sang phải; số nằm phía phải lớn hơn số phía trái."
+        },
+        {
+          "heading": "Số kề nhau",
+          "body": "Với n tự nhiên, n + 1 là số liền sau; nếu n > 0, n − 1 là số liền trước. Số 0 không có số liền trước trong ℕ."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Sắp xếp 208, 82, 280 theo thứ tự tăng dần.",
+        "steps": [
+          "82 có hai chữ số, nhỏ hơn hai số còn lại.",
+          "So sánh 208 và 280: cùng hàng trăm là 2, nhưng hàng chục 0 < 8."
+        ],
+        "conclusion": "82 < 208 < 280."
+      },
+      "commonMistake": "Không ghi −1 là số tự nhiên liền trước số 0.",
+      "practice": [
+        {
+          "prompt": "Số liền trước của 100 là?",
+          "choices": [
+            "99",
+            "100",
+            "101",
+            "0"
+          ],
+          "correct": 0,
+          "explanation": "100 − 1 = 99.",
+          "skill": "so-lien-truoc"
+        },
+        {
+          "prompt": "Số nào lớn nhất?",
+          "choices": [
+            "3 045",
+            "3 450",
+            "3 405",
+            "3 054"
+          ],
+          "correct": 1,
+          "explanation": "So sánh từng hàng từ trái sang phải.",
+          "skill": "so-sanh"
+        },
+        {
+          "prompt": "Khẳng định nào đúng?",
+          "choices": [
+            "0 không thuộc ℕ",
+            "0 có số tự nhiên liền trước",
+            "0 là số tự nhiên nhỏ nhất",
+            "ℕ chỉ gồm số lẻ"
+          ],
+          "correct": 2,
+          "explanation": "Trong ℕ, 0 đứng đầu tia số.",
+          "skill": "so-tu-nhien"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-04",
+      "number": 4,
+      "chapter": 1,
+      "title": "Phép cộng và phép trừ số tự nhiên",
+      "objectives": [
+        "Thực hiện cộng trừ đúng",
+        "Vận dụng tính chất phép cộng để tính nhanh"
+      ],
+      "concepts": [
+        {
+          "heading": "Phép cộng",
+          "body": "Cộng hai số tự nhiên luôn cho một số tự nhiên. Giao hoán: a + b = b + a; kết hợp: (a + b) + c = a + (b + c)."
+        },
+        {
+          "heading": "Phép trừ",
+          "body": "Với a, b tự nhiên, a − b là số tự nhiên khi a ≥ b. Có thể kiểm tra phép trừ bằng phép cộng ngược."
+        },
+        {
+          "heading": "Tính thuận tiện",
+          "body": "Nhóm các số tròn chục, tròn trăm trước rồi cộng phần còn lại."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính nhanh 138 + 62 + 45.",
+        "steps": [
+          "Nhóm 138 + 62 = 200.",
+          "Cộng 200 + 45 = 245."
+        ],
+        "conclusion": "245."
+      },
+      "commonMistake": "Không áp dụng giao hoán của phép cộng cho phép trừ: 8 − 3 khác 3 − 8.",
+      "practice": [
+        {
+          "prompt": "Tính 175 + 25 + 19.",
+          "choices": [
+            "199",
+            "209",
+            "219",
+            "229"
+          ],
+          "correct": 2,
+          "explanation": "175 + 25 = 200; cộng 19 được 219.",
+          "skill": "phep-cong"
+        },
+        {
+          "prompt": "Trong ℕ, phép trừ nào thực hiện được?",
+          "choices": [
+            "4 − 9",
+            "7 − 11",
+            "12 − 20",
+            "20 − 12"
+          ],
+          "correct": 3,
+          "explanation": "Số bị trừ phải lớn hơn hoặc bằng số trừ.",
+          "skill": "phep-tru"
+        },
+        {
+          "prompt": "54 − 17 bằng bao nhiêu?",
+          "choices": [
+            "37",
+            "38",
+            "47",
+            "71"
+          ],
+          "correct": 0,
+          "explanation": "54 − 10 = 44, trừ tiếp 7 được 37.",
+          "skill": "phep-tru"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-05",
+      "number": 5,
+      "chapter": 1,
+      "title": "Phép nhân và phép chia số tự nhiên",
+      "objectives": [
+        "Nhân chia và nhận biết số dư",
+        "Dùng tính phân phối, phép chia có dư"
+      ],
+      "concepts": [
+        {
+          "heading": "Tính chất phép nhân",
+          "body": "a × b = b × a; (a × b) × c = a × (b × c); a(b + c) = ab + ac; nhân 0 được 0."
+        },
+        {
+          "heading": "Chia hết và chia có dư",
+          "body": "Với b > 0: a = bq + r, trong đó 0 ≤ r < b. Nếu r = 0, a chia hết cho b."
+        },
+        {
+          "heading": "Ứng dụng",
+          "body": "Chia thành từng nhóm bằng nhau, tính số gói và số đồ vật còn thừa."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Có 47 quyển vở, xếp mỗi chồng 8 quyển. Được bao nhiêu chồng đủ và còn mấy quyển?",
+        "steps": [
+          "Ta có 47 = 8 × 5 + 7.",
+          "Số dư 7 nhỏ hơn số chia 8 nên phép chia đúng."
+        ],
+        "conclusion": "5 chồng đủ, còn 7 quyển."
+      },
+      "commonMistake": "Không để số dư bằng hoặc lớn hơn số chia.",
+      "practice": [
+        {
+          "prompt": "37 chia 6 được thương và dư nào?",
+          "choices": [
+            "6 dư 1",
+            "5 dư 7",
+            "6 dư 2",
+            "7 dư 1"
+          ],
+          "correct": 0,
+          "explanation": "37 = 6 × 6 + 1.",
+          "skill": "chia-co-du"
+        },
+        {
+          "prompt": "Tính 25 × 16.",
+          "choices": [
+            "200",
+            "300",
+            "400",
+            "425"
+          ],
+          "correct": 2,
+          "explanation": "25 × 4 × 4 = 100 × 4 = 400.",
+          "skill": "phep-nhan"
+        },
+        {
+          "prompt": "Phép chia nào không có nghĩa trong số tự nhiên?",
+          "choices": [
+            "0 : 7",
+            "7 : 1",
+            "7 : 0",
+            "14 : 7"
+          ],
+          "correct": 2,
+          "explanation": "Không được chia cho số 0.",
+          "skill": "phep-chia"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-06",
+      "number": 6,
+      "chapter": 1,
+      "title": "Lũy thừa với số mũ tự nhiên",
+      "objectives": [
+        "Viết tích lặp bằng lũy thừa",
+        "Áp dụng quy tắc nhân chia lũy thừa cùng cơ số"
+      ],
+      "concepts": [
+        {
+          "heading": "Định nghĩa",
+          "body": "a^n là tích của n thừa số a với n là số nguyên dương; a là cơ số, n là số mũ."
+        },
+        {
+          "heading": "Nhân lũy thừa",
+          "body": "Cùng cơ số: a^m × a^n = a^(m+n). Với a ≠ 0, a^m : a^n = a^(m−n) khi m ≥ n."
+        },
+        {
+          "heading": "Thứ tự ưu tiên",
+          "body": "Lũy thừa được tính trước nhân chia và cộng trừ, nếu không có ngoặc."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính 2^3 × 2^4.",
+        "steps": [
+          "Áp dụng quy tắc cộng số mũ vì cùng cơ số 2.",
+          "2^(3+4) = 2^7 = 128."
+        ],
+        "conclusion": "128."
+      },
+      "commonMistake": "Không nhầm 3^2 = 3 × 3 với 3 × 2.",
+      "practice": [
+        {
+          "prompt": "5^2 bằng bao nhiêu?",
+          "choices": [
+            "10",
+            "15",
+            "25",
+            "52"
+          ],
+          "correct": 2,
+          "explanation": "5^2 = 5 × 5 = 25.",
+          "skill": "luy-thua"
+        },
+        {
+          "prompt": "2^3 × 2^2 bằng bao nhiêu?",
+          "choices": [
+            "2^5",
+            "2^6",
+            "4^5",
+            "2^1"
+          ],
+          "correct": 0,
+          "explanation": "Nhân cùng cơ số thì cộng số mũ: 3 + 2 = 5.",
+          "skill": "quy-tac-mu"
+        },
+        {
+          "prompt": "3^3 bằng bao nhiêu?",
+          "choices": [
+            "9",
+            "18",
+            "27",
+            "81"
+          ],
+          "correct": 2,
+          "explanation": "3 × 3 × 3 = 27.",
+          "skill": "luy-thua"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-07",
+      "number": 7,
+      "chapter": 1,
+      "title": "Thứ tự thực hiện các phép tính",
+      "objectives": [
+        "Tính đúng biểu thức có ngoặc",
+        "Thực hiện phép toán theo thứ tự"
+      ],
+      "concepts": [
+        {
+          "heading": "Không có ngoặc",
+          "body": "Lũy thừa trước; tiếp theo nhân và chia từ trái sang phải; cuối cùng cộng và trừ từ trái sang phải."
+        },
+        {
+          "heading": "Có ngoặc",
+          "body": "Trong một biểu thức, ưu tiên ( ) rồi [ ] rồi { } nếu lồng ngoặc theo thứ tự đó."
+        },
+        {
+          "heading": "Kiểm tra",
+          "body": "Viết từng bước, không chuyển sai thứ tự toán tử và kiểm tra kết quả."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính 80 − (12 + 8) × 3.",
+        "steps": [
+          "Trong ngoặc: 12 + 8 = 20.",
+          "Nhân: 20 × 3 = 60.",
+          "Trừ: 80 − 60 = 20."
+        ],
+        "conclusion": "20."
+      },
+      "commonMistake": "Không tính 80 − 20 trước phép nhân trong biểu thức trên.",
+      "practice": [
+        {
+          "prompt": "8 + 3 × 4 bằng bao nhiêu?",
+          "choices": [
+            "44",
+            "20",
+            "32",
+            "11"
+          ],
+          "correct": 1,
+          "explanation": "Nhân 3 × 4 = 12 trước rồi cộng 8.",
+          "skill": "thu-tu-phep-tinh"
+        },
+        {
+          "prompt": "72 : (4 + 5) bằng bao nhiêu?",
+          "choices": [
+            "8",
+            "9",
+            "13",
+            "18"
+          ],
+          "correct": 0,
+          "explanation": "Trong ngoặc bằng 9; 72 : 9 = 8.",
+          "skill": "ngoac"
+        },
+        {
+          "prompt": "2^3 + 6 : 2 bằng bao nhiêu?",
+          "choices": [
+            "7",
+            "11",
+            "10",
+            "16"
+          ],
+          "correct": 1,
+          "explanation": "2^3 = 8, 6 : 2 = 3; tổng 11.",
+          "skill": "thu-tu-phep-tinh"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-08",
+      "number": 8,
+      "chapter": 2,
+      "title": "Quan hệ chia hết và tính chất",
+      "objectives": [
+        "Nhận biết a chia hết cho b",
+        "Vận dụng tính chia hết của tổng"
+      ],
+      "concepts": [
+        {
+          "heading": "Quan hệ chia hết",
+          "body": "Với b khác 0, a chia hết cho b nếu có số tự nhiên q sao cho a = bq."
+        },
+        {
+          "heading": "Tính chất của tổng",
+          "body": "Nếu a và b đều chia hết cho m thì a + b và a − b (khi a ≥ b) chia hết cho m."
+        },
+        {
+          "heading": "Nhận biết tổng không chia hết",
+          "body": "Nếu một số hạng chia hết cho m còn số hạng kia không chia hết cho m thì tổng không chia hết cho m."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Không cần chia trực tiếp, giải thích 72 + 48 chia hết cho 6.",
+        "steps": [
+          "72 = 6 × 12 nên chia hết cho 6.",
+          "48 = 6 × 8 nên chia hết cho 6.",
+          "Tổng hai số chia hết cho 6 thì cũng chia hết cho 6."
+        ],
+        "conclusion": "120 chia hết cho 6."
+      },
+      "commonMistake": "Không suy ngược rằng cả hai số hạng đều chia hết chỉ vì tổng chia hết.",
+      "practice": [
+        {
+          "prompt": "Khẳng định nào đúng?",
+          "choices": [
+            "15 chia hết cho 4",
+            "24 chia hết cho 6",
+            "18 chia hết cho 5",
+            "21 chia hết cho 2"
+          ],
+          "correct": 1,
+          "explanation": "24 = 6 × 4.",
+          "skill": "chia-het"
+        },
+        {
+          "prompt": "42 và 18 cùng chia hết cho 6. Tổng của chúng?",
+          "choices": [
+            "Không chia hết cho 6",
+            "Chia hết cho 6",
+            "Chỉ chia hết cho 5",
+            "Không xác định"
+          ],
+          "correct": 1,
+          "explanation": "Tổng 60 chia hết cho 6.",
+          "skill": "tong-chia-het"
+        },
+        {
+          "prompt": "Số nào là bội của 7?",
+          "choices": [
+            "20",
+            "35",
+            "46",
+            "50"
+          ],
+          "correct": 1,
+          "explanation": "35 = 7 × 5.",
+          "skill": "boi"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-09",
+      "number": 9,
+      "chapter": 2,
+      "title": "Dấu hiệu chia hết",
+      "objectives": [
+        "Nhận biết dấu hiệu chia hết cho 2, 3, 5, 9",
+        "Kiểm tra số lớn mà không chia trực tiếp"
+      ],
+      "concepts": [
+        {
+          "heading": "Chia hết cho 2, 5",
+          "body": "Tận cùng 0, 2, 4, 6, 8 thì chia hết cho 2; tận cùng 0 hoặc 5 thì chia hết cho 5."
+        },
+        {
+          "heading": "Chia hết cho 3, 9",
+          "body": "Tổng các chữ số chia hết cho 3 thì số chia hết cho 3; tổng các chữ số chia hết cho 9 thì số chia hết cho 9."
+        },
+        {
+          "heading": "Kết hợp dấu hiệu",
+          "body": "Số tận cùng 0 có thể chia hết cả 2 và 5; muốn xét 3 và 9 vẫn cần tổng chữ số."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Xét số 2 430 có chia hết cho 2, 3, 5, 9 không.",
+        "steps": [
+          "Tận cùng 0 nên chia hết cho 2 và 5.",
+          "Tổng chữ số 2 + 4 + 3 + 0 = 9.",
+          "Vì 9 chia hết cho 3 và 9, số đã cho chia hết cho cả bốn số."
+        ],
+        "conclusion": "2, 3, 5 và 9 đều là ước của 2 430."
+      },
+      "commonMistake": "Đừng kết luận số chia hết cho 9 chỉ vì số đó chia hết cho 3.",
+      "practice": [
+        {
+          "prompt": "Số nào chia hết cho 9?",
+          "choices": [
+            "121",
+            "342",
+            "245",
+            "118"
+          ],
+          "correct": 1,
+          "explanation": "3 + 4 + 2 = 9.",
+          "skill": "chia-het-9"
+        },
+        {
+          "prompt": "Số nào chia hết cho cả 2 và 5?",
+          "choices": [
+            "115",
+            "124",
+            "130",
+            "153"
+          ],
+          "correct": 2,
+          "explanation": "Số tận cùng 0 chia hết cho cả 2 và 5.",
+          "skill": "chia-het-2-5"
+        },
+        {
+          "prompt": "234 có chia hết cho 3 không?",
+          "choices": [
+            "Có, vì 2+3+4=9",
+            "Không, vì tận cùng 4",
+            "Có, vì 234 là số chẵn",
+            "Không, vì 234 không tận cùng 3"
+          ],
+          "correct": 0,
+          "explanation": "Tổng chữ số bằng 9, chia hết cho 3.",
+          "skill": "chia-het-3"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-10",
+      "number": 10,
+      "chapter": 2,
+      "title": "Số nguyên tố",
+      "objectives": [
+        "Phân biệt nguyên tố và hợp số",
+        "Phân tích số thành tích các thừa số nguyên tố"
+      ],
+      "concepts": [
+        {
+          "heading": "Số nguyên tố",
+          "body": "Là số tự nhiên lớn hơn 1 chỉ có hai ước dương là 1 và chính nó."
+        },
+        {
+          "heading": "Hợp số",
+          "body": "Là số tự nhiên lớn hơn 1 có nhiều hơn hai ước dương; 0 và 1 không phải số nguyên tố cũng không phải hợp số."
+        },
+        {
+          "heading": "Phân tích thừa số",
+          "body": "Chia liên tiếp cho các số nguyên tố để biểu diễn một số thành tích các thừa số nguyên tố."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Phân tích 84 ra thừa số nguyên tố.",
+        "steps": [
+          "84 = 2 × 42 = 2 × 2 × 21.",
+          "21 = 3 × 7, cả 3 và 7 đều nguyên tố.",
+          "Gộp thừa số giống nhau: 2² × 3 × 7."
+        ],
+        "conclusion": "84 = 2² × 3 × 7."
+      },
+      "commonMistake": "Không coi số 1 là số nguyên tố.",
+      "practice": [
+        {
+          "prompt": "Số nào là số nguyên tố?",
+          "choices": [
+            "1",
+            "9",
+            "13",
+            "21"
+          ],
+          "correct": 2,
+          "explanation": "13 chỉ có hai ước là 1 và 13.",
+          "skill": "so-nguyen-to"
+        },
+        {
+          "prompt": "Phân tích 18 ra thừa số nguyên tố được?",
+          "choices": [
+            "2 × 9",
+            "2 × 3²",
+            "3 × 6",
+            "2² × 3"
+          ],
+          "correct": 1,
+          "explanation": "18 = 2 × 3 × 3.",
+          "skill": "phan-tich"
+        },
+        {
+          "prompt": "Số 1 là gì?",
+          "choices": [
+            "Số nguyên tố",
+            "Hợp số",
+            "Vừa nguyên tố vừa hợp số",
+            "Không thuộc hai loại trên"
+          ],
+          "correct": 3,
+          "explanation": "Số 1 chỉ có một ước dương.",
+          "skill": "dinh-nghia"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-11",
+      "number": 11,
+      "chapter": 2,
+      "title": "Ước chung. Ước chung lớn nhất",
+      "objectives": [
+        "Tìm ước chung, ƯCLN",
+        "Vận dụng chia nhóm đều"
+      ],
+      "concepts": [
+        {
+          "heading": "Ước chung",
+          "body": "Là số chia hết đồng thời các số đã cho, ví dụ 1, 2, 3, 6 là ước chung của 12 và 18."
+        },
+        {
+          "heading": "ƯCLN",
+          "body": "Là ước chung dương lớn nhất. Có thể phân tích mỗi số thành thừa số nguyên tố, lấy thừa số chung với số mũ nhỏ nhất."
+        },
+        {
+          "heading": "Ứng dụng",
+          "body": "Chia đều hai loại đồ vật thành số nhóm nhiều nhất mà không dư thì dùng ƯCLN."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Có 24 bút đỏ và 36 bút xanh. Chia nhiều nhất thành bao nhiêu nhóm giống nhau, không dư?",
+        "steps": [
+          "Phân tích 24 = 2³ × 3; 36 = 2² × 3².",
+          "ƯCLN(24,36) = 2² × 3 = 12."
+        ],
+        "conclusion": "Có thể chia thành 12 nhóm; mỗi nhóm 2 bút đỏ và 3 bút xanh."
+      },
+      "commonMistake": "Không lấy thừa số chung với số mũ lớn nhất khi tìm ƯCLN.",
+      "practice": [
+        {
+          "prompt": "ƯCLN(18, 30) bằng bao nhiêu?",
+          "choices": [
+            "3",
+            "6",
+            "9",
+            "12"
+          ],
+          "correct": 1,
+          "explanation": "18 = 2×3², 30 = 2×3×5; phần chung là 2×3=6.",
+          "skill": "ucln"
+        },
+        {
+          "prompt": "Ước chung nào của 12 và 18 lớn nhất?",
+          "choices": [
+            "2",
+            "3",
+            "6",
+            "9"
+          ],
+          "correct": 2,
+          "explanation": "6 chia hết cả 12 và 18, và là số lớn nhất như vậy.",
+          "skill": "uoc-chung"
+        },
+        {
+          "prompt": "ƯCLN(7, 9) bằng bao nhiêu?",
+          "choices": [
+            "0",
+            "1",
+            "3",
+            "7"
+          ],
+          "correct": 1,
+          "explanation": "7 và 9 không có ước chung nào lớn hơn 1.",
+          "skill": "nguyen-to-cung-nhau"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-12",
+      "number": 12,
+      "chapter": 2,
+      "title": "Bội chung. Bội chung nhỏ nhất",
+      "objectives": [
+        "Tìm bội chung, BCNN",
+        "Giải bài toán chu kì lặp"
+      ],
+      "concepts": [
+        {
+          "heading": "Bội chung",
+          "body": "Là số chia hết đồng thời cho các số đã cho. 12, 24,... là bội chung của 4 và 6."
+        },
+        {
+          "heading": "BCNN",
+          "body": "Là bội chung dương nhỏ nhất. Phân tích thừa số nguyên tố và lấy tất cả thừa số với số mũ lớn nhất."
+        },
+        {
+          "heading": "Ứng dụng",
+          "body": "Tìm thời điểm sự kiện lặp lại cùng nhau bằng BCNN của các chu kì."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Chuông A reo mỗi 6 phút, chuông B mỗi 8 phút. Sau ít nhất bao lâu hai chuông lại reo cùng lúc?",
+        "steps": [
+          "6 = 2 × 3; 8 = 2³.",
+          "BCNN(6,8) = 2³ × 3 = 24."
+        ],
+        "conclusion": "Sau 24 phút."
+      },
+      "commonMistake": "Không coi 0 là BCNN; BCNN là bội chung dương nhỏ nhất.",
+      "practice": [
+        {
+          "prompt": "BCNN(4, 6) bằng bao nhiêu?",
+          "choices": [
+            "2",
+            "6",
+            "12",
+            "24"
+          ],
+          "correct": 2,
+          "explanation": "12 là bội dương nhỏ nhất cùng chia hết cho 4 và 6.",
+          "skill": "bcnn"
+        },
+        {
+          "prompt": "BCNN(3, 5) bằng bao nhiêu?",
+          "choices": [
+            "1",
+            "8",
+            "15",
+            "30"
+          ],
+          "correct": 2,
+          "explanation": "Vì 3 và 5 nguyên tố cùng nhau, BCNN = 3×5 = 15.",
+          "skill": "bcnn"
+        },
+        {
+          "prompt": "Hai việc lặp mỗi 5 và 10 ngày, cùng xảy ra hôm nay, sau ít nhất mấy ngày lại trùng?",
+          "choices": [
+            "5",
+            "10",
+            "15",
+            "20"
+          ],
+          "correct": 1,
+          "explanation": "BCNN(5,10)=10.",
+          "skill": "bai-toan-chu-ki"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-13",
+      "number": 13,
+      "chapter": 3,
+      "title": "Tập hợp các số nguyên",
+      "objectives": [
+        "Nhận biết số nguyên âm và số đối",
+        "Biểu diễn, so sánh số nguyên trên trục số"
+      ],
+      "concepts": [
+        {
+          "heading": "Số nguyên",
+          "body": "Tập số nguyên ℤ gồm 0, các số nguyên dương và các số nguyên âm −1, −2, ... Ví dụ: nhiệt độ −3°C."
+        },
+        {
+          "heading": "Trục số",
+          "body": "Số nằm bên trái nhỏ hơn số bên phải. Mọi số âm nhỏ hơn 0; −7 < −3 dù 7 > 3."
+        },
+        {
+          "heading": "Số đối, giá trị tuyệt đối",
+          "body": "Số đối của a là −a. Giá trị tuyệt đối |a| là khoảng cách từ điểm a đến 0 trên trục số."
+        }
+      ],
+      "workedExample": {
+        "prompt": "So sánh −7, −3, 2 và tìm |−7|.",
+        "steps": [
+          "Trên trục số, −7 nằm bên trái −3, còn 2 nằm bên phải 0.",
+          "Vậy −7 < −3 < 2.",
+          "Khoảng cách từ −7 tới 0 là 7."
+        ],
+        "conclusion": "−7 < −3 < 2 và |−7| = 7."
+      },
+      "commonMistake": "Đừng nhầm −8 > −3 chỉ vì 8 > 3.",
+      "practice": [
+        {
+          "prompt": "Số nào nhỏ nhất?",
+          "choices": [
+            "−9",
+            "−2",
+            "0",
+            "3"
+          ],
+          "correct": 0,
+          "explanation": "−9 nằm xa bên trái nhất.",
+          "skill": "so-sanh-so-nguyen"
+        },
+        {
+          "prompt": "Số đối của −12 là gì?",
+          "choices": [
+            "−12",
+            "0",
+            "12",
+            "1/12"
+          ],
+          "correct": 2,
+          "explanation": "Số đối của −12 là 12.",
+          "skill": "so-doi"
+        },
+        {
+          "prompt": "Giá trị tuyệt đối |−5| bằng?",
+          "choices": [
+            "−5",
+            "0",
+            "5",
+            "10"
+          ],
+          "correct": 2,
+          "explanation": "Khoảng cách từ −5 đến 0 là 5.",
+          "skill": "gia-tri-tuyet-doi"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-14",
+      "number": 14,
+      "chapter": 3,
+      "title": "Phép cộng và phép trừ số nguyên",
+      "objectives": [
+        "Cộng hai số nguyên cùng dấu hoặc khác dấu",
+        "Trừ bằng cộng số đối"
+      ],
+      "concepts": [
+        {
+          "heading": "Cộng cùng dấu",
+          "body": "Hai số âm: cộng trị tuyệt đối rồi đặt dấu âm. Hai số dương: cộng như số tự nhiên."
+        },
+        {
+          "heading": "Cộng khác dấu",
+          "body": "Lấy trị tuyệt đối lớn trừ nhỏ; giữ dấu của số có trị tuyệt đối lớn. Hai số đối nhau có tổng 0."
+        },
+        {
+          "heading": "Phép trừ",
+          "body": "a − b = a + (−b): lấy số bị trừ cộng với số đối của số trừ. Ví dụ 6 − (−4) = 6 + 4 = 10; 6 − 4 = 6 + (−4) = 2."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính −18 + 7 − (−5).",
+        "steps": [
+          "−18 + 7 = −11 vì 18 lớn hơn 7.",
+          "Trừ −5 là cộng 5: −11 + 5 = −6."
+        ],
+        "conclusion": "−6."
+      },
+      "commonMistake": "Trừ số âm thì đổi thành cộng số dương.",
+      "practice": [
+        {
+          "prompt": "−6 + (−8) bằng?",
+          "choices": [
+            "2",
+            "−2",
+            "−14",
+            "14"
+          ],
+          "correct": 2,
+          "explanation": "−(6 + 8) = −14.",
+          "skill": "cong-cung-dau"
+        },
+        {
+          "prompt": "−15 + 9 bằng?",
+          "choices": [
+            "24",
+            "−24",
+            "−6",
+            "6"
+          ],
+          "correct": 2,
+          "explanation": "15 − 9 = 6, giữ dấu âm.",
+          "skill": "cong-khac-dau"
+        },
+        {
+          "prompt": "4 − (−7) bằng?",
+          "choices": [
+            "−3",
+            "3",
+            "11",
+            "−11"
+          ],
+          "correct": 2,
+          "explanation": "4 + 7 = 11.",
+          "skill": "tru-so-nguyen"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-15",
+      "number": 15,
+      "chapter": 3,
+      "title": "Quy tắc dấu ngoặc",
+      "objectives": [
+        "Bỏ ngoặc và đổi dấu đúng",
+        "Nhóm các số nguyên để tính nhanh"
+      ],
+      "concepts": [
+        {
+          "heading": "Dấu cộng trước ngoặc",
+          "body": "Giữ nguyên dấu các số hạng: a + (b − c) = a + b − c."
+        },
+        {
+          "heading": "Dấu trừ trước ngoặc",
+          "body": "Đổi dấu mọi số hạng: a − (b − c) = a − b + c."
+        },
+        {
+          "heading": "Nhóm thuận tiện",
+          "body": "Sau khi bỏ ngoặc đúng, nhóm các số tạo số tròn chục hoặc các số đối nhau."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính 12 − (7 − 15) + (−4).",
+        "steps": [
+          "Bỏ ngoặc: 12 − 7 + 15 − 4.",
+          "Nhóm (12 − 7) + (15 − 4) = 5 + 11."
+        ],
+        "conclusion": "16."
+      },
+      "commonMistake": "Không chỉ đổi dấu số hạng đầu khi bỏ ngoặc có dấu trừ.",
+      "practice": [
+        {
+          "prompt": "9 − (2 + 6) bằng?",
+          "choices": [
+            "1",
+            "13",
+            "17",
+            "−1"
+          ],
+          "correct": 0,
+          "explanation": "9 − 8 = 1.",
+          "skill": "dau-ngoac"
+        },
+        {
+          "prompt": "8 − (−5 + 2) bằng?",
+          "choices": [
+            "5",
+            "11",
+            "15",
+            "1"
+          ],
+          "correct": 1,
+          "explanation": "Trong ngoặc là −3; 8 − (−3) = 11.",
+          "skill": "dau-ngoac"
+        },
+        {
+          "prompt": "Bỏ ngoặc 6 − (a − b) được?",
+          "choices": [
+            "6 − a − b",
+            "6 + a − b",
+            "6 − a + b",
+            "6 + a + b"
+          ],
+          "correct": 2,
+          "explanation": "Đổi dấu cả a lẫn −b.",
+          "skill": "quy-tac"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-16",
+      "number": 16,
+      "chapter": 3,
+      "title": "Phép nhân số nguyên",
+      "objectives": [
+        "Nhân số nguyên theo dấu",
+        "Nhân nhiều thừa số"
+      ],
+      "concepts": [
+        {
+          "heading": "Quy tắc dấu",
+          "body": "Nhân hai số cùng dấu cho kết quả dương, khác dấu cho kết quả âm."
+        },
+        {
+          "heading": "Tính chất",
+          "body": "Phép nhân có giao hoán, kết hợp và phân phối với phép cộng. Nhân với 0 cho kết quả 0."
+        },
+        {
+          "heading": "Nhiều thừa số",
+          "body": "Nếu không có số 0, có số chẵn thừa số âm thì tích dương; số lẻ thì tích âm."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính (−4) × 5 × (−3).",
+        "steps": [
+          "(−4) × 5 = −20.",
+          "(−20) × (−3) = 60."
+        ],
+        "conclusion": "60."
+      },
+      "commonMistake": "Không áp dụng quy tắc cộng số nguyên vào phép nhân.",
+      "practice": [
+        {
+          "prompt": "(−6) × 7 bằng?",
+          "choices": [
+            "−42",
+            "42",
+            "−13",
+            "13"
+          ],
+          "correct": 0,
+          "explanation": "Khác dấu thì tích âm.",
+          "skill": "nhan-khac-dau"
+        },
+        {
+          "prompt": "(−8) × (−5) bằng?",
+          "choices": [
+            "−40",
+            "40",
+            "−13",
+            "13"
+          ],
+          "correct": 1,
+          "explanation": "Cùng dấu thì tích dương.",
+          "skill": "nhan-cung-dau"
+        },
+        {
+          "prompt": "Tích (−2) × (−3) × (−4) có dấu gì?",
+          "choices": [
+            "Dương",
+            "Âm",
+            "Bằng 0",
+            "Không xác định"
+          ],
+          "correct": 1,
+          "explanation": "Có ba thừa số âm nên tích âm.",
+          "skill": "nhan-nhieu-so"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-17",
+      "number": 17,
+      "chapter": 3,
+      "title": "Phép chia hết. Ước và bội của một số nguyên",
+      "objectives": [
+        "Thực hiện chia hết hai số nguyên",
+        "Xác định ước và bội nguyên"
+      ],
+      "concepts": [
+        {
+          "heading": "Quy tắc chia",
+          "body": "Khi chia hết, hai số cùng dấu cho thương dương, khác dấu cho thương âm."
+        },
+        {
+          "heading": "Điều kiện",
+          "body": "Số chia phải khác 0. a chia hết cho b khi a = b × q với q là số nguyên."
+        },
+        {
+          "heading": "Ước và bội",
+          "body": "Nếu a = b × q (b ≠ 0), thì b là ước của a; a là bội của b. Ước của số nguyên có thể âm."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Xét 36 : (−9), rồi xét −9 có là ước của 36 không.",
+        "steps": [
+          "36 : 9 = 4; khác dấu nên thương bằng −4.",
+          "36 = (−9) × (−4), do đó −9 là ước của 36."
+        ],
+        "conclusion": "36 : (−9) = −4 và −9 là ước của 36."
+      },
+      "commonMistake": "Không thực hiện phép chia với số chia bằng 0.",
+      "practice": [
+        {
+          "prompt": "(−24) : 6 bằng?",
+          "choices": [
+            "−4",
+            "4",
+            "−18",
+            "18"
+          ],
+          "correct": 0,
+          "explanation": "Khác dấu nên thương −4.",
+          "skill": "chia-so-nguyen"
+        },
+        {
+          "prompt": "Số nào là ước của 20?",
+          "choices": [
+            "−4",
+            "3",
+            "6",
+            "7"
+          ],
+          "correct": 0,
+          "explanation": "20 = (−4) × (−5).",
+          "skill": "uoc-so-nguyen"
+        },
+        {
+          "prompt": "Mệnh đề nào đúng?",
+          "choices": [
+            "8 : 0 = 0",
+            "0 : (−5) = 0",
+            "−7 : 0 = −7",
+            "0 : 0 = 1"
+          ],
+          "correct": 1,
+          "explanation": "0 chia số khác 0 bằng 0.",
+          "skill": "dieu-kien-chia"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-18",
+      "number": 18,
+      "chapter": 4,
+      "title": "Hình tam giác đều. Hình vuông. Hình lục giác đều",
+      "objectives": [
+        "Nhận dạng tam giác đều, hình vuông, lục giác đều",
+        "Tính chu vi đơn giản từ độ dài cạnh"
+      ],
+      "concepts": [
+        {
+          "heading": "Tam giác đều",
+          "body": "Có ba cạnh bằng nhau và ba góc bằng nhau (mỗi góc 60°)."
+        },
+        {
+          "heading": "Hình vuông",
+          "body": "Có bốn cạnh bằng nhau và bốn góc vuông. Chu vi bằng 4 lần độ dài cạnh."
+        },
+        {
+          "heading": "Lục giác đều",
+          "body": "Có sáu cạnh bằng nhau và các góc bằng nhau. Có thể chia lục giác đều thành sáu tam giác đều bằng nhau qua tâm."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Một hình vuông có cạnh 7 cm. Tính chu vi.",
+        "steps": [
+          "Vì hình vuông có bốn cạnh bằng nhau, mỗi cạnh dài 7 cm.",
+          "Chu vi P = 4 × 7 = 28 cm."
+        ],
+        "conclusion": "28 cm."
+      },
+      "commonMistake": "Hình có bốn cạnh bằng nhau chưa chắc là hình vuông: còn phải có bốn góc vuông.",
+      "practice": [
+        {
+          "prompt": "Tam giác đều có bao nhiêu cạnh bằng nhau?",
+          "choices": [
+            "2",
+            "3",
+            "4",
+            "6"
+          ],
+          "correct": 1,
+          "explanation": "Cả ba cạnh tam giác đều bằng nhau.",
+          "skill": "tam-giac-deu"
+        },
+        {
+          "prompt": "Chu vi hình vuông cạnh 9 cm là?",
+          "choices": [
+            "18 cm",
+            "27 cm",
+            "36 cm",
+            "81 cm"
+          ],
+          "correct": 2,
+          "explanation": "4 × 9 = 36 cm.",
+          "skill": "hinh-vuong"
+        },
+        {
+          "prompt": "Lục giác đều có bao nhiêu cạnh?",
+          "choices": [
+            "4",
+            "5",
+            "6",
+            "8"
+          ],
+          "correct": 2,
+          "explanation": "Lục giác là hình có sáu cạnh.",
+          "skill": "luc-giac"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-19",
+      "number": 19,
+      "chapter": 4,
+      "title": "Hình chữ nhật. Hình thoi. Hình bình hành. Hình thang cân",
+      "objectives": [
+        "Nhận biết các tứ giác",
+        "Phân biệt cạnh và góc trong các hình"
+      ],
+      "concepts": [
+        {
+          "heading": "Hình chữ nhật",
+          "body": "Có bốn góc vuông, hai cặp cạnh đối diện song song và bằng nhau."
+        },
+        {
+          "heading": "Hình thoi, hình bình hành",
+          "body": "Hình thoi có bốn cạnh bằng nhau; hình bình hành có hai cặp cạnh đối diện song song, bằng nhau."
+        },
+        {
+          "heading": "Hình thang cân",
+          "body": "Có một cặp cạnh đối diện song song; hai cạnh bên bằng nhau và các góc kề cùng một đáy bằng nhau."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Hình bình hành có hai cạnh kề 5 cm và 8 cm. Tính chu vi.",
+        "steps": [
+          "Trong hình bình hành, mỗi cạnh đối diện dài bằng cạnh tương ứng.",
+          "Chu vi P = 5 + 8 + 5 + 8 = 26 cm."
+        ],
+        "conclusion": "26 cm."
+      },
+      "commonMistake": "Không suy ra hình bình hành luôn có bốn góc vuông.",
+      "practice": [
+        {
+          "prompt": "Hình nào luôn có bốn góc vuông?",
+          "choices": [
+            "Hình thoi",
+            "Hình bình hành",
+            "Hình chữ nhật",
+            "Hình thang cân"
+          ],
+          "correct": 2,
+          "explanation": "Hình chữ nhật có bốn góc vuông.",
+          "skill": "nhan-dang"
+        },
+        {
+          "prompt": "Hình thoi có bao nhiêu cạnh bằng nhau?",
+          "choices": [
+            "2",
+            "3",
+            "4",
+            "Không cạnh nào"
+          ],
+          "correct": 2,
+          "explanation": "Bốn cạnh hình thoi bằng nhau.",
+          "skill": "hinh-thoi"
+        },
+        {
+          "prompt": "Chu vi hình bình hành có hai cạnh kề 6 cm, 4 cm bằng?",
+          "choices": [
+            "10 cm",
+            "16 cm",
+            "20 cm",
+            "24 cm"
+          ],
+          "correct": 2,
+          "explanation": "P = 2 × (6 + 4) = 20 cm.",
+          "skill": "chu-vi"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-20",
+      "number": 20,
+      "chapter": 4,
+      "title": "Chu vi và diện tích của một số tứ giác đã học",
+      "objectives": [
+        "Tính diện tích và chu vi các hình quen thuộc",
+        "Phân biệt đơn vị chiều dài và diện tích"
+      ],
+      "concepts": [
+        {
+          "heading": "Chữ nhật, hình vuông",
+          "body": "Chữ nhật dài a rộng b: P = 2(a+b), S = a×b. Vuông cạnh a: P = 4a, S = a²."
+        },
+        {
+          "heading": "Bình hành, hình thoi",
+          "body": "Hình bình hành có diện tích đáy × chiều cao tương ứng. Hình thoi có diện tích bằng một nửa tích hai đường chéo."
+        },
+        {
+          "heading": "Hình thang",
+          "body": "S = (đáy lớn + đáy nhỏ) × chiều cao : 2. Chiều cao vuông góc với hai đáy."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Hình thang có hai đáy 8 m và 14 m, chiều cao 5 m. Tính diện tích.",
+        "steps": [
+          "Tổng hai đáy là 8 + 14 = 22 m.",
+          "22 × 5 : 2 = 55 m²."
+        ],
+        "conclusion": "55 m²."
+      },
+      "commonMistake": "Chu vi đo bằng cm, m; diện tích phải ghi cm², m².",
+      "practice": [
+        {
+          "prompt": "Diện tích hình chữ nhật 7 cm × 4 cm là?",
+          "choices": [
+            "11 cm²",
+            "22 cm²",
+            "28 cm²",
+            "49 cm²"
+          ],
+          "correct": 2,
+          "explanation": "7 × 4 = 28 cm².",
+          "skill": "dien-tich-chu-nhat"
+        },
+        {
+          "prompt": "Hình thoi có hai đường chéo 6 cm, 10 cm. Diện tích bằng?",
+          "choices": [
+            "16 cm²",
+            "30 cm²",
+            "60 cm²",
+            "120 cm²"
+          ],
+          "correct": 1,
+          "explanation": "6 × 10 : 2 = 30 cm².",
+          "skill": "dien-tich-hinh-thoi"
+        },
+        {
+          "prompt": "Hình bình hành đáy 9 m, cao 3 m có diện tích?",
+          "choices": [
+            "12 m²",
+            "18 m²",
+            "27 m²",
+            "54 m²"
+          ],
+          "correct": 2,
+          "explanation": "9 × 3 = 27 m².",
+          "skill": "dien-tich-binh-hanh"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-21",
+      "number": 21,
+      "chapter": 5,
+      "title": "Hình có trục đối xứng",
+      "objectives": [
+        "Nhận biết hình có trục đối xứng",
+        "Tìm trục đối xứng của một số hình"
+      ],
+      "concepts": [
+        {
+          "heading": "Trục đối xứng",
+          "body": "Một đường thẳng là trục đối xứng khi gấp hình theo đường đó thì hai phần của hình trùng khít."
+        },
+        {
+          "heading": "Những hình quen thuộc",
+          "body": "Hình vuông có bốn trục đối xứng; hình chữ nhật không phải hình vuông có hai trục; tam giác đều có ba trục."
+        },
+        {
+          "heading": "Trong thực tế",
+          "body": "Có thể nhận ra đối xứng trục ở hoa văn, biểu tượng, một số lá cây và mặt tiền công trình."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Hình chữ nhật dài 8 cm, rộng 4 cm có bao nhiêu trục đối xứng?",
+        "steps": [
+          "Có một trục qua trung điểm hai cạnh dài đối diện.",
+          "Có một trục qua trung điểm hai cạnh ngắn đối diện.",
+          "Đường chéo không là trục đối xứng vì hình này không phải hình vuông."
+        ],
+        "conclusion": "Có hai trục đối xứng."
+      },
+      "commonMistake": "Không coi hai đường chéo hình chữ nhật bất kỳ là trục đối xứng.",
+      "practice": [
+        {
+          "prompt": "Hình vuông có bao nhiêu trục đối xứng?",
+          "choices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "correct": 2,
+          "explanation": "Có hai trục qua trung điểm cạnh và hai đường chéo.",
+          "skill": "truc-doi-xung"
+        },
+        {
+          "prompt": "Tam giác đều có bao nhiêu trục đối xứng?",
+          "choices": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "correct": 2,
+          "explanation": "Ba đường thẳng qua mỗi đỉnh và trung điểm cạnh đối diện.",
+          "skill": "tam-giac-deu"
+        },
+        {
+          "prompt": "Hình chữ nhật không phải hình vuông có mấy trục đối xứng?",
+          "choices": [
+            "0",
+            "1",
+            "2",
+            "4"
+          ],
+          "correct": 2,
+          "explanation": "Có hai trục đối xứng qua tâm.",
+          "skill": "nhan-biet"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-22",
+      "number": 22,
+      "chapter": 5,
+      "title": "Hình có tâm đối xứng",
+      "objectives": [
+        "Nhận biết tâm đối xứng",
+        "Phân biệt đối xứng trục với đối xứng tâm"
+      ],
+      "concepts": [
+        {
+          "heading": "Tâm đối xứng",
+          "body": "Điểm O là tâm đối xứng nếu quay hình 180° quanh O thì hình trùng với chính nó."
+        },
+        {
+          "heading": "Một số hình",
+          "body": "Hình bình hành, hình thoi, hình chữ nhật và hình vuông có tâm đối xứng ở giao điểm hai đường chéo."
+        },
+        {
+          "heading": "Không nhầm",
+          "body": "Tam giác đều có ba trục đối xứng nhưng không có tâm đối xứng."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Hình bình hành ABCD có hai đường chéo cắt nhau tại O. Vì sao O là tâm đối xứng?",
+        "steps": [
+          "Hai đường chéo của hình bình hành cắt nhau tại trung điểm mỗi đường.",
+          "Phép quay 180° quanh O hoán đổi A và C, B và D; hình trùng với chính nó."
+        ],
+        "conclusion": "O là tâm đối xứng."
+      },
+      "commonMistake": "Giao hai đường chéo của tứ giác bất kỳ chưa chắc là tâm đối xứng.",
+      "practice": [
+        {
+          "prompt": "Tâm đối xứng hình chữ nhật nằm ở đâu?",
+          "choices": [
+            "Một đỉnh",
+            "Giữa một cạnh",
+            "Giao điểm hai đường chéo",
+            "Mọi điểm trong hình"
+          ],
+          "correct": 2,
+          "explanation": "Giao điểm hai đường chéo là tâm quay 180°.",
+          "skill": "tam-doi-xung"
+        },
+        {
+          "prompt": "Hình nào không có tâm đối xứng?",
+          "choices": [
+            "Hình vuông",
+            "Hình bình hành",
+            "Hình chữ nhật",
+            "Tam giác đều"
+          ],
+          "correct": 3,
+          "explanation": "Tam giác đều không trùng chính nó khi quay 180°.",
+          "skill": "phan-biet"
+        },
+        {
+          "prompt": "Hình có tâm đối xứng trùng chính nó sau phép quay góc nào?",
+          "choices": [
+            "45°",
+            "90°",
+            "180°",
+            "270°"
+          ],
+          "correct": 2,
+          "explanation": "Theo định nghĩa, quay 180° quanh tâm cho chính hình.",
+          "skill": "tinh-chat"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    }
+  ],
+  "expectedLessonCount": 22,
+  "expectedPracticeCount": 66
+}

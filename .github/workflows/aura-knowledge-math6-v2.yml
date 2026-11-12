@@ -1,0 +1,66 @@
+name: AURA Knowledge Library Math6 KNTT Volume1 V2
+
+on:
+  pull_request:
+    paths:
+      - 'aura_data/knowledge_math6_kntt_volume1_v2.json'
+      - 'knowledge-math6-v2.html'
+      - 'knowledge_math6_v2.js'
+      - 'knowledge_math6_v2.css'
+      - 'lesson_maps_ui.js'
+      - 'lesson_maps.css'
+      - 'student-direct.html'
+      - 'tests/knowledge-math6-volume1-v2.test.mjs'
+      - 'tests/knowledge-math6-volume1-browser.mjs'
+      - 'docs/knowledge-library-math6-volume1-v2.md'
+      - '.github/workflows/aura-knowledge-math6-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  content-schema-qa:
+    name: Verify 22 authored lessons, 66 answers and zero Question Bank promotion
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse and validate JavaScript plus original curriculum content
+        run: |
+          node --check knowledge_math6_v2.js
+          node --check lesson_maps_ui.js
+          node --test tests/knowledge-math6-volume1-v2.test.mjs
+
+  reader-browser:
+    name: Study on iPad, phone, desktop (offline synthetic Chromium)
+    needs: content-schema-qa
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Check learning navigation, grading explanations and browser-local progress
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/knowledge-math6-http.log 2>&1 &
+          sleep 2
+          node tests/knowledge-math6-volume1-browser.mjs
+      - name: Save preview screenshots only (no real user data)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aura-knowledge-math6-v2-screenshots
+          path: test-results/knowledge-math6-volume1/
+          retention-days: 7
+
+# Source content is independently authored by AURA, not copied full textbook.
+# No prod Exam Engine, Question Bank writes, student backend credentials or Drive calls.
