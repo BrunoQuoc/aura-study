@@ -106,3 +106,13 @@ The two short comments were **edited in place**. Verified through GitHub Issue #
 A read-only, AI-assisted STAGING query was run at **2026-11-12 03:58:37 UTC** (10:58 Vietnam time). The [snapshot report](https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-monitoring-first-manual-check-phase3fb2-2026-11-12.md) and [sanitized Issue #12 evidence](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814075968) include aggregate results. Counts of Auth users 6 (anonymous 5), active paired devices 1, Learning Events 13 and Attempts 0 match the 2026-11-06 baseline. There were **no matching auth_logs/edge_logs rows** in the rolling 24h sample, despite pgbouncer/postgres rows. A zero error count without Auth logs is **insufficient monitoring coverage**; verify log source/traffic without artificial account creation or login floods.
 
 This ad hoc query is **NOT** a self-authored Primary 09:00 review, and it does not satisfy the cadence attendance, independent policy signoff or alert source requirements. The [Backup handoff tabletop runbook](https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-backup-handoff-drill-phase3fb2.md) is prepared but **not performed**. Policy flags remain PENDING. PRODUCTION NO-GO.
+
+
+### Self-authored snapshot review ACKs — 2026-11-12
+
+- Primary `BrunoQuoc` posted [ACK DAILY MONITOR REVIEW](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814311117).
+- Backup `Sonic-2015` posted [ACK BACKUP MONITOR REVIEW](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814290472). Backup also posted a separate short `ACK DAILY MONITOR REVIEW`, but this is not a Primary acknowledgement.
+- Both authors and exact short-form texts were verified on Issue #12. These are **human self-attestations that the report was reviewed**, not independent findings or proof that the two people personally executed SQL or attended the 09:00 daily check.
+- The known **Auth/edge log visibility gap remains OPEN**. Neither message independently assessed whether the missing rows reflect low traffic, service configuration or log retention.
+- The policy sets the two human review attestation flags true but leaves `first_real_manual_check_completed=false`, `missed_review_handoff_tabletop_completed=false`, `approval.approved=false`, `live_supabase_alerting_verified=false` and production NO-GO.
+- Next: run the [Backup Handoff tabletop](https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-backup-handoff-drill-phase3fb2.md) using distinct self-authored DRILL ONLY comments, then separately capture a genuine 09:00 Primary/Backup check and independent governance signoff.
