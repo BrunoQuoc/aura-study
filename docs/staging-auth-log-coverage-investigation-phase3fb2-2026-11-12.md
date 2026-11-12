@@ -82,3 +82,10 @@ Read-only diagnostic scripts:
 5. An independent reviewer must separately evaluate the deferred 09:00 monitoring acceptance and sign off any remediation or time-limited exception. Neither this research nor an assistant-authored GitHub comment constitutes human approval.
 
 **Governance:** phase3FB2 Independent Operational Review remains **PENDING**; skipped 09:00 acceptance is **DEFERRED NOT PASS**; `ALERTING_AND_INCIDENT_RESPONSE` remains **OPEN**; **PRODUCTION NO-GO**.
+
+
+## 7. Audit Logs configuration screenshot — 2026-11-12
+
+User-supplied dashboard screenshot shows **Authentication → Configuration → Audit Logs → Write audit logs to the database = OFF** (grey switch). [Issue #12 audit note](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6816208559). No setting was changed. This optional setting is consistent with an empty PostgreSQL `auth.audit_log_entries` table, but **it does not explain or establish a defect in the separate `auth_logs` or `auth_audit_logs` Logs Explorer streams**. Centralized Auth event telemetry remains UNVERIFIED because there was no independently known real interactive Auth event in the sampled rolling 24h window.
+
+Next: an authorized reviewer should compare the centralized source rows over a timestamped, independently known historical Auth operation window, without revealing identifiers or causing new Auth requests. If no corroborated event window exists, retain status INCONCLUSIVE pending a separately approved bounded test. No switches or data were changed; independent review and production gates remain OPEN.
