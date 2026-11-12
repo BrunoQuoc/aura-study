@@ -81,7 +81,7 @@
     {
       "id": "ALERTING_AND_INCIDENT_RESPONSE",
       "status": "OPEN",
-      "reason": "Phase3F-B2 STAGING: operator screenshot confirms synthetic incident tabletop 3/3 PASS (P0 unpaired RLS, P1 unexpected test-user pairing, P1 Auth 5xx), zero Auth calls/writes/deletions; sanitized GitHub issue #13 persisted. Actual alert delivery NOT VERIFIED, primary/backup owners UNASSIGNED, monitoring cadence/response SLA unapproved, real 429/alert escalation not tested. Production NO-GO.",
+      "reason": "Phase3F-B2 STAGING mock tabletop PASS 3/3; synthetic issue #13 stored. Primary BrunoQuoc self-authored GitHub ACK verified; Sonic-2015 nominated as Backup (repo read permission), but not added as Issue assignee and BACKUP ACK still pending. Human notification receipt, monitoring owner/backup schedule, alert routing, incident escalation, and real Supabase Auth 429 alert delivery remain unverified. PRODUCTION NO-GO.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
