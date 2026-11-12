@@ -99,3 +99,10 @@ The two short comments were **edited in place**. Verified through GitHub Issue #
 **PASS — two role-level approvals and explicit response-target consent.** Registry `release/phase3fb2-monitoring-cadence-sla.json` now sets both accepted flags, both terms-confirmed flags and author verification to true, while keeping `approval.approved=false` and `independent_reviewer_approved=false`.
 
 **Still OPEN:** independent playbook/reviewer signoff; first real aggregate-only daily monitoring evidence (not a copied historical sample); missed-Primary Backup handoff tabletop; effective and next-review dates; verification of any actual alert source. These are required before claiming active/manual readiness. Neither a daily reminder nor 24/7 incident monitoring has been activated. PRODUCTION NO-GO.
+
+
+### First ad hoc aggregate snapshot — 2026-11-12
+
+A read-only, AI-assisted STAGING query was run at **2026-11-12 03:58:37 UTC** (10:58 Vietnam time). The [snapshot report](https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-monitoring-first-manual-check-phase3fb2-2026-11-12.md) and [sanitized Issue #12 evidence](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814075968) include aggregate results. Counts of Auth users 6 (anonymous 5), active paired devices 1, Learning Events 13 and Attempts 0 match the 2026-11-06 baseline. There were **no matching auth_logs/edge_logs rows** in the rolling 24h sample, despite pgbouncer/postgres rows. A zero error count without Auth logs is **insufficient monitoring coverage**; verify log source/traffic without artificial account creation or login floods.
+
+This ad hoc query is **NOT** a self-authored Primary 09:00 review, and it does not satisfy the cadence attendance, independent policy signoff or alert source requirements. The [Backup handoff tabletop runbook](https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-backup-handoff-drill-phase3fb2.md) is prepared but **not performed**. Policy flags remain PENDING. PRODUCTION NO-GO.
