@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#173b67">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'self'">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="icon.svg">
+  <link rel="stylesheet" href="admin_question_review.css?v=stage2c-20261112">
+  <title>AURA STUDY — Kiểm định câu hỏi 2C</title>
+</head>
+<body>
+<main class="qa-shell">
+  <header class="qa-head">
+    <div><div class="eyebrow">AURA STUDY · STAGE 2C</div>
+      <h1>Kiểm định câu hỏi trước Question Bank</h1>
+      <p>Đối chiếu nguồn Word, hình, đáp án và thang điểm. Mọi phê duyệt tại trang này chỉ là bản ghi cục bộ, chưa được xác thực máy chủ.</p>
+    </div>
+    <a href="admin-direct.html" class="qa-back">← Trở về Admin</a>
+  </header>
+  <div class="qa-warning" role="note"><strong>Chưa xuất bản hoặc chấm tự động.</strong> Không có kết nối ghi vào Question Bank. Không đăng nhập tài khoản hay nhập mật khẩu/Google token tại đây. Khi rời trang, dữ liệu kiểm định chưa xuất file sẽ mất.</div>
+  <section class="qa-import">
+    <h2>01 · Nạp hồ sơ kiểm định riêng tư</h2>
+    <p>Chọn gói JSON nguồn 2C đã tải vào Files trên iPad. File chỉ được đọc trong tab này; không gửi lên GitHub hay Google Drive.</p>
+    <div class="qa-import-grid">
+      <label class="qa-file">Hồ sơ câu hỏi và hình gốc (.json)
+        <input id="packetFile" type="file" accept=".json,application/json"/>
+      </label>
+      <label class="qa-file">Nạp lại bản ghi đã lưu (không bắt buộc)
+        <input id="decisionFile" type="file" accept=".json,application/json" disabled/>
+      </label>
+    </div>
+    <p id="qaMessage" class="qa-message" role="status">Chưa nạp nguồn. Không có tài liệu nào được tự động duyệt.</p>
+  </section>
+  <section class="qa-content" id="qaContent" hidden>
+    <div class="qa-summary" id="qaSummary"></div>
+    <div class="qa-layout">
+      <aside class="qa-panel qa-list-panel">
+        <div class="qa-list-title"><h2>02 · Danh sách câu</h2><span id="qaCount"></span></div>
+        <label>Bộ lọc
+          <select id="qaFilter">
+            <option value="all">Tất cả câu hỏi</option>
+            <option value="blocked">Cần kiểm định</option>
+            <option value="complete">Đã rà soát cục bộ</option>
+            <option value="issues">Có cảnh báo</option>
+            <option value="images">Có hình</option>
+          </select>
+        </label>
+        <div id="qaQuestionList" class="qa-question-list" role="list"></div>
+      </aside>
+      <article class="qa-panel qa-detail-panel" id="qaDetail">
+        <h2 id="qaQuestionTitle">03 · Kiểm định câu hỏi</h2>
+        <p id="qaSourceInfo" class="qa-source"></p>
+        <div id="qaQuestionBody" class="qa-question-body"></div>
+        <form id="qaReviewForm">
+          <fieldset id="qaImageReview">
+            <legend>1. Đối chiếu hình và nguồn</legend>
+            <label class="qa-check"><input name="checkImage" type="checkbox"/> Đã kiểm tra thứ tự hình, câu chứa hình và nội dung nguồn gốc.</label>
+            <label>Ghi chú đối chiếu hình hoặc lý do câu không có hình
+              <textarea name="imageEvidence" rows="2" placeholder="Ví dụ: Ảnh 1 nằm ngay sau Bài 4, kích thước giữ nguyên."></textarea>
+            </label>
+          </fieldset>
+          <fieldset>
+            <legend>2. Đáp án độc lập</legend>
+            <p class="qa-caption">Nguồn gốc hiện chưa có đáp án được chứng thực. Nhập đáp án sau khi tự giải và đối chiếu, không dựa vào suy đoán.</p>
+            <div id="qaAnswerInput"></div>
+            <label>Căn cứ kiểm tra đáp án
+              <textarea name="answerEvidence" rows="2" placeholder="Diễn giải phép tính hoặc nguồn đáp án đã đối chiếu"></textarea>
+            </label>
+            <label class="qa-check"><input name="checkAnswer" type="checkbox"/> Tôi đã kiểm tra đáp án độc lập; không coi gợi ý tự động là đáp án chuẩn.</label>
+          </fieldset>
+          <fieldset>
+            <legend>3. Thang điểm và tiêu chí chấm</legend>
+            <div class="qa-grid-two"><label>Điểm tối đa của câu
+                <input name="maxPoints" type="number" min="0.25" max="10" step="0.25" inputmode="decimal" placeholder="Ví dụ: 0.5"/>
+              </label><label>Người kiểm tra
+                <input name="reviewerLabel" type="text" maxlength="100" autocomplete="off" placeholder="Họ tên người duyệt"/>
+              </label></div>
+            <label>Thang điểm theo bước
+              <textarea name="rubric" rows="3" placeholder="Nêu mỗi bước được bao nhiêu điểm; tổng bằng điểm tối đa"></textarea>
+            </label>
+            <label>Căn cứ xác minh thang điểm
+              <textarea name="rubricEvidence" rows="2" placeholder="Đối chiếu ma trận đề, hướng dẫn chấm hoặc phê duyệt của giáo viên"></textarea>
+            </label>
+            <label class="qa-check"><input name="checkRubric" type="checkbox"/> Tôi đã đối chiếu các bước tính điểm và tổng điểm.</label>
+          </fieldset>
+          <fieldset id="qaFlags" hidden><legend>4. Cảnh báo nguồn cần giải quyết</legend><div id="qaFlagsItems"></div></fieldset>
+          <label>Ghi chú kiểm định bổ sung
+            <textarea name="reviewNote" rows="2" placeholder="Những điểm còn cần giáo viên/nguồn gốc bổ sung"></textarea>
+          </label>
+          <div id="qaGate" class="qa-gate" role="status"></div>
+          <div class="qa-actions"><button type="button" id="qaPrevious">← Câu trước</button><button type="button" class="primary" id="qaSaveNext">Ghi nhận tại máy & câu tiếp →</button></div>
+        </form>
+      </article>
+    </div>
+    <footer class="qa-export">
+      <div><h2>04 · Xuất biên bản kiểm định</h2>
+        <p>Xuất JSON gồm mã câu, SHA-256 nguồn, kết quả rà soát và các điểm còn chặn. <strong>Không chứa lại nội dung đề hoặc hình.</strong> Biên bản này không phải lệnh xuất bản, vẫn cần người có quyền và hệ thống máy chủ xác minh trước khi nhập Question Bank.</p></div>
+      <button type="button" id="qaExport" class="primary">Xuất biên bản JSON</button>
+    </footer>
+  </section>
+</main>
+<script src="admin_question_review_core.js?v=stage2c-20261112"></script>
+<script src="admin_question_review_ui.js?v=stage2c-20261112"></script>
+</body>
+</html>
