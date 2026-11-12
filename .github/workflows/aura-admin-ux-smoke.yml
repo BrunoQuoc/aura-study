@@ -1,0 +1,31 @@
+name: AURA Admin MVP UX smoke
+
+on:
+  pull_request:
+    paths:
+      - 'admin-direct.html'
+      - 'admin_mvp_v2.css'
+      - 'admin_mvp_v2.js'
+      - 'tests/admin-mvp-v2.test.mjs'
+      - '.github/workflows/aura-admin-ux-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  admin-ux-offline:
+    name: Admin UI + source readiness (synthetic offline)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse admin JS and check source/readiness/accessibility wiring
+        run: |
+          node --check admin_mvp_v2.js
+          node --test tests/admin-mvp-v2.test.mjs
+
+# Offline checks only. No Google Drive, Supabase, user data, or deployment access.
