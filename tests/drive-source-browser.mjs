@@ -93,7 +93,7 @@ try{
     await page.locator('#auraDriveSourceRoot').fill(root);
     await page.locator('[data-source-action="scan"]').click();
     await page.getByRole('status').filter({hasText:'Đã quét 3 file'}).waitFor({timeout:15000});
-    assert.equal(requests.filter(x=>x.url.includes('googleapis.com')).length,4);
+    assert.equal(requests.filter(x=>x.url.includes('googleapis.com')).length,5, 'root check + 2 root pages + 2 child folders');
     const queue=await page.evaluate(()=>JSON.parse(localStorage.getItem('aura_drive_source_review_queue_v1')));
     assert.equal(queue.length,3);
     assert.equal(queue.filter(x=>x.sourceGate.startsWith('BLOCKED_')).length,2);
