@@ -41,8 +41,8 @@ try{
   await page.locator('[name=checkRubric]').check();
   assert.match(await page.locator('#qaGate').innerText(),/CONTRADICTORY_SQUARE/);
   await page.locator('[data-qa-flag]').fill('Giữ nguyên câu ở trạng thái lỗi; chỉ ghi nhận kiểm tra, chưa xuất bản.');
-  assert.match(await page.locator('#qaGate').innerText(),/Đã rà soát cục bộ/);
-  assert.match(await page.locator('#qaGate').innerText(),/chưa được cấp quyền xuất bản/);
+  assert.match(await page.locator('#qaGate').innerText(),/Nguồn còn cảnh báo/);
+  assert.match(await page.locator('#qaGate').innerText(),/Question Bank tiếp tục bị chặn/);
   assert.equal(await page.locator('button').filter({hasText:/Xuất bản|Publish/}).count(),0);
   const downloadPromise=page.waitForEvent('download');
   await page.locator('#qaExport').click();
