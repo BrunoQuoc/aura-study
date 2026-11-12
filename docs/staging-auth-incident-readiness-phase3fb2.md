@@ -104,3 +104,10 @@ Other references: [Phase 3F-B tracker #12](https://github.com/BrunoQuoc/aura-stu
 ### 9. Ownership & receipt verification protocol
 
 As of 2026-11-06, the connected GitHub account `BrunoQuoc` has been recorded as a **proposed Primary candidate only**, without appointment or acceptance. Backup remains UNASSIGNED. Owner/Backup self-authored acknowledgements and human receipt of a synthetic Issue #13 notification are pending. Candidate identity must never imply on-call duty. Source of truth: `release/phase3fb2-monitoring-ownership.json`. The safe, no-PII protocol and receipt evidence requirements are in `docs/staging-auth-ownership-alert-receipt-phase3fb2.md`. Offline guard is `scripts/phase3fb2-receipt-gate.mjs`. GitHub Issue #12 contains the operator participation instructions. No live Supabase alert, real 429 or production change is implied.
+
+
+### 10. Independent Primary and Backup role acknowledgements — 2026-11-12
+
+GitHub Issue #12 comment authors were independently verified: `BrunoQuoc` submitted [ACK PRIMARY](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6680960922) and `Sonic-2015` submitted [ACK BACKUP](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6812366506). Both selected GitHub Inbox, so STAGING duty acceptance is recorded as **PASS** for both roles.
+
+Alert delivery remains unverified: neither account has provided a receipt acknowledgement from a new synthetic notification, and no live Supabase-to-GitHub alert integration has been established. The backup currently has repository read permission but is not an Issue #12 assignee. To test actual receipt, use an independent authorized sender for synthetic Issue #13 (not one of the intended receivers), then collect self-authored receipt comments, verify the actors, and record approved response cadence. **PRODUCTION NO-GO**.
