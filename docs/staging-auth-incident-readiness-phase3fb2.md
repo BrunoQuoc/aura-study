@@ -85,7 +85,7 @@ The offline policy proposes escalation and preserves evidence. It intentionally 
 | Real email/push/automated alert delivery | A named recipient acknowledges receipt | **OPEN** |
 | Primary/backup monitoring ownership | BrunoQuoc and Sonic-2015 self-authored ACKs verified | **PASS — STAGING DUTY ACCEPTANCE** |
 | GitHub Inbox cross-account receipt drill | Two distinct senders and recipients; Issue #12 human ACKs | **PASS 2/2 — SELF-REPORTED RECEIPT ONLY** |
-| Monitoring cadence / incident SLA | Owner-approved schedule and escalation | **OPEN** |
+| Monitoring cadence / incident SLA | Daily 09:00 VN proposed; owner/backup approvals and first manual check pending | **OPEN — DRAFT ONLY** |
 | Real Supabase HTTP 429 / alert response | Bounded test and independent evidence | **OPEN** |
 
 **Closure criteria:** After owner + backup accept, choose a supported alerting path; perform one no-sensitive-data notification delivery exercise with actual acknowledgement; record an approved tabletop decision; establish a monitoring cadence; and verify either approved manual-monitoring exception or actual automated alerting. Production remains NO-GO until every relevant release condition passes.
@@ -118,3 +118,10 @@ Alert delivery remains unverified: neither account has provided a receipt acknow
 STAGING-only two-account GitHub mention drill is now **2/2 recipient self-ACK PASS**, source authors and recipient authors verified on GitHub Issue #13 and #12 respectively. Primary: `Sonic-2015` [trigger](https://github.com/BrunoQuoc/aura-study/issues/13#issuecomment-6812476673) -> `BrunoQuoc` [ACK RECEIPT PRIMARY](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6812558525). Backup: `BrunoQuoc` [trigger](https://github.com/BrunoQuoc/aura-study/issues/13#issuecomment-6812564741) -> `Sonic-2015` [ACK RECEIPT BACKUP](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6812578418).
 
 No independent GitHub inbox delivery telemetry or provider timestamps available in retrieved issue comments; do not claim confirmed notification latency or a live Supabase alert. Human response is acknowledged; independent governance reviewer sign-off, monitoring schedule/SLA and actual alert pipeline are not approved. PRODUCTION remains NO-GO.
+
+
+### 12. Draft monitoring cadence and response targets — 2026-11-12
+
+**DRAFT, NOT APPROVED:** Proposed manual STAGING review daily at 09:00 Asia/Ho_Chi_Minh, Primary BrunoQuoc, Backup Sonic-2015, sanitized evidence by 09:30, Backup handoff at 09:15 if missing. P0 proposed ACK target 15 min from human detection, P1 60 min, P2 4h; these are not 24/7 promises.
+
+Runbook: [`docs/staging-auth-monitoring-cadence-sla-phase3fb2.md`](https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-monitoring-cadence-sla-phase3fb2.md). Policy: `release/phase3fb2-monitoring-cadence-sla.json`. Required next evidence: distinct approval comments from Primary and Backup, approved coverage/response windows and independent reviewer signoff, at least one real read-only daily check, and missed-check tabletop handoff. Neither scheduled monitoring nor alerts were activated. Alerting & Incident Response production gate remains OPEN; production NO-GO.
