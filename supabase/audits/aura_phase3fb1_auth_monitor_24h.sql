@@ -5,7 +5,7 @@
 SELECT
   min(timestamp) AS first_log_ts,
   max(timestamp) AS last_log_ts,
-  count(*) AS log_rows,
+  count() AS log_rows,
   countIf(source='auth_logs'
     AND log_attributes['error_code']='captcha_failed')
     AS captcha_failed,
