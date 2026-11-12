@@ -3,7 +3,7 @@
 -- READ-ONLY aggregate counts by log source for latest 24 hours; no user-identifying data.
 SELECT
   source,
-  count(*) AS rows_in_last_24h,
+  count() AS rows_in_last_24h,
   min(timestamp) AS first_log_ts,
   max(timestamp) AS last_log_ts
 FROM logs
