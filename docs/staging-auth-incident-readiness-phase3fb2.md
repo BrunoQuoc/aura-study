@@ -140,3 +140,8 @@ GitHub Issue #12 shows both users **edited their existing comments** into full S
 ### 15. Backup handoff tabletop 3/3 — 2026-11-12
 
 All three self-authored GitHub Issue #12 comments were observed in correct order: [Primary scenario](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814391249), [Backup takeover](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814400852), [Primary review](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814413737). Backup explicitly acknowledged the aggregate snapshot and missing Auth/edge log coverage. This is **PASS — STAGING TABLETOP ONLY**. Real 09:00 attendance, real response-time measurement, independent operational signoff and live Supabase alert pipeline remain unverified; PRODUCTION NO-GO.
+
+
+### 16. First scheduled 09:00 check deferred; independent review prepared — 2026-11-12
+
+The user explicitly deferred (did not execute or waive) the proposed 2026-11-13 09:00 acceptance check and requested next-phase review. Independent operational readiness packet prepared: [packet](https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-independent-operational-review-phase3fb2-2026-11-12.md); [Issue #12 request](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6815431457). Existing role ACK, receipt ACK, ad hoc snapshots and Backup Handoff tabletop remain documented, but do **not** establish a recurring scheduled-monitoring trial, complete Auth telemetry or live alerting. Until an authorized independent human reviews, operational approval remains false; release OPEN and PRODUCTION NO-GO.
