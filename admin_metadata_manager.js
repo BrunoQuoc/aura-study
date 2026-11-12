@@ -1,98 +1,282 @@
-/* AURA STUDY — Admin metadata assignment manager */
-(function(){
-  if(!document.body.classList.contains('admin-shell'))return;
-  const esc=s=>String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]));
-  const PERIOD_ORDER=['GK1','CK1','GK2','CK2'];
-  const PERIOD_LABEL={GK1:'Giữa kỳ 1',CK1:'Cuối kỳ 1',GK2:'Giữa kỳ 2',CK2:'Cuối kỳ 2'};
-  const BASIS_LABEL={source_declared:'Nguồn ghi rõ kỳ',source_declared_term:'Nguồn ghi rõ học kỳ',curriculum_scope:'AURA gắn theo phạm vi kiến thức',current_bank_scope:'AURA gắn theo phạm vi ngân hàng',mixed_scope_requires_split:'Kho trộn phạm vi — chưa bật theo kỳ',insufficient_source_evidence:'Chưa đủ căn cứ nguồn',manual_admin_override:'Admin chủ động gán sử dụng'};
-  const DOC_LABEL={worked_example:'Bài mẫu / lời giải',question_bank:'Ngân hàng tạo đề'};
-  let activeMode='replace';
+/* AURA STUDY — Admin Phân kỳ V2. Presentation + per-resource override workflow only.
+   The source registry, underlying content, and generator gates stay authoritative. */
+(function () {
+  'use strict';
+  if (!document.body.classList.contains('admin-shell')) return;
 
-  function registry(){return window.AURA_EXAM_METADATA||{resources:{},banks:{},subjects:{},periods:{}}}
-  function subjectLabel(id){return registry().subjects?.[id]?.label||id}
-  function subjectOrder(){return Object.keys(registry().subjects||{})}
-  function periodText(list,term=''){
-    const arr=Array.isArray(list)?list:[];
-    if(arr.length)return arr.map(x=>PERIOD_LABEL[x]||x).join(' · ');
-    return term?`${term} · chưa xác định kỳ cụ thể`:'Chưa xác định kỳ';
-  }
-  function resourceTitle(key,row){
-    if(row.kind==='review'){
-      const r=(window.AURA_REVIEWS?.[row.subject]||[]).find(x=>x.id===row.resourceId);
-      if(r?.title)return r.title;
-    }
-    return row.scope||row.resourceId||key;
-  }
-  function bankTitle(key,row){return `Ngân hàng ${row.bankId||key.split(':').pop()}`}
-  function effective(group,key,row){
-    if(group==='resources'&&typeof window.auraExamMetaFor==='function')return window.auraExamMetaFor(row.kind,row.subject,row.resourceId)||row;
-    if(group==='banks'&&typeof window.auraExamBankMetaFor==='function')return window.auraExamBankMetaFor(row.subject,row.bankId)||row;
-    return row;
-  }
-  function allRows(){
-    const r=registry();
+  const PERIODS = [
+    {id:'GK1',name:'Giữa kỳ 1',term:'HK1'},
+    {id:'CK1',name:'Cuối kỳ 1',term:'HK1'},
+    {id:'GK2',name:'Giữa kỳ 2',term:'HK2'},
+    {id:'CK2',name:'Cuối kỳ 2',term:'HK2'}
+  ];
+  const BASIS = {
+    source_declared:'Nguồn ghi rõ kỳ',
+    source_declared_term:'Nguồn chỉ ghi học kỳ',
+    curriculum_scope:'AURA xếp theo phạm vi kiến thức',
+    current_bank_scope:'AURA xếp theo phạm vi ngân hàng',
+    mixed_scope_requires_split:'Nguồn trộn nhiều phạm vi, cần tách',
+    insufficient_source_evidence:'Chưa đủ căn cứ từ tài liệu',
+    manual_admin_override:'Admin chọn kỳ sử dụng'
+  };
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const state = {subject:'ALL', period:'ALL', view:'ALL'};
+  const app = document.getElementById('app');
+  if (!app) return;
+
+  const registry = () => window.AURA_EXAM_METADATA || {subjects:{},resources:{},banks:{}};
+  function rows() {
+    const data=registry();
     return [
-      ...Object.entries(r.resources||{}).map(([key,row])=>({group:'resources',key,row,title:resourceTitle(key,row)})),
-      ...Object.entries(r.banks||{}).map(([key,row])=>({group:'banks',key,row,title:bankTitle(key,row)}))
+      ...Object.entries(data.resources || {}).map(([key,row])=>({group:'resources',key,row,title:titleFor(row,key)})),
+      ...Object.entries(data.banks || {}).map(([key,row])=>({group:'banks',key,row,title:'Ngân hàng: '+(row.scope || row.bankId || key)}))
     ];
   }
-  function checkboxes(selected=[]){
-    const set=new Set(selected||[]);
-    return PERIOD_ORDER.map(p=>`<label class="metadata-period"><input type="checkbox" data-period="${p}" ${set.has(p)?'checked':''}><span>${PERIOD_LABEL[p]}</span></label>`).join('');
+  function titleFor(row,key) {
+    if (row.kind === 'review') {
+      const source = (window.AURA_REVIEWS?.[row.subject] || []).find(r=>r.id === row.resourceId);
+      if (source?.title) return source.title;
+    }
+    return row.scope || row.resourceId || key;
   }
-  function rowHTML(item){
-    const {group,key,row,title}=item,meta=effective(group,key,row),ov=meta.override||null;
-    const source=periodText(row.sourcePeriods,row.sourceTerm),def=periodText(row.periods,row.term),active=periodText(meta.effectivePeriods,meta.effectiveTerm);
-    const selected=ov?.periods||meta.effectivePeriods||row.periods||[];
-    return `<article class="card metadata-item" data-group="${group}" data-key="${esc(key)}">
-      <div class="metadata-item-head"><div><span class="metadata-kind">${group==='banks'?'NGÂN HÀNG TẠO ĐỀ':'TÀI LIỆU'}</span><h3>${esc(title)}</h3><small>${esc(DOC_LABEL[row.docType]||row.docType)} · ${esc(row.sourceFile||'')}</small></div><span class="metadata-status ${ov?'manual':'default'}">${ov?'Admin override':'Theo mặc định'}</span></div>
-      <div class="metadata-triplet"><div><span>NGUỒN</span><b>${esc(source)}</b><small>${esc(BASIS_LABEL[row.assignmentBasis]||row.assignmentBasis)}</small></div><div><span>MẶC ĐỊNH</span><b>${esc(def)}</b><small>${esc(row.scope||'')}</small></div><div class="effective"><span>ĐANG DÙNG</span><b>${esc(active)}</b><small>${ov?esc(ov.reason||'Admin gán thủ công'):'Không có override'}</small></div></div>
-      <div class="metadata-editor">
-        <div class="metadata-periods">${checkboxes(selected)}</div>
-        <label class="metadata-reason"><b>Lý do / ghi chú</b><input type="text" value="${esc(ov?.reason||'')}" placeholder="Ví dụ: Dùng lại nội dung HK1 để ôn nền tảng trong HK2"></label>
-        <div class="metadata-actions"><button class="btn primary" type="button" onclick="auraSaveMetadataOverride(this)">Lưu</button>${ov?'<button class="btn soft" type="button" onclick="auraResetMetadataOverride(this)">Trả về mặc định</button>':''}${row.sourcePeriods?.length?'<button class="btn soft" type="button" onclick="auraUseSourcePeriods(this)">Dùng đúng kỳ nguồn</button>':''}</div>
-      </div>
-    </article>`;
+  function effective(item) {
+    const row=item.row;
+    if (item.group==='resources' && typeof window.auraExamMetaFor==='function')
+      return window.auraExamMetaFor(row.kind,row.subject,row.resourceId) || row;
+    if (item.group==='banks' && typeof window.auraExamBankMetaFor==='function')
+      return window.auraExamBankMetaFor(row.subject,row.bankId) || row;
+    return row;
   }
-  function subjectSections(rows){
-    const ids=[...subjectOrder(),...rows.map(x=>x.row.subject).filter((x,i,a)=>x&&!subjectOrder().includes(x)&&a.indexOf(x)===i)];
-    return ids.map(id=>{
-      const list=rows.filter(x=>x.row.subject===id);if(!list.length)return'';
-      const manual=list.filter(x=>effective(x.group,x.key,x.row).override).length;
-      return `<section class="metadata-subject" data-subject="${esc(id)}"><div class="metadata-subject-head"><div><h3>${esc(subjectLabel(id))}</h3><span>${list.length} mục quản lý${manual?` · ${manual} override`:''}</span></div></div><div class="metadata-subject-list">${list.map(rowHTML).join('')}</div></section>`;
-    }).join('');
+  const list = x => Array.isArray(x) ? x : [];
+  function periodNames(xs) {
+    const ids=list(xs);
+    return ids.length ? ids.map(id=>PERIODS.find(x=>x.id===id)?.name || id).join(' · ') : 'Chưa gán kỳ';
   }
-  function render(){
-    if(typeof window.setActive==='function')window.setActive('metadata');
-    const app=document.getElementById('app');if(!app)return;
-    const rows=allRows(),overrideCount=rows.filter(x=>effective(x.group,x.key,x.row).override).length,validation=typeof window.auraValidateExamMetadata==='function'?window.auraValidateExamMetadata():{ok:true,errors:[]};
-    app.innerHTML=`<div class="sectionhead metadata-admin-head" style="margin-top:0"><div><h2>Phân kỳ tài liệu</h2><span>Chọn 1 cách xử lý chung → quản lý theo từng môn</span></div></div>
-      <section class="metadata-toolbar card"><div><span class="metadata-toolbar-label">CÁCH XỬ LÝ</span><b>Áp dụng cho mục anh chỉnh bên dưới</b><small>Metadata nguồn luôn được giữ nguyên.</small></div><select id="auraMetadataMode" onchange="auraMetadataModeChanged(this.value)"><option value="replace" ${activeMode==='replace'?'selected':''}>Chuyển sang kỳ đã chọn</option><option value="add" ${activeMode==='add'?'selected':''}>Dùng thêm ở kỳ đã chọn</option></select></section>
-      <section class="metadata-summary"><article><span>Tổng mục</span><strong>${rows.length}</strong><small>Tài liệu + ngân hàng</small></article><article><span>Admin override</span><strong>${overrideCount}</strong><small>Đang dùng khác mặc định</small></article><article><span>Registry</span><strong>${validation.ok?'OK':'CẦN KIỂM TRA'}</strong><small>v${esc(registry().version||'')}</small></article></section>
-      ${validation.ok?'':`<div class="card metadata-warning"><b>Registry có lỗi:</b><p>${validation.errors.map(esc).join('<br>')}</p></div>`}
-      <div class="metadata-groups">${subjectSections(rows)}</div>`;
+  function sourceDetail(row) {
+    if (list(row.sourcePeriods).length) return 'Nguồn ghi rõ: '+periodNames(row.sourcePeriods);
+    if (row.sourceTerm) return 'Nguồn chỉ ghi '+row.sourceTerm+' — không xác nhận riêng GK/CK';
+    return 'Nguồn không ghi rõ kỳ hoặc học kỳ';
+  }
+  function status(item, meta) {
+    if (meta.override) return {name:'Đã chỉnh thủ công',kind:'manual'};
+    if (!list(meta.effectivePeriods || meta.periods).length ||
+      ['insufficient_source_evidence','mixed_scope_requires_split'].includes(item.row.assignmentBasis))
+      return {name:'Cần rà soát',kind:'review'};
+    if (list(item.row.sourcePeriods).length) return {name:'Có căn cứ nguồn',kind:'verified'};
+    return {name:'Theo phạm vi AURA',kind:'scope'};
+  }
+  function isBlockedBank(item) {
+    return item.group==='banks' &&
+      (item.row.assignmentBasis==='mixed_scope_requires_split' || item.row.generator===false);
+  }
+  function subjectState(id) {
+    const sub=registry().subjects?.[id];
+    return sub?.status || 'awaiting_source';
+  }
+  function subjectStatusText(id) {
+    return ({ready:'Đã có nội dung',partial:'Nội dung chưa đầy đủ',awaiting_source:'Chờ học liệu'})[subjectState(id)] || 'Chờ học liệu';
+  }
+  function periodReady(id,p) {
+    return typeof window.auraExamGeneratorReady==='function' && window.auraExamGeneratorReady(id,p);
+  }
+  function subjectReadiness(id,subjectRows) {
+    if (id==='ALL') return '';
+    const available=PERIODS.filter(p=>periodReady(id,p.id)).map(p=>p.name);
+    const count=subjectRows.filter(i=>list(effective(i).effectivePeriods).length).length;
+    return '<div class="period-v2-readiness">' +
+      '<div><strong>'+esc(registry().subjects?.[id]?.label || id)+'</strong>'+
+      '<span class="period-v2-pill '+esc(subjectState(id))+'">'+esc(subjectStatusText(id))+'</span></div>'+
+      '<p>'+esc(registry().subjects?.[id]?.note || 'Chưa có học liệu được xác nhận')+'</p>'+
+      '<div class="period-v2-readiness-grid">'+
+      '<span><b>'+count+'/'+subjectRows.length+'</b> mục đã xác định kỳ sử dụng</span>'+
+      '<span><b>'+esc(available.length?available.join(' · '):'Chưa có')+'</b> kỳ được phép tạo đề theo ngân hàng hiện tại</span>'+
+      '</div><small>Gán lại kỳ cho tài liệu không tự tạo thêm câu hỏi, đáp án hoặc dữ liệu còn thiếu.</small></div>';
+  }
+  function checkboxMarkup(values=[]) {
+    const selected=new Set(list(values));
+    return ['HK1','HK2'].map(term=>
+      '<fieldset class="period-v2-term"><legend>'+('HK1'===term?'Học kỳ I':'Học kỳ II')+'</legend>'+
+      PERIODS.filter(p=>p.term===term).map(p=>
+        '<label class="period-v2-choice"><input type="checkbox" data-period="'+p.id+'" '+(selected.has(p.id)?'checked':'')+'>'+
+        '<span>'+p.name+'</span></label>').join('')+'</fieldset>'
+    ).join('');
+  }
+  function itemMarkup(item) {
+    const meta=effective(item),row=item.row,ov=meta.override || null,info=status(item,meta);
+    const activePeriods=list(meta.effectivePeriods || meta.periods);
+    const editable=!isBlockedBank(item);
+    const preselected=ov?list(ov.periods):activePeriods;
+    const mode=ov?.mode==='add'?'add':'replace';
+    const source=sourceDetail(row);
+    const defaultPeriod=periodNames(row.periods);
+    const current=periodNames(activePeriods);
+    const note = row.note || '';
+    const original=row.sourceFile || '';
+    return '<article class="period-v2-item" data-group="'+esc(item.group)+'" data-key="'+esc(item.key)+'">' +
+      '<div class="period-v2-item-head">' +
+      '<div class="period-v2-heading"><small>'+ (item.group==='banks'?'NGÂN HÀNG CÂU HỎI':'TÀI LIỆU ÔN TẬP') +
+      '</small><h3>'+esc(item.title)+'</h3><p>'+esc(row.scope || '')+'</p></div>' +
+      '<span class="period-v2-pill '+info.kind+'">'+info.name+'</span></div>' +
+      '<div class="period-v2-three">' +
+      '<div><span>1. TÀI LIỆU GỐC</span><b>'+esc(source)+'</b><small>'+esc(BASIS[row.assignmentBasis]||row.assignmentBasis||'')+'</small></div>'+
+      '<div><span>2. AURA MẶC ĐỊNH</span><b>'+esc(defaultPeriod)+'</b><small>Không thay đổi nguồn ban đầu</small></div>'+
+      '<div class="is-current"><span>3. ĐANG SỬ DỤNG</span><b>'+esc(current)+'</b><small>'+esc(ov?.reason || (ov?'Admin đã chọn thủ công':'Theo thiết lập AURA'))+'</small></div>'+
+      '</div>'+
+      (note?'<p class="period-v2-note">Lưu ý nguồn: '+esc(note)+'</p>':'')+
+      (editable ?
+        '<details class="period-v2-editor"><summary><span>Chỉnh kỳ sử dụng</span><span aria-hidden="true">⌄</span></summary>'+
+        '<div class="period-v2-editor-inner">'+
+        '<p class="period-v2-help">Chỉ thay đổi <b>kỳ AURA được dùng nội dung này</b>. Không đổi kỳ ghi trong tài liệu gốc, không thêm nội dung hoặc tự bật tạo đề.</p>'+
+        '<label class="period-v2-field"><b>Cách áp dụng</b><select data-mode aria-label="Cách áp dụng kỳ cho '+esc(item.title)+'">'+
+        '<option value="replace" '+(mode==='replace'?'selected':'')+'>Chỉ dùng ở các kỳ em chọn</option>'+
+        '<option value="add" '+(mode==='add'?'selected':'')+'>Dùng thêm các kỳ em chọn (giữ kỳ mặc định)</option></select></label>'+
+        '<div class="period-v2-checkboxes">'+checkboxMarkup(preselected)+'</div>'+
+        '<label class="period-v2-field"><b>Lý do thay đổi (bắt buộc)</b>'+
+        '<textarea data-reason rows="2" maxlength="600" placeholder="Ví dụ: Phần kiến thức này dùng ôn nền tảng cho kỳ 2; đã đối chiếu chương trình.">'+esc(ov?.reason || '')+'</textarea></label>'+
+        '<label class="period-v2-ack"><input type="checkbox" data-ack>'+
+        '<span>Tôi đã kiểm tra căn cứ phân kỳ, chấp nhận việc sử dụng khác tài liệu gốc nếu có. Đây không phải xác nhận đề đã đủ dữ kiện.</span></label>'+
+        '<div class="period-v2-actions"><button type="button" class="btn primary" data-action="save">Lưu kỳ sử dụng</button>'+
+        (ov?'<button type="button" class="btn soft" data-action="reset">Trả về mặc định</button>':'')+
+        (list(row.sourcePeriods).length?'<button type="button" class="btn soft" data-action="source">Dùng đúng kỳ ghi trong nguồn</button>':'')+
+        '</div><p class="period-v2-small">Quyết định này được lưu trên trình duyệt Admin hiện tại, không tự đồng bộ qua thiết bị khác.</p>'+
+        '</div></details>'
+      : '<div class="period-v2-blocked"><b>Cần tách ngân hàng nguồn trước khi phân kỳ.</b> Kho này chưa cho phép tạo đề theo kỳ. '+
+        'Đừng gán thủ công để che tình trạng trộn phạm vi.'+
+        (ov?'<button type="button" class="btn soft" data-action="reset">Bỏ phân kỳ thủ công hiện có</button>':'')+'</div>')+
+      '<details class="period-v2-provenance"><summary>Thông tin nguồn & kỹ thuật</summary>'+
+      '<div><b>Tệp:</b> '+esc(original)+' · <b>Độ tin cậy:</b> '+esc(row.confidence||'chưa xác định')+
+      ' · <b>Mã nguồn:</b> '+esc(item.key)+'</div></details>'+
+      '</article>';
+  }
+  function filteredRows(all) {
+    return all.filter(item=>{
+      const meta=effective(item),assigned=list(meta.effectivePeriods||meta.periods);
+      if(state.subject!=='ALL'&&item.row.subject!==state.subject)return false;
+      if(state.period!=='ALL'&&!assigned.includes(state.period))return false;
+      if(state.view==='manual'&&!meta.override)return false;
+      if(state.view==='review'&&status(item,meta).kind!=='review')return false;
+      if(state.view==='unassigned'&&assigned.length)return false;
+      return true;
+    });
+  }
+  function options(listing,value) {
+    return listing.map(o=>'<option value="'+esc(o.id)+'" '+(o.id===value?'selected':'')+'>'+esc(o.label)+'</option>').join('');
+  }
+  function draw(initial=false) {
+    if(initial && typeof window.setActive==='function')window.setActive('metadata');
     document.body.dataset.auraPage='metadata';
-  }
-  function cardOf(btn){return btn?.closest('.metadata-item')}
-  function payloadFrom(card){
-    const periods=[...card.querySelectorAll('input[data-period]:checked')].map(x=>x.dataset.period),reason=card.querySelector('.metadata-reason input')?.value?.trim()||'';
-    return {periods,mode:activeMode,assignmentBasis:'manual_admin_override',reason};
-  }
-  function applyAndRender(fn){const result=fn();if(result?.ok===false){alert(result.error||'Không thể cập nhật metadata.');return}render()}
+    const all=rows(),filtered=filteredRows(all);
+    const manual=all.filter(item=>!!effective(item).override).length;
+    const review=all.filter(item=>status(item,effective(item)).kind==='review').length;
+    const subjects=registry().subjects || {};
+    const selected=state.subject==='ALL'?all:all.filter(i=>i.row.subject===state.subject);
+    const validation=typeof window.auraValidateExamMetadata==='function'?
+      window.auraValidateExamMetadata():{ok:false,errors:['Chưa nạp registry phân kỳ']};
 
-  window.auraMetadataManager=render;
-  window.auraMetadataModeChanged=function(value){activeMode=value==='add'?'add':'replace'};
-  window.auraSaveMetadataOverride=function(btn){
-    const card=cardOf(btn);if(!card)return;const payload=payloadFrom(card);
-    if(!payload.periods.length){alert('Hãy chọn ít nhất một kỳ. Nếu muốn bỏ override, dùng “Trả về mặc định”.');return}
-    if(!payload.reason){alert('Hãy nhập lý do/ghi chú cho quyết định phân kỳ để AURA có thể truy vết về sau.');return}
-    applyAndRender(()=>window.auraSetMetadataOverride?.(card.dataset.group,card.dataset.key,payload)||{ok:false,error:'Registry chưa sẵn sàng.'});
-  };
-  window.auraResetMetadataOverride=function(btn){const card=cardOf(btn);if(!card)return;applyAndRender(()=>window.auraClearMetadataOverride?.(card.dataset.group,card.dataset.key)||{ok:false,error:'Registry chưa sẵn sàng.'})};
-  window.auraUseSourcePeriods=function(btn){
-    const card=cardOf(btn);if(!card)return;const group=card.dataset.group,key=card.dataset.key,row=registry()[group]?.[key],periods=row?.sourcePeriods||[];
-    if(!periods.length){alert('Nguồn không ghi rõ kỳ cụ thể.');return}
-    applyAndRender(()=>window.auraSetMetadataOverride?.(group,key,{periods,mode:'replace',assignmentBasis:'manual_admin_override',reason:'Admin chọn sử dụng đúng kỳ ghi trong nguồn.'})||{ok:false,error:'Registry chưa sẵn sàng.'});
-  };
-  window.addEventListener('aura:metadata-overrides-changed',()=>{if(document.body.dataset.auraPage==='metadata')render()});
+    app.innerHTML='<div class="period-v2">' +
+      '<div class="period-v2-hero"><div><small>QUẢN LÝ HỌC LIỆU · LỚP 6</small><h1>Phân kỳ ôn tập & đề thi</h1>'+
+      '<p>Chọn môn và kỳ cần xem, sau đó chỉnh đúng tài liệu. AURA phân biệt <b>kỳ trong tài liệu gốc</b> và <b>kỳ được phép dùng để ôn tập</b>.</p></div>'+
+      '<div class="period-v2-head-note"><b>Nguyên tắc</b><span>Không suy đoán đáp án, không biến tài liệu thiếu dữ kiện thành đề đủ điều kiện.</span></div></div>'+
+      '<div class="period-v2-stats">'+
+      '<div><span>Mục có trong registry</span><strong>'+all.length+'</strong><small>Tài liệu và ngân hàng</small></div>'+
+      '<div><span>Đã chỉnh thủ công</span><strong>'+manual+'</strong><small>Chỉ trên trình duyệt này</small></div>'+
+      '<div><span>Cần rà soát kỳ</span><strong>'+review+'</strong><small>Không tự gán khi thiếu căn cứ</small></div></div>'+
+      '<div class="period-v2-filters"><div class="period-v2-filter-head"><h2>01 · Tìm tài liệu cần phân kỳ</h2><p>Chọn lần lượt môn, kỳ và trạng thái. Bộ lọc chỉ thay đổi danh sách hiển thị.</p></div>'+
+      '<div class="period-v2-filter-grid">'+
+      '<label><b>Môn học</b><select data-filter="subject">'+
+      options([{id:'ALL',label:'Tất cả 8 môn'},...Object.entries(subjects).map(([id,s])=>({id,label:s.label}))],state.subject)+'</select></label>'+
+      '<label><b>Kỳ đang sử dụng</b><select data-filter="period">'+
+      options([{id:'ALL',label:'Tất cả các kỳ'},...PERIODS.map(p=>({id:p.id,label:p.name}))],state.period)+'</select></label>'+
+      '<label><b>Trạng thái</b><select data-filter="view">'+options([
+        {id:'ALL',label:'Tất cả mục'},
+        {id:'review',label:'Cần rà soát'},
+        {id:'manual',label:'Đã chỉnh thủ công'},
+        {id:'unassigned',label:'Chưa gán kỳ'}
+      ],state.view)+'</select></label></div></div>'+
+      subjectReadiness(state.subject,selected)+
+      (validation.ok?'':'<div class="period-v2-warning"><b>Registry có lỗi cần kiểm tra:</b><ul>'+
+      list(validation.errors).map(err=>'<li>'+esc(err)+'</li>').join('')+'</ul></div>')+
+      '<section class="period-v2-results"><div class="period-v2-results-head"><h2>02 · Xem nguồn và chỉnh kỳ sử dụng</h2>'+
+      '<span>'+filtered.length+' / '+all.length+' mục hiển thị</span></div>'+
+      '<p class="period-v2-description">Mỗi thẻ cho biết ba lớp: <b>nguồn gốc → thiết lập mặc định → kỳ AURA đang dùng</b>. Chạm “Chỉnh kỳ sử dụng” khi cần thay đổi.</p>'+
+      (filtered.length?filtered.map(itemMarkup).join(''):
+        '<div class="period-v2-empty"><b>Chưa có mục phù hợp.</b><p>'+
+        (state.subject!=='ALL'&&selected.length===0?
+          'Môn này chưa có tài liệu/ngân hàng đủ điều kiện trong registry. Hãy bổ sung nguồn qua INBOX trước khi phân kỳ.':
+          'Không có tài liệu khớp bộ lọc. Thử chọn “Tất cả các kỳ” hoặc “Tất cả mục”.')+
+        '</p><button type="button" class="btn soft" data-action="clear">Đặt lại bộ lọc</button></div>')+
+      '</section>'+
+      '<div class="period-v2-footer"><b>Cần phân biệt:</b> phân kỳ không đồng nghĩa tài liệu đã đủ dữ kiện để chấm tự động. '+
+      'Các môn thiếu nguồn vẫn phải bổ sung học liệu và được kiểm tra riêng trước khi mở tạo đề.</div>'+
+      '</div>';
+  }
+  function itemOf(button) {return button.closest('.period-v2-item');}
+  function fail(message) {if(typeof window.alert==='function')window.alert(message);}
+  function apply(action) {
+    if(action?.ok===false){fail(action.error||'Không thể cập nhật phân kỳ.');return;}
+    draw(false);
+  }
+  function selectedPeriods(card) {
+    return [...card.querySelectorAll('input[data-period]:checked')].map(x=>x.dataset.period);
+  }
+  function save(card) {
+    if(!card)return;
+    const ids=selectedPeriods(card),mode=card.querySelector('[data-mode]')?.value==='add'?'add':'replace';
+    const reason=card.querySelector('[data-reason]')?.value.trim() || '';
+    if(!ids.length){fail('Anh hãy chọn ít nhất một kỳ. Muốn dùng lại thiết lập gốc, chọn “Trả về mặc định”.');return;}
+    if(!reason){fail('Anh cần ghi lý do thay đổi để AURA lưu dấu quyết định phân kỳ.');return;}
+    if(!card.querySelector('[data-ack]')?.checked){fail('Anh hãy xác nhận đã đối chiếu tài liệu trước khi thay đổi kỳ sử dụng.');return;}
+    const item=rows().find(x=>x.group===card.dataset.group&&x.key===card.dataset.key);
+    if(!item || isBlockedBank(item)){fail('Ngân hàng chưa được tách nguồn, không thể gán kỳ thủ công.');return;}
+    if(typeof window.auraSetMetadataOverride!=='function'){fail('Chức năng phân kỳ chưa sẵn sàng.');return;}
+    apply(window.auraSetMetadataOverride(item.group,item.key,{
+      periods:ids,mode,reason,assignmentBasis:'manual_admin_override'
+    }));
+  }
+  function reset(card) {
+    if(!card || typeof window.auraClearMetadataOverride!=='function')return;
+    if(typeof window.confirm==='function' &&
+      !window.confirm('Trả tài liệu về kỳ sử dụng mặc định của AURA? Kỳ trong nguồn gốc vẫn giữ nguyên.'))return;
+    apply(window.auraClearMetadataOverride(card.dataset.group,card.dataset.key));
+  }
+  function useSource(card) {
+    if(!card)return;
+    const item=rows().find(x=>x.group===card.dataset.group&&x.key===card.dataset.key);
+    if(!item || !list(item.row.sourcePeriods).length){fail('Tài liệu nguồn không ghi rõ kỳ cụ thể.');return;}
+    if(typeof window.auraSetMetadataOverride!=='function'){fail('Chức năng phân kỳ chưa sẵn sàng.');return;}
+    if(typeof window.confirm==='function' &&
+       !window.confirm('Sử dụng đúng kỳ được ghi rõ trong nguồn cho tài liệu này?'))return;
+    apply(window.auraSetMetadataOverride(item.group,item.key,{
+      periods:item.row.sourcePeriods,mode:'replace',
+      reason:'Admin chọn sử dụng theo kỳ được ghi rõ trong tài liệu nguồn.',
+      assignmentBasis:'manual_admin_override'
+    }));
+  }
+
+  app.addEventListener('change',event=>{
+    const filter=event.target.closest('[data-filter]');
+    if(!filter || !app.contains(filter))return;
+    const field=filter.dataset.filter;
+    if(!['subject','period','view'].includes(field))return;
+    state[field]=filter.value;
+    draw(false);
+  });
+  app.addEventListener('click',event=>{
+    const button=event.target.closest('[data-action]');
+    if(!button || !app.contains(button))return;
+    const action=button.dataset.action;
+    if(action==='clear'){state.subject='ALL';state.period='ALL';state.view='ALL';draw(false);return;}
+    const card=itemOf(button);
+    if(action==='save')save(card);
+    if(action==='reset')reset(card);
+    if(action==='source')useSource(card);
+  });
+  window.auraMetadataManager=()=>draw(true);
+  window.addEventListener('aura:metadata-overrides-changed',()=>{
+    if(document.body.dataset.auraPage==='metadata')draw(false);
+  });
+  window.addEventListener('storage',event=>{
+    if(event.key===registry().overrideStorageKey && document.body.dataset.auraPage==='metadata')draw(false);
+  });
 })();

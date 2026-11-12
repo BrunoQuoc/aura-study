@@ -1,0 +1,59 @@
+name: AURA Admin Period Workflow V2 QA
+
+on:
+  pull_request:
+    paths:
+      - 'admin-direct.html'
+      - 'admin_metadata_manager.js'
+      - 'admin_metadata_manager.css'
+      - 'exam_metadata.js'
+      - 'tests/admin-metadata-v2.test.mjs'
+      - 'tests/admin-metadata-browser.mjs'
+      - '.github/workflows/aura-admin-metadata-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-offline:
+    name: Period provenance + override logic (synthetic)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax and unit tests
+        run: |
+          node --check admin_metadata_manager.js
+          node --test tests/admin-metadata-v2.test.mjs
+
+  metadata-browser:
+    name: iPad/mobile/desktop guided period workflow (isolated Chromium)
+    needs: metadata-offline
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Run localhost-only browser journey
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/aura-period-http.log 2>&1 &
+          sleep 2
+          node tests/admin-metadata-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aura-period-v2-browser-shots
+          path: test-results/admin-metadata-v2/
+          retention-days: 7
+
+# Synthetic localStorage only; third-party network blocked. No live Drive, Supabase or user data writes.
