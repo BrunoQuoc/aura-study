@@ -81,7 +81,7 @@
     {
       "id": "ALERTING_AND_INCIDENT_RESPONSE",
       "status": "OPEN",
-      "reason": "STAGING Phase3F-B2: BrunoQuoc Primary and Sonic-2015 Backup each verified full daily 09:00 VN (including weekends), 09:15 Backup takeover, 09:30 evidence and P0/P1/P2 human ACK targets (15/60/240 minutes from actual detection). Reciprocal synthetic GitHub Inbox receipt self-ACK 2/2 PASS. Operational governance still OPEN: independent policy signoff, first actual aggregate-only manual check, missed-review handoff exercise, effective/review dates and proof of live Supabase-triggered alerts / real 429. No 24/7 coverage or automated monitoring; PRODUCTION NO-GO.",
+      "reason": "Phase3F-B2 STAGING: Primary BrunoQuoc and Backup Sonic-2015 consented to daily 09:00 Vietnam manual cadence and P0/P1/P2 human response targets; reciprocal synthetic GitHub Inbox receipt self-ACK 2/2 PASS. First actual ad hoc read-only aggregate snapshot collected 2026-11-12 03:58 UTC: core Auth users/devices/events/attempts counts stable, but no auth_logs/edge_logs records in 24h despite other log sources, so Auth visibility is inconclusive. Primary 09:00 self-reviewed attendance, Backup handoff drill, independent operational signoff, effective/review dates, actual Supabase-triggered alert and bounded real 429 evidence remain OPEN. No automation enabled or 24/7 guarantee. PRODUCTION NO-GO.",
       "production_evidence_url": null,
       "verified_at_utc": null
     },
