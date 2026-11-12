@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "kind": "aura_knowledge_release_pointer_v1",
+  "status": "NO_APPROVED_RELEASE",
+  "version": null,
+  "signedReleasePath": null,
+  "releaseSha256": null,
+  "note": "No Knowledge Library V2 content has qualified teacher signoff and server-side authenticated release."
+}
