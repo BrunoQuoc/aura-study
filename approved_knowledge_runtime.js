@@ -6,6 +6,8 @@
 'use strict';
 const TRUST='aura_data/approved_knowledge/trust.json';
 const POINTER='aura_data/approved_knowledge/active.json';
+const SOURCE_LESSONS='aura_data/knowledge_math6_kntt_volume1_v2.json';
+const SOURCE_REVIEWS='aura_data/knowledge_math6_kntt_v2_chapter_reviews.json';
 const RELEASE_PATH=/^aura_data\/approved_knowledge\/releases\/math6-v2-v[1-9]\d*\.\d+\.\d+\.json$/;
 const HEX=/^[0-9a-f]{64}$/i;
 const encoder=new TextEncoder();
@@ -27,7 +29,7 @@ async function fetchText(path){
  const r=await fetch(path,{cache:'no-store',credentials:'omit'});
  if(!r.ok)fail('missing approved release resource '+r.status);
  const body=await r.text();
- if(body.length>150000)fail('release file too large');
+ if(body.length>500000)fail('learning source or release file too large');
  return body;
 }
 function validatePayload(p,pointer){
@@ -106,6 +108,14 @@ async function load(){
   );
   if(!valid)fail('signature verification failed');
   validatePayload(signed.payload,pointer);
+  // A teacher signature applies to an EXACT curriculum revision, not to future
+  // edits. Any source change invalidates the active promotion automatically.
+  const [sourceLessons,sourceReviews]=await Promise.all([
+   fetchText(SOURCE_LESSONS),fetchText(SOURCE_REVIEWS)
+  ]);
+  if((await digest(sourceLessons))!==signed.payload.sourceSha256.lessonData.toLowerCase()||
+     (await digest(sourceReviews))!==signed.payload.sourceSha256.chapterData.toLowerCase())
+   fail('source revision changed since educator approval');
   const pool=await verifyItems(signed.payload.items,signed.payload.version);
   root.AURA_APPROVED_KNOWLEDGE_MC=pool;
   status={state:'SIGNED_ACTIVE',approvedCount:pool.length,version:signed.payload.version,
