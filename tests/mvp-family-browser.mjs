@@ -64,7 +64,16 @@ async function main(){
   });
   assert.ok(sel,'No ready auto-gradable Math exam');
   await page.evaluate(id=>window.exam(id),sel.id);
-  await page.locator('input[name="mc'+sel.index+'"][value="'+sel.wrong+'"]').check();
+  const examDiagnostic=await page.evaluate(id=>({
+    selectedId:id,
+    selectedReady:window.AURA_MATH_EXAMS?.find(e=>e.id===id)?.ready,
+    radioCount:document.querySelectorAll('#app input[type="radio"][name^="mc"]').length,
+    appH2:[...document.querySelectorAll('#app h2')].slice(0,3).map(x=>x.textContent.slice(0,90)),
+    bodyPage:document.body.dataset.auraPage||'',
+    examFunction:String(window.exam).slice(0,140)
+  }),sel.id);
+  console.log('EXAM_OPEN_DIAG',JSON.stringify(examDiagnostic));
+  await page.locator('input[name="mc'+sel.index+'"][value="'+sel.wrong+'"]').check({timeout:8000});
   if(await page.locator('#es0').count())await page.locator('#es0').fill('Synthetic essay for QA only');
   await page.reload({waitUntil:'load'});
   await page.waitForFunction(()=>typeof window.exam==='function');
