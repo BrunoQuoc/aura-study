@@ -90,3 +90,16 @@ If no independent third sender is available, an explicitly approved **cross-noti
 3. A reviewer independently verifies sender/recipient account distinctions, comment authors and timestamps via GitHub. Notification observation may fail due to per-user settings; never assume a mention guarantees delivery. No accounts, RLS policies or Supabase settings change.
 
 Use **one message per target**, no mention spamming or repeated notifications. The acceptance registry remains PENDING until both recipient acknowledgements are verified. Monitoring cadence, automated alert integration and full production gates remain OPEN.
+
+### Verified reciprocal GitHub Inbox receipt — 2026-11-12
+
+**Human self-attestation 2/2 PASS (STAGING DRILL ONLY)** after cross-checking GitHub issue comment authors:
+
+- [Sonic-2015 sent synthetic notice to BrunoQuoc on Issue #13](https://github.com/BrunoQuoc/aura-study/issues/13#issuecomment-6812476673).
+- [BrunoQuoc confirmed receipt on Issue #12](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6812558525).
+- [BrunoQuoc sent synthetic notice to Sonic-2015 on Issue #13](https://github.com/BrunoQuoc/aura-study/issues/13#issuecomment-6812564741).
+- [Sonic-2015 confirmed receipt on Issue #12](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6812578418).
+
+Both source message authors and receipt ACK authors match expected two-account test roles. Receipt is **recipient self-report**: GitHub's normalized issue-comment read did not provide delivery telemetry or usable creation timestamps. This evidence cannot independently prove push/email delivery latency or true real-time provider delivery.
+
+Registry records `primary_received=true`, `backup_received=true` and `incident_intake.notification_received=true` **strictly as human-reported GitHub Inbox receipt of synthetic mentions**. Keep `approved_by_independent_reviewer=false`, `live_alerts_enabled=false`, `production_release_approved=false`, `review_cadence=PROPOSED_DAILY_NOT_APPROVED` and corresponding release gate **OPEN** pending separate approval and actual live alert engineering.
