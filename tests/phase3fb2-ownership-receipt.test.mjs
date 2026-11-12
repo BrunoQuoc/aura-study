@@ -41,6 +41,8 @@ test("even manual governance acknowledgements need valid comments and distinct r
  const full={
   ...cfg,
   review_cadence:"DAILY_09_00_VIETNAM_APPROVED",
+  monitoring_cadence_sla_approved:true,
+  monitoring_cadence_sla_approval_comment_url:link(8888),
   incident_intake:{...cfg.incident_intake,notification_received:true},
   notification_delivery_evidence:{
    ...cfg.notification_delivery_evidence,
@@ -53,6 +55,7 @@ test("even manual governance acknowledgements need valid comments and distinct r
   }
  };
  assert.equal(assessReceipt(full).status,"HUMAN_RECEIPT_PASS");
+ assert.equal(assessReceipt({...full,monitoring_cadence_sla_approved:false}).status,"PENDING");
  assert.equal(assessReceipt({...full,backup_reviewer_github:"BrunoQuoc"}).status,"PENDING");
  assert.equal(assessReceipt({...full,notification_delivery_evidence:{...full.notification_delivery_evidence,verified_comment_authors:false}}).status,"PENDING");
  assert.equal(assessReceipt({...full,notification_delivery_evidence:{...full.notification_delivery_evidence,backup_ack_comment_url:"https://example.org/fake"}}).status,"PENDING");
