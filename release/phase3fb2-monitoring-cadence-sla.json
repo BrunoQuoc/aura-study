@@ -93,7 +93,23 @@
     "missed_review_handoff_correct_order": true,
     "missed_review_handoff_tabletop_only": true,
     "missed_review_handoff_scope": "STAGING role-order-and-comment-content tabletop only; not an actual missed daily monitoring or measured 09:15 escalation",
-    "missed_review_handoff_actual_latency_verified": false
+    "missed_review_handoff_actual_latency_verified": false,
+    "next_real_scheduled_review": {
+      "local_date": "2026-11-13",
+      "local_time": "09:00",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "status": "PREPARED_NOT_EXECUTED",
+      "runbook_url": "https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-first-scheduled-review-phase3fb2-2026-11-13.md",
+      "auth_source_coverage_sql": "supabase/audits/aura_phase3fb2_log_source_coverage_24h.sql",
+      "expected_primary_github": "BrunoQuoc",
+      "backup_github": "Sonic-2015",
+      "actual_review_comment_url": null,
+      "backup_review_comment_url": null,
+      "actual_start_local": null,
+      "actual_postgres_snapshot_utc": null,
+      "auth_log_coverage_verified": false,
+      "scope": "Manual authorized STAGING queries only; not an automation or performance SLA"
+    }
   },
   "exceptions": {
     "time_bounded_manual_monitoring_exception_approved": false,
