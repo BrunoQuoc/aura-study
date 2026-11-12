@@ -1,0 +1,72 @@
+/* AURA STUDY — Source Drive review queue (metadata-only, touch-first) */
+.admin-shell .aura-source-ui{display:grid;gap:17px;color:#1d3551;min-width:0}
+.admin-shell .aura-source-ui *{box-sizing:border-box}
+.admin-shell .aura-source-hero{border-radius:21px;background:linear-gradient(120deg,#12365e,#2768a3);color:#fff;padding:27px 29px}
+.admin-shell .aura-source-hero small{color:#d1e5ff;font-size:11px;font-weight:900;letter-spacing:.1em}
+.admin-shell .aura-source-hero h1{font-size:clamp(23px,3vw,32px);margin:8px 0 11px;line-height:1.2}
+.admin-shell .aura-source-hero p{font-size:13px;color:#e2effe;margin:0;line-height:1.7;max-width:800px}
+.admin-shell .aura-source-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.admin-shell .aura-source-metrics>div{padding:16px 15px;background:#fff;border:1px solid #dce6ef;border-radius:15px;min-width:0}
+.admin-shell .aura-source-metrics span{display:block;font-size:12px;color:#667d95;line-height:1.4}
+.admin-shell .aura-source-metrics b{display:block;font-size:27px;color:#164877;margin-top:6px}
+.admin-shell .aura-source-panel{display:grid;gap:13px;padding:20px;border:1px solid #dce6f0;background:#fff;border-radius:18px}
+.admin-shell .aura-source-panel h2{font-size:19px;color:#1c3858;margin:0}
+.admin-shell .aura-source-panel>p{margin:0;color:#637790;font-size:12px;line-height:1.7}
+.admin-shell .aura-source-panel .aura-source-danger{color:#825736;background:#fff9ee;border:1px solid #f0dec0;border-radius:10px;padding:9px 12px}
+.admin-shell .aura-source-connect,.admin-shell .aura-source-sectionhead{display:flex;gap:13px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.admin-shell .aura-source-connect .btn{min-height:46px}
+.admin-shell .aura-source-root{display:grid;gap:7px}
+.admin-shell .aura-source-root b,.admin-shell .aura-source-filters b,.admin-shell .aura-source-form b,.admin-shell .aura-source-note b{font-size:12px;color:#50647d}
+.admin-shell .aura-source-root input,.admin-shell .aura-source-ui select,.admin-shell .aura-source-ui textarea{
+  display:block;width:100%;min-width:0;border:1px solid #d5e0ec;border-radius:11px;
+  background:#fff;color:#173452;font-size:14px;padding:11px 12px;
+}
+.admin-shell .aura-source-root input,.admin-shell .aura-source-ui select{min-height:47px}
+.admin-shell .aura-source-ui textarea{min-height:75px;resize:vertical;line-height:1.5}
+.admin-shell .aura-source-footnote{font-size:12px;color:#72839a;line-height:1.65}
+.admin-shell .aura-source-pill{white-space:nowrap;border-radius:22px;padding:7px 10px;font-size:11px;font-weight:800;background:#f0f3f7;color:#64748b}
+.admin-shell .aura-source-pill.reviewed{background:#e5f7ee;color:#187347}
+.admin-shell .aura-source-pill.blocked{background:#fff1e1;color:#935b17}
+.admin-shell .aura-source-pill.missing{background:#eef0f4;color:#66758b}
+.admin-shell .aura-source-pill.pending{background:#e9f3ff;color:#2a65a4}
+.admin-shell .aura-source-error{background:#fff4f1;border:1px solid #e7b5a9;border-radius:12px;padding:13px 16px;font-size:13px;line-height:1.6;color:#963f32}
+.admin-shell .aura-source-success{background:#eefbf5;border:1px solid #b8dfcc;border-radius:12px;padding:13px 16px;font-size:13px;line-height:1.6;color:#1e6c46}
+.admin-shell .aura-source-sectionhead h2{margin:0 0 6px}
+.admin-shell .aura-source-sectionhead p{margin:0;font-size:12px;line-height:1.55;color:#71839a}
+.admin-shell .aura-source-sectionhead>div{flex:1 1 270px}
+.admin-shell .aura-source-sectionhead>b{font-size:12px;color:#71839a}
+.admin-shell .aura-source-filters{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.admin-shell .aura-source-filters label,.admin-shell .aura-source-form label,.admin-shell .aura-source-note{display:grid;gap:6px;min-width:0}
+.admin-shell .aura-source-card{border:1px solid #dbe6f0;border-radius:15px;padding:16px;display:grid;gap:13px;background:#fff}
+.admin-shell .aura-source-card-head{display:flex;justify-content:space-between;align-items:start;gap:15px}
+.admin-shell .aura-source-card-head>div{min-width:0;overflow-wrap:anywhere}
+.admin-shell .aura-source-card-head small{font-size:11px;color:#788aa0;line-height:1.5}
+.admin-shell .aura-source-card h3{font-size:15px;color:#203e5e;margin:6px 0;line-height:1.4}
+.admin-shell .aura-source-card-head p{margin:0;font-size:11px;color:#75869b}
+.admin-shell .aura-source-evidence{background:#f8fafd;border:1px solid #e7edf4;border-radius:12px;padding:12px 14px}
+.admin-shell .aura-source-evidence b{color:#385b80;font-size:12px;overflow-wrap:anywhere}
+.admin-shell .aura-source-evidence p{font-size:12px;color:#64778c;margin:6px 0;line-height:1.6}
+.admin-shell .aura-source-evidence small{font-size:11px;color:#7b8ba0;line-height:1.5}
+.admin-shell .aura-source-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.admin-shell .aura-source-ack{display:flex;gap:10px;align-items:flex-start;background:#f4f9ff;border:1px solid #dcebf9;border-radius:12px;padding:11px 12px;font-size:12px;color:#4c6580;line-height:1.55}
+.admin-shell .aura-source-ack input{width:19px;height:19px;flex:0 0 19px;accent-color:#216bb4;margin:1px 0 0}
+.admin-shell .aura-source-actions{display:flex;gap:9px;flex-wrap:wrap}
+.admin-shell .aura-source-actions .btn{min-height:45px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.admin-shell .aura-source-hint{font-size:12px;background:#faf8f3;padding:11px;color:#775b3d;border-radius:10px;margin:0}
+.admin-shell .aura-source-empty{text-align:center;background:#f7fafc;border-radius:12px;padding:24px 14px;color:#647893}
+.admin-shell .aura-source-empty b{color:#425f7e}
+.admin-shell .aura-source-empty p{font-size:12px;line-height:1.6}
+.admin-shell .aura-source-pagination{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px;font-size:12px;color:#72859b}
+.admin-shell .aura-source-ui :is(input,select,textarea,button,a):focus-visible{outline:3px solid #267aca;outline-offset:2px}
+@media(max-width:1050px){
+  .admin-shell .aura-source-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin-shell .aura-source-form{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+  .admin-shell .aura-source-panel{padding:15px}
+  .admin-shell .aura-source-hero{padding:22px 17px}
+  .admin-shell .aura-source-filters,.admin-shell .aura-source-form{grid-template-columns:1fr}
+  .admin-shell .aura-source-card-head{flex-direction:column}
+  .admin-shell .aura-source-actions .btn,.admin-shell .aura-source-connect .btn{width:100%}
+  .admin-shell .aura-source-card{padding:13px}
+}

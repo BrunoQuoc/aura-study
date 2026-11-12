@@ -94,7 +94,8 @@
           '<h1 id="adm2-title">Tài liệu, đề thi và học sinh — trong một nơi.</h1>' +
           '<p>Thêm tài liệu mới, kiểm tra độ đầy đủ của từng môn và theo dõi những mục chưa thể đưa vào đề thi. Không tự tạo đáp án khi nguồn chưa đủ.</p>' +
           '<div class="adm2-actions">' +
-            '<button type="button" class="adm2-btn primary" data-admin-action="inbox">＋ Nhận tài liệu mới</button>' +
+            '<button type="button" class="adm2-btn primary" data-admin-action="inbox">＋ Tải tài liệu từ máy</button>' +
+            '<button type="button" class="adm2-btn outline" data-admin-action="driveSources">Quét nguồn Google Drive</button>' +
             '<button type="button" class="adm2-btn outline" data-admin-action="students">Quản lý học sinh</button>' +
           '</div></div>' +
           '<div class="adm2-hero-side"><span>Môn đã có nội dung</span><strong>' +
@@ -135,7 +136,7 @@
             '</div>' +
             '<div class="adm2-source-status" id="adm2-source-snapshot" aria-live="polite">' +
             'Đang đọc snapshot AURA DATA từ phiên bản web…</div>' +
-            '<div class="adm2-alert">Lưu ý: đồng bộ tự động mọi file anh thả trực tiếp lên Google Drive và xuất bản đề chưa được kích hoạt. ' +
+            '<div class="adm2-alert">Đã có trang “Nguồn Drive” để kết nối quyền đọc và tự quét file vào hàng chờ kiểm tra metadata. Đồng bộ chạy nền và xuất bản đề vẫn chưa bật. ' +
             'Quyền Drive, danh sách file và chất lượng nguồn cần được kiểm chứng trước khi bật.</div>' +
           '</section>' +
 
@@ -174,6 +175,7 @@
 
   const operations = {
     inbox: 'auraAdminInbox',
+    driveSources: 'auraDriveSourceInbox',
     students: 'auraStudentUsers',
     library: 'library',
     results: 'history',

@@ -3,12 +3,13 @@
 (function(){
   if(!document.body.classList.contains('admin-shell'))return;
 
-  const state={token:'',expiresAt:0,pending:null,originalInit:null,patched:false,gsiPromise:null};
+  const state={token:'',expiresAt:0,pending:null,originalInit:null,patched:false,gsiPromise:null,metadataToken:'',metadataExpiresAt:0,metadataPending:null};
+  const METADATA_SCOPE='https://www.googleapis.com/auth/drive.metadata.readonly';
   const valid=()=>!!state.token&&Date.now()<state.expiresAt-30000;
   const remaining=()=>Math.max(60,Math.floor((state.expiresAt-Date.now())/1000));
   const emit=()=>{try{window.dispatchEvent(new CustomEvent('aura-drive-auth-change',{detail:{connected:valid(),expiresAt:state.expiresAt}}))}catch(_){}};
 
-  function clear(){state.token='';state.expiresAt=0;emit()}
+  function clear(){state.token='';state.expiresAt=0;state.metadataToken='';state.metadataExpiresAt=0;emit()}
   function remember(r){
     state.token=r?.access_token||'';
     state.expiresAt=Date.now()+Math.max(60,Number(r?.expires_in||3600)-60)*1000;
@@ -88,9 +89,51 @@
     });
   }
 
+  // Separate consent and token for broad, READ-ONLY Drive metadata discovery.
+  // IMPORTANT: use the real GIS client; the shared drive.file proxy cannot prove
+  // that a token has metadata.readonly scope. Never persist or log this token.
+  const metadataValid=()=>!!state.metadataToken&&Date.now()<state.metadataExpiresAt-30000;
+  async function connectMetadataRead(){
+    await ensureGsi();
+    if(metadataValid())return state.metadataToken;
+    if(state.metadataPending)return state.metadataPending;
+    const cfg=window.AURA_GOOGLE_DRIVE_CONFIG||{};
+    if(!cfg.clientId||!state.originalInit)throw new Error('Chưa cấu hình Google OAuth cho quyền đọc nguồn.');
+    state.metadataPending=new Promise((resolve,reject)=>{
+      const client=state.originalInit({
+        client_id:cfg.clientId,
+        scope:METADATA_SCOPE,
+        include_granted_scopes:false,
+        callback:()=>{}
+      });
+      client.callback=response=>{
+        if(response?.error){reject(new Error(response.error_description||response.error));return}
+        // Google Identity Services normally returns the scopes granted in response.scope.
+        // Absence of a verifiable grant must not be treated as successful authorization.
+        const granted=String(response?.scope||'').split(/\s+/);
+        if(!response?.access_token||!granted.includes(METADATA_SCOPE)){
+          reject(new Error('Google chưa xác nhận quyền drive.metadata.readonly. Kiểm tra OAuth consent và thử lại.'));
+          return;
+        }
+        state.metadataToken=response.access_token;
+        state.metadataExpiresAt=Date.now()+Math.max(60,Number(response.expires_in||3600)-60)*1000;
+        emit();
+        resolve(state.metadataToken);
+      };
+      client.error_callback=error=>reject(new Error(error?.message||error?.type||'Không kết nối được quyền chỉ đọc metadata.'));
+      try{client.requestAccessToken({prompt:'consent'});}
+      catch(error){reject(error);}
+    }).finally(()=>{state.metadataPending=null});
+    return state.metadataPending;
+  }
+
   window.AURA_DRIVE_AUTH=Object.freeze({
     ensure:ensureGsi,
     connect,
+    connectMetadataRead,
+    hasMetadataToken:metadataValid,
+    get metadataToken(){return metadataValid()?state.metadataToken:''},
+    metadataScope:METADATA_SCOPE,
     clear,
     hasToken:valid,
     get token(){return valid()?state.token:''},
