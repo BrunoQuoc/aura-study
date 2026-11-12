@@ -88,7 +88,7 @@ async function scenario(browser,name,mode,view){
   return {state,approved:n,approvedSourcePool:pool.filter(q=>q.approvedLearning===true).length};
  });
  if(mode==='valid'){
-  assert.equal(ready.state.state,'SIGNED_ACTIVE');
+  assert.equal(ready.state.state,'SIGNED_ACTIVE','Signed runtime reason: '+JSON.stringify(ready.state));
   assert.equal(ready.approved,96);
   assert.equal(ready.approvedSourcePool,96);
   const exercise=await page.evaluate(()=>{
