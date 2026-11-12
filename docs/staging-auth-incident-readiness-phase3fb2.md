@@ -83,7 +83,8 @@ The offline policy proposes escalation and preserves evidence. It intentionally 
 | Tabletop browser run | Operator screenshot: 3/3 | **PASS — MOCK ONLY** |
 | Sanitized incident issue intake | Issue #13 created and re-found | **PASS — TICKET INBOX ONLY** |
 | Real email/push/automated alert delivery | A named recipient acknowledges receipt | **OPEN** |
-| Primary/backup monitoring ownership | Two named accounts/roles explicitly accept | **OPEN** |
+| Primary/backup monitoring ownership | BrunoQuoc and Sonic-2015 self-authored ACKs verified | **PASS — STAGING DUTY ACCEPTANCE** |
+| GitHub Inbox cross-account receipt drill | Two distinct senders and recipients; Issue #12 human ACKs | **PASS 2/2 — SELF-REPORTED RECEIPT ONLY** |
 | Monitoring cadence / incident SLA | Owner-approved schedule and escalation | **OPEN** |
 | Real Supabase HTTP 429 / alert response | Bounded test and independent evidence | **OPEN** |
 
