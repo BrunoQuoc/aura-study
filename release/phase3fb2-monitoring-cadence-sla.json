@@ -3,7 +3,7 @@
   "project": "AURA STUDY",
   "environment": "STAGING",
   "scope": "Phase 3F-B2",
-  "status": "DUAL_REVIEW_SELF_ACK_VERIFIED_HANDOFF_AND_09_00_CHECK_PENDING",
+  "status": "TWO_ROLE_REVIEW_AND_HANDOFF_TABLETOP_PASS_SCHEDULED_CHECK_AND_SIGNOFF_PENDING",
   "mode": "MANUAL_READ_ONLY_PROPOSED",
   "automation_enabled": false,
   "timezone": "Asia/Ho_Chi_Minh",
@@ -70,8 +70,8 @@
   "exercise": {
     "first_real_manual_check_completed": false,
     "first_real_manual_check_issue_comment_url": null,
-    "missed_review_handoff_tabletop_completed": false,
-    "missed_review_handoff_evidence_url": null,
+    "missed_review_handoff_tabletop_completed": true,
+    "missed_review_handoff_evidence_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814413737",
     "first_ad_hoc_read_only_snapshot_collected": true,
     "first_ad_hoc_snapshot_utc": "2026-11-12T03:58:37Z",
     "first_ad_hoc_snapshot_local_time": "2026-11-12 10:58:37 Asia/Ho_Chi_Minh",
@@ -85,7 +85,15 @@
     "auth_log_coverage_status": "NO_AUTH_OR_EDGE_ROWS_IN_LATEST_24H_WINDOW_INCOMPLETE_VISIBILITY",
     "auth_log_coverage_review_required": true,
     "snapshot_review_ack_scope": "Both users posted self-authored short-form ACKs in Issue #12; this records review self-attestation only, without substantive analysis or independent verification of log telemetry coverage.",
-    "snapshot_review_content_detail": "KEYWORD_ONLY_ACK_NO_METRIC_OR_LOG_COVERAGE_COMMENTARY"
+    "snapshot_review_content_detail": "KEYWORD_ONLY_ACK_NO_METRIC_OR_LOG_COVERAGE_COMMENTARY",
+    "missed_review_handoff_primary_scenario_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814391249",
+    "missed_review_handoff_backup_takeover_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814400852",
+    "missed_review_handoff_primary_review_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814413737",
+    "missed_review_handoff_participants_verified": true,
+    "missed_review_handoff_correct_order": true,
+    "missed_review_handoff_tabletop_only": true,
+    "missed_review_handoff_scope": "STAGING role-order-and-comment-content tabletop only; not an actual missed daily monitoring or measured 09:15 escalation",
+    "missed_review_handoff_actual_latency_verified": false
   },
   "exceptions": {
     "time_bounded_manual_monitoring_exception_approved": false,
