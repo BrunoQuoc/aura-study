@@ -50,4 +50,17 @@ Separate requirements: Primary self-reviews an actual daily aggregate report; in
 
 ## Current readiness for dry run — 2026-11-12
 
-Human short-form review ACKs are present on Issue #12: [Primary](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814311117) and [Backup](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814290472). Their authors were verified against the accepted roles. The handoff drill **has not started** as of these records. Follow the three separate DRILL ONLY comment steps above; no one should report a missed real 09:00 check.
+Human short-form review ACKs are present on Issue #12: [Primary](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814311117) and [Backup](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814290472). Their authors were verified against the accepted roles. This section described the prerequisites before the drill. The tabletop was subsequently completed; see the verified acceptance section below. Follow the three separate DRILL ONLY comment steps above; no one should report a missed real 09:00 check.
+
+
+## Verified tabletop acceptance — 2026-11-12
+
+**PASS 3/3 — STAGING MOCK ONLY.** The accepted roles posted the three scenario-specific comments in the correct ordered Issue #12 conversation:
+
+1. `BrunoQuoc`: [DRILL ONLY — PRIMARY MISSED 09:00 SCENARIO](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814391249); explicitly labels **not an actual missed review**.
+2. `Sonic-2015`: [DRILL ONLY — ACK BACKUP TAKEOVER](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814400852); acknowledges simulated 09:15 takeover, read-only aggregate snapshot and missing Auth/edge logs; does not claim a fresh review was performed.
+3. `BrunoQuoc`: [DRILL ONLY — ACK PRIMARY HANDOFF REVIEW](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814413737); confirms tabletop scope and outstanding Auth visibility.
+
+GitHub comment author fields and returned comment order were verified. The connector did not provide usable creation timestamps; **do not claim measured 09:15 latency or a real 09:30 SLA**. No automated monitoring, live Supabase Auth alert or real 09:00 scheduled Primary review is established.
+
+**Remain OPEN:** first actual 09:00 read-only review with self-authored timestamped evidence, Auth/edge log coverage investigation, independent operational policy signoff, effective/review dates, and real alert source (or separately approved time-limited exception). PRODUCTION NO-GO.
