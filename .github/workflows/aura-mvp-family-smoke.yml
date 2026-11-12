@@ -1,0 +1,63 @@
+name: AURA MVP Family Offline Smoke
+
+on:
+  pull_request:
+    paths:
+      - 'student-direct.html'
+      - 'admin-direct.html'
+      - 'app.js'
+      - 'backup.js'
+      - 'generator.js'
+      - 'smart_engine.js'
+      - 'learner_tools.js'
+      - 'exam_timer.js'
+      - 'aura_pro_2026.js'
+      - 'local_accounts_v3.js'
+      - 'multisubject_results.js'
+      - 'README.md'
+      - 'tests/mvp-family-flow.test.mjs'
+      - 'tests/mvp-family-browser.mjs'
+      - '.github/workflows/aura-mvp-family-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-family-smoke:
+    name: Synthetic local-only learning flow
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Student/Admin assets, Math grading, draft, history and backup
+        run: node --test tests/mvp-family-flow.test.mjs
+
+# No live browser user account, Auth API, Supabase, Google Drive or production writes.
+# This is a focused offline check; browser acceptance is separate.
+
+  isolated-browser-smoke:
+    name: Chromium family journey (synthetic localhost)
+    needs: offline-family-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser test runner
+        run: npm install --no-save playwright@1.56.1
+      - name: Install Chromium dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Run private-browser local-only smoke
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/aura-mvp-http.log 2>&1 &
+          sleep 2
+          node tests/mvp-family-browser.mjs
+
+# Browser test blocks third-party requests and uses fresh synthetic localStorage.
+# It never opens the deployed public URL or any Supabase endpoint.

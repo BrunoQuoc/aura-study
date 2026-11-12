@@ -3,16 +3,16 @@
 AURA STUDY là web app học tập lớp 6 tối ưu cho iPad/iPhone/Android. GitHub Pages là lớp triển khai ứng dụng; Google Drive là kho dữ liệu gốc.
 
 ## Truy cập hiện tại
-AURA STUDY dùng mô hình **2 link riêng, không đăng nhập**:
+AURA STUDY hiện có **2 link riêng**, không dùng **Supabase Auth**, đăng nhập email hoặc mật khẩu máy chủ:
 
 - **Học sinh:** `https://brunoquoc.github.io/aura-study/student-direct.html`
 - **Admin:** `https://brunoquoc.github.io/aura-study/admin-direct.html`
 
-`index.html` và `admin.html` chỉ còn nhiệm vụ chuyển hướng về hai entry production ở trên để bookmark/link cũ không mở nhầm giao diện legacy.
+`index.html` và `admin.html` chỉ chuyển hướng sang hai giao diện này.
 
-Không còn luồng tạo user, email xác nhận, Supabase Auth hay mật khẩu trong giao diện đang sử dụng.
+**Phân biệt đăng nhập cục bộ với xác thực máy chủ:** Trang Student vẫn tải `local_accounts_v3.js` và `student_login_direct_fix.js`. Admin có thể tạo **hồ sơ học sinh cục bộ** và PIN 4–8 số; học sinh chọn hồ sơ/PIN để vào học **trên cùng trình duyệt**, các dữ liệu cục bộ được tách theo hồ sơ. PIN dùng hash + salt và lưu trong `localStorage`; đây là tiện ích phân tách hồ sơ gia đình, **không phải xác thực bảo mật phía máy chủ** và không đồng bộ giữa thiết bị. Mô tả “không đăng nhập” trước đây không phản ánh đầy đủ giao diện Student hiện tại.
 
-> Lưu ý: link Admin không có lớp xác thực. Ai có đúng URL Admin đều có thể mở giao diện quản trị. Mô hình này phù hợp với hệ thống gia đình hiện tại.
+> **Giới hạn an toàn:** Trang Admin hiện không có xác thực/phân quyền máy chủ; bất kỳ ai truy cập đúng URL đều có thể mở giao diện Admin. Không dùng hai link này như môi trường nhiều người dùng công khai hoặc lưu dữ liệu nhạy cảm. File backup JSON có thể chứa dữ liệu học sinh cục bộ, thông tin hồ sơ và PIN hash; cần bảo quản riêng.
 
 ## Cache / Service Worker
 Service Worker cũ đã được nghỉ sử dụng. Core `app.js` không còn đăng ký Service Worker. `sw.js` chỉ được giữ lại như lớp cleanup cho các thiết bị từng đăng ký bản cũ.
