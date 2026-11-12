@@ -33,8 +33,17 @@ async function login(page,id,pin){
   await page.waitForSelector('#auraLoginStudent');
   await page.locator('#auraLoginStudent').selectOption(id);
   await page.locator('#auraLoginPin').fill(pin);
-  await page.getByRole('button',{name:'Vào học'}).click();
-  await page.waitForFunction(()=>!document.querySelector('.aura-login-overlay'),null,{timeout:25000});
+  // The direct PIN handler reloads the page asynchronously after hashing.
+  // Wait for that *navigation* before inspecting the app, otherwise the old
+  // document can transiently look like a completed login.
+  await Promise.all([
+    page.waitForNavigation({waitUntil:'load',timeout:25000}),
+    page.getByRole('button',{name:'Vào học'}).click()
+  ]);
+  await page.waitForFunction(()=>
+    !document.querySelector('.aura-login-overlay') &&
+    document.querySelector('.aura-account')?.textContent?.includes('Đăng xuất') &&
+    typeof window.exam==='function',null,{timeout:25000});
 }
 async function main(){
  const browser=await chromium.launch({headless:true});
