@@ -71,6 +71,35 @@ try{
     const cleaned=await page.evaluate(()=>JSON.parse(localStorage.getItem('aura_metadata_overrides_v1')||'{}'));
     assert.equal(cleaned.resources['review:TOAN:toan_gk1_thucte'],undefined);
     assert.equal(await page.locator('.period-v2-item').count(),0,'manual filter should now show no rows');
+
+    // Complete-and-hide must keep saved override and source intact; reopen must be reversible.
+    await page.locator('[data-filter="view"]').selectOption('pending');
+    const work=page.locator('.period-v2-item[data-key="review:TOAN:toan_gk1_thucte"]');
+    await work.locator('.period-v2-editor summary').click();
+    await work.locator('input[data-period="GK2"]').check();
+    await work.locator('[data-reason]').fill('Đã đối chiếu nguồn — nghiệm thu giao diện');
+    await work.locator('[data-ack]').check();
+    await work.locator('[data-action="save"]').click();
+    const toComplete=page.locator('.period-v2-item[data-key="review:TOAN:toan_gk1_thucte"]');
+    await toComplete.locator('[data-action="complete"]').click();
+    assert.equal(await page.locator('.period-v2-item[data-key="review:TOAN:toan_gk1_thucte"]').count(),0,
+      'Completed item should disappear from pending list');
+    assert.match(await page.locator('.period-v2-notice').innerText(),/Đã hoàn thành/);
+    const completion=await page.evaluate(()=>JSON.parse(localStorage.getItem('aura_metadata_completed_v1')||'{}'));
+    assert.ok(completion['resources:review:TOAN:toan_gk1_thucte']?.signature);
+    const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('aura_metadata_overrides_v1')||'{}'));
+    assert.equal(saved.resources['review:TOAN:toan_gk1_thucte'].reason,'Đã đối chiếu nguồn — nghiệm thu giao diện');
+    await page.locator('[data-filter="view"]').selectOption('completed');
+    const done=page.locator('.period-v2-item[data-key="review:TOAN:toan_gk1_thucte"]');
+    assert.equal(await done.count(),1);
+    await page.screenshot({path:path+'/'+viewport.label+'-completed.png',fullPage:true});
+    await done.locator('[data-action="reopen"]').click();
+    assert.equal(await done.count(),0);
+    await page.locator('[data-filter="view"]').selectOption('pending');
+    assert.equal(await work.count(),1);
+    const stillSaved=await page.evaluate(()=>JSON.parse(localStorage.getItem('aura_metadata_overrides_v1')||'{}'));
+    assert.equal(stillSaved.resources['review:TOAN:toan_gk1_thucte'].reason,'Đã đối chiếu nguồn — nghiệm thu giao diện');
+
     assert.deepEqual(errors.filter(x=>/metadata|period-v2/i.test(x)),[]);
     console.log('PASS '+viewport.label+' metadata UI + guard + manual override + reset');
     await context.close();
