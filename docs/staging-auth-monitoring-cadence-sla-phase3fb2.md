@@ -116,3 +116,10 @@ This ad hoc query is **NOT** a self-authored Primary 09:00 review, and it does n
 - The known **Auth/edge log visibility gap remains OPEN**. Neither message independently assessed whether the missing rows reflect low traffic, service configuration or log retention.
 - The policy sets the two human review attestation flags true but leaves `first_real_manual_check_completed=false`, `missed_review_handoff_tabletop_completed=false`, `approval.approved=false`, `live_supabase_alerting_verified=false` and production NO-GO.
 - Next: run the [Backup Handoff tabletop](https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-backup-handoff-drill-phase3fb2.md) using distinct self-authored DRILL ONLY comments, then separately capture a genuine 09:00 Primary/Backup check and independent governance signoff.
+
+
+### Backup handoff tabletop verification — 2026-11-12
+
+**PASS 3/3 — MOCK ONLY** on GitHub Issue #12. Correct author/order and content independently checked: `BrunoQuoc` [simulated missed 09:00](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814391249), `Sonic-2015` [simulated Backup takeover at 09:15](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814400852), `BrunoQuoc` [tabletop review](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814413737). The Backup explicitly flagged that Auth/edge logs were absent from the 2026-11-12 24h window. No real incident or scheduled monitoring slot occurred in this drill, no alert latency was measured, and no data/permissions were changed.
+
+Source of truth: `release/phase3fb2-monitoring-cadence-sla.json` now marks `missed_review_handoff_tabletop_completed=true` with three comment URLs and verified role order. **Actual 09:00 manual check is still PENDING**. Independent operational signoff, effective and review dates, complete Auth log telemetry, and alert integration remain OPEN; PRODUCTION NO-GO.
