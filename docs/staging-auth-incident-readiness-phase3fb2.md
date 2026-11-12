@@ -85,7 +85,7 @@ The offline policy proposes escalation and preserves evidence. It intentionally 
 | Real email/push/automated alert delivery | A named recipient acknowledges receipt | **OPEN** |
 | Primary/backup monitoring ownership | BrunoQuoc and Sonic-2015 self-authored ACKs verified | **PASS — STAGING DUTY ACCEPTANCE** |
 | GitHub Inbox cross-account receipt drill | Two distinct senders and recipients; Issue #12 human ACKs | **PASS 2/2 — SELF-REPORTED RECEIPT ONLY** |
-| Monitoring cadence / incident SLA | Daily 09:00 VN proposed; owner/backup approvals and first manual check pending | **OPEN — DRAFT ONLY** |
+| Monitoring cadence / incident SLA | BrunoQuoc and Sonic-2015 full terms accepted; independent signoff and first check pending | **ROLE ACK PASS / OPERATION OPEN** |
 | Real Supabase HTTP 429 / alert response | Bounded test and independent evidence | **OPEN** |
 
 **Closure criteria:** After owner + backup accept, choose a supported alerting path; perform one no-sensitive-data notification delivery exercise with actual acknowledgement; record an approved tabletop decision; establish a monitoring cadence; and verify either approved manual-monitoring exception or actual automated alerting. Production remains NO-GO until every relevant release condition passes.
@@ -130,3 +130,8 @@ Runbook: [`docs/staging-auth-monitoring-cadence-sla-phase3fb2.md`](https://githu
 ### 13. Short-form cadence intent verified — 2026-11-12
 
 Both role-specific short-form cadence comments are present on Issue #12: [BrunoQuoc](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813565895) and [Sonic-2015](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813579412). Authors independently checked. Since neither comment specifies 09:00 weekend coverage, P0/P1/P2 targets or Backup takeover, these are **in-principle approvals only**, not completed operational SLA consent. Full terms, independent policy sign-off, first real manual read-only check and handoff rehearsal remain OPEN; live Supabase alerts off and PRODUCTION NO-GO.
+
+
+### 14. Full monitoring cadence consent verified — 2026-11-12
+
+GitHub Issue #12 shows both users **edited their existing comments** into full STAGING-only manual monitoring and SLA-target acceptance. Exact source comments: [BrunoQuoc Primary](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813565895) and [Sonic-2015 Backup](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6813579412). Confirmed 09:00 VN daily incl. weekends, Backup handoff from 09:15, review evidence by 09:30, P0/P1/P2 human ACK targets 15/60/240 minutes after actual detection during coverage, no 24/7 guarantee and no automation. **Role-level agreement PASS**, but no executed daily monitoring, no independent final governance signoff and no live Supabase alert integration. Release remains NO-GO.
