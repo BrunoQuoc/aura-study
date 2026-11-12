@@ -203,7 +203,15 @@
       "root_cause_verified": false,
       "auth_telemetry_healthy_verified": false,
       "plausible_explanation": "Low or absent interactive Auth traffic during sample; cannot exclude logs source ingestion/configuration/retention issues",
-      "next_approved_action": "Read-only inspect Authentication > Configuration > Audit Logs; compare with independently known Auth event time, avoid test traffic or changing storage settings"
+      "next_approved_action": "Read-only compare auth_logs and auth_audit_logs during a corroborated genuine prior Auth event window; no new test traffic or audit settings changes without separate approval.",
+      "audit_database_storage_dashboard_evidence": {
+        "date": "2026-11-12",
+        "source": "User-supplied screenshot: Supabase STAGING Authentication > Configuration > Audit Logs",
+        "write_audit_logs_to_database": "OFF_OBSERVED",
+        "no_setting_changed": true,
+        "issue_evidence_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6816208559",
+        "interpretation": "Optional PostgreSQL audit sink visually disabled; compatible with empty auth.audit_log_entries, but does not diagnose separate Logs Explorer auth_logs/auth_audit_logs stream."
+      }
     }
   },
   "exceptions": {
