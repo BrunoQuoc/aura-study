@@ -25,6 +25,8 @@ test("completed manual plan demands distinct role ACKs, independent approval and
  completed.approval={
   accepted_by_primary:true,primary_cadence_ack_comment_url:comment(1),
   accepted_by_backup:true,backup_cadence_ack_comment_url:comment(2),
+  sla_and_coverage_terms_confirmed_by_primary:true,
+  sla_and_coverage_terms_confirmed_by_backup:true,
   independent_reviewer_approved:true,independent_policy_signoff_comment_url:comment(3),
   approved:true,approved_at_utc:"2026-11-13T01:00:00Z",
   effective_from_local_date:"2026-11-14",review_due_local_date:"2026-11-21"
@@ -34,7 +36,7 @@ test("completed manual plan demands distinct role ACKs, independent approval and
   missed_review_handoff_tabletop_completed:true,missed_review_handoff_evidence_url:comment(5)
  };
  assert.equal(assessCadenceSla(completed,registry).status,"MANUAL_CADENCE_READY");
- for(const field of ["accepted_by_primary","accepted_by_backup","independent_reviewer_approved","approved"]){
+ for(const field of ["accepted_by_primary","accepted_by_backup","sla_and_coverage_terms_confirmed_by_primary","sla_and_coverage_terms_confirmed_by_backup","independent_reviewer_approved","approved"]){
   const bad=structuredClone(completed);
   bad.approval[field]=false;
   assert.equal(assessCadenceSla(bad,registry).status,"DRAFT_OR_PENDING");
