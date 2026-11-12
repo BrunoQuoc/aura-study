@@ -22,7 +22,7 @@ The tool \`scripts/drive-inbox-discovery.mjs\` is deliberately **read-only**. Wi
 4. Guesses subject/type/period from **folder and filename as review hints**, never authoritative school-period assignments.
 5. Joins against existing \`aura_data/processed_sources.json\` for blocked/represented/new/changed review status. A changed source is never silently accepted.
 6. Outputs summary *counts only*. An optional private inventory can be saved under \`.aura_private/\`, which is gitignored. It contains private file IDs/names, so must **not** be uploaded to GitHub, screenshots, public logs, or external sharing.
-7. Never downloads document bytes, moves or deletes a file, changes Drive sharing, or modifies AURA Question Bank.
+8. Never downloads document bytes, moves or deletes a file, changes Drive sharing, or modifies AURA Question Bank.
 
 Supported read permission: a valid OAuth token with **metadata read** access to the relevant tree (for example, \`drive.metadata.readonly\` with explicit authorized owner consent). A \`drive.file\` token from the existing browser uploader does **not** guarantee access to files manually uploaded through Drive. Do not escalate a browser OAuth token without owner consent. Do not put tokens in the web page, repository, GitHub Actions variables, CI logs, command arguments or git commits.
 
