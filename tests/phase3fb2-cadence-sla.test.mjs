@@ -12,8 +12,12 @@ test("draft cadence does not silently activate on accepted ownership and receipt
  assert.equal(s.status,"DRAFT_OR_PENDING");
  assert.equal(s.checks.assigned_distinct_roles,true);
  assert.equal(s.checks.manual_daily_time,true);
- assert.equal(s.checks.explicit_owner_cadence_ack,false);
- assert.equal(s.checks.explicit_backup_cadence_ack,false);
+ assert.equal(s.checks.explicit_owner_cadence_ack,true);
+ assert.equal(s.checks.explicit_backup_cadence_ack,true);
+ assert.equal(s.checks.primary_sla_terms_confirmed,true);
+ assert.equal(s.checks.backup_sla_terms_confirmed,true);
+ assert.equal(s.checks.cadence_comment_authors_verified,true);
+ assert.equal(s.checks.independent_reviewer_signoff,false);
  assert.equal(s.checks.actual_read_only_review,false);
  assert.equal(s.production_release_approved,false);
  assert.equal(s.full_production_monitoring_verified,false);
@@ -27,6 +31,7 @@ test("completed manual plan demands distinct role ACKs, independent approval and
   accepted_by_backup:true,backup_cadence_ack_comment_url:comment(2),
   sla_and_coverage_terms_confirmed_by_primary:true,
   sla_and_coverage_terms_confirmed_by_backup:true,
+  cadence_comment_authors_verified:true,
   independent_reviewer_approved:true,independent_policy_signoff_comment_url:comment(3),
   approved:true,approved_at_utc:"2026-11-13T01:00:00Z",
   effective_from_local_date:"2026-11-14",review_due_local_date:"2026-11-21"
@@ -36,7 +41,7 @@ test("completed manual plan demands distinct role ACKs, independent approval and
   missed_review_handoff_tabletop_completed:true,missed_review_handoff_evidence_url:comment(5)
  };
  assert.equal(assessCadenceSla(completed,registry).status,"MANUAL_CADENCE_READY");
- for(const field of ["accepted_by_primary","accepted_by_backup","sla_and_coverage_terms_confirmed_by_primary","sla_and_coverage_terms_confirmed_by_backup","independent_reviewer_approved","approved"]){
+ for(const field of ["accepted_by_primary","accepted_by_backup","sla_and_coverage_terms_confirmed_by_primary","sla_and_coverage_terms_confirmed_by_backup","cadence_comment_authors_verified","independent_reviewer_approved","approved"]){
   const bad=structuredClone(completed);
   bad.approval[field]=false;
   assert.equal(assessCadenceSla(bad,registry).status,"DRAFT_OR_PENDING");
