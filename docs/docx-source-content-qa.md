@@ -5,9 +5,9 @@
 ## Phát hiện thực tế từ 9 DOCX nguồn (2026-11-12)
 
 Qua tài khoản Drive đã kết nối trong dự án, đọc **byte gốc** của 9 DOCX nguồn bị chặn:
-- Toán GK1: 5 đề (01–05). Trong 5 DOCX có tổng **18 ảnh nhúng** (2, 4, 4, 4, 4), cùng 55 bảng OOXML. Lần đọc text-only trước đó không chứa hình nên chặn chuyển đổi đề.
-- Ngữ văn: 3 DOCX có toàn bộ phần văn bản trong \`word/document.xml\`, không có hình nhúng; nguồn kiểm kê cũ bị giới hạn/truncation khi lấy readable text. Một file có 7 bảng.
-- Tiếng Anh: 1 DOCX có 26 bảng và tên file **KHONG_DAP_AN**. Có thể khôi phục bản Word đầy đủ nhưng **không được tự suy diễn đáp án**.
+- Toán GK1: 5 đề (01–05). Trong 5 DOCX có tổng **18 ảnh nhúng** (2, 4, 4, 4, 4), cùng 55 bảng OOXML. Kiểm tra bằng bộ đọc package OOXML trên 9 file gốc đã xác minh **18/18 tham chiếu ảnh trỏ tới thành phần tồn tại**; không có tham chiếu ảnh bị đứt trong các phần tài liệu chính. Lần đọc text-only trước đó không chứa hình nên chặn chuyển đổi đề.
+- Ngữ văn: 3 DOCX có toàn bộ phần văn bản trong \`word/document.xml\`, không có hình nhúng; nguồn kiểm kê cũ bị giới hạn/truncation khi lấy readable text. Một file có 7 bảng. Có cả các thành phần footer/footnotes/endnotes được giữ trong package và phải kiểm tra theo nội dung.
+- Tiếng Anh: 1 DOCX có 26 bảng và tên file **KHONG_DAP_AN**. Tổng cộng 9 file gốc chứa **88 bảng**; file thiếu đáp án vẫn bị chặn. Có thể khôi phục bản Word đầy đủ nhưng **không được tự suy diễn đáp án**.
 
 **Đây là phát hiện về cấu trúc file gốc**, không phải kiểm định đáp án/hình đã trùng khớp từng câu hoặc giấy phép xuất bản. Các nguồn cũ vẫn BLOCKED cho đến khi được QA.
 
