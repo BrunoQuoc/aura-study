@@ -69,7 +69,7 @@ test('Runtime V2 scripts are wired with cache version and guided touch layout',(
 test('Guided view separates source declaration, AURA defaults and active use',()=>{
   const h=harness();
   const content=h.app.innerHTML;
-  assert.match(content,/Phân kỳ ôn tập &amp; đề thi/);
+  assert.match(content,/Phân kỳ ôn tập & đề thi/);
   assert.match(content,/1. TÀI LIỆU GỐC/);
   assert.match(content,/2. AURA MẶC ĐỊNH/);
   assert.match(content,/3. ĐANG SỬ DỤNG/);
