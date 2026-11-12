@@ -203,3 +203,99 @@ test('Generated practice, weakness report and history modules are wired',()=>{
   assert.match(source('smart_engine.js'),/function auraRecordSmartResult/);
   assert.match(source('multisubject_results.js'),/window\.history\s*=\s*multiHistory/);
 });
+
+
+test('Two synthetic local Student profiles reject a wrong PIN and isolate progress', async()=>{
+  // Browser-local behavior contract, not server authentication or real-browser E2E.
+  // Each synthetic page has its own Storage prototype and shares only a fake same-origin store.
+  const { webcrypto } = await import('node:crypto');
+  const shared=new Map();
+  function page(shell){
+    class FakeStorage {
+      get length(){return shared.size}
+      key(index){return [...shared.keys()][index]??null}
+      getItem(key){return shared.has(String(key))?shared.get(String(key)):null}
+      setItem(key,value){shared.set(String(key),String(value))}
+      removeItem(key){shared.delete(String(key))}
+      clear(){shared.clear()}
+    }
+    const values={};
+    const document={
+      body:{
+        classList:{contains:name=>name===shell},
+        appendChild(){}
+      },
+      head:{appendChild(){}},
+      getElementById:id=>Object.prototype.hasOwnProperty.call(values,id)?{value:values[id]}:null,
+      querySelector(){return null},
+      createElement(){return {className:'',innerHTML:'',textContent:''}},
+      addEventListener(){}
+    };
+    const ctx={
+      Storage:FakeStorage,
+      localStorage:new FakeStorage(),
+      document,
+      crypto:webcrypto,
+      TextEncoder,
+      location:{origin:'https://qa.local.invalid',search:''},
+      setTimeout(){},  // no DOM renders: exercise model logic only
+      addEventListener(){},
+      alert(){},
+      confirm(){return true}
+    };
+    ctx.window=ctx;
+    createContext(ctx);
+    runInContext(source('local_accounts_v3.js'),ctx,{filename:'local_accounts_v3.js'});
+    return {ctx,values};
+  }
+
+  const admin=page('admin-shell');
+  admin.values.studentName='Synthetic Student A';
+  admin.values.studentUsername='synthetic_a';
+  admin.values.studentPin='1357';
+  await admin.ctx.auraCreateStudent();
+  admin.values.studentName='Synthetic Student B';
+  admin.values.studentUsername='synthetic_b';
+  admin.values.studentPin='2468';
+  await admin.ctx.auraCreateStudent();
+
+  const accounts=JSON.parse(shared.get('aura_local_students_v1'));
+  assert.equal(accounts.length,2);
+  assert.notEqual(accounts[0].pinSalt,accounts[1].pinSalt);
+  assert.notEqual(accounts[0].pinHash,'1357'); // plaintext PIN is not stored
+  assert.notEqual(accounts[1].pinHash,'2468');
+  const [idA,idB]=accounts.map(a=>a.id);
+  assert.notEqual(idA,idB);
+
+  const student=page('student-shell');
+  student.values.auraLoginStudent=idA;
+  student.values.auraLoginPin='9999';
+  await student.ctx.auraStudentLogin();
+  assert.equal(shared.has('aura_student_session_v1'),false,'wrong PIN must not create a session');
+
+  student.values.auraLoginPin='1357';
+  await student.ctx.auraStudentLogin();
+  assert.equal(JSON.parse(shared.get('aura_student_session_v1')).studentId,idA);
+  student.ctx.localStorage.setItem('aura_attempts',JSON.stringify([{title:'A synthetic',score:10}]));
+  student.ctx.localStorage.setItem('aura_wrong_book_v1',JSON.stringify({onlyA:{wrongCount:1}}));
+  student.ctx.auraStudentLogout();
+  assert.equal(shared.has('aura_attempts'),false);
+
+  student.values.auraLoginStudent=idB;
+  student.values.auraLoginPin='2468';
+  await student.ctx.auraStudentLogin();
+  assert.equal(student.ctx.localStorage.getItem('aura_attempts'),null,'Student B must not see A attempts');
+  assert.equal(student.ctx.localStorage.getItem('aura_wrong_book_v1'),null,'Student B must not see A wrong-book');
+  student.ctx.localStorage.setItem('aura_attempts',JSON.stringify([{title:'B synthetic',score:4}]));
+  student.ctx.auraStudentLogout();
+
+  student.values.auraLoginStudent=idA;
+  student.values.auraLoginPin='1357';
+  await student.ctx.auraStudentLogin();
+  assert.equal(JSON.parse(student.ctx.localStorage.getItem('aura_attempts'))[0].score,10);
+  assert.equal(JSON.parse(student.ctx.localStorage.getItem('aura_wrong_book_v1')).onlyA.wrongCount,1);
+  const a=JSON.parse(shared.get('aura_student_profile_v1:'+idA));
+  const b=JSON.parse(shared.get('aura_student_profile_v1:'+idB));
+  assert.equal(JSON.parse(a.data.aura_attempts)[0].score,10);
+  assert.equal(JSON.parse(b.data.aura_attempts)[0].score,4);
+});
