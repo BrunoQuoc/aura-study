@@ -110,6 +110,27 @@ export function buildInventory(files,registryRows=[],scanAt=new Date().toISOStri
       containsPrivateDriveMetadata:true},fileCount:data.length,gateCounts:totals,files:data};
 }
 
+export function diffInventories(previous,current){
+  const valid=x=>x?.schemaVersion===1&&x?.kind==='read_only_drive_source_inventory'&&Array.isArray(x.files);
+  if(!valid(current))throw new Error('Inventory mới không hợp lệ.');
+  const prior=valid(previous)?previous.files:[];
+  const byId=rows=>new Map(rows.filter(x=>typeof x?.driveFileId==='string').map(x=>[x.driveFileId,x]));
+  const oldRows=byId(prior),newRows=byId(current.files);
+  const delta={previousCount:oldRows.size,currentCount:newRows.size,
+    added:0,modified:0,moved:0,unchanged:0,missing:0,baseline:!valid(previous)};
+  if(delta.baseline)return delta;
+  for(const [id,row] of newRows){
+    const last=oldRows.get(id);
+    if(!last){delta.added++;continue;}
+    if(last.modifiedTime!==row.modifiedTime||last.md5Checksum!==row.md5Checksum||last.sizeBytes!==row.sizeBytes)
+      delta.modified++;
+    else if(JSON.stringify(last.sourcePath)!==JSON.stringify(row.sourcePath))delta.moved++;
+    else delta.unchanged++;
+  }
+  for(const id of oldRows.keys())if(!newRows.has(id))delta.missing++;
+  return delta;
+}
+
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function driveError(status){
   if(status===401||status===403)return new Error('Google Drive từ chối quyền đọc metadata. Hãy cấp quyền đọc cho đúng cây 00_INBOX; không dùng token drive.file để khẳng định đã quét đầy đủ.');
@@ -197,6 +218,18 @@ export async function scanFolderTree({client,rootId,maxDepth=8,maxFolders=250,ma
   return {rootName:root.name,folderCount:seenFolders.size,files:found};
 }
 
+async function readPreviousPrivate(){
+  try{
+    const value=JSON.parse(await readFile(join(resolve('.aura_private'),'drive-inbox-inventory.json'),'utf8'));
+    if(value?.schemaVersion!==1||value?.kind!=='read_only_drive_source_inventory'||!Array.isArray(value.files))
+      throw new Error('Snapshot lần trước không đúng định dạng; không ghi đè tự động.');
+    return value;
+  }catch(error){
+    if(error.code==='ENOENT')return null;
+    throw error;
+  }
+}
+
 async function privateWrite(inventory){
   const folder=resolve('.aura_private');
   await mkdir(folder,{recursive:true,mode:0o700});
@@ -219,9 +252,14 @@ export async function main(env=process.env,args=process.argv.slice(2)){
   const client=await makeDriveClient(env.AURA_DRIVE_ACCESS_TOKEN);
   const scan=await scanFolderTree({client,rootId});
   const inventory=buildInventory(scan.files,registry.sources);
+  const previous=await readPreviousPrivate();
+  const delta=diffInventories(previous,inventory);
   console.log('AURA STUDY | Read-only source discovery');
   console.log('INBOX folders inspected: '+scan.folderCount+'; files: '+inventory.fileCount);
   for(const [gate,count] of Object.entries(inventory.gateCounts))console.log(gate+': '+count);
+  if(delta.baseline)console.log('Delta: no prior private snapshot; this scan is the baseline.');
+  else console.log('Delta: new='+delta.added+', modified='+delta.modified+
+    ', moved='+delta.moved+', unchanged='+delta.unchanged+', missing-from-INBOX='+delta.missing);
   console.log('Auto-publish: DISABLED. Source content download: DISABLED. Drive writes: DISABLED.');
   if(args.includes('--write-private'))console.log('Private inventory saved at '+await privateWrite(inventory));
   return 0;
