@@ -12,7 +12,10 @@ export function assessReceipt(registry){
   distinct_named_owners:!!distinct,
   primary_accepted:registry.owner_acceptance===true,
   backup_accepted:registry.backup_acceptance===true,
-  cadence_approved:typeof registry.review_cadence==="string"&&
+  cadence_approved:registry.monitoring_cadence_sla_approved===true&&
+   typeof registry.monitoring_cadence_sla_approval_comment_url==="string"&&
+   /^https:\/\/github\.com\/BrunoQuoc\/aura-study\/issues\/12#issuecomment-\d+$/.test(registry.monitoring_cadence_sla_approval_comment_url)&&
+   typeof registry.review_cadence==="string"&&
    !registry.review_cadence.includes("NOT_APPROVED")&&
    !registry.review_cadence.includes("PROPOSED"),
   primary_notification_receipt:e.primary_received===true&&validProof(e.primary_ack_comment_url),
