@@ -14,8 +14,9 @@
     "tracker": "https://github.com/BrunoQuoc/aura-study/issues/12",
     "synthetic_receipt": "https://github.com/BrunoQuoc/aura-study/issues/13",
     "receipt_persisted": true,
-    "notification_received": false,
-    "no_sensitive_identifiers": true
+    "notification_received": true,
+    "no_sensitive_identifiers": true,
+    "receipt_interpretation": "Two GitHub Inbox receipt self-attestations; no independent provider delivery telemetry or Supabase integration"
   },
   "severities": [
     {
@@ -49,32 +50,37 @@
   "primary_owner_candidate_github": "BrunoQuoc",
   "primary_owner_candidate_status": "GITHUB_SELF_ACK_VERIFIED",
   "primary_owner_candidate_source": "Connected GitHub account; not a consent or incident-duty assignment",
-  "ownership_receipt_gate": "OPEN",
+  "ownership_receipt_gate": "OPEN_REVIEW_CADENCE_AND_INDEPENDENT_APPROVAL",
   "ack_protocol_document": "docs/staging-auth-ownership-alert-receipt-phase3fb2.md",
   "ack_required_from_distinct_accounts": true,
   "notification_delivery_evidence": {
     "mechanism": "GitHub issue notification or email or push; chosen by recipient",
     "test_issue_number": 13,
-    "primary_received": false,
-    "backup_received": false,
-    "primary_ack_comment_url": null,
-    "backup_ack_comment_url": null,
-    "verified_comment_authors": false,
+    "primary_received": true,
+    "backup_received": true,
+    "primary_ack_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6812558525",
+    "backup_ack_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6812578418",
+    "verified_comment_authors": true,
     "approved_by_independent_reviewer": false,
     "synthetic_primary_trigger": {
       "sender_github": "Sonic-2015",
       "target_github": "BrunoQuoc",
       "source_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/13#issuecomment-6812476673",
       "comment_present": true,
-      "recipient_ack_verified": false
+      "recipient_ack_verified": true
     },
     "synthetic_backup_trigger": {
       "sender_github": "BrunoQuoc",
       "target_github": "Sonic-2015",
-      "source_comment_url": null,
-      "comment_present": false,
-      "recipient_ack_verified": false
-    }
+      "source_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/13#issuecomment-6812564741",
+      "comment_present": true,
+      "recipient_ack_verified": true
+    },
+    "primary_selected_channel": "GitHub Inbox",
+    "backup_selected_channel": "GitHub Inbox",
+    "human_ack_status": "TWO_SELF_ATTESTED_RECEIPTS_VERIFIED_BY_GITHUB_COMMENT_AUTHORS",
+    "provider_delivery_telemetry_verified": false,
+    "source_is_live_supabase_alert": false
   },
   "primary_owner_user_confirmation": "Explicit confirmation in AURA STUDY conversation on 2026-11-06; not GitHub self-acknowledgement",
   "primary_owner_ack_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6680960922",
