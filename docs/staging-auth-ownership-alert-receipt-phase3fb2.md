@@ -67,3 +67,15 @@ After receipt confirmation, conduct a separate controlled escalation tabletop wi
 Associated registry: `release/phase3fb2-monitoring-ownership.json`. Main tracker: [Issue #12](https://github.com/BrunoQuoc/aura-study/issues/12). Detailed B2 evidence: `docs/staging-auth-incident-readiness-phase3fb2.md`.
 
 References: [GitHub issue assignment](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/assigning-issues-and-pull-requests-to-other-github-users) · [GitHub notification settings](https://docs.github.com/en/subscriptions-and-notifications/get-started/configuring-notifications).
+
+---
+
+### Verified role self-acknowledgements — 2026-11-12
+
+- Primary `BrunoQuoc`: self-authored [ACK PRIMARY](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6680960922); selected GitHub Inbox.
+- Backup `Sonic-2015`: self-authored [ACK BACKUP](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6812366506); selected GitHub Inbox.
+- Both distinct role acknowledgements now **PASS**. Backup has repository `read` access, but is **not** a GitHub issue assignee; this does not invalidate the user's independent ACK.
+- Notification receipt **PENDING** for both. Do NOT mistake role ACK, assignment, @mention or ticket creation for notification proof.
+- A safe alert-delivery test needs an independent authorized sender to post `DRILL ONLY` with both approved @mentions on synthetic [Issue #13](https://github.com/BrunoQuoc/aura-study/issues/13). Using the Primary's own GitHub account as sender would not establish notification delivery to that same account.
+- Each participant must confirm the received notification on Issue #12 from their own account, specifying the chosen channel and UTC receipt time. Reviewer verifies comment author and links before updating receipt evidence.
+- The owner-approved monitoring cadence, actual Supabase alert pipeline, escalation and real 429 thresholds remain OPEN. **PRODUCTION NO-GO**.
