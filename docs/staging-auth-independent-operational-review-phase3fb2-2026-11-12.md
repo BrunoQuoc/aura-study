@@ -55,3 +55,10 @@ If reviewer disagrees, they must edit the findings and evidence appropriately. A
 - **Monitoring integration design**: design a safe alert pipeline with explicit approval before enabling any webhooks or credentials.
 
 **Governance status:** review packet prepared; independent human HOLD/review pending. All release gates remain as previously recorded, **PRODUCTION NO-GO**.
+
+
+## 6. Follow-up Auth telemetry investigation — 2026-11-12
+
+The [read-only investigation report](https://github.com/BrunoQuoc/aura-study/blob/main/docs/staging-auth-log-coverage-investigation-phase3fb2-2026-11-12.md) and [Issue #12 finding](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6816021020) narrow the gap. The connected Supabase project reports ACTIVE_HEALTHY. In rolling-24h logs, edge_logs=5 (two /auth/v1/health), auth_logs=0 and auth_audit_logs=0. There were no newly created Auth users/sessions/refresh tokens in 24h; the optional PostgreSQL auth.audit_log_entries table is empty. Both newly committed diagnostics executed successfully read-only. This is **NOT proof of an Auth log pipeline defect or of its correctness**: absence of interactive Auth traffic is plausible, while event ingestion/retention still needs independent assessment.
+
+**Review action is unchanged:** authorized human reviewer checks Auth Audit Logs configuration without toggling it, determines whether any known real Auth activity should have produced entries, and maintains operational HOLD until acceptance evidence exists. The skipped scheduled 09:00 check remains DEFERRED, not PASS; PRODUCTION NO-GO.
