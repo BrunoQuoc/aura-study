@@ -1,0 +1,103 @@
+name: AURA Knowledge — Versioned Signed Approval QA
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/knowledge-release-core.mjs'
+      - 'scripts/knowledge-approval-pipeline.mjs'
+      - 'scripts/create-knowledge-approval-keys.mjs'
+      - 'approved_knowledge_runtime.js'
+      - 'aura_data/approved_knowledge/**'
+      - 'aura_data/knowledge_approval/**'
+      - 'generator.js'
+      - 'smart_engine.js'
+      - 'student-direct.html'
+      - 'knowledge-approval.html'
+      - 'knowledge_approval_status.js'
+      - 'knowledge_approval.css'
+      - 'admin_drive_source_ui.js'
+      - 'admin-direct.html'
+      - 'tests/knowledge-approval-gate.test.mjs'
+      - 'tests/knowledge-approval-browser.mjs'
+      - 'tests/fixtures/approved-knowledge-sandbox.html'
+      - 'docs/knowledge-approval-versioned-promotion.md'
+      - '.github/workflows/aura-knowledge-approval-qa.yml'
+      - '.github/workflows/aura-knowledge-protected-promotion.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  approval-contract:
+    name: SHA, educator gate, ECDSA, tamper, dedup and zero default promotion
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check scripts and deterministic source quality
+        run: |
+          node --check scripts/knowledge-release-core.mjs
+          node --check scripts/knowledge-approval-pipeline.mjs
+          node --check scripts/create-knowledge-approval-keys.mjs
+          node --check approved_knowledge_runtime.js
+          node --check knowledge_approval_status.js
+          node --check generator.js
+          node --check smart_engine.js
+          node scripts/qa-knowledge-math6-v2.mjs >/dev/null
+          node --test tests/knowledge-approval-gate.test.mjs
+          node scripts/knowledge-approval-pipeline.mjs status --output=/tmp/aura-approval-qa-status.json
+      - name: Assert fail-closed signed release not active until real educator signoff
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const a=JSON.parse(fs.readFileSync('aura_data/approved_knowledge/active.json'));
+          const t=JSON.parse(fs.readFileSync('aura_data/approved_knowledge/trust.json'));
+          const q=JSON.parse(fs.readFileSync('/tmp/aura-approval-qa-status.json'));
+          if(a.status!=='NO_APPROVED_RELEASE'||t.activeKeyId!==null||q.approvedCount!==0||
+             q.candidateCount!==96||q.teacherStatus!=='PENDING_QUALIFIED_REVIEW')
+            throw Error('Fail-closed initial state not preserved in this feature PR.');
+          console.log('PASS: 96 candidates; 0 user-authorized, 0 auto-published');
+          NODE
+      - name: Regression: Math6 lesson/chapter data
+        run: |
+          node --test tests/knowledge-math6-volume1-v2.test.mjs tests/knowledge-math6-chapter-review.test.mjs
+
+  signed-browser:
+    name: Verify signed pool → Generator → skill weakness and reject changed signatures
+    needs: approval-contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Chromium and headless dependencies
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Positive and negative signed integration plus old iPad readers
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/aura-approval-http.log 2>&1 &
+          sleep 2
+          node tests/knowledge-approval-browser.mjs
+          node tests/knowledge-math6-volume1-browser.mjs
+          node tests/knowledge-math6-chapter-review-browser.mjs
+      - name: Synthetic screenshots only (no secrets or student data)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aura-signed-knowledge-staging-ci
+          path: |
+            test-results/knowledge-approval-signed/
+            test-results/knowledge-math6-volume1/
+            test-results/knowledge-math6-chapter-review/
+          retention-days: 7
+
+# This QA uses throwaway signing keys generated only in CI test process.
+# Real protected Environment secrets are absent and never used by test workflows.
+# Production Question Bank and real learner backend are unchanged.
