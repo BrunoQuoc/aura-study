@@ -124,7 +124,8 @@ try{
 
     await page.locator('[data-source-action="scan"]').click();
     await page.getByRole('status').filter({hasText:'Đã quét 3 file'}).waitFor({timeout:15000});
-    assert.equal(await page.locator('.aura-source-card[data-source-id="SOURCE0000002"]').count(),1);
+    const unchanged=await page.evaluate(()=>JSON.parse(localStorage.getItem('aura_drive_source_review_queue_v1')));
+    assert.equal(unchanged.find(x=>x.driveFileId==='SOURCE0000002').reviewStatus,'METADATA_REVIEWED');
     revision=2;
     await page.locator('[data-source-action="scan"]').click();
     await page.getByRole('status').filter({hasText:'cần kiểm tra lại: 1'}).waitFor({timeout:15000});
