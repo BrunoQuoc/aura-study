@@ -1330,6 +1330,377 @@
       "status": "DRAFT_ORIGINAL_AURA",
       "requiresPedagogicalReview": true,
       "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-18",
+      "number": 18,
+      "chapter": 4,
+      "title": "Hình tam giác đều. Hình vuông. Hình lục giác đều",
+      "objectives": [
+        "Nhận dạng tam giác đều, hình vuông, lục giác đều",
+        "Tính chu vi đơn giản từ độ dài cạnh"
+      ],
+      "concepts": [
+        {
+          "heading": "Tam giác đều",
+          "body": "Có ba cạnh bằng nhau và ba góc bằng nhau (mỗi góc 60°)."
+        },
+        {
+          "heading": "Hình vuông",
+          "body": "Có bốn cạnh bằng nhau và bốn góc vuông. Chu vi bằng 4 lần độ dài cạnh."
+        },
+        {
+          "heading": "Lục giác đều",
+          "body": "Có sáu cạnh bằng nhau và các góc bằng nhau. Có thể chia lục giác đều thành sáu tam giác đều bằng nhau qua tâm."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Một hình vuông có cạnh 7 cm. Tính chu vi.",
+        "steps": [
+          "Vì hình vuông có bốn cạnh bằng nhau, mỗi cạnh dài 7 cm.",
+          "Chu vi P = 4 × 7 = 28 cm."
+        ],
+        "conclusion": "28 cm."
+      },
+      "commonMistake": "Hình có bốn cạnh bằng nhau chưa chắc là hình vuông: còn phải có bốn góc vuông.",
+      "practice": [
+        {
+          "prompt": "Tam giác đều có bao nhiêu cạnh bằng nhau?",
+          "choices": [
+            "2",
+            "3",
+            "4",
+            "6"
+          ],
+          "correct": 1,
+          "explanation": "Cả ba cạnh tam giác đều bằng nhau.",
+          "skill": "tam-giac-deu"
+        },
+        {
+          "prompt": "Chu vi hình vuông cạnh 9 cm là?",
+          "choices": [
+            "18 cm",
+            "27 cm",
+            "36 cm",
+            "81 cm"
+          ],
+          "correct": 2,
+          "explanation": "4 × 9 = 36 cm.",
+          "skill": "hinh-vuong"
+        },
+        {
+          "prompt": "Lục giác đều có bao nhiêu cạnh?",
+          "choices": [
+            "4",
+            "5",
+            "6",
+            "8"
+          ],
+          "correct": 2,
+          "explanation": "Lục giác là hình có sáu cạnh.",
+          "skill": "luc-giac"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-19",
+      "number": 19,
+      "chapter": 4,
+      "title": "Hình chữ nhật. Hình thoi. Hình bình hành. Hình thang cân",
+      "objectives": [
+        "Nhận biết các tứ giác",
+        "Phân biệt cạnh và góc trong các hình"
+      ],
+      "concepts": [
+        {
+          "heading": "Hình chữ nhật",
+          "body": "Có bốn góc vuông, hai cặp cạnh đối diện song song và bằng nhau."
+        },
+        {
+          "heading": "Hình thoi, hình bình hành",
+          "body": "Hình thoi có bốn cạnh bằng nhau; hình bình hành có hai cặp cạnh đối diện song song, bằng nhau."
+        },
+        {
+          "heading": "Hình thang cân",
+          "body": "Có một cặp cạnh đối diện song song; hai cạnh bên bằng nhau và các góc kề cùng một đáy bằng nhau."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Hình bình hành có hai cạnh kề 5 cm và 8 cm. Tính chu vi.",
+        "steps": [
+          "Trong hình bình hành, mỗi cạnh đối diện dài bằng cạnh tương ứng.",
+          "Chu vi P = 5 + 8 + 5 + 8 = 26 cm."
+        ],
+        "conclusion": "26 cm."
+      },
+      "commonMistake": "Không suy ra hình bình hành luôn có bốn góc vuông.",
+      "practice": [
+        {
+          "prompt": "Hình nào luôn có bốn góc vuông?",
+          "choices": [
+            "Hình thoi",
+            "Hình bình hành",
+            "Hình chữ nhật",
+            "Hình thang cân"
+          ],
+          "correct": 2,
+          "explanation": "Hình chữ nhật có bốn góc vuông.",
+          "skill": "nhan-dang"
+        },
+        {
+          "prompt": "Hình thoi có bao nhiêu cạnh bằng nhau?",
+          "choices": [
+            "2",
+            "3",
+            "4",
+            "Không cạnh nào"
+          ],
+          "correct": 2,
+          "explanation": "Bốn cạnh hình thoi bằng nhau.",
+          "skill": "hinh-thoi"
+        },
+        {
+          "prompt": "Chu vi hình bình hành có hai cạnh kề 6 cm, 4 cm bằng?",
+          "choices": [
+            "10 cm",
+            "16 cm",
+            "20 cm",
+            "24 cm"
+          ],
+          "correct": 2,
+          "explanation": "P = 2 × (6 + 4) = 20 cm.",
+          "skill": "chu-vi"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-20",
+      "number": 20,
+      "chapter": 4,
+      "title": "Chu vi và diện tích của một số tứ giác đã học",
+      "objectives": [
+        "Tính diện tích và chu vi các hình quen thuộc",
+        "Phân biệt đơn vị chiều dài và diện tích"
+      ],
+      "concepts": [
+        {
+          "heading": "Chữ nhật, hình vuông",
+          "body": "Chữ nhật dài a rộng b: P = 2(a+b), S = a×b. Vuông cạnh a: P = 4a, S = a²."
+        },
+        {
+          "heading": "Bình hành, hình thoi",
+          "body": "Hình bình hành có diện tích đáy × chiều cao tương ứng. Hình thoi có diện tích bằng một nửa tích hai đường chéo."
+        },
+        {
+          "heading": "Hình thang",
+          "body": "S = (đáy lớn + đáy nhỏ) × chiều cao : 2. Chiều cao vuông góc với hai đáy."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Hình thang có hai đáy 8 m và 14 m, chiều cao 5 m. Tính diện tích.",
+        "steps": [
+          "Tổng hai đáy là 8 + 14 = 22 m.",
+          "22 × 5 : 2 = 55 m²."
+        ],
+        "conclusion": "55 m²."
+      },
+      "commonMistake": "Chu vi đo bằng cm, m; diện tích phải ghi cm², m².",
+      "practice": [
+        {
+          "prompt": "Diện tích hình chữ nhật 7 cm × 4 cm là?",
+          "choices": [
+            "11 cm²",
+            "22 cm²",
+            "28 cm²",
+            "49 cm²"
+          ],
+          "correct": 2,
+          "explanation": "7 × 4 = 28 cm².",
+          "skill": "dien-tich-chu-nhat"
+        },
+        {
+          "prompt": "Hình thoi có hai đường chéo 6 cm, 10 cm. Diện tích bằng?",
+          "choices": [
+            "16 cm²",
+            "30 cm²",
+            "60 cm²",
+            "120 cm²"
+          ],
+          "correct": 1,
+          "explanation": "6 × 10 : 2 = 30 cm².",
+          "skill": "dien-tich-hinh-thoi"
+        },
+        {
+          "prompt": "Hình bình hành đáy 9 m, cao 3 m có diện tích?",
+          "choices": [
+            "12 m²",
+            "18 m²",
+            "27 m²",
+            "54 m²"
+          ],
+          "correct": 2,
+          "explanation": "9 × 3 = 27 m².",
+          "skill": "dien-tich-binh-hanh"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-21",
+      "number": 21,
+      "chapter": 5,
+      "title": "Hình có trục đối xứng",
+      "objectives": [
+        "Nhận biết hình có trục đối xứng",
+        "Tìm trục đối xứng của một số hình"
+      ],
+      "concepts": [
+        {
+          "heading": "Trục đối xứng",
+          "body": "Một đường thẳng là trục đối xứng khi gấp hình theo đường đó thì hai phần của hình trùng khít."
+        },
+        {
+          "heading": "Những hình quen thuộc",
+          "body": "Hình vuông có bốn trục đối xứng; hình chữ nhật không phải hình vuông có hai trục; tam giác đều có ba trục."
+        },
+        {
+          "heading": "Trong thực tế",
+          "body": "Có thể nhận ra đối xứng trục ở hoa văn, biểu tượng, một số lá cây và mặt tiền công trình."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Hình chữ nhật dài 8 cm, rộng 4 cm có bao nhiêu trục đối xứng?",
+        "steps": [
+          "Có một trục qua trung điểm hai cạnh dài đối diện.",
+          "Có một trục qua trung điểm hai cạnh ngắn đối diện.",
+          "Đường chéo không là trục đối xứng vì hình này không phải hình vuông."
+        ],
+        "conclusion": "Có hai trục đối xứng."
+      },
+      "commonMistake": "Không coi hai đường chéo hình chữ nhật bất kỳ là trục đối xứng.",
+      "practice": [
+        {
+          "prompt": "Hình vuông có bao nhiêu trục đối xứng?",
+          "choices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "correct": 2,
+          "explanation": "Có hai trục qua trung điểm cạnh và hai đường chéo.",
+          "skill": "truc-doi-xung"
+        },
+        {
+          "prompt": "Tam giác đều có bao nhiêu trục đối xứng?",
+          "choices": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "correct": 2,
+          "explanation": "Ba đường thẳng qua mỗi đỉnh và trung điểm cạnh đối diện.",
+          "skill": "tam-giac-deu"
+        },
+        {
+          "prompt": "Hình chữ nhật không phải hình vuông có mấy trục đối xứng?",
+          "choices": [
+            "0",
+            "1",
+            "2",
+            "4"
+          ],
+          "correct": 2,
+          "explanation": "Có hai trục đối xứng qua tâm.",
+          "skill": "nhan-biet"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V1-22",
+      "number": 22,
+      "chapter": 5,
+      "title": "Hình có tâm đối xứng",
+      "objectives": [
+        "Nhận biết tâm đối xứng",
+        "Phân biệt đối xứng trục với đối xứng tâm"
+      ],
+      "concepts": [
+        {
+          "heading": "Tâm đối xứng",
+          "body": "Điểm O là tâm đối xứng nếu quay hình 180° quanh O thì hình trùng với chính nó."
+        },
+        {
+          "heading": "Một số hình",
+          "body": "Hình bình hành, hình thoi, hình chữ nhật và hình vuông có tâm đối xứng ở giao điểm hai đường chéo."
+        },
+        {
+          "heading": "Không nhầm",
+          "body": "Tam giác đều có ba trục đối xứng nhưng không có tâm đối xứng."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Hình bình hành ABCD có hai đường chéo cắt nhau tại O. Vì sao O là tâm đối xứng?",
+        "steps": [
+          "Hai đường chéo của hình bình hành cắt nhau tại trung điểm mỗi đường.",
+          "Phép quay 180° quanh O hoán đổi A và C, B và D; hình trùng với chính nó."
+        ],
+        "conclusion": "O là tâm đối xứng."
+      },
+      "commonMistake": "Giao hai đường chéo của tứ giác bất kỳ chưa chắc là tâm đối xứng.",
+      "practice": [
+        {
+          "prompt": "Tâm đối xứng hình chữ nhật nằm ở đâu?",
+          "choices": [
+            "Một đỉnh",
+            "Giữa một cạnh",
+            "Giao điểm hai đường chéo",
+            "Mọi điểm trong hình"
+          ],
+          "correct": 2,
+          "explanation": "Giao điểm hai đường chéo là tâm quay 180°.",
+          "skill": "tam-doi-xung"
+        },
+        {
+          "prompt": "Hình nào không có tâm đối xứng?",
+          "choices": [
+            "Hình vuông",
+            "Hình bình hành",
+            "Hình chữ nhật",
+            "Tam giác đều"
+          ],
+          "correct": 3,
+          "explanation": "Tam giác đều không trùng chính nó khi quay 180°.",
+          "skill": "phan-biet"
+        },
+        {
+          "prompt": "Hình có tâm đối xứng trùng chính nó sau phép quay góc nào?",
+          "choices": [
+            "45°",
+            "90°",
+            "180°",
+            "270°"
+          ],
+          "correct": 2,
+          "explanation": "Theo định nghĩa, quay 180° quanh tâm cho chính hình.",
+          "skill": "tinh-chat"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
     }
   ],
   "expectedLessonCount": 22,
