@@ -46,3 +46,8 @@ Only after these self-authored comments have been verified may `missed_review_ha
 ## Outstanding operational gates
 
 Separate requirements: Primary self-reviews an actual daily aggregate report; independent operational signoff and effective/review date; confirm intended availability; clarify Auth/edge logs visibility; establish a real alert source or an explicit expiring manual exception. All PRODUCTION gates continue NO-GO.
+
+
+## Current readiness for dry run — 2026-11-12
+
+Human short-form review ACKs are present on Issue #12: [Primary](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814311117) and [Backup](https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814290472). Their authors were verified against the accepted roles. The handoff drill **has not started** as of these records. Follow the three separate DRILL ONLY comment steps above; no one should report a missed real 09:00 check.
