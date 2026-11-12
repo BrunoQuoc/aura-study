@@ -102,8 +102,12 @@ try{
     assert.equal(await page.evaluate(()=>localStorage.getItem('aura_inbox_queue_v1')),null);
     assert.ok(!JSON.stringify(await page.evaluate(()=>Object.entries(localStorage))).includes('SYNTHETIC_ONLY_TOKEN'));
 
-    await page.locator('[data-source-filter="status"]').selectOption('blocked');
+    // The status summary is now a real, accessible button, not a static count.
+    await page.locator('button[data-source-metric="blocked"]').click();
+    assert.equal(await page.locator('[data-source-filter="status"]').inputValue(),'blocked');
+    assert.equal(await page.locator('button[data-source-metric="blocked"]').getAttribute('aria-pressed'),'true');
     assert.equal(await page.locator('.aura-source-card').count(),2);
+    assert.ok(await page.locator('#aura-source-review-results').count()===1);
     await page.screenshot({path:output+'/'+viewport.label+'-blocked.png',fullPage:true});
     const blocked=page.locator('.aura-source-card[data-source-id="SOURCE0000001"]');
     assert.equal(await blocked.locator('[data-source-action="review"]').count(),0);
@@ -111,7 +115,8 @@ try{
     await blocked.locator('[data-source-action="note"]').click();
     assert.match(await page.locator('.aura-source-card[data-source-id="SOURCE0000001"]').innerText(),/Thiếu hình/);
 
-    await page.locator('[data-source-filter="status"]').selectOption('pending');
+    await page.locator('button[data-source-metric="pending"]').click();
+    assert.equal(await page.locator('[data-source-filter="status"]').inputValue(),'pending');
     const candidate=page.locator('.aura-source-card[data-source-id="SOURCE0000002"]');
     assert.equal(await candidate.count(),1);
     await candidate.locator('[data-source-field="note"]').fill('Đã kiểm tra tên file, môn và loại tài liệu.');
