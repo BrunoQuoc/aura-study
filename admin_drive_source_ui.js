@@ -159,6 +159,11 @@
         '<span>'+Math.min(state.offset+1,matches.length)+'–'+Math.min(state.offset+35,matches.length)+' / '+matches.length+'</span>'+
         '<button class="btn soft" data-source-action="next" '+(state.offset+35>=matches.length?'disabled':'')+'>Tiếp</button></div>':'')+
       '</section>'+
+      '<section class="aura-source-panel"><h2>03 · Kiểm định hình, đáp án và thang điểm</h2>'+
+      '<p>Giai đoạn 2C có bàn duyệt câu hỏi riêng. Anh cần nạp hồ sơ JSON nguồn đã khôi phục từ Word; '+
+      'hệ thống chưa tự tải nội dung file qua OAuth metadata và không tự đưa câu hỏi vào ngân hàng.</p>'+
+      '<a class="btn primary" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-height:46px" '+
+      'href="admin-question-review.html">Mở bàn kiểm định câu hỏi →</a></section>'+
       '<p class="aura-source-footnote">Hàng chờ chỉ lưu trên thiết bị này. Nó <b>không kết nối</b> với nút duyệt/chuyển file của INBOX cũ; '+
       '“Đã xem thông tin” không có nghĩa câu hỏi đã đạt kiểm định nội dung hoặc sẵn sàng tự chấm.</p>'+
       '</div>';
