@@ -258,7 +258,7 @@
             "0"
           ],
           "correct": 0,
-          "explanation": "100 − 1 = 99.",
+          "explanation": "Số liền trước của 100 là số nhỏ hơn 100 đúng một đơn vị: 100 − 1 = 99.",
           "skill": "so-lien-truoc"
         },
         {
@@ -406,7 +406,7 @@
             "7 dư 1"
           ],
           "correct": 0,
-          "explanation": "37 = 6 × 6 + 1.",
+          "explanation": "Vì 6 × 6 = 36 và 37 − 36 = 1 (nhỏ hơn 6), nên 37 chia 6 được thương 6, dư 1.",
           "skill": "chia-co-du"
         },
         {
@@ -480,7 +480,7 @@
             "52"
           ],
           "correct": 2,
-          "explanation": "5^2 = 5 × 5 = 25.",
+          "explanation": "Lũy thừa bậc hai nghĩa là nhân cơ số với chính nó hai lần: 5² = 5 × 5 = 25.",
           "skill": "luy-thua"
         },
         {
@@ -504,7 +504,7 @@
             "81"
           ],
           "correct": 2,
-          "explanation": "3 × 3 × 3 = 27.",
+          "explanation": "Lũy thừa 3³ là tích của ba thừa số 3: 3 × 3 × 3 = 27.",
           "skill": "luy-thua"
         }
       ],
@@ -630,7 +630,7 @@
             "21 chia hết cho 2"
           ],
           "correct": 1,
-          "explanation": "24 = 6 × 4.",
+          "explanation": "Số 24 chia hết cho 6 vì ta viết được 24 = 6 × 4, với thương 4 là số tự nhiên.",
           "skill": "chia-het"
         },
         {
@@ -654,7 +654,7 @@
             "50"
           ],
           "correct": 1,
-          "explanation": "35 = 7 × 5.",
+          "explanation": "Số 35 là bội của 7 vì 35 = 7 × 5; các lựa chọn còn lại không chia hết cho 7.",
           "skill": "boi"
         }
       ],
@@ -705,7 +705,7 @@
             "118"
           ],
           "correct": 1,
-          "explanation": "3 + 4 + 2 = 9.",
+          "explanation": "Tổng các chữ số của 342 là 3 + 4 + 2 = 9, chia hết cho 9 nên 342 chia hết cho 9.",
           "skill": "chia-het-9"
         },
         {
@@ -792,7 +792,7 @@
             "2² × 3"
           ],
           "correct": 1,
-          "explanation": "18 = 2 × 3 × 3.",
+          "explanation": "Ta phân tích 18 = 2 × 9 = 2 × 3 × 3 = 2 × 3²; cả 2 và 3 đều là số nguyên tố.",
           "skill": "phan-tich"
         },
         {
@@ -952,7 +952,7 @@
             "20"
           ],
           "correct": 1,
-          "explanation": "BCNN(5,10)=10.",
+          "explanation": "Hai hoạt động trùng nhau sớm nhất sau BCNN của 5 và 10 ngày, tức BCNN(5,10) = 10 ngày.",
           "skill": "bai-toan-chu-ki"
         }
       ],
@@ -1077,7 +1077,7 @@
             "14"
           ],
           "correct": 2,
-          "explanation": "−(6 + 8) = −14.",
+          "explanation": "Khi cộng hai số nguyên âm, cộng giá trị tuyệt đối rồi đặt dấu âm: −6 + (−8) = −(6 + 8) = −14.",
           "skill": "cong-cung-dau"
         },
         {
@@ -1101,7 +1101,7 @@
             "−11"
           ],
           "correct": 2,
-          "explanation": "4 + 7 = 11.",
+          "explanation": "Trừ một số âm tương đương cộng số đối của nó: 4 − (−7) = 4 + 7 = 11.",
           "skill": "tru-so-nguyen"
         }
       ],
@@ -1151,7 +1151,7 @@
             "−1"
           ],
           "correct": 0,
-          "explanation": "9 − 8 = 1.",
+          "explanation": "Tính phép cộng trong ngoặc trước: 2 + 6 = 8; sau đó 9 − 8 = 1.",
           "skill": "dau-ngoac"
         },
         {
@@ -1311,7 +1311,7 @@
             "7"
           ],
           "correct": 0,
-          "explanation": "20 = (−4) × (−5).",
+          "explanation": "Ta có 20 = (−4) × (−5), trong đó −5 là số nguyên, nên −4 là một ước của 20.",
           "skill": "uoc-so-nguyen"
         },
         {
@@ -1385,7 +1385,7 @@
             "81 cm"
           ],
           "correct": 2,
-          "explanation": "4 × 9 = 36 cm.",
+          "explanation": "Hình vuông có bốn cạnh bằng nhau; chu vi bằng 4 nhân cạnh nên 4 × 9 = 36 cm.",
           "skill": "hinh-vuong"
         },
         {
@@ -1521,7 +1521,7 @@
             "49 cm²"
           ],
           "correct": 2,
-          "explanation": "7 × 4 = 28 cm².",
+          "explanation": "Diện tích hình chữ nhật bằng chiều dài nhân chiều rộng: 7 × 4 = 28 cm².",
           "skill": "dien-tich-chu-nhat"
         },
         {
@@ -1545,7 +1545,7 @@
             "54 m²"
           ],
           "correct": 2,
-          "explanation": "9 × 3 = 27 m².",
+          "explanation": "Diện tích hình bình hành bằng độ dài đáy nhân chiều cao tương ứng: 9 × 3 = 27 m².",
           "skill": "dien-tich-binh-hanh"
         }
       ],

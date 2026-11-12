@@ -1,0 +1,56 @@
+.review-layout{display:grid;grid-template-columns:minmax(250px,310px) minmax(0,1fr);gap:16px;align-items:start}
+.review-sidebar,.review-workspace{min-width:0;background:white;border:1px solid #dce6f0;border-radius:17px;padding:19px}
+.review-sidebar{position:sticky;top:12px}
+.review-sidebar h2{font-size:19px;color:#1e466f;margin:0 0 7px}
+.review-sidebar>p{color:#687d94;font-size:12px;line-height:1.55;margin:0 0 14px}
+.review-chapter-nav{display:grid;gap:9px}
+.review-chapter-button{display:grid;gap:6px;text-align:left;padding:13px 12px;border:1px solid #d9e6f1;background:#f8fbfe;border-radius:12px;line-height:1.45;color:#315e8a;min-height:72px}
+.review-chapter-button strong{font-size:13px}
+.review-chapter-button small{font-size:11px;color:#72889f}
+.review-chapter-button.active{background:#eaf4ff;border:2px solid #2776b4}
+.review-back{display:block;margin-top:15px;border-radius:10px;text-decoration:none;font-size:12px;font-weight:800;color:#1b68a6}
+.review-workspace{display:grid;gap:13px}
+.review-heading h2{font-size:24px;margin:8px 0;color:#1f4c73}
+.review-heading p{color:#69809a;font-size:13px;line-height:1.6;margin:0}
+.review-visual-card{padding:15px;border-radius:15px;border:1px solid #d5e3f1;background:linear-gradient(130deg,#f4faff,#fff)}
+.review-visual-card h3{font-size:17px;margin:0 0 6px}
+.review-visual-card p{margin:0 0 14px;font-size:12px;color:#64809a;line-height:1.6}
+.visual-controls{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
+.visual-control{display:grid;gap:6px;flex:1 1 140px;max-width:260px;font-size:12px;font-weight:750;color:#466781}
+.visual-control select,.visual-control input{width:100%;min-height:45px;padding:9px 10px;border:1px solid #cadae9;border-radius:10px;background:#fff;color:#193d60}
+.visual-control input[type=range]{accent-color:#277ec0;padding:5px}
+.visual-canvas{border:1px solid #dbe8f5;background:#fff;border-radius:13px;padding:13px;overflow:hidden}
+.visual-canvas svg{display:block;width:100%;height:auto;max-height:290px}
+.visual-result{font-size:13px;font-weight:750;color:#1c5c96;padding:12px;background:#e6f3ff;border:1px solid #c7e1f8;border-radius:10px;margin-top:13px;line-height:1.6}
+.visual-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.visual-grid>span{min-width:0;display:flex;align-items:center;justify-content:center;font-size:11px;aspect-ratio:1;border-radius:6px;background:#f0f5f9;color:#667a8a;border:1px solid #e0e8f2}
+.visual-grid>span.multiple{background:#cbeafc;border-color:#85c2e4;color:#105c88;font-weight:850}
+.visual-grid>span.focus{box-shadow:inset 0 0 0 2px #15599d}
+.review-questions{display:grid;gap:13px;margin-top:7px}
+.review-questions h3{margin:10px 0 0;font-size:19px;color:#24557d}
+.review-questions .quiz-card{margin:0}
+.review-summary{padding:15px;background:#eef8f3;border:1px solid #b8daca;border-radius:13px}
+.review-summary strong{font-size:18px;color:#26744c}
+.review-summary p{font-size:12px;color:#496b60;line-height:1.6}
+.review-remediation{margin-top:13px;padding:13px;background:#fff;border:1px solid #d9e7ef;border-radius:10px}
+.review-remediation strong{display:block;margin-bottom:9px;font-size:13px;color:#24537b}
+.review-remediation a{display:block;margin:6px 0;font-size:13px;color:#2b70a4;text-decoration:none}
+.review-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.review-actions button{min-height:47px;border:1px solid #cedfeb;border-radius:11px;background:#f6faff;padding:10px 16px;color:#1c5e93;font-weight:800}
+.review-actions button.primary{background:#376bc3;color:#fff;border-color:#376bc3}
+.review-empty{padding:24px;color:#9d3d35;background:#fff2f0;border:1px solid #e4bdb3;border-radius:13px;font-size:13px;line-height:1.6}
+.review-note{font-size:11px;color:#798fa5;line-height:1.6}
+@media(max-width:930px){
+.review-layout{grid-template-columns:1fr}
+.review-sidebar{position:static}
+.review-chapter-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+.review-sidebar,.review-workspace{padding:13px}
+.review-chapter-nav{grid-template-columns:1fr}
+.visual-grid{gap:2px}
+.visual-grid>span{font-size:10px}
+.visual-controls{display:grid}
+.visual-control{max-width:none}
+.review-actions button{flex:1}
+}

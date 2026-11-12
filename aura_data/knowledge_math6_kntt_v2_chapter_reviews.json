@@ -1,0 +1,592 @@
+{
+  "schemaVersion": 1,
+  "libraryId": "AURA-KNTT6-MATH-VOLUME1-CHAPTER-REVIEW",
+  "parentLibraryId": "AURA-KNTT6-MATH-VOLUME1",
+  "subject": "TOAN",
+  "grade": 6,
+  "volume": 1,
+  "provenance": "AURA_ORIGINAL_PRACTICE_NOT_TEXTBOOK_COPY",
+  "status": "DRAFT_NEEDS_PEDAGOGICAL_REVIEW",
+  "teacherApproved": false,
+  "questionBankPromotionEnabled": false,
+  "weaknessMapWriteEnabled": false,
+  "coveragePolicy": "Every one of 22 lesson numbers is targeted by at least one chapter-review item; 30 original questions across 5 chapters",
+  "chapters": [
+    {
+      "number": 1,
+      "title": "Ôn tập cuối chương I · Tập hợp các số tự nhiên",
+      "learningGoal": "Tổng hợp tập hợp, hàng số, thứ tự, các phép tính và lũy thừa.",
+      "questions": [
+        {
+          "id": "C1-01",
+          "sourceLessons": [
+            1
+          ],
+          "prompt": "Tập hợp các số tự nhiên chẵn nhỏ hơn 7 là tập hợp nào?",
+          "choices": [
+            "{2; 4; 6}",
+            "{0; 2; 4; 6}",
+            "{0; 2; 4; 6; 8}",
+            "{1; 3; 5}"
+          ],
+          "correct": 1,
+          "explanation": "Số tự nhiên gồm 0; các số chẵn nhỏ hơn 7 là 0, 2, 4, 6.",
+          "skill": "tap-hop",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C1-02",
+          "sourceLessons": [
+            2
+          ],
+          "prompt": "Trong số 1 425, chữ số 4 có giá trị bao nhiêu?",
+          "choices": [
+            "4",
+            "40",
+            "400",
+            "4 000"
+          ],
+          "correct": 2,
+          "explanation": "Chữ số 4 nằm ở hàng trăm nên có giá trị 400.",
+          "skill": "gia-tri-chu-so",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C1-03",
+          "sourceLessons": [
+            3
+          ],
+          "prompt": "Cách so sánh nào đúng?",
+          "choices": [
+            "1 280 < 1 208",
+            "1 280 = 1 208",
+            "1 280 > 1 208",
+            "Không so sánh được"
+          ],
+          "correct": 2,
+          "explanation": "Hai số có bốn chữ số, hàng chục lần lượt là 8 và 0, nên 1 280 lớn hơn.",
+          "skill": "thu-tu-so",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C1-04",
+          "sourceLessons": [
+            4
+          ],
+          "prompt": "Tính 185 + 115 − 48.",
+          "choices": [
+            "252",
+            "248",
+            "300",
+            "348"
+          ],
+          "correct": 0,
+          "explanation": "185 + 115 = 300, sau đó 300 − 48 = 252.",
+          "skill": "cong-tru",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C1-05",
+          "sourceLessons": [
+            5
+          ],
+          "prompt": "43 : 6 có thương và số dư là bao nhiêu?",
+          "choices": [
+            "7 dư 1",
+            "6 dư 7",
+            "7 dư 2",
+            "8 dư 1"
+          ],
+          "correct": 0,
+          "explanation": "43 = 6 × 7 + 1 và 1 nhỏ hơn 6.",
+          "skill": "chia-co-du",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C1-06",
+          "sourceLessons": [
+            6,
+            7
+          ],
+          "prompt": "Tính 2³ × 2² + 1.",
+          "choices": [
+            "17",
+            "25",
+            "33",
+            "65"
+          ],
+          "correct": 2,
+          "explanation": "Nhân hai lũy thừa cùng cơ số: 2^(3+2) = 32, rồi cộng 1 được 33.",
+          "skill": "luy-thua-va-thu-tu",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Ôn tập cuối chương II · Tính chia hết",
+      "learningGoal": "Dùng dấu hiệu chia hết, số nguyên tố và ƯCLN–BCNN trong tình huống mới.",
+      "questions": [
+        {
+          "id": "C2-01",
+          "sourceLessons": [
+            8
+          ],
+          "prompt": "Vì 36 và 54 đều chia hết cho 9, tổng 36 + 54 có tính chất nào?",
+          "choices": [
+            "Không chia hết cho 9",
+            "Chia hết cho 9",
+            "Chỉ chia hết cho 4",
+            "Là số nguyên tố"
+          ],
+          "correct": 1,
+          "explanation": "Tổng hai số cùng chia hết cho 9 cũng chia hết cho 9; 36 + 54 = 90.",
+          "skill": "tong-chia-het",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C2-02",
+          "sourceLessons": [
+            9
+          ],
+          "prompt": "Số nào chia hết cho cả 3 và 5?",
+          "choices": [
+            "105",
+            "112",
+            "136",
+            "142"
+          ],
+          "correct": 0,
+          "explanation": "105 tận cùng bằng 5 và tổng chữ số 1+0+5 = 6 chia hết cho 3.",
+          "skill": "dau-hieu-chia-het",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C2-03",
+          "sourceLessons": [
+            10
+          ],
+          "prompt": "Trong các số sau, số nào là số nguyên tố?",
+          "choices": [
+            "21",
+            "27",
+            "29",
+            "33"
+          ],
+          "correct": 2,
+          "explanation": "29 chỉ có hai ước dương là 1 và 29; các số còn lại chia hết cho 3.",
+          "skill": "so-nguyen-to",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C2-04",
+          "sourceLessons": [
+            10
+          ],
+          "prompt": "Phân tích 90 thành tích các thừa số nguyên tố là gì?",
+          "choices": [
+            "2 × 3² × 5",
+            "2² × 3 × 5",
+            "3 × 5²",
+            "2 × 3 × 15"
+          ],
+          "correct": 0,
+          "explanation": "90 = 9 × 10 = 3² × 2 × 5.",
+          "skill": "phan-tich-thua-so",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C2-05",
+          "sourceLessons": [
+            11
+          ],
+          "prompt": "ƯCLN của 36 và 60 bằng bao nhiêu?",
+          "choices": [
+            "6",
+            "12",
+            "18",
+            "24"
+          ],
+          "correct": 1,
+          "explanation": "36 = 2² × 3², 60 = 2² × 3 × 5; phần chung lớn nhất là 2² × 3 = 12.",
+          "skill": "ucln",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C2-06",
+          "sourceLessons": [
+            12
+          ],
+          "prompt": "BCNN của 8 và 12 bằng bao nhiêu?",
+          "choices": [
+            "4",
+            "12",
+            "24",
+            "48"
+          ],
+          "correct": 2,
+          "explanation": "8 = 2³, 12 = 2² × 3; lấy mũ cao nhất được 2³ × 3 = 24.",
+          "skill": "bcnn",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Ôn tập cuối chương III · Số nguyên",
+      "learningGoal": "So sánh số nguyên và làm chủ phép cộng, trừ, nhân, chia, dấu ngoặc.",
+      "questions": [
+        {
+          "id": "C3-01",
+          "sourceLessons": [
+            13
+          ],
+          "prompt": "Trong các số nguyên sau, số nào nhỏ nhất?",
+          "choices": [
+            "−2",
+            "−6",
+            "0",
+            "5"
+          ],
+          "correct": 1,
+          "explanation": "Số −6 ở bên trái −2, 0 và 5 trên trục số.",
+          "skill": "so-sanh-nguyen",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C3-02",
+          "sourceLessons": [
+            13
+          ],
+          "prompt": "Giá trị tuyệt đối của −11 bằng bao nhiêu?",
+          "choices": [
+            "−11",
+            "0",
+            "11",
+            "22"
+          ],
+          "correct": 2,
+          "explanation": "Khoảng cách từ −11 đến 0 trên trục số là 11 đơn vị.",
+          "skill": "gia-tri-tuyet-doi",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C3-03",
+          "sourceLessons": [
+            14
+          ],
+          "prompt": "Tính −14 + 9.",
+          "choices": [
+            "−23",
+            "−5",
+            "5",
+            "23"
+          ],
+          "correct": 1,
+          "explanation": "14 lớn hơn 9, nên hiệu 14−9=5 mang dấu âm.",
+          "skill": "cong-nguyen",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C3-04",
+          "sourceLessons": [
+            15
+          ],
+          "prompt": "Tính 7 − (3 − 9).",
+          "choices": [
+            "1",
+            "7",
+            "13",
+            "−5"
+          ],
+          "correct": 2,
+          "explanation": "Trong ngoặc 3 − 9 = −6, do đó 7 − (−6) = 13.",
+          "skill": "dau-ngoac",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C3-05",
+          "sourceLessons": [
+            16
+          ],
+          "prompt": "Tính (−4) × (−6) × (−2).",
+          "choices": [
+            "−48",
+            "48",
+            "−12",
+            "12"
+          ],
+          "correct": 0,
+          "explanation": "Hai số âm nhân nhau thành 24, nhân thêm −2 được −48.",
+          "skill": "nhan-nguyen",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C3-06",
+          "sourceLessons": [
+            17
+          ],
+          "prompt": "Tính (−54) : 9.",
+          "choices": [
+            "−9",
+            "−6",
+            "6",
+            "9"
+          ],
+          "correct": 1,
+          "explanation": "Khác dấu nên thương âm, 54 : 9 = 6.",
+          "skill": "chia-nguyen",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Ôn tập cuối chương IV · Hình phẳng",
+      "learningGoal": "Nhận dạng hình quen thuộc và vận dụng chu vi–diện tích có đơn vị.",
+      "questions": [
+        {
+          "id": "C4-01",
+          "sourceLessons": [
+            18
+          ],
+          "prompt": "Hình vuông có cạnh 8 cm thì chu vi bằng bao nhiêu?",
+          "choices": [
+            "16 cm",
+            "24 cm",
+            "32 cm",
+            "64 cm"
+          ],
+          "correct": 2,
+          "explanation": "Chu vi hình vuông bằng 4 × 8 = 32 cm.",
+          "skill": "chu-vi-vuong",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C4-02",
+          "sourceLessons": [
+            18
+          ],
+          "prompt": "Tam giác đều có mấy cạnh bằng nhau?",
+          "choices": [
+            "2",
+            "3",
+            "4",
+            "6"
+          ],
+          "correct": 1,
+          "explanation": "Ba cạnh của tam giác đều có cùng độ dài.",
+          "skill": "tam-giac-deu",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C4-03",
+          "sourceLessons": [
+            19
+          ],
+          "prompt": "Hình thoi có tính chất nào luôn đúng?",
+          "choices": [
+            "Bốn góc vuông",
+            "Bốn cạnh bằng nhau",
+            "Hai đường chéo bằng nhau",
+            "Chỉ có một cặp cạnh đối song song"
+          ],
+          "correct": 1,
+          "explanation": "Hình thoi có bốn cạnh bằng nhau; không nhất thiết có bốn góc vuông.",
+          "skill": "hinh-thoi",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C4-04",
+          "sourceLessons": [
+            19
+          ],
+          "prompt": "Hình bình hành có hai cạnh kề dài 7 cm và 9 cm. Chu vi bằng bao nhiêu?",
+          "choices": [
+            "16 cm",
+            "25 cm",
+            "32 cm",
+            "63 cm"
+          ],
+          "correct": 2,
+          "explanation": "P = 2 × (7 + 9) = 32 cm.",
+          "skill": "chu-vi-binh-hanh",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C4-05",
+          "sourceLessons": [
+            20
+          ],
+          "prompt": "Hình thang có hai đáy 10 cm, 14 cm và chiều cao 6 cm. Diện tích bằng bao nhiêu?",
+          "choices": [
+            "36 cm²",
+            "60 cm²",
+            "72 cm²",
+            "144 cm²"
+          ],
+          "correct": 2,
+          "explanation": "S = (10 + 14) × 6 : 2 = 72 cm².",
+          "skill": "dien-tich-thang",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C4-06",
+          "sourceLessons": [
+            20
+          ],
+          "prompt": "Hình thoi có hai đường chéo dài 8 cm và 12 cm. Diện tích bằng bao nhiêu?",
+          "choices": [
+            "20 cm²",
+            "48 cm²",
+            "96 cm²",
+            "192 cm²"
+          ],
+          "correct": 1,
+          "explanation": "S = 8 × 12 : 2 = 48 cm².",
+          "skill": "dien-tich-thoi",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Ôn tập cuối chương V · Tính đối xứng",
+      "learningGoal": "Nhận biết trục và tâm đối xứng của các hình phổ biến.",
+      "questions": [
+        {
+          "id": "C5-01",
+          "sourceLessons": [
+            21
+          ],
+          "prompt": "Hình vuông có bao nhiêu trục đối xứng?",
+          "choices": [
+            "1",
+            "2",
+            "4",
+            "6"
+          ],
+          "correct": 2,
+          "explanation": "Hai trục qua trung điểm các cạnh đối diện và hai đường chéo.",
+          "skill": "truc-doi-xung",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C5-02",
+          "sourceLessons": [
+            21
+          ],
+          "prompt": "Hình chữ nhật không phải hình vuông có bao nhiêu trục đối xứng?",
+          "choices": [
+            "0",
+            "1",
+            "2",
+            "4"
+          ],
+          "correct": 2,
+          "explanation": "Hai trục đi qua trung điểm các cặp cạnh đối diện.",
+          "skill": "truc-chu-nhat",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C5-03",
+          "sourceLessons": [
+            21
+          ],
+          "prompt": "Tam giác đều có bao nhiêu trục đối xứng?",
+          "choices": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "correct": 2,
+          "explanation": "Mỗi đỉnh và trung điểm cạnh đối diện xác định một trục đối xứng.",
+          "skill": "truc-tam-giac",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C5-04",
+          "sourceLessons": [
+            22
+          ],
+          "prompt": "Tâm đối xứng của hình bình hành là điểm nào?",
+          "choices": [
+            "Một đỉnh",
+            "Trung điểm cạnh dài",
+            "Giao điểm hai đường chéo",
+            "Tâm của đường tròn ngoại tiếp bất kỳ"
+          ],
+          "correct": 2,
+          "explanation": "Hai đường chéo hình bình hành cắt nhau tại trung điểm mỗi đường.",
+          "skill": "tam-binh-hanh",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C5-05",
+          "sourceLessons": [
+            22
+          ],
+          "prompt": "Hình nào sau đây không có tâm đối xứng?",
+          "choices": [
+            "Hình vuông",
+            "Hình bình hành",
+            "Hình chữ nhật",
+            "Tam giác đều"
+          ],
+          "correct": 3,
+          "explanation": "Tam giác đều không trùng chính nó sau phép quay 180°.",
+          "skill": "khong-co-tam",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        },
+        {
+          "id": "C5-06",
+          "sourceLessons": [
+            22
+          ],
+          "prompt": "Quay hình vuông 180° quanh giao điểm hai đường chéo, điều gì xảy ra?",
+          "choices": [
+            "Hình trùng chính nó",
+            "Hình biến thành tam giác",
+            "Hình có cạnh dài gấp đôi",
+            "Hình mất tính đối xứng"
+          ],
+          "correct": 0,
+          "explanation": "Giao hai đường chéo là tâm đối xứng của hình vuông, quay 180° trùng vị trí ban đầu.",
+          "skill": "quay-doi-xung",
+          "requiresPedagogicalReview": true,
+          "eligibleForQuestionBank": false
+        }
+      ]
+    }
+  ]
+}
