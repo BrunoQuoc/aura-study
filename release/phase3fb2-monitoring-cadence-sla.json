@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "project": "AURA STUDY",
+  "environment": "STAGING",
+  "scope": "Phase 3F-B2",
+  "status": "DRAFT_NOT_APPROVED",
+  "mode": "MANUAL_READ_ONLY_PROPOSED",
+  "automation_enabled": false,
+  "timezone": "Asia/Ho_Chi_Minh",
+  "cadence": {
+    "local_time": "09:00",
+    "days": "DAILY_INCLUDING_WEEKENDS_PROPOSED",
+    "primary_github": "BrunoQuoc",
+    "backup_github": "Sonic-2015",
+    "review_window_minutes": 30,
+    "missed_primary_handoff_after_minutes": 15,
+    "missed_both_escalation_after_minutes": 30,
+    "review_frequency_approved": false,
+    "no_24x7_coverage": true
+  },
+  "signal_sources": [
+    "Supabase Auth logs: rolling 24h aggregate counts, captcha_failed, signup/OTP failures, observed 429 and 5xx",
+    "Read-only STAGING user/device/session and learning-event count cross-check; exclude credentials and learner records",
+    "GitHub Issue #12 monitoring tracker and sanitized incident Issues"
+  ],
+  "response_targets_draft": {
+    "P0": {
+      "acknowledge_within_minutes_after_detection": 15,
+      "decision_within_minutes_after_detection": 30,
+      "response": "STOP STAGING security tests, preserve sanitized aggregates, escalate to Primary and Backup; no destructive change"
+    },
+    "P1": {
+      "acknowledge_within_minutes_after_detection": 60,
+      "triage_within_minutes_after_detection": 120,
+      "response": "Freeze affected test path; read-only inspect; owner and reviewer approve containment"
+    },
+    "P2": {
+      "acknowledge_within_minutes_after_detection": 240,
+      "triage_within_minutes_after_detection": 1440,
+      "response": "Compare Auth aggregate baseline and investigate; no unbounded load/retries"
+    }
+  },
+  "response_time_origin": "From actual human detection or confirmed alert receipt DURING AGREED COVERAGE, not onset of an undetected event",
+  "service_level_classification": "DRAFT_RESPONSE_TARGETS_NOT_AN_ENFORCED_OR_24_7_SLA",
+  "missed_review_rule": "At 09:15 if Primary has not posted a sanitized daily review, Backup follows up; at 09:30 log a missed review and pause any high-risk STAGING security test pending human approval. No automatic follow-up is enabled.",
+  "approval": {
+    "primary_cadence_ack_comment_url": null,
+    "backup_cadence_ack_comment_url": null,
+    "independent_policy_signoff_comment_url": null,
+    "accepted_by_primary": false,
+    "accepted_by_backup": false,
+    "independent_reviewer_approved": false,
+    "approved": false,
+    "approved_at_utc": null,
+    "effective_from_local_date": null,
+    "review_due_local_date": null
+  },
+  "exercise": {
+    "first_real_manual_check_completed": false,
+    "first_real_manual_check_issue_comment_url": null,
+    "missed_review_handoff_tabletop_completed": false,
+    "missed_review_handoff_evidence_url": null
+  },
+  "exceptions": {
+    "time_bounded_manual_monitoring_exception_approved": false,
+    "expires_at_utc": null,
+    "reason": null,
+    "reviewer_approval_url": null
+  },
+  "release": {
+    "live_supabase_alerting_verified": false,
+    "production_release_approved": false
+  }
+}
