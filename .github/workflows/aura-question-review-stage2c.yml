@@ -1,0 +1,76 @@
+name: AURA Question Bank Stage 2C QA
+
+on:
+  pull_request:
+    paths:
+      - 'admin-question-review.html'
+      - 'admin_question_review_core.js'
+      - 'admin_question_review_ui.js'
+      - 'admin_question_review.css'
+      - 'admin_drive_source_ui.js'
+      - 'admin-direct.html'
+      - 'scripts/build-question-review-packet.py'
+      - 'tests/question-review-stage2c.test.mjs'
+      - 'tests/test_question_packet_stage2c.py'
+      - 'tests/question-review-browser.mjs'
+      - 'docs/question-content-review-stage2c.md'
+      - '.github/workflows/aura-question-review-stage2c.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  question-review-safety:
+    name: Answer, image, rubric & source integrity gate (synthetic)
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Syntax and fail-closed review gate
+        run: |
+          node --check admin_question_review_core.js
+          node --check admin_question_review_ui.js
+          python -m py_compile scripts/build-question-review-packet.py
+          node --test tests/question-review-stage2c.test.mjs
+          python -m unittest discover -s tests -p test_question_packet_stage2c.py -v
+      - name: No real source files or publish endpoint in QA
+        run: |
+          test -f .gitignore
+          grep -q '^\.aura_private/$' .gitignore
+          ! grep -E '(auraApproveInboxFile|aura_inbox_queue_v1|fetch\()' admin_question_review_ui.js
+
+  question-review-browser:
+    name: iPad, phone & desktop Chromium (isolated private test packet)
+    needs: question-review-safety
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium Playwright
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test local page (no Google, Github API or source files)
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/aura-question-review-http.log 2>&1 &
+          sleep 2
+          node tests/question-review-browser.mjs
+      - name: Retain screenshots (synthetic only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aura-stage2c-local-review-ui
+          path: test-results/question-review-stage2c
+          retention-days: 7
+
+# Real DOCX and images stay private. CI uses only generated synthetic questions.
