@@ -19,11 +19,11 @@
 | Student direct page assets | **STATIC PASS**: 46 local asset references checked against repository tree; 0 missing |
 | Admin direct page assets | **STATIC PASS**: 60 local asset references checked; 0 missing |
 | Math exam draft, MC auto-grade, persistence, history | **SYNTHETIC VM SAMPLE PASS**: 5/10 on 2 eligible questions; missing-image question excluded; essay draft preserved |
-| Wrong-answer notebook / retry | **STATIC WIRING CHECKED**: `learner_tools.js` defines recording and retry; `aura_pro_2026.js` dynamically loads `exam_timer.js`, whose grade wrapper calls the recorder. Browser integration is **PENDING** |
+| Wrong-answer notebook / retry | **SYNTHETIC CHROMIUM PASS**: a wrong Math answer appeared in the notebook and retry screen via the loaded `exam_timer.js` recording hook. Manual iPad check remains PENDING |
 | Generated practice / weakness map | **CODE EXISTS**: `generator.js`, `smart_engine.js`, `exam_year_flow.js`, `multisubject_results.js`; actual browser journey **PENDING** |
-| Multi-student local PIN flow, profile separation | **CODE EXISTS**: `local_accounts_v3.js`; two-account browser test **PENDING**. No server-side identity/authorization |
-| Backup/restore | **OFFLINE TEST ADDED**: `tests/mvp-family-flow.test.mjs` simulates export/import of synthetic attempt, essay draft, wrong book and local profile; manual browser round-trip **PENDING** |
-| Documentation alignment | README previously claimed no login; candidate PR explains optional per-browser Student PIN and unauthenticated Admin |
+| Multi-student local PIN flow, profile separation | **SYNTHETIC CHROMIUM PASS**: two local accounts, wrong-PIN rejection, separate histories and return to the first profile. No server-side identity/authorization |
+| Backup/restore | **SYNTHETIC VM + CHROMIUM PASS**: actual browser download and restore into a fresh isolated Chromium context preserved synthetic attempts and profiles. Manual iPad/file handling is PENDING |
+| Documentation alignment | **DRAFT PR UPDATED**: README explains local Student PIN and unauthenticated Admin, pending merge |
 | Mobile/iPad experience | **MANUAL REAL-DEVICE TEST PENDING** (responsive screenshots and touch navigation not certified) |
 
 ### Source chain clarified
@@ -77,3 +77,16 @@ Do **not** treat lack of a literal `<script src="exam_timer.js">` in `student-di
 - This acceptance sheet: operator steps and status ledger.
 
 **Next operational work:** review CI run and execute isolated browser checklist. Do not declare the 12-step browser matrix PASS from source inspection alone.
+
+
+## 7. Actual CI verification — 2026-11-12
+
+**GitHub Actions verified (PR #14):**
+- [Completed successful run](https://github.com/BrunoQuoc/aura-study/actions/runs/43170974789) includes **offline Node 7/7 PASS** and **Chromium localhost synthetic browser journey PASS**.
+- Browser tested: Admin creates two *synthetic local accounts*, wrong PIN rejected, valid Student login works, existing GK1 Math exam renders; an answer and essay draft survive reload; grade/attempt saved; wrong-answer notebook and retry screen open; second profile has no first-profile result; switching back restores first profile; Admin JSON backup downloads and restores in another fresh Chromium browser context.
+- The first attempts to automate a click on a visually styled radio and to open the exam immediately before dynamic scripts initialized failed due to **test timing / interaction assumptions**. Test harness was changed to wait for dynamic modules and call the radio click/change path. The final **complete run passed** without modifying shipped app HTML/JS.
+- Network restricted to `http://127.0.0.1:8765`; all third-party requests blocked, no Supabase Auth/Google Drive events, no real student identities, no modifications to family browser data.
+
+**Acceptance interpretation:** `FAMILY_MVP_SOURCE_QA=PASS`, `FAMILY_MVP_SYNTHETIC_CHROMIUM_QA=PASS`; these do **not** mean manual iPad/touch UI, real file downloads on Safari, cross-device sync or sensitive Admin security are ready.
+
+**Remaining before closing trusted-family usability QA:** run the actual 12-step manual scenario in an isolated real-device session, inspect unsupported subjects, exam generator completeness, accessibility/touch behavior, and make a backup/restore copy outside the test browser. **Production server-centric release stays 3 STAGING_PASS / 11 OPEN / NO-GO**.
