@@ -8,7 +8,7 @@
   "backup_reviewer_github": "Sonic-2015",
   "owner_acceptance": true,
   "backup_acceptance": true,
-  "review_cadence": "PROPOSED_DAILY_NOT_APPROVED",
+  "review_cadence": "PROPOSED_DAILY_09_00_VN_NOT_APPROVED",
   "incident_intake": {
     "provider": "GitHub Issues",
     "tracker": "https://github.com/BrunoQuoc/aura-study/issues/12",
@@ -50,7 +50,7 @@
   "primary_owner_candidate_github": "BrunoQuoc",
   "primary_owner_candidate_status": "GITHUB_SELF_ACK_VERIFIED",
   "primary_owner_candidate_source": "Connected GitHub account; not a consent or incident-duty assignment",
-  "ownership_receipt_gate": "OPEN_REVIEW_CADENCE_AND_INDEPENDENT_APPROVAL",
+  "ownership_receipt_gate": "OPEN_CADENCE_AND_INDEPENDENT_REVIEW",
   "ack_protocol_document": "docs/staging-auth-ownership-alert-receipt-phase3fb2.md",
   "ack_required_from_distinct_accounts": true,
   "notification_delivery_evidence": {
@@ -92,5 +92,11 @@
   "backup_reviewer_ack_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6812366506",
   "backup_reviewer_preferred_channel": "GitHub Inbox",
   "backup_reviewer_ack_evidence": "GitHub issue comment verified with author Sonic-2015, not merely a delegated comment",
-  "ownership_acceptance_status": "BOTH_ROLES_ACK_VERIFIED"
+  "ownership_acceptance_status": "BOTH_ROLES_ACK_VERIFIED",
+  "monitoring_cadence_sla_policy": "release/phase3fb2-monitoring-cadence-sla.json",
+  "monitoring_cadence_sla_runbook": "docs/staging-auth-monitoring-cadence-sla-phase3fb2.md",
+  "monitoring_cadence_sla_status": "DRAFT_PENDING_BOTH_OWNER_ACKS_AND_REAL_CHECK",
+  "monitoring_cadence_sla_approved": false,
+  "monitoring_cadence_sla_approval_comment_url": null,
+  "review_cadence_approval_received": false
 }
