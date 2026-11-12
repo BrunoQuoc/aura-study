@@ -1,0 +1,81 @@
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#173250;background:#f0f5fa;font-synthesis:none}
+*{box-sizing:border-box}
+body{margin:0}
+button,input,textarea,select{font:inherit}
+button{min-height:45px;cursor:pointer;touch-action:manipulation}
+button:disabled{cursor:not-allowed;opacity:.5}
+a{color:#1d5d9e}
+.qa-shell{max-width:1390px;margin:auto;padding:22px 18px 70px}
+.qa-head{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:26px 28px;background:linear-gradient(125deg,#153b66,#2d689e);color:#fff;border-radius:22px}
+.eyebrow{font-size:11px;color:#c5dbf6;font-weight:900;letter-spacing:.13em}
+.qa-head h1{font-size:clamp(23px,3vw,32px);margin:6px 0 8px}
+.qa-head p{font-size:13px;line-height:1.6;color:#e3eefb;max-width:780px;margin:0}
+.qa-back{color:#fff;font-weight:700;background:#ffffff24;border:1px solid #ffffff4a;border-radius:12px;text-decoration:none;padding:12px 15px;white-space:nowrap}
+.qa-warning{padding:15px 19px;border-radius:14px;background:#fff8eb;border:1px solid #ebd6aa;margin:16px 0;font-size:13px;line-height:1.7;color:#70562e}
+.qa-import,.qa-panel,.qa-export{background:#fff;border:1px solid #d8e5f1;border-radius:18px;padding:20px}
+.qa-import h2,.qa-export h2{font-size:18px;margin:0 0 8px}
+.qa-import p,.qa-export p{margin:0 0 14px;font-size:12px;color:#647a91;line-height:1.7}
+.qa-import-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.qa-import-grid label,.qa-panel label{font-size:13px;font-weight:650;color:#3c5672;display:grid;gap:7px}
+.qa-file{background:#f6f9fd;padding:13px;border-radius:12px;border:1px solid #dfe8f2}
+.qa-file input{max-width:100%;font-size:13px}
+.qa-message{padding:9px 13px;background:#eef5fc;border-radius:9px;color:#305d87!important;margin:12px 0 0!important}
+.qa-message.is-error{background:#fff1ef;color:#a13b32!important}
+.qa-content{margin-top:16px}
+.qa-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.qa-summary>div{background:#fff;border:1px solid #d8e5f1;border-radius:15px;padding:15px}
+.qa-summary span{font-size:12px;color:#6d8095;display:block}.qa-summary strong{font-size:26px;color:#255c91}
+.qa-layout{display:grid;grid-template-columns:minmax(265px,335px) minmax(0,1fr);align-items:start;gap:16px}
+.qa-list-panel{position:sticky;top:12px;max-height:95vh;display:grid;gap:11px;overflow:auto}
+.qa-list-title{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.qa-list-title h2,.qa-detail-panel h2{font-size:18px;margin:0}
+.qa-list-title span{font-size:12px;color:#607d97}
+.qa-list-panel select{padding:10px;border:1px solid #cfdae5;border-radius:11px;background:#fff;color:#183d66;width:100%}
+.qa-question-list{display:grid;gap:7px;max-height:67vh;overflow:auto}
+.qa-qitem{min-height:60px;border:1px solid #dce6ef;border-radius:12px;padding:10px 12px;text-align:left;background:#f8fafc;color:#274966;display:grid;gap:5px}
+.qa-qitem.active{background:#eaf3fc;border-color:#2674bb;border-width:2px}
+.qa-qitem strong{font-size:12px;overflow-wrap:anywhere}
+.qa-qitem small{font-size:11px;color:#687c92}
+.qa-qitem.issue{border-left:4px solid #d0943c}
+.qa-qitem.done{border-left:4px solid #29845f}
+.qa-detail-panel{min-width:0}
+.qa-source{color:#6f8194;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.qa-question-body{border-radius:14px;border:1px solid #dce6f0;background:#f7fafc;padding:15px;display:grid;gap:10px}
+.qa-para{white-space:pre-wrap;margin:0;font-size:14px;line-height:1.65;overflow-wrap:anywhere}
+.qa-options{display:grid;gap:8px}
+.qa-option{padding:8px 11px;border:1px solid #e2e9f0;background:#fff;border-radius:9px;font-size:13px;line-height:1.5}
+.qa-image{margin:0;border:1px solid #e1e7ed;border-radius:12px;background:white;padding:10px}
+.qa-image img{display:block;width:auto;max-width:100%;max-height:490px;object-fit:contain;margin:auto}
+.qa-image figcaption{font-size:11px;color:#688199;margin-top:7px;overflow-wrap:anywhere}
+#qaReviewForm{display:grid;gap:12px;margin-top:16px}
+fieldset{border:1px solid #dce6ee;padding:16px;border-radius:12px;display:grid;gap:12px;min-width:0}
+legend{padding:0 8px;font-weight:750;color:#23527d;font-size:14px}
+fieldset p.qa-caption{font-size:12px;color:#6c7c8b;margin:0}
+fieldset textarea,fieldset input:not([type=checkbox]),#qaReviewForm>label textarea,#qaAnswerInput select,#qaAnswerInput textarea{
+ width:100%;border:1px solid #ccdae7;border-radius:9px;background:#fff;color:#173452;
+ padding:11px;min-height:44px
+}
+fieldset textarea,#qaReviewForm>label textarea,#qaAnswerInput textarea{resize:vertical;line-height:1.55;min-height:70px}
+.qa-grid-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+#qaReviewForm .qa-check{display:flex;align-items:flex-start;gap:9px;font-weight:550;background:#f5f9fd;padding:9px;border-radius:10px;line-height:1.5}
+.qa-check input{width:18px;height:18px;margin:2px 0 0;flex:0 0 18px;accent-color:#2467aa}
+.qa-flag-row{display:grid;gap:6px;padding:9px;background:#fff7f2;border:1px solid #ecd5c3;border-radius:10px}
+.qa-flag-row b{font-size:12px;color:#8b4b25;overflow-wrap:anywhere}
+.qa-gate{padding:13px 14px;border-radius:11px;background:#fff6ed;border:1px solid #e9d5bb;color:#7f4c27;line-height:1.6;font-size:12px}
+.qa-gate.done{background:#ecf8f1;color:#245f45;border-color:#b5d8c6}
+.qa-gate ul{margin:6px 0 0;padding-left:20px}
+.qa-actions{display:flex;gap:9px;justify-content:space-between;flex-wrap:wrap}
+.qa-actions button,.qa-export button{padding:10px 18px;border:1px solid #bcd3e8;border-radius:11px;color:#25547f;background:#fff;font-weight:750}
+.qa-actions button.primary,.qa-export button.primary{color:#fff;background:#3e66d6;border-color:#3e66d6}
+.qa-export{margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.qa-export p{margin:0;max-width:850px}
+:focus-visible{outline:3px solid #268cd8!important;outline-offset:2px}
+@media(max-width:900px){
+.qa-layout{grid-template-columns:1fr}.qa-list-panel{position:static;max-height:none}.qa-question-list{max-height:250px;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+.qa-shell{padding:10px 8px 38px}.qa-head{padding:19px 16px;display:grid}.qa-back{width:max-content}
+.qa-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.qa-import-grid,.qa-grid-two{grid-template-columns:1fr}
+.qa-import,.qa-panel,.qa-export{padding:14px}.qa-question-list{grid-template-columns:1fr}
+.qa-export{display:grid}.qa-export button{width:100%}
+}
