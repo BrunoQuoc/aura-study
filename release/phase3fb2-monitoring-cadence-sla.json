@@ -82,7 +82,7 @@
     "primary_daily_review_issue_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814311117",
     "backup_snapshot_review_attested": true,
     "backup_snapshot_review_issue_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6814290472",
-    "auth_log_coverage_status": "NO_AUTH_OR_EDGE_ROWS_IN_LATEST_24H_WINDOW_INCOMPLETE_VISIBILITY",
+    "auth_log_coverage_status": "EDGE_LOGS_PRESENT_5_AUTH_LOGS_ABSENT_OPERATOR_SCREENSHOT_2026_11_12",
     "auth_log_coverage_review_required": true,
     "snapshot_review_ack_scope": "Both users posted self-authored short-form ACKs in Issue #12; this records review self-attestation only, without substantive analysis or independent verification of log telemetry coverage.",
     "snapshot_review_content_detail": "KEYWORD_ONLY_ACK_NO_METRIC_OR_LOG_COVERAGE_COMMENTARY",
@@ -109,6 +109,34 @@
       "actual_postgres_snapshot_utc": null,
       "auth_log_coverage_verified": false,
       "scope": "Manual authorized STAGING queries only; not an automation or performance SLA"
+    },
+    "auth_log_source_coverage_screenshot_evidence": {
+      "source": "User-supplied Supabase STAGING Logs Explorer screenshots in AURA STUDY chat (not externally hosted)",
+      "environment": "STAGING",
+      "date": "2026-11-12",
+      "issue_note_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6815264719",
+      "edge_logs": 5,
+      "auth_logs_observed": false,
+      "sources": {
+        "postgrest_logs": 15,
+        "pgbouncer_logs": 10,
+        "postgres_logs": 6,
+        "edge_logs": 5,
+        "realtime_logs": 4,
+        "storage_logs": 1
+      },
+      "auth_edge_aggregate": {
+        "log_rows": 5,
+        "captcha_failed": 0,
+        "auth_service_429": 0,
+        "auth_edge_429": 0,
+        "auth_edge_5xx": 0,
+        "otp_http_400": 0,
+        "signup_http_400": 0
+      },
+      "auth_edge_first_log_ts": "2026-11-12T04:31:57.791000",
+      "auth_edge_last_log_ts": "2026-11-12T04:32:03.981000",
+      "interpretation": "Edge logs present but no auth_logs observed; only narrow request sample with health/readiness checks, therefore Auth coverage/health and alerting not verified"
     }
   },
   "exceptions": {
