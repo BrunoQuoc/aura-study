@@ -1,12 +1,12 @@
 # AURA STUDY — Phase 3F-B2: Ownership & Alert Receipt
 
 **Environment:** STAGING ONLY. **Date:** 2026-11-06. **Production:** NO-GO.
-**Status:** ownership candidate nominated; neither owner nor backup has accepted; actual recipient delivery and human acknowledgement are NOT VERIFIED.
+**Current status (2026-11-12):** both Primary and Backup have individually accepted; reciprocal GitHub Inbox notification recipient self-ACKs are verified 2/2. Independent governance reviewer approval, monitoring cadence/SLA, live Supabase alerts and PRODUCTION remain OPEN. Earlier nomination steps below document the historical protocol.
 
 ## 1. Identity and authorization boundary
 
-- The connected GitHub login returned `BrunoQuoc`. It is a **proposed Primary candidate only**. Repository ownership/account connection does **not** constitute an accepted on-call duty.
-- `release/phase3fb2-monitoring-ownership.json` keeps `primary_owner_github=null`, `backup_reviewer_github=null`, `owner_acceptance=false` and `backup_acceptance=false` until explicit approval and two separate acknowledgements.
+- Current accepted Primary is `BrunoQuoc`; accepted Backup is `Sonic-2015`. Their respective GitHub self-ACK links are in the verified role section below. Account connection alone would not have constituted acceptance.
+- The ownership registry now records `primary_owner_github=BrunoQuoc`, `backup_reviewer_github=Sonic-2015`, `owner_acceptance=true` and `backup_acceptance=true`. Monitoring cadence/SLA approval is separately `false`.
 - Backup must be a **different human/account**. A single GitHub user cannot approve and independently review the same incident.
 - Never paste real email addresses, passwords, Auth/refresh tokens, magic links, JWTs, OTP, pairing codes, IP addresses, user IDs, or learner information into a GitHub issue.
 
