@@ -38,7 +38,13 @@ test("completed manual plan demands distinct role ACKs, independent approval and
  };
  completed.exercise={
   first_real_manual_check_completed:true,first_real_manual_check_issue_comment_url:comment(4),
-  missed_review_handoff_tabletop_completed:true,missed_review_handoff_evidence_url:comment(5)
+  missed_review_handoff_tabletop_completed:true,missed_review_handoff_evidence_url:comment(7),
+  missed_review_handoff_primary_scenario_comment_url:comment(5),
+  missed_review_handoff_backup_takeover_comment_url:comment(6),
+  missed_review_handoff_primary_review_comment_url:comment(7),
+  missed_review_handoff_participants_verified:true,
+  missed_review_handoff_correct_order:true,
+  missed_review_handoff_tabletop_only:true
  };
  assert.equal(assessCadenceSla(completed,registry).status,"MANUAL_CADENCE_READY");
  for(const field of ["accepted_by_primary","accepted_by_backup","sla_and_coverage_terms_confirmed_by_primary","sla_and_coverage_terms_confirmed_by_backup","cadence_comment_authors_verified","independent_reviewer_approved","approved"]){
@@ -49,6 +55,12 @@ test("completed manual plan demands distinct role ACKs, independent approval and
  const absentCheck=structuredClone(completed);
  absentCheck.exercise.first_real_manual_check_completed=false;
  assert.equal(assessCadenceSla(absentCheck,registry).status,"DRAFT_OR_PENDING");
+ const unverifiedHandoff=structuredClone(completed);
+ unverifiedHandoff.exercise.missed_review_handoff_participants_verified=false;
+ assert.equal(assessCadenceSla(unverifiedHandoff,registry).status,"DRAFT_OR_PENDING");
+ const sameAccountComment=structuredClone(completed);
+ sameAccountComment.exercise.missed_review_handoff_backup_takeover_comment_url=comment(5);
+ assert.equal(assessCadenceSla(sameAccountComment,registry).status,"DRAFT_OR_PENDING");
  const badLink=structuredClone(completed);
  badLink.approval.backup_cadence_ack_comment_url="https://untrusted.example/receipt";
  assert.equal(assessCadenceSla(badLink,registry).status,"DRAFT_OR_PENDING");
