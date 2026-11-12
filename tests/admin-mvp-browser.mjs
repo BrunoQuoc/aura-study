@@ -47,7 +47,7 @@ try {
     await page.locator('.brand').click();
     await page.locator('#adm2-title').waitFor({timeout:15000});
     await page.locator('[data-admin-action="students"]').first().click();
-    await page.getByText('Học sinh',{exact:true}).first().waitFor({timeout:15000});
+    await page.locator('#app h2').filter({hasText:'Học sinh'}).first().waitFor({timeout:15000});
     checks++;
 
     await page.locator('.brand').click();
