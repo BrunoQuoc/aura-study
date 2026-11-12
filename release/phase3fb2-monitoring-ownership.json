@@ -60,7 +60,21 @@
     "primary_ack_comment_url": null,
     "backup_ack_comment_url": null,
     "verified_comment_authors": false,
-    "approved_by_independent_reviewer": false
+    "approved_by_independent_reviewer": false,
+    "synthetic_primary_trigger": {
+      "sender_github": "Sonic-2015",
+      "target_github": "BrunoQuoc",
+      "source_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/13#issuecomment-6812476673",
+      "comment_present": true,
+      "recipient_ack_verified": false
+    },
+    "synthetic_backup_trigger": {
+      "sender_github": "BrunoQuoc",
+      "target_github": "Sonic-2015",
+      "source_comment_url": null,
+      "comment_present": false,
+      "recipient_ack_verified": false
+    }
   },
   "primary_owner_user_confirmation": "Explicit confirmation in AURA STUDY conversation on 2026-11-06; not GitHub self-acknowledgement",
   "primary_owner_ack_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6680960922",
