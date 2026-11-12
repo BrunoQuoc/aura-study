@@ -7,7 +7,7 @@
   "primary_owner_github": "BrunoQuoc",
   "backup_reviewer_github": "Sonic-2015",
   "owner_acceptance": true,
-  "backup_acceptance": false,
+  "backup_acceptance": true,
   "review_cadence": "PROPOSED_DAILY_NOT_APPROVED",
   "incident_intake": {
     "provider": "GitHub Issues",
@@ -65,8 +65,12 @@
   "primary_owner_user_confirmation": "Explicit confirmation in AURA STUDY conversation on 2026-11-06; not GitHub self-acknowledgement",
   "primary_owner_ack_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6680960922",
   "primary_owner_preferred_channel": "GitHub Inbox",
-  "backup_reviewer_status": "NOMINATED_PENDING_SELF_ACK",
+  "backup_reviewer_status": "GITHUB_SELF_ACK_VERIFIED",
   "backup_reviewer_github_profile": "https://github.com/Sonic-2015",
   "backup_reviewer_repository_permission": "read",
-  "backup_nomination_source": "Explicit user designation in AURA STUDY chat; not backup's acceptance"
+  "backup_nomination_source": "Explicit user designation in AURA STUDY chat; not backup's acceptance",
+  "backup_reviewer_ack_comment_url": "https://github.com/BrunoQuoc/aura-study/issues/12#issuecomment-6812366506",
+  "backup_reviewer_preferred_channel": "GitHub Inbox",
+  "backup_reviewer_ack_evidence": "GitHub issue comment verified with author Sonic-2015, not merely a delegated comment",
+  "ownership_acceptance_status": "BOTH_ROLES_ACK_VERIFIED"
 }
