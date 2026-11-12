@@ -106,7 +106,8 @@ test('Committed registry snapshot is correctly labeled, not real-time Drive stat
   assert.match(t.snapshotNode.textContent,new RegExp(processed+' mục có bản chuẩn hóa'));
   assert.match(t.snapshotNode.textContent,new RegExp(blocked+' mục đang bị chặn'));
   assert.match(t.snapshotNode.textContent,/snapshot trong mã nguồn/);
-  assert.match(t.app.innerHTML,/đồng bộ tự động mọi file anh thả trực tiếp lên Google Drive và xuất bản đề chưa được kích hoạt/);
+  assert.match(t.app.innerHTML,/Đã có trang “Nguồn Drive” để kết nối quyền đọc/);
+  assert.match(t.app.innerHTML,/Đồng bộ chạy nền và xuất bản đề vẫn chưa bật/);
 });
 
 test('Touch layout and focus visibility are explicitly styled',()=>{
