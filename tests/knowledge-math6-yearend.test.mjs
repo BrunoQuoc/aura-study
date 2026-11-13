@@ -65,7 +65,7 @@ test('All five original essays have human-only 0.5-point step rubrics totaling 1
 });
 test('Math examples are numerically sound and user controls cannot publish, auto-grade essays or change official results',()=>{
  assert.equal(24*36/12,72);
- assert.equal(-9/12+10/12,1/12);
+ assert.ok(Math.abs((-9/12+10/12)-(1/12))<1e-12);
  assert.equal((2/3)/(-4/9),-1.5);
  assert.equal(4+4,8);
  assert.equal(240000*0.25,60000);
