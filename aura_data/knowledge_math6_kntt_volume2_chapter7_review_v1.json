@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "libraryId": "AURA-KNTT6-MATH-VOLUME2-CHAPTER7-REVIEW",
+  "parentLibraryId": "AURA-KNTT6-MATH-VOLUME2",
+  "subject": "TOAN",
+  "grade": 6,
+  "volume": 2,
+  "chapter": 7,
+  "series": "Kết nối tri thức với cuộc sống",
+  "status": "DRAFT_NEEDS_PEDAGOGICAL_REVIEW",
+  "teacherApproved": false,
+  "questionBankPromotionEnabled": false,
+  "weaknessMapWriteEnabled": false,
+  "provenance": "Original AURA questions using curriculum table-of-contents and common mathematical definitions; no copied book content",
+  "learningGoal": "Ôn số thập phân, số thập phân âm, phép tính, làm tròn, ước lượng, tỉ số và phần trăm.",
+  "questions": [
+    {
+      "id": "C7-01",
+      "prompt": "Phân số -7/20 viết thành số thập phân nào?",
+      "choices": [
+        "-0,35",
+        "-0,035",
+        "0,35",
+        "-3,5"
+      ],
+      "correct": 0,
+      "explanation": "Nhân cả tử và mẫu của -7/20 với 5 được -35/100, vì thế số thập phân tương ứng là -0,35.",
+      "skill": "viet-so-thap-phan",
+      "sourceLessons": [
+        28
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C7-02",
+      "prompt": "Trong các khẳng định sau, khẳng định nào đúng?",
+      "choices": [
+        "-1,08 < -1,8",
+        "-1,08 = -1,8",
+        "-1,8 < -1,08",
+        "-1,08 > 0"
+      ],
+      "correct": 2,
+      "explanation": "Viết -1,8 = -1,80; trên trục số -1,80 nằm bên trái -1,08 nên -1,8 < -1,08.",
+      "skill": "so-sanh-thap-phan",
+      "sourceLessons": [
+        28
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C7-03",
+      "prompt": "Kết quả của (-1,4) + 3,25 là bao nhiêu?",
+      "choices": [
+        "-4,65",
+        "1,85",
+        "-1,85",
+        "2,15"
+      ],
+      "correct": 1,
+      "explanation": "Đổi -1,4 thành -1,40; vì 3,25 lớn hơn 1,40, tổng là 3,25 - 1,40 = 1,85.",
+      "skill": "cong-tru-thap-phan",
+      "sourceLessons": [
+        29
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C7-04",
+      "prompt": "Tích 2,4 × (-0,5) bằng bao nhiêu?",
+      "choices": [
+        "1,2",
+        "-12",
+        "-1,2",
+        "-0,12"
+      ],
+      "correct": 2,
+      "explanation": "Nhân giá trị tuyệt đối: 2,4 × 0,5 = 1,2; có đúng một thừa số âm nên tích là -1,2.",
+      "skill": "nhan-chia-thap-phan",
+      "sourceLessons": [
+        29
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C7-05",
+      "prompt": "Làm tròn số 6,847 đến hàng phần trăm được số nào?",
+      "choices": [
+        "6,84",
+        "6,85",
+        "6,8",
+        "6,90"
+      ],
+      "correct": 1,
+      "explanation": "Hàng phần trăm của 6,847 là 4; chữ số bên phải là 7 (≥ 5), nên tăng 4 lên 5 và được 6,85.",
+      "skill": "lam-tron",
+      "sourceLessons": [
+        30
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C7-06",
+      "prompt": "12,5% của 80 bằng bao nhiêu?",
+      "choices": [
+        "8",
+        "12,5",
+        "10",
+        "100"
+      ],
+      "correct": 2,
+      "explanation": "12,5% = 0,125 = 1/8, nên 12,5% của 80 là 80 × 1/8 = 10.",
+      "skill": "phan-tram-cua-so",
+      "sourceLessons": [
+        31
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    }
+  ]
+}
