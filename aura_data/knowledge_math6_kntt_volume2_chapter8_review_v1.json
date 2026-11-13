@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "libraryId": "AURA-KNTT6-MATH-VOLUME2-CHAPTER8-REVIEW",
+  "parentLibraryId": "AURA-KNTT6-MATH-VOLUME2",
+  "subject": "TOAN",
+  "grade": 6,
+  "volume": 2,
+  "chapter": 8,
+  "series": "Kết nối tri thức với cuộc sống",
+  "status": "DRAFT_NEEDS_PEDAGOGICAL_REVIEW",
+  "teacherApproved": false,
+  "questionBankPromotionEnabled": false,
+  "weaknessMapWriteEnabled": false,
+  "provenance": "Independent AURA-generated teaching examples, figures and review items, aligned to public KNTT6 chapter TOC only.",
+  "questions": [
+    {
+      "id": "C8-01",
+      "prompt": "Một đường thẳng d đi qua hai điểm phân biệt A và B. Điểm C nằm ngoài d. Bộ ba A, B, C có tính chất nào?",
+      "choices": [
+        "Ba điểm trùng nhau",
+        "Ba điểm thẳng hàng",
+        "Ba điểm không thẳng hàng",
+        "Không xác định được A có thuộc d hay không"
+      ],
+      "correct": 2,
+      "explanation": "A, B đều thuộc đường thẳng d còn C không thuộc d; do đó C không nằm trên đường thẳng AB và ba điểm không thẳng hàng.",
+      "skill": "ba-diem-thang-hang",
+      "sourceLessons": [
+        32
+      ],
+      "figureFacts": {
+        "line": "d",
+        "onLine": [
+          "A",
+          "B"
+        ],
+        "offLine": [
+          "C"
+        ]
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C8-02",
+      "prompt": "Ba điểm phân biệt X, O, Y nằm trên một đường thẳng theo thứ tự X — O — Y. Phát biểu nào đúng?",
+      "choices": [
+        "Tia OX và OY là hai tia đối nhau",
+        "Tia OX và OY trùng nhau",
+        "O nằm ngoài đoạn XY",
+        "Ba điểm không thẳng hàng"
+      ],
+      "correct": 0,
+      "explanation": "Vì O nằm giữa X và Y trên cùng một đường thẳng, hai tia OX và OY cùng gốc O và hướng ngược nhau, nên là hai tia đối nhau.",
+      "skill": "hai-tia-doi-nhau",
+      "sourceLessons": [
+        33
+      ],
+      "figureFacts": {
+        "collinearOrder": [
+          "X",
+          "O",
+          "Y"
+        ],
+        "origin": "O"
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C8-03",
+      "prompt": "Cho M nằm giữa A và B, AM = 5 cm và MB = 7 cm. Độ dài AB bằng bao nhiêu?",
+      "choices": [
+        "2 cm",
+        "35 cm",
+        "12 cm",
+        "7 cm"
+      ],
+      "correct": 2,
+      "explanation": "Điểm M đã được xác định nằm giữa A và B, nên AB = AM + MB = 5 + 7 = 12 cm. Không thể dùng phép cộng này nếu thiếu điều kiện nằm giữa.",
+      "skill": "cong-do-dai-doan",
+      "sourceLessons": [
+        34
+      ],
+      "figureFacts": {
+        "collinearOrder": [
+          "A",
+          "M",
+          "B"
+        ],
+        "lengthCm": {
+          "AM": 5,
+          "MB": 7
+        }
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C8-04",
+      "prompt": "Cho M nằm giữa A và B, AM = 6 cm và MB = 6 cm. Khẳng định nào đúng?",
+      "choices": [
+        "M là trung điểm của AB",
+        "M là đầu mút A",
+        "AB = 6 cm",
+        "Không thể xác định vì chưa biết M có nằm giữa hay không"
+      ],
+      "correct": 0,
+      "explanation": "Vì M nằm giữa A, B và AM = MB = 6 cm nên đủ cả hai điều kiện trung điểm; AB = 12 cm và M là trung điểm.",
+      "skill": "trung-diem-doan-thang",
+      "sourceLessons": [
+        35
+      ],
+      "figureFacts": {
+        "collinearOrder": [
+          "A",
+          "M",
+          "B"
+        ],
+        "lengthCm": {
+          "AM": 6,
+          "MB": 6
+        }
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C8-05",
+      "prompt": "Hai tia OA và OB có chung gốc O. Trong góc AOB, điểm nào là đỉnh?",
+      "choices": [
+        "Điểm A",
+        "Điểm B",
+        "Điểm O",
+        "Một điểm bất kỳ trên AB"
+      ],
+      "correct": 2,
+      "explanation": "Góc AOB được tạo bởi tia OA và OB chung gốc O. Chữ ở giữa kí hiệu AOB luôn là đỉnh O.",
+      "skill": "dinh-va-canh-goc",
+      "sourceLessons": [
+        36
+      ],
+      "figureFacts": {
+        "rays": [
+          [
+            "O",
+            "A"
+          ],
+          [
+            "O",
+            "B"
+          ]
+        ],
+        "commonOrigin": "O"
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C8-06",
+      "prompt": "Một góc được cho có số đo chính xác 135°. Góc đó thuộc loại nào?",
+      "choices": [
+        "Góc nhọn",
+        "Góc tù",
+        "Góc vuông",
+        "Góc bẹt"
+      ],
+      "correct": 1,
+      "explanation": "Ta có 90° < 135° < 180° nên góc 135° thuộc loại góc tù; không phải góc vuông hoặc góc bẹt.",
+      "skill": "phan-loai-goc",
+      "sourceLessons": [
+        37
+      ],
+      "figureFacts": {
+        "measureDegrees": 135
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    }
+  ]
+}

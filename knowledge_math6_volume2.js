@@ -16,28 +16,31 @@ function validate(d){
  if(!d||d.schemaVersion!==1||d.libraryId!=='AURA-KNTT6-MATH-VOLUME2'||
   d.rollout?.status!=='DRAFT_PREVIEW_PARTIAL'||d.rollout?.teacherReviewed!==false||d.rollout?.weaknessMapWriteEnabled!==false||d.rollout?.questionBankPromotionEnabled!==false||
   d.rollout?.examEngineLinkEnabled!==false||!Array.isArray(d.chapters)||d.chapters.length!==4||
-  !Array.isArray(d.lessons)||d.lessons.length!==9)throw Error('Kho bài học chưa hợp lệ hoặc chưa an toàn.');
+  !Array.isArray(d.lessons)||d.lessons.length!==15)throw Error('Kho bài học chưa hợp lệ hoặc chưa an toàn.');
  const ids=new Set(),nums=new Set(),chapters=new Set(d.chapters.map(c=>c.number));
- if(d.chapters.find(c=>c.number===8)?.status!=='NOT_AUTHORED'||
+ if(d.chapters.find(c=>c.number===8)?.status!=='DRAFT_CONTENT_IN_PROGRESS'||
     d.chapters.find(c=>c.number===9)?.status!=='NOT_AUTHORED'||
     d.chapters.find(c=>c.number===6)?.status!=='DRAFT_CONTENT_IN_PROGRESS'||
     d.chapters.find(c=>c.number===7)?.status!=='DRAFT_CONTENT_IN_PROGRESS'||
-    d.outline?.some((o,i)=>o.number!==i+23||o.authored!==(i<9)))
+    d.outline?.some((o,i)=>o.number!==i+23||o.authored!==(i<15)))
     throw Error('Chương chưa biên soạn hoặc số bài không đúng phiên bản.');
  if(chapters.size!==4||d.chapters.some(c=>!Array.isArray(c.range)||c.range.length!==2))
   throw Error('Danh mục chương không hợp lệ.');
  let count=0;
  d.lessons.forEach(l=>{
   if(!/^KNTT6-MATH-V2-\d{2}$/.test(l.id)||ids.has(l.id)||nums.has(l.number)||
-   l.number<23||l.number>31||!chapters.has(l.chapter)||
+   l.number<23||l.number>37||!chapters.has(l.chapter)||
    !d.chapters.some(c=>c.number===l.chapter&&l.number>=c.range[0]&&l.number<=c.range[1])||
    l.status!=='DRAFT_ORIGINAL_AURA'||l.readyForQuestionBank!==false||
-   l.requiresPedagogicalReview!==true||typeof l.title!=='string'||l.title.length<4||
+   l.requiresPedagogicalReview!==true||typeof l.title!=='string'||l.title.trim().length<3||
    !Array.isArray(l.objectives)||l.objectives.length<2||
    !Array.isArray(l.concepts)||l.concepts.length<2||
    !Array.isArray(l.workedExample?.steps)||l.workedExample.steps.length<2||
    typeof l.commonMistake!=='string'||l.commonMistake.length<10||
-   !Array.isArray(l.practice)||l.practice.length!==3)
+   !Array.isArray(l.practice)||l.practice.length!==3||
+   (l.chapter===8&&(!l.geometryModel||
+    !['line-membership','opposite-rays','segment-length','midpoint','angle-definition','angle-measure'].includes(l.geometryModel.kind)||
+    typeof l.geometryModel.caption!=='string'||l.geometryModel.caption.length<25)))
    throw Error('Bài '+l.number+' thiếu nội dung hoặc sai trạng thái.');
   l.practice.forEach(q=>{
    if(typeof q.prompt!=='string'||q.prompt.length<8||
@@ -49,7 +52,7 @@ function validate(d){
    count++;
   });ids.add(l.id);nums.add(l.number);
  });
- if(count!==27||d.authoredLessonCount!==9||d.authoredPracticeCount!==27||d.expectedTotalLessons!==21||d.expectedTotalChapters!==4||d.outline?.length!==21||d.outline.filter(x=>x.authored).length!==9)
+ if(count!==45||d.authoredLessonCount!==15||d.authoredPracticeCount!==45||d.expectedTotalLessons!==21||d.expectedTotalChapters!==4||d.outline?.length!==21||d.outline.filter(x=>x.authored).length!==15)
   throw Error('Số lượng bài và câu hỏi không khớp.');
  return d;
 }
@@ -117,6 +120,13 @@ function renderTheory(root,l){
   x.append(el('span','concept-index',String(i+1).padStart(2,'0')));
   const body=el('div');body.append(el('h4','',c.heading),el('p','',c.body));x.append(body);s.append(x);
  });
+ if(l.chapter===8&&l.geometryModel){
+  const figureSection=section(root,'Hình minh họa hình học AURA tự dựng');
+  if(typeof window.auraMath6DrawGeometry!=='function'||
+    window.auraMath6DrawGeometry(figureSection,l.geometryModel)!==true){
+    figureSection.append(el('p','error-state','Không thể dựng hình. Dữ liệu minh họa cần được kiểm tra.'));
+  }
+ }
  s=section(root,'Ví dụ có hướng dẫn','knowledge-section worked-example');
  s.append(el('p','example-question',l.workedExample.prompt));
  const steps=el('ol','worked-steps');
@@ -196,7 +206,7 @@ function content(){
  const pager=$('lessonPager');pager.replaceChildren();
  pager.append(btn('← Bài trước',()=>select(state.selected-1),'pager-button',state.selected===23));
  pager.append(el('span','','Bài '+state.selected+' / 43'));
- pager.append(btn('Bài tiếp →',()=>select(state.selected+1),'pager-button primary',state.selected===31));
+ pager.append(btn('Bài tiếp →',()=>select(state.selected+1),'pager-button primary',state.selected===37));
 }
 function render(){
  if(!state.data)return;

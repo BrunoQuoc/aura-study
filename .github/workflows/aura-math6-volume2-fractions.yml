@@ -1,4 +1,4 @@
-name: AURA Math6 Volume 2 — Fractions, Decimals & iPad QA
+name: AURA Math6 Volume 2 — Fractions, Decimals, Geometry & iPad QA
 
 on:
   pull_request:
@@ -9,6 +9,13 @@ on:
       - 'aura_data/knowledge_math6_kntt_volume2_chapter7_review_v1.json'
       - 'knowledge-math6-decimals-review.html'
       - 'knowledge_math6_decimals.js'
+      - 'aura_data/knowledge_math6_kntt_volume2_chapter8_review_v1.json'
+      - 'knowledge-math6-geometry-review.html'
+      - 'knowledge_math6_geometry_review.js'
+      - 'knowledge_math6_geometry_svg.js'
+      - 'knowledge_math6_geometry.css'
+      - 'tests/knowledge-math6-chapter8-geometry.test.mjs'
+      - 'tests/knowledge-math6-chapter8-browser.mjs'
       - 'knowledge_math6_decimals.css'
       - 'tests/knowledge-math6-chapter7-decimals.test.mjs'
       - 'tests/knowledge-math6-chapter7-browser.mjs'
@@ -24,7 +31,7 @@ permissions:
 
 jobs:
   static-content:
-    name: 21-lesson TOC, 9 authored VI-VII lessons and 33 practice/review answer keys
+    name: 21-lesson TOC, 15 authored VI-VIII lessons with 57 lesson/review answer keys
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
@@ -36,9 +43,12 @@ jobs:
         run: |
           node --check knowledge_math6_volume2.js
           node --check knowledge_math6_decimals.js
+          node --check knowledge_math6_geometry_svg.js
+          node --check knowledge_math6_geometry_review.js
           node --check lesson_maps_ui.js
           node --test tests/knowledge-math6-volume2-fractions.test.mjs \
                       tests/knowledge-math6-chapter7-decimals.test.mjs \
+                      tests/knowledge-math6-chapter8-geometry.test.mjs \
                       tests/knowledge-math6-volume1-v2.test.mjs \
                       tests/knowledge-math6-chapter-review.test.mjs
 
@@ -62,6 +72,7 @@ jobs:
           sleep 2
           node tests/knowledge-math6-volume2-browser.mjs
           node tests/knowledge-math6-chapter7-browser.mjs
+          node tests/knowledge-math6-chapter8-browser.mjs
           node tests/knowledge-math6-volume1-browser.mjs
           node tests/knowledge-math6-chapter-review-browser.mjs
       - name: Keep synthetic screenshots only
@@ -72,6 +83,7 @@ jobs:
           path: |
             test-results/knowledge-math6-volume2/
             test-results/knowledge-math6-chapter7-decimals/
+            test-results/knowledge-math6-chapter8-geometry/
             test-results/knowledge-math6-volume1/
             test-results/knowledge-math6-chapter-review/
           retention-days: 7

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173f66">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="knowledge_math6_v2.css?v=20261113">
+<link rel="stylesheet" href="knowledge_math6_geometry.css?v=20261113">
+<title>AURA STUDY — Hình học cơ bản · Chương VIII, Toán 6</title>
+</head>
+<body>
+<div class="geometry-app">
+  <header class="geometry-header">
+    <a href="knowledge-math6-volume2.html#bai-32">← Toán 6 Tập 2 · Bài 32–37</a>
+    <p class="eyebrow">AURA STUDY · LEARNING ENGINE TOÁN · CHƯƠNG VIII</p>
+    <h1>Hình học cơ bản — khám phá và luyện tập</h1>
+    <p>Thực hành vị trí trung điểm và số đo góc trực tiếp trên hình SVG AURA dựng. Sau đó thử 6 câu ôn từ Bài 32–37 với dữ kiện đầy đủ và lời giải từng bước.</p>
+  </header>
+  <p class="geometry-notice"><strong>Học thử, chưa kiểm định sư phạm.</strong> Đây là mô hình minh họa theo số đo quy ước. Hình chỉ cung cấp dữ kiện khi văn bản ghi rõ; không suy luận kích thước bằng cách đo pixel. Điểm luyện lưu riêng tại trình duyệt, không ghi Question Bank, Weakness Map hoặc Exam Engine.</p>
+  <main>
+   <section class="geometry-card" aria-labelledby="segmentTitle">
+    <h2 id="segmentTitle">01 · Đoạn thẳng 12 cm và trung điểm</h2>
+    <p>A và B là hai đầu mút của đoạn dài <strong>12 cm</strong>; M được đặt <strong>nằm giữa A và B</strong> trong mô hình. Kéo M để quan sát AM + MB = AB. Khi AM = MB, M là trung điểm.</p>
+    <label for="segmentSlider">Di chuyển điểm M trên đoạn AB (mỗi bước 0,5 cm)</label>
+    <input id="segmentSlider" type="range" min="0.5" max="11.5" step="0.5" value="5" aria-label="Điều chỉnh AM tính bằng cm">
+    <div class="geometry-model">
+     <svg id="segmentSvg" viewBox="0 0 640 225" role="img" aria-label="M nằm giữa A và B trên đoạn 12 cm; M di chuyển theo thanh kéo">
+      <line x1="65" y1="120" x2="575" y2="120" stroke="#246996" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="65" cy="120" r="7" fill="#235d8f"/><circle cx="575" cy="120" r="7" fill="#235d8f"/>
+      <circle id="segmentM" cx="277.5" cy="120" r="10" fill="#e18a34"/>
+      <text x="65" y="98" text-anchor="middle" fill="#214e71">A</text>
+      <text x="575" y="98" text-anchor="middle" fill="#214e71">B</text>
+      <text id="segmentMLabel" x="277.5" y="92" text-anchor="middle" fill="#8c5224">M</text>
+      <text id="segmentAM" x="175" y="168" text-anchor="middle" fill="#214e71">5 cm</text>
+      <text id="segmentMB" x="425" y="168" text-anchor="middle" fill="#214e71">7 cm</text>
+      <text x="320" y="207" text-anchor="middle" fill="#214e71">AB = 12 cm</text>
+     </svg>
+    </div>
+    <p class="geometry-output" id="segmentOutput" role="status">AM = 5 cm, MB = 7 cm. M chưa là trung điểm.</p>
+   </section>
+   <section class="geometry-card" aria-labelledby="angleTitle">
+    <h2 id="angleTitle">02 · Thước đo góc 0°–180°</h2>
+    <p>Góc AOB có đỉnh <strong>O</strong>; tia OA cố định nằm ngang sang phải, còn tia OB xoay theo số đo đã chọn. Góc nhọn, vuông, tù, bẹt được phân loại theo định nghĩa.</p>
+    <label for="angleSlider">Điều chỉnh góc AOB (mỗi bước 5°)</label>
+    <input id="angleSlider" type="range" min="0" max="180" step="5" value="60" aria-label="Chọn số đo góc AOB theo độ">
+    <div class="geometry-model">
+     <svg id="angleSvg" viewBox="0 0 640 285" role="img" aria-label="Hai tia OA và OB tạo góc AOB có số đo thay đổi theo thanh kéo">
+      <line x1="320" y1="229" x2="500" y2="229" stroke="#246996" stroke-width="4" stroke-linecap="round"/>
+      <line id="angleRay" x1="320" y1="229" x2="410" y2="73" stroke="#246996" stroke-width="4" stroke-linecap="round"/>
+      <path id="angleArc" d="" fill="none" stroke="#dc8930" stroke-width="4"/>
+      <circle cx="320" cy="229" r="6" fill="#235d8f"/>
+      <text x="308" y="254" fill="#214e71">O</text>
+      <text x="505" y="236" fill="#214e71">A</text>
+      <text id="angleBLabel" x="416" y="68" fill="#214e71">B</text>
+      <text id="angleDegreeLabel" x="393" y="208" fill="#a0652a">60°</text>
+     </svg>
+    </div>
+    <p class="geometry-output" id="angleOutput" role="status">60° là góc nhọn.</p>
+   </section>
+   <section class="geometry-card geometry-quiz" aria-labelledby="geometryQuizTitle">
+    <h2 id="geometryQuizTitle">03 · Ôn tập Chương VIII — 6 câu có dữ kiện rõ</h2>
+    <p>Đáp án và lời giải dưới đây là bản nháp AURA. Nếu sai, hệ thống dẫn đến đúng bài liên quan; bài ôn không tự động chuyển vào đề thi hoặc hồ sơ đánh giá.</p>
+    <form id="geometryReviewForm"><div id="geometryReviewQuestions"></div>
+      <button class="geometry-submit" id="geometrySubmit" type="submit">Nộp bài và xem lời giải</button>
+    </form>
+    <div id="geometryReviewResult" class="geometry-result" role="status"></div>
+    <button id="geometryRetry" class="geometry-retry" type="button" hidden>Làm lại 6 câu</button>
+   </section>
+  </main>
+  <footer class="geometry-footer">Hình và lời giải do AURA tự xây dựng, chỉ căn cứ mục lục chương trình được đối chiếu. Đoạn vẽ trên màn hình không dùng thay cho thước đo thật; giáo viên vẫn cần xác nhận sư phạm trước khi sử dụng trong đề thi chính thức.</footer>
+</div>
+<script src="knowledge_math6_geometry_review.js?v=20261113"></script>
+</body>
+</html>
