@@ -1081,7 +1081,7 @@
             "4 cm"
           ],
           "correct": 2,
-          "explanation": "Có dữ kiện M nằm giữa A, B nên AB = AM + MB = 3 + 5 = 8 cm.",
+          "explanation": "Vì M đã được cho nằm giữa A và B nên AB = AM + MB = 3 + 5 = 8 cm. Tất cả các độ dài đều dùng chung đơn vị cm.",
           "skill": "cong-do-dai-doan"
         },
         {
@@ -1172,7 +1172,7 @@
             "32 cm"
           ],
           "correct": 2,
-          "explanation": "Theo định nghĩa trung điểm, MB = AB/2 = 16/2 = 8 cm.",
+          "explanation": "Theo định nghĩa trung điểm, M nằm giữa A và B và AM = MB = AB/2 = 16/2 = 8 cm. Vậy MB bằng 8 cm.",
           "skill": "tinh-do-dai-trung-diem"
         }
       ],
@@ -1227,7 +1227,7 @@
             "C"
           ],
           "correct": 2,
-          "explanation": "Góc AOB có hai tia OA và OB chung gốc O nên O chính là đỉnh.",
+          "explanation": "Hai tia OA và OB có chung gốc O, nên đỉnh của góc AOB là O; thứ tự chữ trong tên góc cũng đặt chữ O ở giữa.",
           "skill": "dinh-va-canh-goc"
         },
         {
@@ -1306,7 +1306,7 @@
             "Góc bẹt"
           ],
           "correct": 0,
-          "explanation": "Vì 0° < 35° < 90°, góc 35° là góc nhọn.",
+          "explanation": "Vì số đo 35° lớn hơn 0° và nhỏ hơn 90°, góc 35° là góc nhọn, không phải góc vuông hay góc tù.",
           "skill": "phan-loai-goc"
         },
         {
@@ -1318,7 +1318,7 @@
             "Góc bẹt"
           ],
           "correct": 2,
-          "explanation": "Vì 90° < 120° < 180°, góc 120° là góc tù.",
+          "explanation": "Vì số đo 120° lớn hơn 90° nhưng nhỏ hơn 180°, góc 120° là góc tù, không phải góc bẹt 180°.",
           "skill": "phan-loai-goc"
         },
         {
