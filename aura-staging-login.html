@@ -18,6 +18,7 @@ button.secondary{background:#eaf2f9;color:#164b72}button:disabled{opacity:.6}
 footer{margin-top:20px;color:#62738a;font-size:.8rem}
 </style></head>
 <body><main><h1>AURA STUDY — Xác thực thử nghiệm (GitHub Pages)</h1>
+<p class="warn">Đây là trang kiểm thử kỹ thuật cũ. <a href="./aura-portal.html">Mở đăng nhập mới: Admin / Parent / Student</a>.</p>
 <p class="warn"><strong>STAGING · Không nhập dữ liệu học thật.</strong> Chỉ kiểm tra đăng nhập Admin và ghép đôi một Student. Không gửi mật khẩu, mã OTP, JWT hoặc mã ghép đôi vào ChatGPT hay GitHub.</p>
 <div class="grid">
 <section class="card"><h2>Admin · Phụ huynh</h2>
@@ -51,6 +52,25 @@ import { AURA_AUTH_SECURITY } from "./auth/phase3fa-security-config.js";
 import { createCaptchaAdapter, adminOtpOptions, anonymousAuthArgs } from "./auth/phase3fa-turnstile.js";
 const cfg={"url":"https://ufqzuowjhdqpydqvcsob.supabase.co","key":"sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p","gateway":"https://ufqzuowjhdqpydqvcsob.supabase.co/functions/v1/aura-identity-pair"};
 const parent = createClient(cfg.url,cfg.key,{auth:{storageKey:"aura-stage-parent-v1",flowType:"pkce",detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});
+// Support role-specific portal after existing authorized Staging email callback.
+(function bridgeLegacyMagicLink(){
+ const target={admin:"./aura-admin.html",parent:"./aura-parent.html"};
+ const intent=localStorage.getItem("aura-portal-intent-v1");
+ if(!Object.hasOwn(target,intent))return;
+ let navigated=false;
+ const go=()=>{
+  if(navigated)return;navigated=true;
+  localStorage.removeItem("aura-portal-intent-v1");
+  location.replace(target[intent]);
+ };
+ parent.auth.onAuthStateChange((event,session)=>{
+  if(session?.access_token&&(event==="SIGNED_IN"||event==="INITIAL_SESSION"))go();
+ });
+ parent.auth.getSession().then(({data})=>{
+  if(data?.session?.access_token)go();
+ }).catch(()=>{});
+})();
+
 const student = createClient(cfg.url,cfg.key,{auth:{storageKey:"aura-stage-student-v1",flowType:"pkce",detectSessionInUrl:false,persistSession:true,autoRefreshToken:true}});
 const byId=id=>document.getElementById(id);
 const captcha=createCaptchaAdapter(AURA_AUTH_SECURITY);
