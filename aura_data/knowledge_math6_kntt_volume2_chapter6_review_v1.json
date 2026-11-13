@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "libraryId": "AURA-KNTT6-MATH-VOLUME2-CHAPTER6-REVIEW",
+  "parentLibraryId": "AURA-KNTT6-MATH-VOLUME2",
+  "subject": "TOAN",
+  "grade": 6,
+  "volume": 2,
+  "chapter": 6,
+  "status": "DRAFT_NEEDS_PEDAGOGICAL_REVIEW",
+  "teacherApproved": false,
+  "questionBankPromotionEnabled": false,
+  "weaknessMapWriteEnabled": false,
+  "provenance": "Original AURA fraction problems, not copied from SGK",
+  "questions": [
+    {
+      "id": "C6-01",
+      "prompt": "Rút gọn phân số (-12)/18 về dạng tối giản.",
+      "choices": [
+        "(-6)/9",
+        "(-2)/3",
+        "2/3",
+        "(-3)/2"
+      ],
+      "correct": 1,
+      "explanation": "Ước chung lớn nhất của 12 và 18 là 6. Chia cả tử lẫn mẫu cho 6 được (-2)/3, với mẫu khác 0.",
+      "skill": "rut-gon-phan-so",
+      "sourceLessons": [
+        23
+      ],
+      "datasetFacts": {},
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C6-02",
+      "prompt": "So sánh hai phân số (-7)/8 và (-3)/4. Khẳng định nào đúng?",
+      "choices": [
+        "(-7)/8 > (-3)/4",
+        "(-7)/8 = (-3)/4",
+        "(-7)/8 < (-3)/4",
+        "Cả hai đều dương"
+      ],
+      "correct": 2,
+      "explanation": "Quy đồng mẫu 8: (-3)/4 = (-6)/8. Do -7 < -6 nên (-7)/8 < (-6)/8.",
+      "skill": "so-sanh-phan-so",
+      "sourceLessons": [
+        24
+      ],
+      "datasetFacts": {},
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C6-03",
+      "prompt": "Tính 2/3 + (-1)/6. Kết quả tối giản là gì?",
+      "choices": [
+        "1/2",
+        "1/6",
+        "(-1)/2",
+        "3/9"
+      ],
+      "correct": 0,
+      "explanation": "Đổi 2/3 thành 4/6, rồi cộng (-1)/6 được 3/6 = 1/2. Mẫu giữ nguyên khi cộng cùng mẫu.",
+      "skill": "cong-phan-so",
+      "sourceLessons": [
+        25
+      ],
+      "datasetFacts": {},
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C6-04",
+      "prompt": "Tính tích (-2)/5 × 15/4 rồi rút gọn.",
+      "choices": [
+        "(-3)/2",
+        "3/2",
+        "(-30)/9",
+        "(-2)/3"
+      ],
+      "correct": 0,
+      "explanation": "Nhân tử và mẫu: (-2×15)/(5×4) = (-30)/20; rút gọn chia 10 được (-3)/2.",
+      "skill": "nhan-phan-so",
+      "sourceLessons": [
+        26
+      ],
+      "datasetFacts": {},
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C6-05",
+      "prompt": "Ba phần tư của một số bằng 18. Số đó bằng bao nhiêu?",
+      "choices": [
+        "12",
+        "18",
+        "24",
+        "27"
+      ],
+      "correct": 2,
+      "explanation": "Gọi số cần tìm là x, ta có x × 3/4 = 18 nên x = 18 : (3/4) = 18 × 4/3 = 24.",
+      "skill": "tim-so-biet-phan-so",
+      "sourceLessons": [
+        27
+      ],
+      "datasetFacts": {},
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C6-06",
+      "prompt": "Tính 3/5 của 50 quyển sách được bao nhiêu quyển?",
+      "choices": [
+        "20",
+        "25",
+        "30",
+        "35"
+      ],
+      "correct": 2,
+      "explanation": "Muốn tìm 3/5 của 50, nhân 50 × 3/5 = (50:5)×3 = 10×3 = 30 quyển.",
+      "skill": "phan-so-cua-so",
+      "sourceLessons": [
+        27
+      ],
+      "datasetFacts": {},
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    }
+  ]
+}

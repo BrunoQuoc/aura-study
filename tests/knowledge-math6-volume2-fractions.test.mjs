@@ -80,7 +80,7 @@ test('No publisher pages copied, no source content promoted to official bank',()
   questionBankPromotionEnabled:false,examEngineLinkEnabled:false,
   weaknessMapWriteEnabled:false
  });
- assert.match(html,/Đã có nội dung bản nháp Bài 23–43/);
+ assert.match(html,/Đã có bản nháp Bài 23–43/);
  assert.match(html,/knowledge_math6_volume2\.js/);
  assert.match(html,/connect-src 'self'/);
  assert.match(legacy,/href='knowledge-math6-volume2\.html'/);
