@@ -140,7 +140,7 @@ function coin(){
  let seed=43125,heads=0;
  for(let i=0;i<n;i++){
   seed=(Math.imul(seed,1664525)+1013904223)>>>0;
-  if(seed%2===0)heads++;
+  if(((seed>>>16)&1)===0)heads++;
  }
  const tails=n-heads;
  const headP=Math.round(heads/n*1000)/10;
