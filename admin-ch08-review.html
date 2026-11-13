@@ -327,6 +327,9 @@ selectLabel.append(checkbox,document.createTextNode("Chọn câu này cho nghi�
 }
 const h=document.createElement("h2");h.style.fontSize="1.06rem";h.textContent=item.id+" · "+(labels[item.status]||item.status);article.append(h);
 const m=document.createElement("p");m.className="meta";m.textContent=item.lesson_id+" · "+item.level+" · Phiên bản "+item.revision;article.append(m);
+cell(article,"Nguồn học liệu",q.source_type==="ORIGINAL_AUTHORING"
+?"AI tự biên soạn · Chỉ đối chiếu tên bài theo mục lục SGK; chưa xác minh bài tập gốc/số trang."
+:"Nguồn chưa xác minh · Chỉ đối chiếu khung bài học.");
 cell(article,"Đề bài",q.stem);if(typeof item.svg==="string"&&item.svg.startsWith("<svg")&&item.svg.length<30000){const img=document.createElement("img");img.className="figure";img.alt="Hình minh họa "+(q.figure_id||"");img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(item.svg);article.append(img);}
 cell(article,"Đáp án",String(q.answer??""));cell(article,"Lời giải",q.explanation);
 const score=q.scoring_rubric||{};cell(article,"Thang điểm",String(score.points??"")+" điểm — "+(Array.isArray(score.criteria)?score.criteria.join("; "):"Chưa có"));
