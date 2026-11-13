@@ -45,6 +45,7 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <section class="panel"><strong>Kiểm định chất lượng trước phát hành</strong>
 <p id="qaSummary" class="quiet">Đang chờ dữ liệu kiểm định...</p>
 <details><summary>Chi tiết các mục cần kiểm tra</summary><div id="qaFindings"></div></details>
+<details><summary>Tiến độ nghiệm thu sư phạm theo từng bài</summary><div id="lessonQaMatrix" style="overflow:auto"></div></details>
 <p class="quiet">Kiểm tra tự động không thay thế phê duyệt sư phạm. Các câu đã duyệt có cảnh báo mức cao vẫn bị chặn xuất bản.</p>
 </section>
 <section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “QA — Ưu tiên cao” để xử lý bốn câu vừa mở lại, hoặc “Toàn bộ câu chờ duyệt” để duyệt từng nhóm (tối đa 30 câu). Hai rubric cũ đã được tạo phiên bản mới và mở lại hàng chờ để tái duyệt; lịch sử duyệt cũ được giữ nguyên. Không có tự động phê duyệt.</p></section>
@@ -261,6 +262,28 @@ for(const f of findings){
  root.append(p);
 }
 }catch(err){el("qaSummary").textContent="Không tải được báo cáo QA: "+err.message;el("qaFindings").replaceChildren();}
+
+try{
+const progression=await send({action:"lesson_qa",batch:chosen.batch});
+const records=Array.isArray(progression.lessons)?progression.lessons:[];
+const root=el("lessonQaMatrix");root.replaceChildren();
+const table=document.createElement("table");table.style.width="100%";
+const th=document.createElement("tr");
+for(const label of ["Bài học","Cấu trúc","Duyệt","Cảnh báo","Mở bài"]){
+const cell=document.createElement("th");cell.textContent=label;cell.style.padding="7px";cell.style.textAlign="left";th.append(cell);
+}table.append(th);
+for(const line of records){
+ const tr=document.createElement("tr");
+ const vals=[line.title||line.lesson_id,(line.structural_pass||0)+"/"+line.total,(line.approved||0)+"/"+line.total,
+ (line.high_flags?line.high_flags+" cao · ":"")+(line.open_flags||0)+" mở"];
+ for(const val of vals){const td=document.createElement("td");td.textContent=String(val);td.style.padding="7px";td.style.borderTop="1px solid #e1e7f1";tr.append(td);}
+ const ctl=document.createElement("td");ctl.style.padding="7px";
+ const btn=document.createElement("button");btn.type="button";btn.textContent="Mở";
+ btn.addEventListener("click",async()=>{el("lesson").value=line.lesson_id;el("state").value="";el("level").value="";el("audit").value="pending_all";await load();el("questions").scrollIntoView({block:"start",behavior:"smooth"});});
+ ctl.append(btn);tr.append(ctl);table.append(tr);
+}
+root.append(table);
+}catch(err){el("lessonQaMatrix").textContent="Không tải được tiến độ theo bài: "+err.message;}
 const incoming=Array.isArray(data.items)?data.items:[];
 renderChartGallery(incoming,chosen);
 if(el("lesson").value===""&&el("level").value===""&&el("state").value===""){
