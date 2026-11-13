@@ -151,7 +151,7 @@ test('Independent arithmetic and source facts are consistent',()=>{
  assert.equal(8/20*100,40);
  assert.equal(12/40*100,30);
  assert.equal(18/60*100,30);
- assert.equal(2/3+1/6,5/6);
+ assert.ok(Math.abs((2/3+1/6)-(5/6))<1e-12);
  assert.equal(240000*0.15,36000);
  assert.equal(240000-36000,204000);
  assert.equal(12*5,60);
