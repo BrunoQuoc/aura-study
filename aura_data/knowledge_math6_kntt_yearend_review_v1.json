@@ -1,0 +1,574 @@
+{
+  "schemaVersion": 1,
+  "kind": "aura_math6_kntt_yearend_review_and_written_rubrics_v1",
+  "libraryId": "AURA-KNTT6-MATH-YEAREND-DRAFT",
+  "grade": 6,
+  "subject": "TOAN",
+  "series": "Kết nối tri thức với cuộc sống",
+  "sourceScope": {
+    "volumes": [
+      1,
+      2
+    ],
+    "totalMainLessons": 43,
+    "verifiedPublisherFullText": false,
+    "basis": "CURRICULUM_PUBLIC_TOC_AND_AURA_ORIGINAL_PRACTICE",
+    "publisherTextCopied": false,
+    "officialTextbookExercisesCopied": false
+  },
+  "status": "DRAFT_NEEDS_QUALIFIED_PEDAGOGICAL_REVIEW",
+  "teacherApproved": false,
+  "questionBankPromotionEnabled": false,
+  "examEngineOfficialEnabled": false,
+  "weaknessMapWriteEnabled": false,
+  "releaseVersion": "draft-20261113.1",
+  "chapter6": {
+    "title": "Ôn tập Chương VI — Phân số",
+    "questions": [
+      {
+        "id": "C6-01",
+        "prompt": "Rút gọn phân số (-18)/24 được phân số tối giản nào?",
+        "choices": [
+          "(-9)/12",
+          "(-3)/4",
+          "3/4",
+          "(-6)/8"
+        ],
+        "correct": 1,
+        "explanation": "ƯCLN(18,24) = 6; chia cả tử và mẫu cho 6 được (-3)/4, đã tối giản.",
+        "sourceLessons": [
+          23
+        ],
+        "skill": "rut-gon-phan-so",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "C6-02",
+        "prompt": "So sánh (-5)/6 và (-3)/4, cách viết nào đúng?",
+        "choices": [
+          "(-5)/6 > (-3)/4",
+          "(-5)/6 = (-3)/4",
+          "(-5)/6 < (-3)/4",
+          "Cả hai bằng 0"
+        ],
+        "correct": 2,
+        "explanation": "Quy đồng mẫu 12: -5/6 = -10/12, -3/4 = -9/12, và -10 < -9.",
+        "sourceLessons": [
+          24
+        ],
+        "skill": "so-sanh-phan-so",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "C6-03",
+        "prompt": "Giá trị (-2)/3 + 5/6 là bao nhiêu?",
+        "choices": [
+          "1/6",
+          "(-7)/6",
+          "7/6",
+          "3/9"
+        ],
+        "correct": 0,
+        "explanation": "Quy đồng mẫu 6: -2/3 = -4/6; -4/6 + 5/6 = 1/6.",
+        "sourceLessons": [
+          25
+        ],
+        "skill": "cong-phan-so",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "C6-04",
+        "prompt": "Tính (-3)/4 × 8/9 được kết quả nào?",
+        "choices": [
+          "2/3",
+          "(-2)/3",
+          "(-24)/13",
+          "(-3)/2"
+        ],
+        "correct": 1,
+        "explanation": "Nhân tử với tử và mẫu với mẫu: (-3×8)/(4×9) = -24/36 = -2/3.",
+        "sourceLessons": [
+          26
+        ],
+        "skill": "nhan-phan-so",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "C6-05",
+        "prompt": "Ba phần năm của 45 bằng bao nhiêu?",
+        "choices": [
+          "15",
+          "27",
+          "30",
+          "75"
+        ],
+        "correct": 1,
+        "explanation": "Tính 45 × 3/5 = (45 : 5) × 3 = 9 × 3 = 27.",
+        "sourceLessons": [
+          27
+        ],
+        "skill": "phan-so-cua-so",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "C6-06",
+        "prompt": "Biết 3/4 của một số là 24. Số cần tìm là gì?",
+        "choices": [
+          "18",
+          "27",
+          "32",
+          "36"
+        ],
+        "correct": 2,
+        "explanation": "Muốn tìm toàn bộ, tính 24 : (3/4) = 24 × 4/3 = 32; kiểm tra 32 × 3/4 = 24.",
+        "sourceLessons": [
+          27
+        ],
+        "skill": "tim-so-biet-phan-so",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      }
+    ]
+  },
+  "yearEnd": {
+    "title": "Ôn tập tổng hợp Toán 6 — Hai tập",
+    "questions": [
+      {
+        "id": "Y6-01",
+        "prompt": "ƯCLN của 24 và 36 là bao nhiêu?",
+        "choices": [
+          "6",
+          "12",
+          "24",
+          "36"
+        ],
+        "correct": 1,
+        "explanation": "Các ước chung của 24 và 36 gồm 1, 2, 3, 4, 6, 12; lớn nhất là 12.",
+        "sourceLessons": [
+          8
+        ],
+        "skill": "uoc-chung-lon-nhat",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-02",
+        "prompt": "BCNN của 6 và 8 bằng bao nhiêu?",
+        "choices": [
+          "14",
+          "16",
+          "24",
+          "48"
+        ],
+        "correct": 2,
+        "explanation": "6 = 2×3 và 8 = 2³, nên BCNN = 2³×3 = 24.",
+        "sourceLessons": [
+          9
+        ],
+        "skill": "boi-chung-nho-nhat",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-03",
+        "prompt": "Tính -7 + 12 được số nào?",
+        "choices": [
+          "-19",
+          "-5",
+          "5",
+          "19"
+        ],
+        "correct": 2,
+        "explanation": "Cộng hai số nguyên trái dấu: lấy 12 - 7 = 5 và giữ dấu của số có giá trị tuyệt đối lớn hơn.",
+        "sourceLessons": [
+          11
+        ],
+        "skill": "cong-so-nguyen",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-04",
+        "prompt": "Tính (-3) × 4 được kết quả nào?",
+        "choices": [
+          "12",
+          "-12",
+          "7",
+          "-7"
+        ],
+        "correct": 1,
+        "explanation": "Một thừa số âm và một thừa số dương nên tích âm; 3 × 4 = 12, vậy tích là -12.",
+        "sourceLessons": [
+          12
+        ],
+        "skill": "nhan-so-nguyen",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-05",
+        "prompt": "Hình chữ nhật dài 8 cm, rộng 5 cm có diện tích bao nhiêu?",
+        "choices": [
+          "13 cm²",
+          "26 cm²",
+          "40 cm²",
+          "80 cm²"
+        ],
+        "correct": 2,
+        "explanation": "Diện tích hình chữ nhật là dài nhân rộng: 8 × 5 = 40 cm².",
+        "sourceLessons": [
+          20
+        ],
+        "skill": "dien-tich-hinh-chu-nhat",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-06",
+        "prompt": "Tính (-2)/3 + 1/6 bằng bao nhiêu?",
+        "choices": [
+          "(-1)/2",
+          "1/2",
+          "(-1)/6",
+          "(-3)/9"
+        ],
+        "correct": 0,
+        "explanation": "Quy đồng -2/3 = -4/6, cộng 1/6 được -3/6 = -1/2.",
+        "sourceLessons": [
+          25
+        ],
+        "skill": "cong-phan-so",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-07",
+        "prompt": "20% của 150 bằng bao nhiêu?",
+        "choices": [
+          "20",
+          "25",
+          "30",
+          "50"
+        ],
+        "correct": 2,
+        "explanation": "20% = 1/5, lấy 150 × 1/5 = 30.",
+        "sourceLessons": [
+          31
+        ],
+        "skill": "phan-tram-cua-so",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-08",
+        "prompt": "Làm tròn 6,847 đến hàng phần trăm được số nào?",
+        "choices": [
+          "6,84",
+          "6,85",
+          "6,8",
+          "6,9"
+        ],
+        "correct": 1,
+        "explanation": "Hàng phần trăm là 4; chữ số hàng phần nghìn bằng 7 ≥ 5 nên tăng thành 5, được 6,85.",
+        "sourceLessons": [
+          30
+        ],
+        "skill": "lam-tron",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-09",
+        "prompt": "Một góc có số đo 90° là loại góc nào?",
+        "choices": [
+          "Góc nhọn",
+          "Góc vuông",
+          "Góc tù",
+          "Góc bẹt"
+        ],
+        "correct": 1,
+        "explanation": "Góc có số đo đúng 90° gọi là góc vuông.",
+        "sourceLessons": [
+          37
+        ],
+        "skill": "phan-loai-goc",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-10",
+        "prompt": "Trên đoạn AB dài 12 cm, M nằm giữa A và B và AM = MB. Độ dài AM là bao nhiêu?",
+        "choices": [
+          "4 cm",
+          "6 cm",
+          "8 cm",
+          "12 cm"
+        ],
+        "correct": 1,
+        "explanation": "Vì M nằm giữa A, B và AM = MB nên AM = AB/2 = 12/2 = 6 cm.",
+        "sourceLessons": [
+          35
+        ],
+        "skill": "trung-diem-doan-thang",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-11",
+        "prompt": "Biểu đồ cột cho biết nhóm A có 5 sách, B có 8 sách. Nhóm B hơn A bao nhiêu quyển?",
+        "choices": [
+          "2",
+          "3",
+          "5",
+          "13"
+        ],
+        "correct": 1,
+        "explanation": "Đọc giá trị cột A = 5 và B = 8, chênh lệch là 8 - 5 = 3 quyển.",
+        "sourceLessons": [
+          40
+        ],
+        "skill": "doc-bieu-do-cot",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "Y6-12",
+        "prompt": "Gieo xúc xắc 60 lần, mặt 6 xuất hiện 15 lần. Xác suất thực nghiệm của mặt 6 là số nào?",
+        "choices": [
+          "1/6",
+          "1/5",
+          "1/4",
+          "1/3"
+        ],
+        "correct": 2,
+        "explanation": "Số lần thuận lợi chia tổng lần thử: 15/60 = 1/4; đây là xác suất thực nghiệm.",
+        "sourceLessons": [
+          43
+        ],
+        "skill": "xac-suat-thuc-nghiem",
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      }
+    ]
+  },
+  "written": {
+    "title": "Tự luận minh họa Toán 6 — Thang điểm theo bước",
+    "maxTotalPoints": 10,
+    "scoringPolicy": "Teacher/human review required; numeric parts may be independently checked but machine cannot certify mathematical reasoning, notation or partial credit.",
+    "questions": [
+      {
+        "id": "W6-01",
+        "prompt": "Phân tích 24 và 36 ra thừa số nguyên tố. Từ đó tìm ƯCLN và BCNN của hai số.",
+        "workedSolution": [
+          "24 = 2³ × 3; 36 = 2² × 3².",
+          "ƯCLN(24,36) = 2² × 3 = 12.",
+          "BCNN(24,36) = 2³ × 3² = 72."
+        ],
+        "rubric": [
+          {
+            "criterion": "Phân tích 24 đúng thành 2³ × 3.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Phân tích 36 đúng thành 2² × 3².",
+            "points": 0.5
+          },
+          {
+            "criterion": "Lập và tính đúng ƯCLN = 12.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Lập và tính đúng BCNN = 72.",
+            "points": 0.5
+          }
+        ],
+        "sourceLessons": [
+          8,
+          9
+        ],
+        "skill": "uoc-boi",
+        "maxPoints": 2,
+        "gradingMode": "HUMAN_REVIEW_REQUIRED",
+        "machineAutoGradeAllowed": false,
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "W6-02",
+        "prompt": "Tính A = (-3)/4 + 5/6 và B = (2/3) : ((-4)/9). Rút gọn kết quả.",
+        "workedSolution": [
+          "Quy đồng mẫu 12: (-3)/4 = -9/12, 5/6 = 10/12.",
+          "A = -9/12 + 10/12 = 1/12.",
+          "B = 2/3 × 9/(-4) = 18/(-12) = -3/2."
+        ],
+        "rubric": [
+          {
+            "criterion": "Quy đồng và xác định dấu đúng cho A.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Tính A = 1/12.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Đổi phép chia B thành phép nhân nghịch đảo chính xác.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Tính và rút gọn B = -3/2.",
+            "points": 0.5
+          }
+        ],
+        "sourceLessons": [
+          25,
+          26
+        ],
+        "skill": "phan-so-hai-buoc",
+        "maxPoints": 2,
+        "gradingMode": "HUMAN_REVIEW_REQUIRED",
+        "machineAutoGradeAllowed": false,
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "W6-03",
+        "prompt": "Cho A, M, B thẳng hàng theo thứ tự A–M–B, AM = 4 cm và MB = 4 cm. Tính AB và giải thích vì sao M là trung điểm của AB.",
+        "workedSolution": [
+          "Vì M nằm giữa A và B nên AB = AM + MB.",
+          "Thay AM = 4 cm, MB = 4 cm: AB = 4 + 4 = 8 cm.",
+          "M nằm giữa A, B và AM = MB, vì vậy M là trung điểm của đoạn AB."
+        ],
+        "rubric": [
+          {
+            "criterion": "Nêu đúng quan hệ M nằm giữa, AB = AM + MB.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Thay đúng độ dài và tính AB = 8 cm.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Nêu đủ hai điều kiện M nằm giữa A, B và AM = MB.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Kết luận chính xác M là trung điểm của AB.",
+            "points": 0.5
+          }
+        ],
+        "sourceLessons": [
+          34,
+          35
+        ],
+        "skill": "trung-diem-lap-luan",
+        "maxPoints": 2,
+        "gradingMode": "HUMAN_REVIEW_REQUIRED",
+        "machineAutoGradeAllowed": false,
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "W6-04",
+        "prompt": "Một chiếc cặp giá 240 000 đồng được giảm 25%. Tính số tiền giảm và số tiền phải trả.",
+        "workedSolution": [
+          "Số tiền giảm là 240 000 × 25/100 = 60 000 đồng.",
+          "Số tiền phải trả là 240 000 - 60 000 = 180 000 đồng.",
+          "Kiểm tra: 180 000 đồng bằng 75% giá ban đầu; nhỏ hơn giá gốc."
+        ],
+        "rubric": [
+          {
+            "criterion": "Thiết lập đúng phép tính 25% của 240 000 đồng.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Tính đúng tiền giảm 60 000 đồng.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Thiết lập phép tính giá phải trả bằng giá gốc trừ tiền giảm.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Kết quả 180 000 đồng, có đơn vị và hợp lí.",
+            "points": 0.5
+          }
+        ],
+        "sourceLessons": [
+          31
+        ],
+        "skill": "phan-tram-ung-dung",
+        "maxPoints": 2,
+        "gradingMode": "HUMAN_REVIEW_REQUIRED",
+        "machineAutoGradeAllowed": false,
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      },
+      {
+        "id": "W6-05",
+        "prompt": "Gieo xúc xắc 20 lần có ghi lại kết quả: mặt 6 xuất hiện 5 lần. Lập bảng gồm 'xuất hiện mặt 6' và 'không xuất hiện mặt 6', rồi tính xác suất thực nghiệm xuất hiện mặt 6.",
+        "workedSolution": [
+          "Tổng số lần thử là 20; số lần mặt 6 xuất hiện là 5.",
+          "Số lần không xuất hiện mặt 6 = 20 - 5 = 15; bảng hai nhóm là 5 và 15.",
+          "Xác suất thực nghiệm mặt 6 = 5/20 = 1/4 = 25%."
+        ],
+        "rubric": [
+          {
+            "criterion": "Lập bảng có đúng hai nhóm và đơn vị số lần.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Ghi đúng tần số xuất hiện 5 và không xuất hiện 15.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Viết đúng công thức tần suất bằng lượt xuất hiện/tổng lượt thử.",
+            "points": 0.5
+          },
+          {
+            "criterion": "Tính và rút gọn 5/20 = 1/4 = 25%.",
+            "points": 0.5
+          }
+        ],
+        "sourceLessons": [
+          38,
+          39,
+          43
+        ],
+        "skill": "tan-suat-tu-luan",
+        "maxPoints": 2,
+        "gradingMode": "HUMAN_REVIEW_REQUIRED",
+        "machineAutoGradeAllowed": false,
+        "status": "DRAFT_ORIGINAL_AURA",
+        "requiresPedagogicalReview": true,
+        "eligibleForQuestionBank": false
+      }
+    ]
+  }
+}
