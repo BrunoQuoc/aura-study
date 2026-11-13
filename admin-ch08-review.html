@@ -14,6 +14,19 @@ textarea{width:100%;min-height:76px;resize:vertical}.actions{display:flex;flex-w
 .btnwarn{background:#9b6b24}.btndanger{background:#a03649}
 img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid #ddd;border-radius:9px;background:white;margin:12px 0}
 #notice{white-space:pre-wrap}.pill{background:#e6f3fb;color:#18577a;border-radius:20px;padding:4px 9px}
+
+#chartGalleryGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,265px),1fr));gap:12px;margin-top:12px}
+.chartTile{border:1px solid #d9e3f0;border-radius:10px;padding:10px;background:#f9fbff;min-width:0}
+.chartTile img{display:block;width:100%;height:auto;border:1px solid #e1e9f2;border-radius:7px;background:#fff}
+.chartTile button{margin-top:8px;width:100%}
+.chartTile p{font-size:.86rem;overflow-wrap:anywhere}
+#chartModal{border:1px solid #c5d3e5;border-radius:14px;max-width:min(96vw,860px);width:min(96vw,860px);max-height:90vh;padding:16px;box-shadow:0 16px 70px #1f2e4490}
+#chartModal::backdrop{background:#10243a99}
+#chartModal .zoomScroller{max-width:100%;max-height:70vh;overflow:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y pinch-zoom;background:white}
+#chartModalImage{display:block;width:760px;max-width:none;height:auto}
+#chartModalTitle{font-weight:600}
+@media(max-width:600px){main{padding:12px}header{padding:13px} .panel{padding:13px}#chartModal{padding:10px} .actions button{flex-basis:100%}}
+
 </style></head><body>
 <header><a href="./admin-direct.html">← Admin V2</a>　 AURA STUDY · NGÂN HÀNG CÂU HỎI</header>
 <main><h1>Toán 6 — Ngân hàng câu hỏi chờ duyệt</h1>
@@ -47,6 +60,25 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <label style="display:block;margin:8px 0"><input type="checkbox" value="Chọn theo lô và xem hộp xác nhận"> Chọn theo lô, xem hộp xác nhận (có thể bấm Hủy để không ghi dữ liệu)</label>
 </div><button type="button" id="deviceReport" style="margin-top:10px">Sao chép biên bản kiểm thử</button>
 <p id="deviceStatus" class="quiet" aria-live="polite"></p></section>
+<section class="panel" id="chartVisual">
+<strong>Nghiệm thu biểu đồ mới trên thiết bị thật · Chương IX</strong>
+<p class="quiet">Hiển thị 23 biểu đồ SVG của Bài 39–41. Kiểm tra từng biểu đồ, dùng nút phóng to để đọc số liệu. Đây là kết quả do Admin trực tiếp xác nhận, không phải kiểm thử độc lập của máy chủ.</p>
+<button type="button" id="chartOpen">Mở 23 biểu đồ để kiểm tra</button>
+<p class="quiet" id="chartLoadStatus" role="status">Chưa tải bộ 23 biểu đồ.</p>
+<div id="chartGalleryGrid"></div>
+<div class="review">
+<label>Thiết bị đang kiểm thử <input id="chartDeviceName" type="text" value="iPhone 12 Pro Max" maxlength="120" placeholder="Ví dụ iPhone 12 Pro Max · Safari" style="display:block;width:100%;padding:10px;margin-top:6px;border:1px solid #becce0;border-radius:9px"></label>
+<div id="chartCheckItems">
+<label style="display:block;margin:8px 0"><input type="checkbox" id="chartCheckedAll"> Đã xem toàn bộ 23 biểu đồ, không có hình trống hoặc bị lỗi</label>
+<label style="display:block;margin:8px 0"><input type="checkbox" id="chartCheckedNumbers"> Chữ, chú giải, nhãn và số liệu đều đọc được</label>
+<label style="display:block;margin:8px 0"><input type="checkbox" id="chartCheckedZoom"> Đã thử phóng to và cuộn ngang trên điện thoại</label>
+<label style="display:block;margin:8px 0"><input type="checkbox" id="chartCheckedAdmin"> Bộ lọc, nút thao tác và hộp xác nhận Admin không bị che hoặc tràn màn hình</label>
+</div>
+<button type="button" id="chartSave">Lưu biên bản nghiệm thu 23 biểu đồ vào Staging</button>
+<p class="quiet" id="chartResult" role="status">Chưa có biên bản nghiệm thu biểu đồ mới.</p>
+</div>
+</section>
+<dialog id="chartModal" aria-label="Phóng to biểu đồ"><div class="actions"><button type="button" id="chartClose">Đóng hình phóng to</button></div><p id="chartModalTitle"></p><div class="zoomScroller"><img id="chartModalImage" alt="Hình biểu đồ kích thước lớn"></div><p class="quiet">Vuốt ngang để đọc nhãn; trên thiết bị hỗ trợ có thể dùng hai ngón để phóng to.</p></dialog>
 <section class="panel" id="learningPanel" hidden><strong>Nội dung học của chương được chọn</strong><p class="quiet">Bản nháp để Admin nghiệm thu; chưa hiển thị trong ứng dụng học sinh.</p><div id="learningContent"></div></section>
 <section class="panel"><strong>Cổng đóng chương</strong><p id="chapterGate" class="quiet">Đang chờ truy xuất thống kê chương.</p></section>
 <p id="summary" class="quiet"></p><section id="questions"></section>
@@ -74,6 +106,65 @@ selected.clear();updateSelection();await load();notice("Đã ghi quyết định
 }catch(e){notice(e.message);}finally{el("batchApprove").disabled=false;el("batchChanges").disabled=false;}
 }
 
+
+
+let chartLoadCounter=0;
+function openChartZoom(src,title){
+ const modal=el("chartModal");
+ el("chartModalImage").src=src;el("chartModalImage").alt=title;el("chartModalTitle").textContent=title;
+ if(typeof modal.showModal==="function")modal.showModal();else modal.setAttribute("open","");
+}
+function renderChartGallery(items,chosen){
+ const root=el("chartGalleryGrid");root.replaceChildren();
+ chartLoadCounter=0;
+ if(!(chosen.volume===2&&chosen.chapter==="IX")){
+ el("chartLoadStatus").textContent="Chọn Tập 2 → Chương IX hoặc bấm Mở 23 biểu đồ để kiểm tra.";
+ return;
+ }
+ const figures=items.filter(item=>item.body?.figure_id&&typeof item.svg==="string"&&item.svg.startsWith("<svg")&&item.id.startsWith("M6-KNTT-T2-L")&&item.id.match(/-L(?:39|40|41)-Q[0-9]{2}$/)).sort((a,b)=>a.id.localeCompare(b.id));
+ el("chartLoadStatus").textContent="Đã nhận "+figures.length+"/23 hình; đang kiểm tra tải hình...";
+ const redraw=()=>{const images=[...root.querySelectorAll("img")],loaded=images.filter(img=>img.complete&&img.naturalWidth>0).length;
+ chartLoadCounter=loaded;el("chartLoadStatus").textContent="Đã hiển thị "+loaded+"/"+figures.length+" hình; yêu cầu đủ 23/23 trước khi lưu nghiệm thu."};
+ for(const item of figures){
+ const tile=document.createElement("div");tile.className="chartTile";
+ const label=document.createElement("p");label.textContent=item.id+" · "+item.body.stem;tile.append(label);
+ const img=document.createElement("img");img.loading="eager";img.alt="Biểu đồ cho "+item.id;
+ img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(item.svg);
+ img.addEventListener("load",redraw);img.addEventListener("error",redraw);
+ const button=document.createElement("button");button.type="button";button.textContent="Phóng to biểu đồ";
+ button.addEventListener("click",()=>openChartZoom(img.src,item.id+" — "+item.body.stem));
+ tile.append(img,button);root.append(tile);
+ }
+ redraw();
+}
+async function openAllChartQA(){
+ const volume=el("volume"),chap=el("chapter");
+ if(!curriculumCatalog.some(c=>c.volume===2&&c.chapter==="IX")){notice("Chưa tìm thấy Chương IX trong danh mục.");return;}
+ volume.value="2";syncVolumes();chap.value="IX";syncLesson();
+ el("level").value="";el("state").value="";el("audit").value="";
+ await load();el("chartVisual").scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function submitChartAcceptance(){
+ const selected=activeCatalog();
+ const images=[...el("chartGalleryGrid").querySelectorAll("img")];
+ const loaded=images.filter(img=>img.complete&&img.naturalWidth>0).length;
+ const checks={all_charts_inspected:el("chartCheckedAll").checked,numbers_and_labels_legible:el("chartCheckedNumbers").checked,zoom_and_horizontal_scroll:el("chartCheckedZoom").checked,admin_filters_and_actions:el("chartCheckedAdmin").checked};
+ const status=el("chartResult");
+ if(!selected||selected.volume!==2||selected.chapter!=="IX"||images.length!==23||loaded!==23){
+ status.textContent="Chưa thể nghiệm thu: cần mở và tải thành công đủ 23 biểu đồ thuộc Chương IX.";return;
+ }
+ if(Object.values(checks).some(v=>!v)){status.textContent="Chưa hoàn tất: cần trực tiếp kiểm tra và xác nhận đủ 4 mục.";return;}
+ const device=el("chartDeviceName").value.trim();
+ if(device.length<3){status.textContent="Vui lòng ghi rõ thiết bị đã kiểm thử.";return;}
+ const button=el("chartSave");button.disabled=true;
+ try{
+ const output=await send({action:"device_visual_attest",batch:selected.batch,report:{
+ ui_build:"AURA-ADMIN-V2-VISUAL-CHART-QA-R1",device_label:device,user_agent:navigator.userAgent.slice(0,400),
+ viewport_width:window.innerWidth,expected_figures:23,loaded_figures:loaded,checks
+ }});
+ status.textContent="ĐÃ LƯU BIÊN BẢN #"+output.acceptance?.record_id+" · 23/23 biểu đồ · do Admin xác nhận. Exam Engine vẫn khóa.";
+ }catch(err){status.textContent="Không lưu được biên bản: "+err.message;}finally{button.disabled=false;}
+}
 
 let curriculumCatalog=[];
 function activeCatalog(){
@@ -171,6 +262,7 @@ for(const f of findings){
 }
 }catch(err){el("qaSummary").textContent="Không tải được báo cáo QA: "+err.message;el("qaFindings").replaceChildren();}
 const incoming=Array.isArray(data.items)?data.items:[];
+renderChartGallery(incoming,chosen);
 if(el("lesson").value===""&&el("level").value===""&&el("state").value===""){
 const approved=incoming.filter(x=>x.status==="APPROVED").length,pending=incoming.filter(x=>x.status==="PENDING").length;
 const ready=approved===chosen.total&&pending===0;
@@ -241,6 +333,9 @@ try{await navigator.clipboard.writeText(report);el("deviceStatus").textContent="
 });
 el("batchApprove").addEventListener("click",()=>applyBatch("APPROVED"));
 el("batchChanges").addEventListener("click",()=>applyBatch("CHANGES_REQUESTED"));
+el("chartOpen").addEventListener("click",openAllChartQA);
+el("chartClose").addEventListener("click",()=>{const dialog=el("chartModal");if(typeof dialog.close==="function")dialog.close();else dialog.removeAttribute("open");});
+el("chartSave").addEventListener("click",submitChartAcceptance);
 el("reload").addEventListener("click",initializeCatalog);el("volume").addEventListener("change",()=>{syncVolumes();load();});el("chapter").addEventListener("change",()=>{syncLesson();load();});for(const id of ["lesson","level","state","audit"])el(id).addEventListener("change",load);
 el("logout").addEventListener("click",async()=>{await auth.auth.signOut();el("questions").replaceChildren();notice("Đã đăng xuất.");});
 initializeCatalog();
