@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "libraryId": "AURA-KNTT6-MATH-VOLUME2-CHAPTER9-REVIEW",
+  "parentLibraryId": "AURA-KNTT6-MATH-VOLUME2",
+  "subject": "TOAN",
+  "grade": 6,
+  "volume": 2,
+  "chapter": 9,
+  "series": "Kết nối tri thức với cuộc sống",
+  "status": "DRAFT_NEEDS_PEDAGOGICAL_REVIEW",
+  "teacherApproved": false,
+  "questionBankPromotionEnabled": false,
+  "weaknessMapWriteEnabled": false,
+  "provenance": "Original AURA questions and synthetic data; linked to Chapter IX public table-of-contents only.",
+  "questions": [
+    {
+      "id": "C9-01",
+      "prompt": "Khảo sát một lớp có 24 bạn, mỗi bạn chọn đúng một hoạt động. Bảng ghi đọc sách 9, đá bóng 8, vẽ tranh 7. Tổng dữ liệu có hợp lệ không?",
+      "choices": [
+        "Không, tổng là 23",
+        "Có, tổng là 24",
+        "Không, tổng là 25",
+        "Không thể kiểm tra bằng phép cộng"
+      ],
+      "correct": 1,
+      "explanation": "Kiểm đếm các nhóm: 9 + 8 + 7 = 24, khớp 24 bạn. Tổng hợp lệ về số lượt nếu mỗi bạn chỉ chọn một hoạt động.",
+      "skill": "kiem-tra-du-lieu",
+      "sourceLessons": [
+        38
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C9-02",
+      "prompt": "Biểu đồ tranh dùng mỗi hình tròn thay cho 4 quyển truyện. Ba hình tròn ứng với bao nhiêu quyển?",
+      "choices": [
+        "3 quyển",
+        "7 quyển",
+        "12 quyển",
+        "16 quyển"
+      ],
+      "correct": 2,
+      "explanation": "Đọc đúng chú giải: 3 biểu tượng × 4 quyển/biểu tượng = 12 quyển truyện.",
+      "skill": "bieu-do-tranh",
+      "sourceLessons": [
+        39
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C9-03",
+      "prompt": "Biểu đồ cột thể hiện số cây của ba tổ A, B, C lần lượt 6, 9, 4. Tổ B hơn tổ C bao nhiêu cây?",
+      "choices": [
+        "3 cây",
+        "4 cây",
+        "5 cây",
+        "13 cây"
+      ],
+      "correct": 2,
+      "explanation": "Giá trị cột B = 9, cột C = 4; chênh lệch 9 - 4 = 5 cây.",
+      "skill": "doc-bieu-do-cot",
+      "sourceLessons": [
+        40
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C9-04",
+      "prompt": "Biểu đồ cột kép: thứ hai lớp A có 8, lớp B có 6 lượt đọc sách; thứ ba lớp A có 7, lớp B có 9. Tổng hai ngày lớp nào nhiều hơn?",
+      "choices": [
+        "Lớp A hơn 1",
+        "Hai lớp bằng nhau",
+        "Lớp B hơn 1",
+        "Lớp B hơn 2"
+      ],
+      "correct": 1,
+      "explanation": "Cộng theo đúng chú giải: lớp A = 8 + 7 = 15, lớp B = 6 + 9 = 15; hai lớp bằng nhau.",
+      "skill": "cot-kep-tong",
+      "sourceLessons": [
+        41
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C9-05",
+      "prompt": "Gieo một xúc xắc 6 mặt chuẩn. Sự kiện 'xuất hiện số lớn hơn 4' gồm những kết quả nào?",
+      "choices": [
+        "3, 4",
+        "4, 5",
+        "5, 6",
+        "1, 2, 3, 4"
+      ],
+      "correct": 2,
+      "explanation": "Trong danh sách mặt 1–6, chỉ có 5 và 6 lớn hơn 4; sự kiện gồm hai kết quả {5,6}.",
+      "skill": "su-kien",
+      "sourceLessons": [
+        42
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C9-06",
+      "prompt": "Gieo xúc xắc 60 lần, mặt 6 xuất hiện 15 lần. Xác suất thực nghiệm mặt 6 bằng bao nhiêu?",
+      "choices": [
+        "1/6",
+        "1/4",
+        "1/3",
+        "1/5"
+      ],
+      "correct": 1,
+      "explanation": "Tính tỉ số số lần mặt 6 xuất hiện và tổng số lần thử: 15/60 = 1/4 = 25%.",
+      "skill": "xac-suat-thuc-nghiem",
+      "sourceLessons": [
+        43
+      ],
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    }
+  ]
+}
