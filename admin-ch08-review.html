@@ -62,7 +62,7 @@ const ids=[...selected.keys()],versions=Object.fromEntries(selected);
 if(!confirm("Xác nhận "+(decision==="APPROVED"?"PHÊ DUYỆT":"YÊU CẦU SỬA")+" "+ids.length+" câu đã chọn? Quyết định sẽ được ghi vào lịch sử và không thể sửa trực tiếp."))return;
 el("batchApprove").disabled=true;el("batchChanges").disabled=true;
 try{
-const x=await send({action:"batch_decide",batch:catalogs[el("volume").value].batch,ids,versions,decision,note});
+const x=await send({action:"batch_decide",batch:activeCatalog().batch,ids,versions,decision,note});
 selected.clear();updateSelection();await load();notice("Đã ghi quyết định cho "+(x.result?.count??ids.length)+" câu; Exam Engine vẫn khóa.");
 }catch(e){notice(e.message);}finally{el("batchApprove").disabled=false;el("batchChanges").disabled=false;}
 }
@@ -72,12 +72,26 @@ const catalogs={
 ["M6-KNTT-T1-L01","Bài 1 — Tập hợp"],["M6-KNTT-T1-L02","Bài 2 — Cách ghi số tự nhiên"],["M6-KNTT-T1-L03","Bài 3 — Thứ tự trong tập hợp số tự nhiên"],["M6-KNTT-T1-L04","Bài 4 — Phép cộng và phép trừ số tự nhiên"],["M6-KNTT-T1-L05","Bài 5 — Phép nhân và phép chia số tự nhiên"],["M6-KNTT-T1-L06","Bài 6 — Lũy thừa với số mũ tự nhiên"],["M6-KNTT-T1-L07","Bài 7 — Thứ tự thực hiện các phép tính"]]},
 "2":{chapter:"VIII",batch:"AURA-M6-KNTT-CH08-V0.4-PEDAGOGICAL-QUEUE",items:Array.from({length:6},(_,i)=>["M6-KNTT-C08-L"+(32+i),"Bài "+(32+i)])}
 };
+const chapter2={chapter:"II",batch:"AURA-M6-KNTT-T1-C02-DRAFT-V0.1",items:[
+["M6-KNTT-T1-L08","Bài 8 — Quan hệ chia hết và tính chất"],
+["M6-KNTT-T1-L09","Bài 9 — Dấu hiệu chia hết"],
+["M6-KNTT-T1-L10","Bài 10 — Số nguyên tố"],
+["M6-KNTT-T1-L11","Bài 11 — Ước chung, ƯCLN"],
+["M6-KNTT-T1-L12","Bài 12 — Bội chung, BCNN"]
+]};
+function activeCatalog(){return el("volume").value==="1"&&el("chapter").value==="II"?chapter2:catalogs[el("volume").value];}
+function syncLesson(){
+ const c=activeCatalog(),lesson=el("lesson");lesson.replaceChildren();
+ const all=document.createElement("option");all.value="";all.textContent="Tất cả bài";lesson.append(all);
+ for(const [id,label] of c.items){const option=document.createElement("option");option.value=id;option.textContent=label;lesson.append(option);}
+ el("state").value="";el("level").value="";el("audit").value="";
+}
 function syncVolumes(){
-const c=catalogs[el("volume").value],ch=el("chapter"),lesson=el("lesson");
-ch.replaceChildren();const o=document.createElement("option");o.value=c.chapter;o.textContent="Chương "+c.chapter;ch.append(o);
-lesson.replaceChildren();const all=document.createElement("option");all.value="";all.textContent="Tất cả bài";lesson.append(all);
-for(const [id,label] of c.items){const option=document.createElement("option");option.value=id;option.textContent=label;lesson.append(option);}
-el("state").value="";el("level").value="";el("audit").value="";
+const c=catalogs[el("volume").value],ch=el("chapter");
+ch.replaceChildren();
+const chapters=el("volume").value==="1"?["I","II"]:["VIII"];
+for(const title of chapters){const option=document.createElement("option");option.value=title;option.textContent="Chương "+title;ch.append(option);}
+syncLesson();
 }
 
 async function send(input){
@@ -90,12 +104,12 @@ function cell(parent,name,value){const p=document.createElement("p");const b=doc
 async function load(){
 el("questions").replaceChildren();notice("Đang đọc dữ liệu qua API bảo vệ…");
 try{
-const data=await send({action:"list",batch:catalogs[el("volume").value].batch,lesson:el("lesson").value,level:el("level").value,state:el("state").value});
+const data=await send({action:"list",batch:activeCatalog().batch,lesson:el("lesson").value,level:el("level").value,state:el("state").value});
 const incoming=Array.isArray(data.items)?data.items:[];
-if(el("volume").value==="1"&&el("lesson").value===""&&el("level").value===""&&el("state").value===""){
+if(el("volume").value==="1"&&el("chapter").value==="I"&&el("lesson").value===""&&el("level").value===""&&el("state").value===""){
 const approvals=incoming.filter(x=>x.status==="APPROVED").length, waiting=incoming.filter(x=>x.status==="PENDING").length;
 el("chapterGate").textContent="Chương I: "+approvals+"/63 đã duyệt; "+waiting+" chờ duyệt. "+(approvals===63&&waiting===0?"Đủ điều kiện kiểm tra đóng chương; Exam Engine vẫn khóa.":"CHƯA ĐỦ ĐIỀU KIỆN ĐÓNG CHƯƠNG.");
-}else{el("chapterGate").textContent="Đặt Tập 1 · Tất cả bài · Tất cả mức độ/trạng thái để xem tổng tiến độ đóng Chương I.";}
+}else{el("chapterGate").textContent="Đặt Tập 1 · Chương I · Tất cả bài · Tất cả mức độ/trạng thái để xem tổng tiến độ đóng Chương I.";}
 
 const audit=el("audit").value;
 const items=incoming.filter(item=>{
@@ -123,7 +137,7 @@ if(item.status==="PENDING"){
 const review=document.createElement("div");review.className="review";const note=document.createElement("textarea");note.placeholder="Nhận xét sư phạm bắt buộc (tối thiểu 8 ký tự)";note.setAttribute("aria-label","Nhận xét "+item.id);review.append(note);
 const actions=document.createElement("div");actions.className="actions";
 for(const [action,label,cls] of [["APPROVED","Phê duyệt",""],["CHANGES_REQUESTED","Yêu cầu sửa","btnwarn"],["REJECTED","Từ chối","btndanger"]]){
-const btn=document.createElement("button");btn.className=cls;btn.textContent=label;btn.addEventListener("click",async()=>{if(note.value.trim().length<8){notice("Cần ghi lý do ít nhất 8 ký tự.");return;}if(!confirm("Xác nhận "+label.toLowerCase()+" câu "+item.id+"? Quyết định được lưu lịch sử."))return;btn.disabled=true;try{await send({action:"decide",batch:catalogs[el("volume").value].batch,id:item.id,decision:action,note:note.value.trim()});await load();notice("Đã lưu quyết định cho "+item.id+". Exam Engine vẫn khóa.");}catch(e){notice(e.message);btn.disabled=false;}});actions.append(btn);}
+const btn=document.createElement("button");btn.className=cls;btn.textContent=label;btn.addEventListener("click",async()=>{if(note.value.trim().length<8){notice("Cần ghi lý do ít nhất 8 ký tự.");return;}if(!confirm("Xác nhận "+label.toLowerCase()+" câu "+item.id+"? Quyết định được lưu lịch sử."))return;btn.disabled=true;try{await send({action:"decide",batch:activeCatalog().batch,id:item.id,decision:action,note:note.value.trim()});await load();notice("Đã lưu quyết định cho "+item.id+". Exam Engine vẫn khóa.");}catch(e){notice(e.message);btn.disabled=false;}});actions.append(btn);}
 review.append(actions);article.append(review);
 }
 el("questions").append(article);
@@ -137,7 +151,7 @@ try{await navigator.clipboard.writeText(report);el("deviceStatus").textContent="
 });
 el("batchApprove").addEventListener("click",()=>applyBatch("APPROVED"));
 el("batchChanges").addEventListener("click",()=>applyBatch("CHANGES_REQUESTED"));
-el("reload").addEventListener("click",load);el("volume").addEventListener("change",()=>{syncVolumes();load();});for(const id of ["lesson","level","state","audit"])el(id).addEventListener("change",load);
+el("reload").addEventListener("click",load);el("volume").addEventListener("change",()=>{syncVolumes();load();});el("chapter").addEventListener("change",()=>{syncLesson();load();});for(const id of ["lesson","level","state","audit"])el(id).addEventListener("change",load);
 el("logout").addEventListener("click",async()=>{await auth.auth.signOut();el("questions").replaceChildren();notice("Đã đăng xuất.");});
 syncVolumes();load();
 </script></body></html>
