@@ -63,8 +63,8 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <p id="deviceStatus" class="quiet" aria-live="polite"></p></section>
 <section class="panel" id="chartVisual">
 <strong>Nghiệm thu biểu đồ mới trên thiết bị thật · Chương IX</strong>
-<p class="quiet">Hiển thị 23 biểu đồ SVG của Bài 39–41. Kiểm tra từng biểu đồ, dùng nút phóng to để đọc số liệu. Đây là kết quả do Admin trực tiếp xác nhận, không phải kiểm thử độc lập của máy chủ.</p>
-<button type="button" id="chartOpen">Mở 23 biểu đồ để kiểm tra</button>
+<p class="quiet">Trên iPhone, mở màn hình kiểm tra riêng bên dưới. Trang này chỉ tải 23 hình, không tải cả chương nên thao tác nhẹ hơn.</p>
+<a href="./admin-chart-review.html?v=2" id="chartMobileLink" style="display:inline-block;background:#176497;color:white;text-decoration:none;border-radius:10px;padding:14px;margin:8px 0;min-height:48px">Mở 23 biểu đồ — giao diện iPhone</a><p class="quiet">Phiên bản mới tải trực tiếp 23 hình, có nút phóng to/thu nhỏ và ghi nhận từng hình đã kiểm tra.</p><button type="button" id="chartOpen">Mở màn hình kiểm tra trên iPhone</button>
 <p class="quiet" id="chartLoadStatus" role="status">Chưa tải bộ 23 biểu đồ.</p>
 <div id="chartGalleryGrid"></div>
 <div class="review">
@@ -358,7 +358,7 @@ try{await navigator.clipboard.writeText(report);el("deviceStatus").textContent="
 });
 el("batchApprove").addEventListener("click",()=>applyBatch("APPROVED"));
 el("batchChanges").addEventListener("click",()=>applyBatch("CHANGES_REQUESTED"));
-el("chartOpen").addEventListener("click",openAllChartQA);
+el("chartOpen").addEventListener("click",()=>{window.location.href="./admin-chart-review.html?v=2";});
 el("chartClose").addEventListener("click",()=>{const dialog=el("chartModal");if(typeof dialog.close==="function")dialog.close();else dialog.removeAttribute("open");});
 el("chartSave").addEventListener("click",submitChartAcceptance);
 el("reload").addEventListener("click",initializeCatalog);el("volume").addEventListener("change",()=>{syncVolumes();load();});el("chapter").addEventListener("change",()=>{syncLesson();load();});for(const id of ["lesson","level","state","audit"])el(id).addEventListener("change",load);
