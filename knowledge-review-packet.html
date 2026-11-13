@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173d63">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="robots" content="noindex,nofollow">
+<title>AURA STUDY — Hồ sơ kiểm định sư phạm 96 câu Toán 6</title>
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="knowledge_review_packet.css?v=20261113">
+</head>
+<body>
+<main class="packet-shell">
+<header class="packet-hero">
+  <div>
+    <p class="packet-eyebrow">AURA STUDY · KIỂM ĐỊNH HỌC LIỆU</p>
+    <h1>Hồ sơ kiểm định sư phạm · Toán 6, Tập 1</h1>
+    <p>96 câu được trích trực tiếp từ 22 bài học và 5 bộ ôn chương đã biên soạn. Không cần gõ lại đề, phương án, đáp án hoặc lời giải.</p>
+    <a class="packet-back" href="knowledge-approval.html">← Trở về cổng phê duyệt</a>
+  </div>
+</header>
+<div class="packet-notice" role="note"><strong>Đây là hồ sơ hỗ trợ giáo viên kiểm định, không phải quyết định phê duyệt.</strong> Đánh dấu ngoại lệ, in trang hoặc xuất JSON từ trình duyệt không tạo quyền phát hành. Dữ liệu chỉ được phê duyệt khi có chứng cứ chuyên môn và người duyệt có thẩm quyền qua quy trình bảo vệ.</div>
+<section class="packet-metrics" aria-label="Thống kê hồ sơ">
+  <div><strong id="packetCount">—</strong><span>Câu trong hồ sơ</span></div>
+  <div><strong id="packetLessons">—</strong><span>Bài gốc</span></div>
+  <div><strong id="packetChapters">—</strong><span>Chương</span></div>
+  <div><strong id="packetExceptions">0</strong><span>Câu đề nghị sửa</span></div>
+</section>
+<section class="packet-source">
+ <h2>Dấu vết phiên bản nguồn</h2>
+ <dl>
+  <dt>SHA-256 · 22 bài</dt><dd id="packetLessonSha">Đang tải…</dd>
+  <dt>SHA-256 · ôn 5 chương</dt><dd id="packetReviewSha">Đang tải…</dd>
+  <dt>Quyền phát hành</dt><dd>Chưa có — chỉ là bản nháp kiểm định</dd>
+ </dl>
+</section>
+<section class="packet-content">
+  <div class="packet-toolbar">
+    <label>Chọn chương<select id="packetChapter" aria-label="Chọn chương"><option value="all">Tất cả 5 chương</option></select></label>
+    <label>Loại câu<select id="packetKind" aria-label="Loại câu"><option value="all">Tất cả</option><option value="LESSON_PRACTICE">66 câu trong bài</option><option value="CHAPTER_REVIEW">30 câu ôn chương</option></select></label>
+    <label>Tìm mã / kỹ năng / nội dung<input id="packetSearch" type="search" placeholder="Ví dụ: C2-04, hình thoi…" autocomplete="off"></label>
+    <label>Hiển thị<select id="packetFlag"><option value="all">Tất cả câu</option><option value="flagged">Chỉ ngoại lệ đã đánh dấu</option></select></label>
+  </div>
+  <div class="packet-subtools">
+    <p id="packetShowing" aria-live="polite">Đang tải học liệu…</p>
+    <button id="packetPrint" type="button">In / lưu PDF để kiểm định</button>
+    <button id="packetExport" type="button" class="primary">Xuất JSON ngoại lệ (bản nháp)</button>
+  </div>
+  <div id="packetAlert" role="status" class="packet-alert"></div>
+  <div id="packetItems" class="packet-items"></div>
+</section>
+<footer class="packet-footer">Không gửi câu trả lời của học sinh, thông tin cá nhân hoặc khóa GitHub qua hồ sơ này. Gửi bản ngoại lệ cho người quản trị bằng kênh được kiểm soát, không dùng JSON tải xuống làm chứng thư tự phê duyệt.</footer>
+</main>
+<script src="knowledge_review_packet.js?v=20261113"></script>
+</body>
+</html>
