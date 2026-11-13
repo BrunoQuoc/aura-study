@@ -24,13 +24,13 @@ try{
   await page.goto(origin+'/knowledge-math6-volume2.html',{waitUntil:'load'});
   await page.locator('.chapter-button').first().waitFor({timeout:12000});
   assert.equal(await page.locator('.chapter-button').count(),4);
-  assert.equal(await page.locator('.chapter-button:disabled').count(),3);
+  assert.equal(await page.locator('.chapter-button:disabled').count(),2);
   assert.equal(await page.locator('.lesson-button').count(),5);
-  assert.equal((await page.locator('#countLessons').innerText()).trim(),'5');
-  assert.equal((await page.locator('#countQuestions').innerText()).trim(),'15');
+  assert.equal((await page.locator('#countLessons').innerText()).trim(),'9');
+  assert.equal((await page.locator('#countQuestions').innerText()).trim(),'27');
   assert.match(await page.locator('.lesson-title h2').innerText(),/Mở rộng khái niệm phân số/);
   assert.equal(await page.locator('.quiz-card').count(),3);
-  assert.match(await page.locator('.knowledge-warning').innerText(),/Ba chương còn lại chỉ có tên trong mục lục/);
+  assert.match(await page.locator('.knowledge-warning').innerText(),/Chương VIII–IX chỉ có tên trong mục lục/);
   const current=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
   assert.ok(current<=3,'overflow initial on '+v.name+': '+current);
   await page.screenshot({path:'test-results/knowledge-math6-volume2/'+v.name+'-home.png',fullPage:true});
@@ -58,6 +58,23 @@ try{
 
   await page.locator('.lesson-button[data-lesson="27"]').click();
   assert.match(await page.locator('.lesson-title h2').innerText(),/Hai bài toán về phân số/);
+  assert.equal(await page.locator('.pager-button.primary').isDisabled(),false);
+  await page.locator('.chapter-button').nth(1).click();
+  assert.equal(await page.locator('.lesson-button').count(),4);
+  await page.locator('.lesson-button[data-lesson="29"]').click();
+  assert.match(await page.locator('.lesson-title h2').innerText(),/Tính toán với số thập phân/);
+  const picks=[1,1,2];
+  for(let i=0;i<3;i++){
+   await page.locator('.quiz-card').nth(i).locator('input[value="'+picks[i]+'"]').check();
+  }
+  await page.locator('.submit-button').click();
+  await page.locator('#quizResult').waitFor();
+  assert.match(await page.locator('#quizResult').innerText(),/3\\/3/);
+  const after=await page.evaluate(()=>JSON.parse(localStorage.getItem('aura_kntt_math6_volume2_progress_v1')));
+  assert.equal(after.lessons['bai-29'].score,3);
+  assert.equal((await page.locator('#countCompleted').innerText()).trim(),'2');
+  await page.locator('.lesson-button[data-lesson="31"]').click();
+  assert.match(await page.locator('.lesson-title h2').innerText(),/tỉ số và tỉ số phần trăm/);
   assert.equal(await page.locator('.pager-button.primary').isDisabled(),true);
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
   assert.ok(overflow<=3,'overflow after interaction '+v.name+': '+overflow);
@@ -65,6 +82,6 @@ try{
   assert.deepEqual(outside,[],'Unexpected external requests '+v.name);
   await page.screenshot({path:'test-results/knowledge-math6-volume2/'+v.name+'-quiz.png',fullPage:true});
   await ctx.close();
-  console.log('PASS '+v.name+': 5 Math6 fraction lessons, 15 items, read-only chapter backlog and local progress isolation');
+  console.log('PASS '+v.name+': 9 Math6 authored fraction/decimal lessons, 27 items, 2 unbuilt chapters and local progress isolation');
  }
 }finally{await browser.close();}
