@@ -176,9 +176,27 @@ const m=document.createElement("p");m.className="meta";m.textContent=item.lesson
 cell(article,"Đề bài",q.stem);if(typeof item.svg==="string"&&item.svg.startsWith("<svg")&&item.svg.length<30000){const img=document.createElement("img");img.className="figure";img.alt="Hình minh họa "+(q.figure_id||"");img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(item.svg);article.append(img);}
 cell(article,"Đáp án",String(q.answer??""));cell(article,"Lời giải",q.explanation);
 const score=q.scoring_rubric||{};cell(article,"Thang điểm",String(score.points??"")+" điểm — "+(Array.isArray(score.criteria)?score.criteria.join("; "):"Chưa có"));
-if(q.grading_policy){
-const grade=q.grading_policy;
-cell(article,"Auto Grading (thử nghiệm)",grade.decision==="NUMERIC_EXACT_CANDIDATE"?"Ứng viên so khớp số, chấm thực tế đang tắt":"Cần người chấm; không tự quyết định điểm");
+const grade=item.grading_profile||q.grading_policy;
+if(grade){
+const isNumeric=grade.decision==="NUMERIC_EXACT_CANDIDATE";
+cell(article,"Chính sách chấm (STAGING)",isNumeric?"Có thể thử so khớp giá trị số; chấm thật TẮT":"Cần giáo viên đánh giá; không tự quyết định điểm");
+if(isNumeric){
+ const probe=document.createElement("div");probe.className="tools";probe.style.alignItems="end";
+ const textLabel=document.createElement("label");textLabel.textContent="Thử câu trả lời (không lưu điểm)";
+ const input=document.createElement("input");input.type="text";input.inputMode="decimal";input.maxLength=100;input.placeholder="Nhập đáp án thử";input.setAttribute("aria-label","Nhập thử "+item.id);
+ input.style.width="100%";input.style.padding="9px";input.style.borderRadius="8px";
+ textLabel.append(input);
+ const btn=document.createElement("button");btn.type="button";btn.textContent="Thử chấm";
+ const result=document.createElement("p");result.className="quiet";result.setAttribute("role","status");
+ btn.addEventListener("click",async()=>{
+  btn.disabled=true;result.textContent="Đang kiểm tra…";
+  try{const out=await send({action:"grade_preview",batch:activeCatalog().batch,id:item.id,submitted:input.value});
+   const verdict=out.preview?.result||"REVIEW_REQUIRED";
+   result.textContent=verdict==="CORRECT"?"Thử nghiệm: khớp đáp án số":verdict==="INCORRECT"?"Thử nghiệm: chưa khớp đáp án số":"Cần giáo viên kiểm tra, không chấm sai tự động";
+  }catch(e){result.textContent=e.message;}finally{btn.disabled=false;}
+ });
+ probe.append(textLabel,btn);article.append(probe,result);
+}
 }
 if(item.status==="PENDING"){
 const review=document.createElement("div");review.className="review";const note=document.createElement("textarea");note.placeholder="Nhận xét sư phạm bắt buộc (tối thiểu 8 ký tự)";note.setAttribute("aria-label","Nhận xét "+item.id);review.append(note);
