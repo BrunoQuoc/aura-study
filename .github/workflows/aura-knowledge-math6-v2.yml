@@ -72,5 +72,5 @@ jobs:
             test-results/knowledge-math6-volume2/
           retention-days: 7
 
-# Source content is independently authored by AURA, not copied full textbook.
+# Both volumes use original AURA teaching drafts and original practice, not copied textbook.
 # No prod Exam Engine, Question Bank writes, student backend credentials or Drive calls.
