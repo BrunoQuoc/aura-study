@@ -1,4 +1,4 @@
-name: AURA Math6 Volume 2 — Fractions Content & iPad QA
+name: AURA Math6 Volume 2 — Fractions, Decimals & iPad QA
 
 on:
   pull_request:
@@ -6,6 +6,12 @@ on:
       - 'aura_data/knowledge_math6_kntt_volume2_v1.json'
       - 'knowledge-math6-volume2.html'
       - 'knowledge_math6_volume2.js'
+      - 'aura_data/knowledge_math6_kntt_volume2_chapter7_review_v1.json'
+      - 'knowledge-math6-decimals-review.html'
+      - 'knowledge_math6_decimals.js'
+      - 'knowledge_math6_decimals.css'
+      - 'tests/knowledge-math6-chapter7-decimals.test.mjs'
+      - 'tests/knowledge-math6-chapter7-browser.mjs'
       - 'lesson_maps_ui.js'
       - 'student-direct.html'
       - 'tests/knowledge-math6-volume2-fractions.test.mjs'
@@ -18,7 +24,7 @@ permissions:
 
 jobs:
   static-content:
-    name: 21-lesson TOC, 5 original chapters VI lessons and 15 answer keys
+    name: 21-lesson TOC, 9 authored VI-VII lessons and 33 practice/review answer keys
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
@@ -29,8 +35,10 @@ jobs:
       - name: Validate fraction source, safety gates and legacy Volume 1
         run: |
           node --check knowledge_math6_volume2.js
+          node --check knowledge_math6_decimals.js
           node --check lesson_maps_ui.js
           node --test tests/knowledge-math6-volume2-fractions.test.mjs \
+                      tests/knowledge-math6-chapter7-decimals.test.mjs \
                       tests/knowledge-math6-volume1-v2.test.mjs \
                       tests/knowledge-math6-chapter-review.test.mjs
 
@@ -53,6 +61,7 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/aura-math6-volume2-http.log 2>&1 &
           sleep 2
           node tests/knowledge-math6-volume2-browser.mjs
+          node tests/knowledge-math6-chapter7-browser.mjs
           node tests/knowledge-math6-volume1-browser.mjs
           node tests/knowledge-math6-chapter-review-browser.mjs
       - name: Keep synthetic screenshots only
@@ -62,6 +71,7 @@ jobs:
           name: aura-math6-volume2-fractions-preview
           path: |
             test-results/knowledge-math6-volume2/
+            test-results/knowledge-math6-chapter7-decimals/
             test-results/knowledge-math6-volume1/
             test-results/knowledge-math6-chapter-review/
           retention-days: 7

@@ -24,8 +24,8 @@
   },
   "expectedTotalLessons": 21,
   "expectedTotalChapters": 4,
-  "authoredLessonCount": 5,
-  "authoredPracticeCount": 15,
+  "authoredLessonCount": 9,
+  "authoredPracticeCount": 27,
   "chapters": [
     {
       "number": 6,
@@ -43,7 +43,7 @@
         28,
         31
       ],
-      "status": "NOT_AUTHORED"
+      "status": "DRAFT_CONTENT_IN_PROGRESS"
     },
     {
       "number": 8,
@@ -99,25 +99,25 @@
       "number": 28,
       "title": "Số thập phân",
       "chapter": 7,
-      "authored": false
+      "authored": true
     },
     {
       "number": 29,
       "title": "Tính toán với số thập phân",
       "chapter": 7,
-      "authored": false
+      "authored": true
     },
     {
       "number": 30,
       "title": "Làm tròn và ước lượng",
       "chapter": 7,
-      "authored": false
+      "authored": true
     },
     {
       "number": 31,
       "title": "Một số bài toán về tỉ số và tỉ số phần trăm",
       "chapter": 7,
-      "authored": false
+      "authored": true
     },
     {
       "number": 32,
@@ -567,6 +567,307 @@
       "status": "DRAFT_ORIGINAL_AURA",
       "requiresPedagogicalReview": true,
       "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-28",
+      "number": 28,
+      "chapter": 7,
+      "title": "Số thập phân",
+      "objectives": [
+        "Viết được phân số có mẫu là 10, 100, 1000 dưới dạng số thập phân và đọc được số thập phân âm.",
+        "Xác định số đối và so sánh hai số thập phân có dấu."
+      ],
+      "concepts": [
+        {
+          "heading": "Từ phân số sang số thập phân",
+          "body": "Một phân số có mẫu là 10, 100, 1000 có thể viết dạng thập phân; chẳng hạn -37/100 = -0,37. Dấu phẩy ngăn cách phần nguyên với phần thập phân."
+        },
+        {
+          "heading": "Số thập phân âm và số đối",
+          "body": "Số -2,35 là số thập phân âm. Số đối của -2,35 là 2,35; hai số có cùng khoảng cách tới 0 nhưng ở hai phía trên trục số."
+        },
+        {
+          "heading": "So sánh số thập phân",
+          "body": "Số âm luôn nhỏ hơn 0 và số dương. Với hai số thập phân âm, số có giá trị tuyệt đối lớn hơn là số nhỏ hơn, ví dụ -3,47 < -3,4."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Viết -235/100 thành số thập phân, tìm số đối và so sánh -2,35 với -2,5.",
+        "steps": [
+          "Tính -235/100 = -2,35 vì mẫu 100 ứng với hai chữ số sau dấu phẩy.",
+          "Số đối của -2,35 là 2,35; cộng hai số đối ta được 0.",
+          "Viết -2,5 = -2,50. Vì -2,35 lớn hơn -2,50 nên -2,35 > -2,5."
+        ],
+        "conclusion": "-235/100 = -2,35; số đối là 2,35; -2,35 > -2,5."
+      },
+      "commonMistake": "Không kết luận -3,47 > -3,4 chỉ vì 47 > 4; phải quy về cùng số chữ số và xét dấu âm.",
+      "practice": [
+        {
+          "prompt": "Phân số -37/100 được viết dưới dạng số thập phân nào?",
+          "choices": [
+            "-0,037",
+            "-0,37",
+            "0,37",
+            "-3,7"
+          ],
+          "correct": 1,
+          "explanation": "Vì 37 phần trăm là 0,37 và phân số có dấu âm, ta có -37/100 = -0,37.",
+          "skill": "viet-so-thap-phan"
+        },
+        {
+          "prompt": "Số đối của -5,08 là số nào?",
+          "choices": [
+            "-5,8",
+            "0",
+            "5,08",
+            "5,8"
+          ],
+          "correct": 2,
+          "explanation": "Hai số đối có tổng bằng 0. Ta có -5,08 + 5,08 = 0, do đó số đối là 5,08.",
+          "skill": "so-doi-thap-phan"
+        },
+        {
+          "prompt": "Khẳng định nào đúng về -3,47 và -3,4?",
+          "choices": [
+            "-3,47 > -3,4",
+            "-3,47 < -3,4",
+            "-3,47 = -3,4",
+            "-3,47 > 0"
+          ],
+          "correct": 1,
+          "explanation": "Viết -3,4 thành -3,40 rồi so sánh: -3,47 nằm bên trái -3,40 trên trục số nên -3,47 < -3,4.",
+          "skill": "so-sanh-thap-phan"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-29",
+      "number": 29,
+      "chapter": 7,
+      "title": "Tính toán với số thập phân",
+      "objectives": [
+        "Cộng, trừ, nhân và chia được các số thập phân có dấu trong các ví dụ vừa sức.",
+        "Vận dụng tính chất giao hoán, kết hợp, phân phối và phép tính thập phân để giải bài toán."
+      ],
+      "concepts": [
+        {
+          "heading": "Cộng và trừ",
+          "body": "Khi cộng, trừ số thập phân, đặt thẳng hàng các chữ số cùng hàng và xét dấu như khi cộng, trừ số nguyên. Ví dụ -2,75 + 5,4 = 2,65."
+        },
+        {
+          "heading": "Nhân các số thập phân",
+          "body": "Nhân như các số tự nhiên rồi đặt dấu phẩy sao cho số chữ số thập phân của tích bằng tổng số chữ số thập phân của các thừa số, sau đó xét dấu."
+        },
+        {
+          "heading": "Chia các số thập phân",
+          "body": "Khi số chia là thập phân khác 0, nhân cả số bị chia và số chia với một lũy thừa của 10 để số chia thành số nguyên; cuối cùng xác định dấu của thương."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính (-1,25) × 0,8 và 4,5 : (-0,9); kiểm tra bằng phép tính ngược.",
+        "steps": [
+          "Nhân phần giá trị tuyệt đối: 1,25 × 0,8 = 1,000 = 1. Một thừa số âm nên tích là -1.",
+          "Chia 4,5 cho -0,9: nhân cả hai với 10 được 45 : (-9) = -5.",
+          "Kiểm tra thương: (-5) × (-0,9) = 4,5; hai kết quả thỏa quy tắc dấu."
+        ],
+        "conclusion": "(-1,25) × 0,8 = -1 và 4,5 : (-0,9) = -5."
+      },
+      "commonMistake": "Không bỏ qua dấu âm khi nhân hoặc chia; phép chia cho số 0 không thực hiện được, dù viết 0 hay 0,0.",
+      "practice": [
+        {
+          "prompt": "Tính (-2,75) + 5,4.",
+          "choices": [
+            "-8,15",
+            "2,65",
+            "-2,65",
+            "3,35"
+          ],
+          "correct": 1,
+          "explanation": "Viết 5,4 thành 5,40 rồi tính 5,40 - 2,75 = 2,65; tổng dương vì 5,40 có giá trị tuyệt đối lớn hơn.",
+          "skill": "cong-tru-thap-phan"
+        },
+        {
+          "prompt": "Tính 7,2 - (-1,35).",
+          "choices": [
+            "5,85",
+            "8,55",
+            "-8,55",
+            "6,15"
+          ],
+          "correct": 1,
+          "explanation": "Trừ số âm bằng cộng số đối: 7,2 - (-1,35) = 7,20 + 1,35 = 8,55.",
+          "skill": "cong-tru-thap-phan"
+        },
+        {
+          "prompt": "Tính 4,5 : (-0,9).",
+          "choices": [
+            "-0,5",
+            "5",
+            "-5",
+            "-50"
+          ],
+          "correct": 2,
+          "explanation": "Nhân cả hai số với 10: 4,5 : (-0,9) = 45 : (-9) = -5; kiểm tra -5 × (-0,9) = 4,5.",
+          "skill": "nhan-chia-thap-phan"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-30",
+      "number": 30,
+      "chapter": 7,
+      "title": "Làm tròn và ước lượng",
+      "objectives": [
+        "Làm tròn một số thập phân dương đến hàng đơn vị, hàng phần mười hoặc hàng phần trăm.",
+        "Ước lượng kết quả phép tính để kiểm tra tính hợp lí của đáp số."
+      ],
+      "concepts": [
+        {
+          "heading": "Quy tắc làm tròn",
+          "body": "Xác định hàng cần làm tròn; xét chữ số ngay bên phải: nếu từ 0 đến 4 thì giữ nguyên, nếu từ 5 đến 9 thì tăng chữ số tại hàng làm tròn một đơn vị."
+        },
+        {
+          "heading": "Độ chính xác của kết quả",
+          "body": "Làm tròn đến hàng phần mười giữ một chữ số sau dấu phẩy; đến hàng phần trăm giữ hai chữ số. Số làm tròn là giá trị gần đúng, không đồng nhất với số ban đầu."
+        },
+        {
+          "heading": "Ước lượng phép tính",
+          "body": "Thay số khó bằng các số gần và dễ tính rồi kiểm tra cỡ lớn của kết quả. Ví dụ 19,8 × 4,9 xấp xỉ 20 × 5 = 100."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Làm tròn số 3,746 đến hàng phần mười, phần trăm và ước lượng 29,7 × 2,1.",
+        "steps": [
+          "Đến hàng phần mười: chữ số hàng phần trăm là 4 (< 5), nên 3,746 ≈ 3,7.",
+          "Đến hàng phần trăm: chữ số hàng phần nghìn là 6 (≥ 5), nên 3,746 ≈ 3,75.",
+          "Để ước lượng tích, làm tròn 29,7 gần 30 và 2,1 gần 2, suy ra tích gần 30 × 2 = 60."
+        ],
+        "conclusion": "3,746 ≈ 3,7 (phần mười); ≈ 3,75 (phần trăm); 29,7 × 2,1 xấp xỉ 60."
+      },
+      "commonMistake": "Không nhìn chữ số ở xa hơn thay vì chữ số ngay bên phải hàng cần làm tròn; đồng thời không coi kết quả ước lượng là kết quả chính xác.",
+      "practice": [
+        {
+          "prompt": "Làm tròn 12,746 đến hàng phần mười được số nào?",
+          "choices": [
+            "12,8",
+            "12,7",
+            "12,75",
+            "13"
+          ],
+          "correct": 1,
+          "explanation": "Hàng phần mười là 7; chữ số ngay bên phải là 4 (< 5), nên giữ 7 và được 12,7.",
+          "skill": "lam-tron"
+        },
+        {
+          "prompt": "Làm tròn 8,768 đến hàng phần trăm được số nào?",
+          "choices": [
+            "8,76",
+            "8,77",
+            "8,8",
+            "8,7"
+          ],
+          "correct": 1,
+          "explanation": "Hàng phần trăm là 6, chữ số ngay bên phải là 8 (≥ 5) nên tăng lên 7: 8,77.",
+          "skill": "lam-tron"
+        },
+        {
+          "prompt": "Ước lượng nhanh 19,8 × 4,9 bằng cách làm tròn 19,8 ≈ 20 và 4,9 ≈ 5. Kết quả gần bằng bao nhiêu?",
+          "choices": [
+            "25",
+            "80",
+            "100",
+            "200"
+          ],
+          "correct": 2,
+          "explanation": "Theo phép ước lượng được yêu cầu, 19,8 ≈ 20 và 4,9 ≈ 5, nên tích gần 20 × 5 = 100.",
+          "skill": "uoc-luong"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-31",
+      "number": 31,
+      "chapter": 7,
+      "title": "Một số bài toán về tỉ số và tỉ số phần trăm",
+      "objectives": [
+        "Tính được tỉ số của hai đại lượng cùng đơn vị, mẫu số khác 0 và đổi tỉ số ra phần trăm.",
+        "Giải được bài toán tìm giá trị phần trăm và giảm giá phần trăm đơn giản."
+      ],
+      "concepts": [
+        {
+          "heading": "Tỉ số và tỉ số phần trăm",
+          "body": "Tỉ số của a và b (b khác 0) là a/b. Muốn viết dưới dạng phần trăm, tính a/b × 100%. Nếu đại lượng có đơn vị, cần quy về cùng đơn vị trước."
+        },
+        {
+          "heading": "Tìm một số phần trăm của lượng đã biết",
+          "body": "p% của a là a × p/100. Ví dụ 15% của 200 là 200 × 15/100 = 30; kết quả giữ đơn vị của lượng a."
+        },
+        {
+          "heading": "Tăng và giảm theo tỉ lệ phần trăm",
+          "body": "Nếu giảm p% thì lượng còn lại bằng lượng ban đầu nhân (1 - p/100); nếu tăng p% thì nhân (1 + p/100). Nên kiểm tra kết quả hợp lí."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Một cửa hàng có 60 cuốn truyện, trong đó 18 cuốn khoa học. Món đồ giá 200 000 đồng được giảm 15%. Tính tỉ lệ và giá mới.",
+        "steps": [
+          "Tỉ lệ truyện khoa học là 18/60 = 0,3 = 30%.",
+          "Số tiền được giảm là 200 000 × 15/100 = 30 000 đồng.",
+          "Giá phải trả là 200 000 - 30 000 = 170 000 đồng, thấp hơn giá gốc."
+        ],
+        "conclusion": "Truyện khoa học chiếm 30%; giá sau giảm là 170 000 đồng."
+      },
+      "commonMistake": "Không nhầm 15% với số 15; và không trừ trực tiếp 15 đồng khi bài cho giảm 15% của giá sản phẩm.",
+      "practice": [
+        {
+          "prompt": "Lớp có 12 bạn chọn bóng rổ trong tổng 60 bạn. Tỉ lệ chọn bóng rổ bằng bao nhiêu phần trăm?",
+          "choices": [
+            "12%",
+            "20%",
+            "48%",
+            "50%"
+          ],
+          "correct": 1,
+          "explanation": "Tỉ lệ là 12/60 = 1/5 = 0,2; đổi ra phần trăm là 0,2 × 100% = 20%.",
+          "skill": "ti-so-phan-tram"
+        },
+        {
+          "prompt": "15% của 240 là bao nhiêu?",
+          "choices": [
+            "24",
+            "36",
+            "40",
+            "48"
+          ],
+          "correct": 1,
+          "explanation": "Tính 240 × 15/100 = 240 × 0,15 = 36; có thể kiểm tra 10% là 24 và 5% là 12, cộng được 36.",
+          "skill": "phan-tram-cua-so"
+        },
+        {
+          "prompt": "Một chiếc cặp giá 150 000 đồng được giảm 20%. Giá phải trả là bao nhiêu?",
+          "choices": [
+            "30 000 đồng",
+            "130 000 đồng",
+            "120 000 đồng",
+            "125 000 đồng"
+          ],
+          "correct": 2,
+          "explanation": "Tiền giảm là 150 000 × 20/100 = 30 000 đồng; giá mới 150 000 - 30 000 = 120 000 đồng.",
+          "skill": "giam-gia-phan-tram"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
     }
-  ]
+  ],
+  "releaseNote": "Volume 2 chapter VI and VII authored drafts; remaining chapters VIII–IX not authored. No teacher signoff."
 }
