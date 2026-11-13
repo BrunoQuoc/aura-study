@@ -1,0 +1,15 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>AURA STUDY · Không gian học sinh</title><link rel="stylesheet" href="./aura-portal-v2.css"></head>
+<body data-role="student"><header><a class="brand" href="./aura-portal.html">AURA STUDY<small>STUDENT PORTAL</small></a><nav class="nav"><a href="./aura-portal.html">Chọn vai trò</a><a href="./aura-staging-login.html">Xác thực Staging cũ</a></nav></header>
+<main><section class="hero"><span class="eyebrow">Không gian STUDENT · Staging V2</span><h1>Không gian học sinh</h1><p class="muted">Ghép đôi thiết bị và truy cập hồ sơ học tập đã được liên kết.</p></section>
+<div class="layout"><section class="panel"><div class="panel-head"><h2>Kết nối thiết bị</h2><span class="stamp">STAGING</span></div><div id="captcha" aria-label="Xác thực chống bot"></div>
+ <button type="button" id="startStudent" style="width:100%">Bắt đầu kết nối thiết bị</button>
+ <label for="deviceLabel">Tên thiết bị</label><input id="deviceLabel" maxlength="80" placeholder="iPad học tập">
+ <label for="pairCode">Mã liên kết do Phụ huynh cấp</label><input id="pairCode" spellcheck="false" autocomplete="off" maxlength="32" placeholder="Mã 32 ký tự">
+ <button type="button" id="pairStudent" class="secondary" style="width:100%;margin-top:10px">Liên kết với hồ sơ</button>
+<div id="authStatus" class="status" role="status" aria-live="polite">Đang kiểm tra phiên đăng nhập…</div>
+<div class="actions"><button type="button" id="checkRole" class="secondary">Kiểm tra quyền</button><button type="button" id="signOut" class="secondary">Đăng xuất phiên này</button></div></section>
+<section class="panel"><div class="panel-head"><h2>Hồ sơ học tập</h2><span class="stamp">Xác thực vai trò</span></div>
+<p id="roleStatus" class="status">Chưa có quyền truy cập được xác minh.</p><div id="roleDetails"><div id="studentInfo" class="muted">Thiết bị chưa được kiểm tra kết nối.</div></div>
+<div class="security">Chỉ các chức năng thuộc đúng vai trò mới được hiển thị. Máy chủ tiếp tục xác minh quyền trước khi trả dữ liệu.</div></section></div></main>
+<footer>AURA STUDY · STAGING — Trang kỹ thuật cũ vẫn được giữ để dự phòng. Không nhập dữ liệu học thật; Exam Engine khóa.</footer>
+<script type="module" src="./aura-portal-v2.js"></script></body></html>
