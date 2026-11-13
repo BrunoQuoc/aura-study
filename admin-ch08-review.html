@@ -47,7 +47,7 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <details><summary>Chi tiết các mục cần kiểm tra</summary><div id="qaFindings"></div></details>
 <p class="quiet">Kiểm tra tự động không thay thế phê duyệt sư phạm. Các câu đã duyệt có cảnh báo mức cao vẫn bị chặn xuất bản.</p>
 </section>
-<section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “Đã sửa — Chờ duyệt”, “Tái duyệt — Rubric V2” hoặc “Toàn bộ câu chờ duyệt” để kiểm tra và chọn rõ các câu cho quyết định theo lô (tối đa 30). Hai rubric cũ đã được tạo phiên bản mới và mở lại hàng chờ để tái duyệt; lịch sử duyệt cũ được giữ nguyên. Không có tự động phê duyệt.</p></section>
+<section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “QA — Ưu tiên cao” để xử lý bốn câu vừa mở lại, hoặc “Toàn bộ câu chờ duyệt” để duyệt từng nhóm (tối đa 30 câu). Hai rubric cũ đã được tạo phiên bản mới và mở lại hàng chờ để tái duyệt; lịch sử duyệt cũ được giữ nguyên. Không có tự động phê duyệt.</p></section>
 <section class="panel" id="batchPanel" hidden><strong>Nghiệm thu theo lô — tối đa 30 câu mỗi lần</strong><p class="quiet">Chọn từng câu sau khi đọc nội dung và kiểm tra đáp án, thang điểm; không chọn tự động. Mọi quyết định áp dụng cho phiên bản đang hiển thị và được ghi lại bằng tài khoản Admin.</p><p id="pickedCount">Đã chọn 0 câu</p><textarea id="batchNote" placeholder="Nhận xét cho đợt duyệt (ít nhất 8 ký tự)" aria-label="Ghi chú duyệt theo lô"></textarea><div class="actions"><button id="batchApprove" type="button">Phê duyệt các câu đã chọn</button><button id="batchChanges" class="btnwarn" type="button">Yêu cầu sửa các câu đã chọn</button></div></section>
 <section class="panel" id="deviceAcceptance"><strong>Nghiệm thu trên điện thoại thật</strong>
 <p class="quiet">Chạy trên Safari iPhone/iPad hoặc Chrome Android. Các dấu kiểm dưới đây chỉ là xác nhận của người thao tác trên thiết bị, không được tự động coi là đã nghiệm thu.</p>
@@ -95,7 +95,7 @@ function updateSelection(){
 el("pickedCount").textContent="Đã chọn "+selected.size+" câu";
 }
 async function applyBatch(decision){
-if(!["revised_pending","approved_rubric","pending_all","qa_flagged"].includes(el("audit").value)||selected.size===0){notice("Chọn các câu đã sửa cần nghiệm thu trước.");return;}
+if(!["revised_pending","approved_rubric","pending_all","qa_flagged","qa_high"].includes(el("audit").value)||selected.size===0){notice("Chọn các câu đã sửa cần nghiệm thu trước.");return;}
 const note=el("batchNote").value.trim();if(note.length<8){notice("Ghi chú phải có ít nhất 8 ký tự.");return;}
 const ids=[...selected.keys()],versions=Object.fromEntries(selected);
 if(!confirm("Xác nhận "+(decision==="APPROVED"?"PHÊ DUYỆT":"YÊU CẦU SỬA")+" "+ids.length+" câu đã chọn? Quyết định sẽ được ghi vào lịch sử và không thể sửa trực tiếp."))return;
@@ -278,11 +278,11 @@ const items=incoming.filter(item=>{
  if(audit==="approved_rubric")return item.status==="PENDING"&&item.body?.qa_status==="RUBRIC_V2_REOPENED_REQUIRES_APPROVAL";
  return true;
 });
-selected.clear();updateSelection();el("batchPanel").hidden=!["pending_all","revised_pending","approved_rubric","qa_flagged"].includes(audit);
+selected.clear();updateSelection();el("batchPanel").hidden=!["pending_all","revised_pending","approved_rubric","qa_flagged","qa_high"].includes(audit);
 el("summary").textContent="Hiển thị "+items.length+" / "+incoming.length+" câu · Đây chỉ là bộ lọc nghiệm thu, không tự phê duyệt hoặc xuất bản.";
 for(const item of items){
 const q=item.body||{},article=document.createElement("article");article.className="panel";
-if(["pending_all","revised_pending","approved_rubric","qa_flagged"].includes(audit)&&item.status==="PENDING"){
+if(["pending_all","revised_pending","approved_rubric","qa_flagged","qa_high"].includes(audit)&&item.status==="PENDING"){
 const selectLabel=document.createElement("label");selectLabel.style.display="block";selectLabel.style.marginBottom="9px";
 const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.style.marginRight="10px";
 checkbox.addEventListener("change",()=>{if(checkbox.checked){if(selected.size>=30){checkbox.checked=false;notice("Mỗi đợt chỉ chọn tối đa 30 câu.");return;}selected.set(item.id,item.revision);}else selected.delete(item.id);updateSelection();});
