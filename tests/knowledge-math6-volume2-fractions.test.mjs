@@ -8,7 +8,7 @@ const html=readFileSync('knowledge-math6-volume2.html','utf8');
 const legacy=readFileSync('lesson_maps_ui.js','utf8');
 const student=readFileSync('student-direct.html','utf8');
 
-test('Volume 2: official TOC 4 chapters, lessons 23–43; 9 lessons actually authored across VI–VII',()=>{
+test('Volume 2: official TOC 4 chapters, lessons 23–43; 15 lessons actually authored across VI–VIII',()=>{
  assert.equal(data.schemaVersion,1);
  assert.equal(data.libraryId,'AURA-KNTT6-MATH-VOLUME2');
  assert.equal(data.subject,'TOAN');
@@ -20,13 +20,13 @@ test('Volume 2: official TOC 4 chapters, lessons 23–43; 9 lessons actually aut
  assert.equal(data.outline.length,21);
  assert.deepEqual(data.outline.map(x=>x.number),
   Array.from({length:21},(_,i)=>i+23));
- assert.equal(data.outline.filter(x=>x.authored).length,9);
- assert.deepEqual(data.lessons.map(x=>x.number),[23,24,25,26,27,28,29,30,31]);
- assert.ok(data.chapters.slice(2).every(x=>x.status==='NOT_AUTHORED'));
- assert.equal(data.authoredLessonCount,9);
+ assert.equal(data.outline.filter(x=>x.authored).length,15);
+ assert.deepEqual(data.lessons.map(x=>x.number),[23,24,25,26,27,28,29,30,31,32,33,34,35,36,37]);
+ assert.ok(data.chapters.slice(3).every(x=>x.status==='NOT_AUTHORED'));
+ assert.equal(data.authoredLessonCount,15);
  assert.equal(data.expectedTotalLessons,21);
- assert.equal(data.authoredPracticeCount,27);
- assert.equal(data.lessons.reduce((sum,l)=>sum+l.practice.length,0),27);
+ assert.equal(data.authoredPracticeCount,45);
+ assert.equal(data.lessons.reduce((sum,l)=>sum+l.practice.length,0),45);
 });
 test('Chapter VI 5 lessons have original explanations, worked problems, 15 unique questions',()=>{
  const seen=new Set();
@@ -80,7 +80,7 @@ test('No publisher pages copied, no source content promoted to official bank',()
   questionBankPromotionEnabled:false,examEngineLinkEnabled:false,
   weaknessMapWriteEnabled:false
  });
- assert.match(html,/Chương VIII–IX chỉ có tên/);
+ assert.match(html,/Chương IX (Bài 38–43) chỉ có mục lục/);
  assert.match(html,/knowledge_math6_volume2\.js/);
  assert.match(html,/connect-src 'self'/);
  assert.match(legacy,/href='knowledge-math6-volume2\.html'/);
@@ -93,7 +93,7 @@ test('Only authored chapters are selectable; Tập 1 reader and content stay iso
  assert.match(js,/const available=state\.data\.lessons\.some/);
  assert.match(js,/!available\);/);
  assert.match(js,/state\.selected===23/);
- assert.match(js,/state\.selected===31/);
- assert.match(js,/count!==27/);
- assert.match(js,/d\.lessons\.length!==9/);
+ assert.match(js,/state\.selected===37/);
+ assert.match(js,/count!==45/);
+ assert.match(js,/d\.lessons\.length!==15/);
 });
