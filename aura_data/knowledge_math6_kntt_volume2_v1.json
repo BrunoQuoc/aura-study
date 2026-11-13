@@ -1,0 +1,572 @@
+{
+  "schemaVersion": 1,
+  "libraryId": "AURA-KNTT6-MATH-VOLUME2",
+  "series": "Kết nối tri thức với cuộc sống",
+  "grade": 6,
+  "subject": "TOAN",
+  "volume": 2,
+  "language": "vi",
+  "source": {
+    "basis": "PUBLISHER_PUBLIC_TOC_ALIGNMENT_ONLY",
+    "publisherToc": "https://sachdientu.nxbgd.vn/thu-vien-so/doc-sach/shs-toan-tap-2.4491552782",
+    "corroboratingToc": "https://ihoc.vn/sgk/lop-6/toan-hoc-lop-6/sach-giao-khoa-toan-lop-6-tap-2-ket-noi-tri-thuc-voi-cuoc-song.html",
+    "userSource": "https://giaokhoaonline.com/toan-lop-6-tap-2-ket-noi-tri-thuc",
+    "verifiedFullText": false,
+    "teacherEditionConfirmed": false
+  },
+  "rights": "AURA-original instructional prose, worked examples and questions; TOC headings only from publisher",
+  "rollout": {
+    "status": "DRAFT_PREVIEW_PARTIAL",
+    "teacherReviewed": false,
+    "questionBankPromotionEnabled": false,
+    "examEngineLinkEnabled": false,
+    "weaknessMapWriteEnabled": false
+  },
+  "expectedTotalLessons": 21,
+  "expectedTotalChapters": 4,
+  "authoredLessonCount": 5,
+  "authoredPracticeCount": 15,
+  "chapters": [
+    {
+      "number": 6,
+      "title": "Phân số",
+      "range": [
+        23,
+        27
+      ],
+      "status": "DRAFT_CONTENT_IN_PROGRESS"
+    },
+    {
+      "number": 7,
+      "title": "Số thập phân",
+      "range": [
+        28,
+        31
+      ],
+      "status": "NOT_AUTHORED"
+    },
+    {
+      "number": 8,
+      "title": "Những hình hình học cơ bản",
+      "range": [
+        32,
+        37
+      ],
+      "status": "NOT_AUTHORED"
+    },
+    {
+      "number": 9,
+      "title": "Dữ liệu và xác suất thực nghiệm",
+      "range": [
+        38,
+        43
+      ],
+      "status": "NOT_AUTHORED"
+    }
+  ],
+  "outline": [
+    {
+      "number": 23,
+      "title": "Mở rộng khái niệm phân số. Phân số bằng nhau",
+      "chapter": 6,
+      "authored": true
+    },
+    {
+      "number": 24,
+      "title": "So sánh phân số. Hỗn số dương",
+      "chapter": 6,
+      "authored": true
+    },
+    {
+      "number": 25,
+      "title": "Phép cộng và phép trừ phân số",
+      "chapter": 6,
+      "authored": true
+    },
+    {
+      "number": 26,
+      "title": "Phép nhân và phép chia phân số",
+      "chapter": 6,
+      "authored": true
+    },
+    {
+      "number": 27,
+      "title": "Hai bài toán về phân số",
+      "chapter": 6,
+      "authored": true
+    },
+    {
+      "number": 28,
+      "title": "Số thập phân",
+      "chapter": 7,
+      "authored": false
+    },
+    {
+      "number": 29,
+      "title": "Tính toán với số thập phân",
+      "chapter": 7,
+      "authored": false
+    },
+    {
+      "number": 30,
+      "title": "Làm tròn và ước lượng",
+      "chapter": 7,
+      "authored": false
+    },
+    {
+      "number": 31,
+      "title": "Một số bài toán về tỉ số và tỉ số phần trăm",
+      "chapter": 7,
+      "authored": false
+    },
+    {
+      "number": 32,
+      "title": "Điểm và đường thẳng",
+      "chapter": 8,
+      "authored": false
+    },
+    {
+      "number": 33,
+      "title": "Điểm nằm giữa hai điểm. Tia",
+      "chapter": 8,
+      "authored": false
+    },
+    {
+      "number": 34,
+      "title": "Đoạn thẳng. Độ dài đoạn thẳng",
+      "chapter": 8,
+      "authored": false
+    },
+    {
+      "number": 35,
+      "title": "Trung điểm của đoạn thẳng",
+      "chapter": 8,
+      "authored": false
+    },
+    {
+      "number": 36,
+      "title": "Góc",
+      "chapter": 8,
+      "authored": false
+    },
+    {
+      "number": 37,
+      "title": "Số đo góc",
+      "chapter": 8,
+      "authored": false
+    },
+    {
+      "number": 38,
+      "title": "Dữ liệu và thu thập dữ liệu",
+      "chapter": 9,
+      "authored": false
+    },
+    {
+      "number": 39,
+      "title": "Bảng thống kê và biểu đồ tranh",
+      "chapter": 9,
+      "authored": false
+    },
+    {
+      "number": 40,
+      "title": "Biểu đồ cột",
+      "chapter": 9,
+      "authored": false
+    },
+    {
+      "number": 41,
+      "title": "Biểu đồ cột kép",
+      "chapter": 9,
+      "authored": false
+    },
+    {
+      "number": 42,
+      "title": "Kết quả có thể và sự kiện trong trò chơi, thí nghiệm",
+      "chapter": 9,
+      "authored": false
+    },
+    {
+      "number": 43,
+      "title": "Xác suất thực nghiệm",
+      "chapter": 9,
+      "authored": false
+    }
+  ],
+  "lessons": [
+    {
+      "id": "KNTT6-MATH-V2-23",
+      "number": 23,
+      "chapter": 6,
+      "title": "Mở rộng khái niệm phân số. Phân số bằng nhau",
+      "objectives": [
+        "Nhận biết phân số có tử và mẫu là số nguyên, mẫu khác 0.",
+        "Kiểm tra hai phân số bằng nhau và rút gọn về dạng tối giản."
+      ],
+      "concepts": [
+        {
+          "heading": "Phân số với số nguyên",
+          "body": "Với a, b là số nguyên và b khác 0, a/b là một phân số. Có thể chuyển dấu âm của mẫu lên tử: 3/(-5) = (-3)/5."
+        },
+        {
+          "heading": "Phân số bằng nhau",
+          "body": "Với b và d khác 0, hai phân số a/b và c/d bằng nhau khi a × d = b × c. Không chỉ so sánh riêng tử hoặc riêng mẫu."
+        },
+        {
+          "heading": "Rút gọn phân số",
+          "body": "Chia cả tử và mẫu cho cùng một ước chung khác 0. Nếu tử, mẫu không còn ước chung lớn hơn 1 về giá trị tuyệt đối thì phân số đã tối giản."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Rút gọn phân số (-18)/24, rồi kiểm tra có bằng (-3)/4 không.",
+        "steps": [
+          "Vì ƯCLN(18, 24) = 6, chia cả tử và mẫu cho 6: (-18)/24 = (-3)/4.",
+          "Kiểm tra tích chéo: (-18) × 4 = -72 và 24 × (-3) = -72.",
+          "Hai tích bằng nhau nên (-18)/24 và (-3)/4 là hai phân số bằng nhau."
+        ],
+        "conclusion": "(-18)/24 = (-3)/4; (-3)/4 là phân số tối giản."
+      },
+      "commonMistake": "Không viết mẫu số bằng 0; rút gọn phải chia cả tử lẫn mẫu cùng một số khác 0.",
+      "practice": [
+        {
+          "prompt": "Cách viết nào là một phân số với tử và mẫu đều là số nguyên? ",
+          "choices": [
+            "3/0",
+            "(-5)/7",
+            "1,5/2",
+            "4/0"
+          ],
+          "correct": 1,
+          "explanation": "(-5) và 7 đều là số nguyên, mẫu 7 khác 0. Các mẫu bằng 0 không hợp lệ; 1,5 không phải số nguyên.",
+          "skill": "phan-so-khai-niem"
+        },
+        {
+          "prompt": "Cặp phân số nào bằng nhau?",
+          "choices": [
+            "(-2)/3 và 4/6",
+            "(-2)/3 và (-6)/9",
+            "2/3 và (-6)/9",
+            "(-2)/3 và (-3)/2"
+          ],
+          "correct": 1,
+          "explanation": "(-6)/9 chia cả tử và mẫu cho 3 được (-2)/3, nên hai phân số bằng nhau.",
+          "skill": "phan-so-bang-nhau"
+        },
+        {
+          "prompt": "Phân số tối giản của (-18)/24 là gì?",
+          "choices": [
+            "(-9)/12",
+            "(-3)/4",
+            "3/4",
+            "(-6)/8"
+          ],
+          "correct": 1,
+          "explanation": "Chia tử và mẫu cho ƯCLN(18,24)=6, ta được (-3)/4. Các phương án (-9)/12 và (-6)/8 chưa tối giản.",
+          "skill": "rut-gon-phan-so"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-24",
+      "number": 24,
+      "chapter": 6,
+      "title": "So sánh phân số. Hỗn số dương",
+      "objectives": [
+        "So sánh được hai phân số, kể cả phân số âm.",
+        "Đổi được hỗn số dương thành phân số và ngược lại."
+      ],
+      "concepts": [
+        {
+          "heading": "So sánh hai phân số",
+          "body": "Có thể quy đồng mẫu dương rồi so sánh tử. Trong hai số âm, số có giá trị tuyệt đối lớn hơn thường đứng bên trái trên trục số và nhỏ hơn."
+        },
+        {
+          "heading": "Phân số và số nguyên",
+          "body": "Mọi phân số dương đều lớn hơn 0; phân số âm nhỏ hơn 0. Số nguyên có thể viết thành phân số mẫu 1 để so sánh."
+        },
+        {
+          "heading": "Hỗn số dương",
+          "body": "Một hỗn số dương gồm phần nguyên và phần phân số thực sự: 2 3/5 = 2 + 3/5 = 13/5. Khi đổi ngược lại, chia tử cho mẫu dương."
+        }
+      ],
+      "workedExample": {
+        "prompt": "So sánh (-5)/6 với (-3)/4 và đổi hỗn số 2 3/5 ra phân số.",
+        "steps": [
+          "Quy đồng mẫu dương 12: (-5)/6 = (-10)/12 và (-3)/4 = (-9)/12.",
+          "Vì -10 nhỏ hơn -9 nên (-5)/6 < (-3)/4.",
+          "Đổi hỗn số: 2 3/5 = (2 × 5 + 3)/5 = 13/5."
+        ],
+        "conclusion": "(-5)/6 < (-3)/4 và 2 3/5 = 13/5."
+      },
+      "commonMistake": "Với các phân số âm, không so sánh chỉ bằng cách nhìn tử số dương hoặc đảo dấu tùy ý; hãy quy đồng mẫu dương.",
+      "practice": [
+        {
+          "prompt": "Khẳng định nào đúng khi so sánh (-5)/6 và (-3)/4?",
+          "choices": [
+            "(-5)/6 > (-3)/4",
+            "(-5)/6 < (-3)/4",
+            "(-5)/6 = (-3)/4",
+            "Cả hai đều bằng 0"
+          ],
+          "correct": 1,
+          "explanation": "Quy đồng mẫu 12 được (-10)/12 và (-9)/12. Vì -10 < -9 nên (-5)/6 nhỏ hơn (-3)/4.",
+          "skill": "so-sanh-phan-so"
+        },
+        {
+          "prompt": "Hỗn số dương 2 3/5 bằng phân số nào?",
+          "choices": [
+            "11/5",
+            "13/5",
+            "5/13",
+            "8/5"
+          ],
+          "correct": 1,
+          "explanation": "Lấy phần nguyên nhân mẫu rồi cộng tử: (2 × 5 + 3)/5 = 13/5.",
+          "skill": "hon-so-duong"
+        },
+        {
+          "prompt": "Dãy nào sắp xếp theo thứ tự tăng dần?",
+          "choices": [
+            "0; (-1)/2; 3/4",
+            "3/4; 0; (-1)/2",
+            "(-1)/2; 0; 3/4",
+            "(-1)/2; 3/4; 0"
+          ],
+          "correct": 2,
+          "explanation": "Phân số âm (-1)/2 nhỏ hơn 0, còn phân số dương 3/4 lớn hơn 0; thứ tự tăng dần là (-1)/2, 0, 3/4.",
+          "skill": "so-sanh-phan-so"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-25",
+      "number": 25,
+      "chapter": 6,
+      "title": "Phép cộng và phép trừ phân số",
+      "objectives": [
+        "Cộng và trừ các phân số có mẫu khác nhau bằng quy đồng mẫu.",
+        "Rút gọn kết quả và biết kiểm tra dấu của phép tính."
+      ],
+      "concepts": [
+        {
+          "heading": "Cộng cùng mẫu",
+          "body": "Với mẫu số giống nhau và khác 0, cộng các tử và giữ mẫu: a/m + b/m = (a + b)/m. Có thể cộng cả số âm."
+        },
+        {
+          "heading": "Cộng khác mẫu",
+          "body": "Quy đồng các phân số về một mẫu chung khác 0 rồi cộng tử. Có thể rút gọn trước hoặc sau để tính nhanh hơn."
+        },
+        {
+          "heading": "Trừ phân số",
+          "body": "Muốn trừ một phân số, cộng với phân số đối của nó: a/b − c/d = a/b + (-c)/d. Giữ đúng dấu âm và mẫu chung."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính (-2)/3 + 5/6 và 7/8 − 1/4.",
+        "steps": [
+          "Quy đồng: (-2)/3 = (-4)/6. Cộng: (-4)/6 + 5/6 = 1/6.",
+          "Quy đồng: 1/4 = 2/8. Trừ: 7/8 − 2/8 = 5/8.",
+          "Kiểm tra kết quả đã tối giản: 1/6 và 5/8."
+        ],
+        "conclusion": "(-2)/3 + 5/6 = 1/6; 7/8 − 1/4 = 5/8."
+      },
+      "commonMistake": "Không cộng trực tiếp cả tử lẫn mẫu, ví dụ 1/2 + 1/3 không bằng 2/5; phải quy đồng trước.",
+      "practice": [
+        {
+          "prompt": "Kết quả của (-2)/3 + 5/6 là gì?",
+          "choices": [
+            "(-7)/6",
+            "1/6",
+            "3/9",
+            "7/6"
+          ],
+          "correct": 1,
+          "explanation": "Quy đồng mẫu 6: (-2)/3 = (-4)/6; cộng (-4 + 5)/6 = 1/6.",
+          "skill": "cong-phan-so"
+        },
+        {
+          "prompt": "Kết quả của 7/8 − 1/4 là gì?",
+          "choices": [
+            "6/4",
+            "5/8",
+            "6/8",
+            "3/4"
+          ],
+          "correct": 1,
+          "explanation": "Đổi 1/4 = 2/8 rồi lấy 7/8 − 2/8 = 5/8. Phân số này đã tối giản.",
+          "skill": "tru-phan-so"
+        },
+        {
+          "prompt": "Giá trị của (-1)/2 − 1/3 là bao nhiêu?",
+          "choices": [
+            "(-1)/6",
+            "(-5)/6",
+            "1/6",
+            "(-2)/5"
+          ],
+          "correct": 1,
+          "explanation": "Quy đồng mẫu 6: (-1)/2 = (-3)/6 và 1/3 = 2/6, vậy kết quả là (-5)/6.",
+          "skill": "tru-phan-so"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-26",
+      "number": 26,
+      "chapter": 6,
+      "title": "Phép nhân và phép chia phân số",
+      "objectives": [
+        "Nhân phân số bằng cách nhân tử với tử, mẫu với mẫu.",
+        "Chia một phân số cho phân số khác 0 bằng nhân với nghịch đảo của số chia."
+      ],
+      "concepts": [
+        {
+          "heading": "Nhân phân số",
+          "body": "Muốn nhân hai phân số, nhân các tử số với nhau và các mẫu số với nhau; rút gọn các thừa số chung giúp phép tính đơn giản hơn."
+        },
+        {
+          "heading": "Nghịch đảo",
+          "body": "Với phân số a/b khác 0, phân số nghịch đảo là b/a. Phân số có tử bằng 0 không có nghịch đảo."
+        },
+        {
+          "heading": "Chia phân số",
+          "body": "Muốn chia a/b cho c/d (c khác 0), tính a/b × d/c. Phép chia cho phân số bằng 0 không xác định."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tính (-3)/4 × 8/9, sau đó tính (2/5) : ((-3)/10).",
+        "steps": [
+          "Nhân phân số: ((-3) × 8)/(4 × 9) = (-24)/36 = (-2)/3.",
+          "Chia phân số là nhân với nghịch đảo: (2/5) × (10/(-3)).",
+          "Nhân và rút gọn: 20/(-15) = (-4)/3."
+        ],
+        "conclusion": "(-3)/4 × 8/9 = (-2)/3; (2/5) : ((-3)/10) = (-4)/3."
+      },
+      "commonMistake": "Không đảo phân số bị chia khi thực hiện phép chia; chỉ đảo số chia và chỉ được chia cho phân số khác 0.",
+      "practice": [
+        {
+          "prompt": "Tính (-3)/4 × 8/9 được kết quả nào?",
+          "choices": [
+            "(-24)/13",
+            "(-2)/3",
+            "2/3",
+            "(-3)/2"
+          ],
+          "correct": 1,
+          "explanation": "Nhân tử và mẫu: (-3 × 8)/(4 × 9) = (-24)/36; rút gọn được (-2)/3.",
+          "skill": "nhan-phan-so"
+        },
+        {
+          "prompt": "Tính (2/5) : ((-3)/10) được kết quả nào?",
+          "choices": [
+            "(-3)/25",
+            "4/3",
+            "(-4)/3",
+            "(-6)/50"
+          ],
+          "correct": 2,
+          "explanation": "Nhân với nghịch đảo của (-3)/10: (2/5) × (10/(-3)) = 20/(-15) = (-4)/3.",
+          "skill": "chia-phan-so"
+        },
+        {
+          "prompt": "Tích 7/9 × 0 bằng bao nhiêu?",
+          "choices": [
+            "7/9",
+            "7/0",
+            "0",
+            "9/7"
+          ],
+          "correct": 2,
+          "explanation": "Số nào nhân với 0 cũng bằng 0; do đó 7/9 × 0 = 0 và không cần rút gọn.",
+          "skill": "nhan-phan-so"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-27",
+      "number": 27,
+      "chapter": 6,
+      "title": "Hai bài toán về phân số",
+      "objectives": [
+        "Tìm giá trị một phân số của số đã biết.",
+        "Tìm số ban đầu khi đã biết giá trị một phân số của nó."
+      ],
+      "concepts": [
+        {
+          "heading": "Tìm phân số của một số",
+          "body": "Muốn tìm m/n của số a, tính a × m/n. Ví dụ 2/5 của 30 là 30 × 2/5 = 12."
+        },
+        {
+          "heading": "Tìm một số khi biết phân số của nó",
+          "body": "Nếu m/n của số cần tìm là b (m/n khác 0), số đó là b : (m/n). Có thể thử lại bằng phép nhân."
+        },
+        {
+          "heading": "Đọc và kiểm tra đơn vị",
+          "body": "Xác định rõ đâu là toàn bộ và đâu là phần đã biết; ghi đơn vị sau phép tính và thử lại kết quả trong tình huống."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tìm 4/7 của 56 quyển sách. Nếu 5/6 số bút là 40 chiếc, tìm tổng số bút.",
+        "steps": [
+          "Số sách cần tìm: 56 × 4/7 = 32 (quyển).",
+          "Gọi tổng số bút là x, có x × 5/6 = 40 nên x = 40 : (5/6) = 48 (chiếc).",
+          "Kiểm tra: 48 × 5/6 = 40, khớp dữ kiện."
+        ],
+        "conclusion": "Có 32 quyển sách ở phần thứ nhất; tổng số bút là 48 chiếc."
+      },
+      "commonMistake": "Không nhầm hai dạng bài: tìm một phần thì nhân; tìm toàn bộ khi đã biết một phần thì chia cho phân số khác 0.",
+      "practice": [
+        {
+          "prompt": "Ba phần năm của 45 là bao nhiêu?",
+          "choices": [
+            "15",
+            "27",
+            "30",
+            "75"
+          ],
+          "correct": 1,
+          "explanation": "Lấy 45 nhân 3/5: 45 × 3/5 = (45 : 5) × 3 = 9 × 3 = 27.",
+          "skill": "phan-so-cua-so"
+        },
+        {
+          "prompt": "Ba phần tư của một số là 24. Số đó bằng bao nhiêu?",
+          "choices": [
+            "18",
+            "32",
+            "36",
+            "27"
+          ],
+          "correct": 1,
+          "explanation": "Số cần tìm bằng 24 : (3/4) = 24 × 4/3 = 32; thử lại 32 × 3/4 = 24.",
+          "skill": "tim-so-biet-phan-so"
+        },
+        {
+          "prompt": "Hai phần năm của một số bằng 18. Số đó là gì?",
+          "choices": [
+            "36",
+            "45",
+            "20",
+            "72"
+          ],
+          "correct": 1,
+          "explanation": "Số cần tìm bằng 18 : (2/5) = 18 × 5/2 = 45; kiểm tra 45 × 2/5 = 18.",
+          "skill": "tim-so-biet-phan-so"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    }
+  ]
+}
