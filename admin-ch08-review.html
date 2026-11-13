@@ -30,6 +30,17 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 </section>
 <section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “Đã sửa — Chờ duyệt” để kiểm tra và chọn rõ các câu cho một quyết định theo lô. Hai rubric cũ đã được tạo phiên bản mới và mở lại hàng chờ để tái duyệt; lịch sử duyệt cũ được giữ nguyên. Không có tự động phê duyệt.</p></section>
 <section class="panel" id="batchPanel" hidden><strong>Đợt duyệt 22 phiên bản đã sửa</strong><p class="quiet">Chọn từng câu sau khi đọc nội dung; không chọn tự động. Mọi quyết định áp dụng cho phiên bản đang hiển thị và được ghi lại bằng tài khoản Admin.</p><p id="pickedCount">Đã chọn 0 câu</p><textarea id="batchNote" placeholder="Nhận xét cho đợt duyệt (ít nhất 8 ký tự)" aria-label="Ghi chú duyệt theo lô"></textarea><div class="actions"><button id="batchApprove" type="button">Phê duyệt các câu đã chọn</button><button id="batchChanges" class="btnwarn" type="button">Yêu cầu sửa các câu đã chọn</button></div></section>
+<section class="panel" id="deviceAcceptance"><strong>Nghiệm thu trên điện thoại thật</strong>
+<p class="quiet">Chạy trên Safari iPhone/iPad hoặc Chrome Android. Các dấu kiểm dưới đây chỉ là xác nhận của người thao tác trên thiết bị, không được tự động coi là đã nghiệm thu.</p>
+<label>Thiết bị / trình duyệt <input id="deviceName" placeholder="Ví dụ: iPhone 13 · Safari" style="width:100%;padding:11px;margin:8px 0;border-radius:9px;border:1px solid #becce0"></label>
+<div id="deviceChecks">
+<label style="display:block;margin:8px 0"><input type="checkbox" value="Đăng nhập và kiểm tra quyền Admin"> Đăng nhập đúng Admin; người chưa đăng nhập không xem được câu</label>
+<label style="display:block;margin:8px 0"><input type="checkbox" value="Lọc Tập Chương Bài và trạng thái"> Bộ lọc Tập, Chương, Bài và trạng thái sử dụng tốt</label>
+<label style="display:block;margin:8px 0"><input type="checkbox" value="Hình SVG, đáp án và rubric rõ ràng"> Hình SVG, đáp án, lời giải và rubric đọc được trên màn hình nhỏ</label>
+<label style="display:block;margin:8px 0"><input type="checkbox" value="Tái duyệt 2 rubric V2"> Bộ lọc tái duyệt hiển thị đúng hai rubric V2</label>
+<label style="display:block;margin:8px 0"><input type="checkbox" value="Chọn theo lô và xem hộp xác nhận"> Chọn theo lô, xem hộp xác nhận (có thể bấm Hủy để không ghi dữ liệu)</label>
+</div><button type="button" id="deviceReport" style="margin-top:10px">Sao chép biên bản kiểm thử</button>
+<p id="deviceStatus" class="quiet" aria-live="polite"></p></section>
 <p id="summary" class="quiet"></p><section id="questions"></section>
 </main>
 <script type="module">
@@ -112,6 +123,11 @@ el("questions").append(article);
 }notice("Đã xác thực và đọc hàng chờ. Các quyết định chỉ lưu trên staging.");
 }catch(e){el("summary").textContent="";notice(e.message);}
 }
+el("deviceReport").addEventListener("click",async()=>{
+const boxes=[...el("deviceChecks").querySelectorAll('input[type="checkbox"]')];
+const report="AURA STUDY — Biên bản nghiệm thu thiết bị thật\\nThiết bị: "+(el("deviceName").value.trim()||"Chưa ghi")+"\\nThời gian: "+new Date().toLocaleString("vi-VN")+"\\n"+boxes.map(x=>(x.checked?"[ĐẠT] ":"[CHƯA XÁC NHẬN] ")+x.value).join("\\n")+"\\nGhi chú: Đạt "+boxes.filter(x=>x.checked).length+"/"+boxes.length+" mục; chưa tự động kích hoạt Exam Engine.";
+try{await navigator.clipboard.writeText(report);el("deviceStatus").textContent="Đã sao chép biên bản. Anh có thể dán kết quả vào cuộc trò chuyện để em đối chiếu.";}catch(_){el("deviceStatus").textContent=report;}
+});
 el("batchApprove").addEventListener("click",()=>applyBatch("APPROVED"));
 el("batchChanges").addEventListener("click",()=>applyBatch("CHANGES_REQUESTED"));
 el("reload").addEventListener("click",load);el("volume").addEventListener("change",()=>{syncVolumes();load();});for(const id of ["lesson","level","state","audit"])el(id).addEventListener("change",load);
