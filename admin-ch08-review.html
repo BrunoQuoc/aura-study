@@ -26,9 +26,10 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <label>Bài học <select id="lesson"></select></label>
 <label>Mức độ <select id="level"><option value="">Tất cả</option><option value="nhan_biet">Nhận biết</option><option value="thong_hieu">Thông hiểu</option><option value="van_dung">Vận dụng</option></select></label>
 <label>Trạng thái <select id="state"><option value="">Tất cả</option><option value="PENDING">Chờ duyệt</option><option value="CHANGES_REQUESTED">Yêu cầu sửa</option><option value="APPROVED">Đã duyệt</option><option value="REJECTED">Từ chối</option></select></label>
-<label>Đợt kiểm định <select id="audit"><option value="">Tất cả câu</option><option value="revised_pending">Đã sửa — Chờ duyệt</option><option value="approved_rubric">Đã duyệt — Cần kiểm tra rubric</option></select></label>
+<label>Đợt kiểm định <select id="audit"><option value="">Tất cả câu</option><option value="revised_pending">Đã sửa — Chờ duyệt</option><option value="approved_rubric">Tái duyệt — Rubric V2</option></select></label>
 </section>
-<section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “Đã sửa — Chờ duyệt” để kiểm tra bản mới trước khi xác nhận. Hai câu đã duyệt có rubric cần rà soát vẫn giữ nguyên bản và lịch sử; chưa được xem là đủ điều kiện xuất bản. Không có nút phê duyệt hàng loạt tự động.</p></section>
+<section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “Đã sửa — Chờ duyệt” để kiểm tra và chọn rõ các câu cho một quyết định theo lô. Hai rubric cũ đã được tạo phiên bản mới và mở lại hàng chờ để tái duyệt; lịch sử duyệt cũ được giữ nguyên. Không có tự động phê duyệt.</p></section>
+<section class="panel" id="batchPanel" hidden><strong>Đợt duyệt 22 phiên bản đã sửa</strong><p class="quiet">Chọn từng câu sau khi đọc nội dung; không chọn tự động. Mọi quyết định áp dụng cho phiên bản đang hiển thị và được ghi lại bằng tài khoản Admin.</p><p id="pickedCount">Đã chọn 0 câu</p><textarea id="batchNote" placeholder="Nhận xét cho đợt duyệt (ít nhất 8 ký tự)" aria-label="Ghi chú duyệt theo lô"></textarea><div class="actions"><button id="batchApprove" type="button">Phê duyệt các câu đã chọn</button><button id="batchChanges" class="btnwarn" type="button">Yêu cầu sửa các câu đã chọn</button></div></section>
 <p id="summary" class="quiet"></p><section id="questions"></section>
 </main>
 <script type="module">
@@ -38,6 +39,22 @@ const api=url+"/functions/v1/aura-admin-review-v1";
 const auth=createClient(url,key,{auth:{storageKey:"aura-stage-parent-v1",flowType:"pkce",detectSessionInUrl:false,persistSession:true,autoRefreshToken:true}});
 const el=id=>document.getElementById(id),notice=txt=>el("notice").textContent=txt;
 const labels={PENDING:"Chờ duyệt",APPROVED:"Đã duyệt",REJECTED:"Từ chối",CHANGES_REQUESTED:"Yêu cầu sửa"};
+let selected=new Map();
+function updateSelection(){
+el("pickedCount").textContent="Đã chọn "+selected.size+" câu";
+}
+async function applyBatch(decision){
+if(el("audit").value!=="revised_pending"||selected.size===0){notice("Chọn các câu đã sửa cần nghiệm thu trước.");return;}
+const note=el("batchNote").value.trim();if(note.length<8){notice("Ghi chú phải có ít nhất 8 ký tự.");return;}
+const ids=[...selected.keys()],versions=Object.fromEntries(selected);
+if(!confirm("Xác nhận "+(decision==="APPROVED"?"PHÊ DUYỆT":"YÊU CẦU SỬA")+" "+ids.length+" câu đã chọn? Quyết định sẽ được ghi vào lịch sử và không thể sửa trực tiếp."))return;
+el("batchApprove").disabled=true;el("batchChanges").disabled=true;
+try{
+const x=await send({action:"batch_decide",batch:catalogs[el("volume").value].batch,ids,versions,decision,note});
+selected.clear();updateSelection();await load();notice("Đã ghi quyết định cho "+(x.result?.count??ids.length)+" câu; Exam Engine vẫn khóa.");
+}catch(e){notice(e.message);}finally{el("batchApprove").disabled=false;el("batchChanges").disabled=false;}
+}
+
 const catalogs={
 "1":{chapter:"I",batch:"AURA-M6-KNTT-T1-C01-DRAFT-V0.2",items:[
 ["M6-KNTT-T1-L01","Bài 1 — Tập hợp"],["M6-KNTT-T1-L02","Bài 2 — Cách ghi số tự nhiên"],["M6-KNTT-T1-L03","Bài 3 — Thứ tự trong tập hợp số tự nhiên"],["M6-KNTT-T1-L04","Bài 4 — Phép cộng và phép trừ số tự nhiên"],["M6-KNTT-T1-L05","Bài 5 — Phép nhân và phép chia số tự nhiên"],["M6-KNTT-T1-L06","Bài 6 — Lũy thừa với số mũ tự nhiên"],["M6-KNTT-T1-L07","Bài 7 — Thứ tự thực hiện các phép tính"]]},
@@ -66,12 +83,19 @@ const incoming=Array.isArray(data.items)?data.items:[];
 const audit=el("audit").value;
 const items=incoming.filter(item=>{
  if(audit==="revised_pending")return item.status==="PENDING"&&item.body?.qa_status==="REVISED_INTERNAL_QA_REVIEW_REQUIRED";
- if(audit==="approved_rubric")return item.status==="APPROVED"&&["M6-KNTT-T1-L01-Q01","M6-KNTT-T1-L01-Q02"].includes(item.id);
+ if(audit==="approved_rubric")return item.status==="PENDING"&&item.body?.qa_status==="RUBRIC_V2_REOPENED_REQUIRES_APPROVAL";
  return true;
 });
+selected.clear();updateSelection();el("batchPanel").hidden=audit!=="revised_pending";
 el("summary").textContent="Hiển thị "+items.length+" / "+incoming.length+" câu · Đây chỉ là bộ lọc nghiệm thu, không tự phê duyệt hoặc xuất bản.";
 for(const item of items){
 const q=item.body||{},article=document.createElement("article");article.className="panel";
+if(audit==="revised_pending"){
+const selectLabel=document.createElement("label");selectLabel.style.display="block";selectLabel.style.marginBottom="9px";
+const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.style.marginRight="10px";
+checkbox.addEventListener("change",()=>{if(checkbox.checked)selected.set(item.id,item.revision);else selected.delete(item.id);updateSelection();});
+selectLabel.append(checkbox,document.createTextNode("Chọn câu này cho nghiệm thu theo lô"));article.append(selectLabel);
+}
 const h=document.createElement("h2");h.style.fontSize="1.06rem";h.textContent=item.id+" · "+(labels[item.status]||item.status);article.append(h);
 const m=document.createElement("p");m.className="meta";m.textContent=item.lesson_id+" · "+item.level+" · Phiên bản "+item.revision;article.append(m);
 cell(article,"Đề bài",q.stem);if(typeof item.svg==="string"&&item.svg.startsWith("<svg")&&item.svg.length<30000){const img=document.createElement("img");img.className="figure";img.alt="Hình minh họa "+(q.figure_id||"");img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(item.svg);article.append(img);}
@@ -88,6 +112,8 @@ el("questions").append(article);
 }notice("Đã xác thực và đọc hàng chờ. Các quyết định chỉ lưu trên staging.");
 }catch(e){el("summary").textContent="";notice(e.message);}
 }
+el("batchApprove").addEventListener("click",()=>applyBatch("APPROVED"));
+el("batchChanges").addEventListener("click",()=>applyBatch("CHANGES_REQUESTED"));
 el("reload").addEventListener("click",load);el("volume").addEventListener("change",()=>{syncVolumes();load();});for(const id of ["lesson","level","state","audit"])el(id).addEventListener("change",load);
 el("logout").addEventListener("click",async()=>{await auth.auth.signOut();el("questions").replaceChildren();notice("Đã đăng xuất.");});
 syncVolumes();load();
