@@ -1,0 +1,509 @@
+{
+  "schemaVersion": 1,
+  "libraryId": "AURA-KNTT6-MATH-GRADE6-YEAREND",
+  "subject": "TOAN",
+  "grade": 6,
+  "series": "Kết nối tri thức với cuộc sống",
+  "sourceType": "AURA_ORIGINAL_DRAFT_TWO_VOLUME_SUMMARY",
+  "teacherApproved": false,
+  "questionBankPromotionEnabled": false,
+  "examEngineEnabled": false,
+  "weaknessMapWriteEnabled": false,
+  "officialAutoGradingEnabled": false,
+  "notes": "Tự luyện trắc nghiệm trên máy được phép như gợi ý. Tự luận chỉ có lời giải và thang điểm tham khảo, giáo viên đủ quyền phải kiểm định trước khi chấm chính thức.",
+  "mc": [
+    {
+      "id": "Y6-M01",
+      "prompt": "Tính 4 + 7 × 3 theo thứ tự thực hiện phép tính.",
+      "choices": [
+        "33",
+        "25",
+        "21",
+        "36"
+      ],
+      "correct": 1,
+      "explanation": "Thực hiện nhân trước cộng: 7 × 3 = 21, sau đó 4 + 21 = 25.",
+      "skill": "thu-tu-phep-tinh",
+      "sourceRef": {
+        "volume": 1,
+        "lesson": 7
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M02",
+      "prompt": "Số 84 chia hết cho 3 nhưng không chia hết cho 9 vì sao?",
+      "choices": [
+        "Tổng chữ số 12 chia hết cho 3 nhưng không chia hết cho 9",
+        "84 là số lẻ",
+        "84 chia hết cho 9",
+        "84 không chia hết cho 3"
+      ],
+      "correct": 0,
+      "explanation": "Tổng chữ số 8+4 = 12; 12 chia hết cho 3 nhưng không chia hết cho 9. Vì thế 84 chia hết 3, không chia hết 9.",
+      "skill": "dau-hieu-chia-het",
+      "sourceRef": {
+        "volume": 1,
+        "lesson": 9
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M03",
+      "prompt": "Số nào là số nguyên tố?",
+      "choices": [
+        "21",
+        "27",
+        "29",
+        "35"
+      ],
+      "correct": 2,
+      "explanation": "29 lớn hơn 1 và không chia hết cho 2, 3 hay 5; không có ước dương nào khác ngoài 1 và 29.",
+      "skill": "so-nguyen-to",
+      "sourceRef": {
+        "volume": 1,
+        "lesson": 10
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M04",
+      "prompt": "Ước chung lớn nhất của 18 và 24 bằng bao nhiêu?",
+      "choices": [
+        "3",
+        "6",
+        "9",
+        "12"
+      ],
+      "correct": 1,
+      "explanation": "Ước của 18 gồm 1,2,3,6,9,18; ước của 24 gồm 1,2,3,4,6,8,12,24; ước chung lớn nhất là 6.",
+      "skill": "uoc-chung-lon-nhat",
+      "sourceRef": {
+        "volume": 1,
+        "lesson": 11
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M05",
+      "prompt": "Tính (-7) + 12 bằng bao nhiêu?",
+      "choices": [
+        "-19",
+        "19",
+        "-5",
+        "5"
+      ],
+      "correct": 3,
+      "explanation": "Hai số khác dấu, lấy 12 - 7 = 5 và giữ dấu dương vì 12 có giá trị tuyệt đối lớn hơn 7.",
+      "skill": "cong-so-nguyen",
+      "sourceRef": {
+        "volume": 1,
+        "lesson": 14
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M06",
+      "prompt": "Hình chữ nhật dài 8 cm, rộng 5 cm. Diện tích bằng bao nhiêu?",
+      "choices": [
+        "13 cm²",
+        "26 cm²",
+        "40 cm²",
+        "80 cm²"
+      ],
+      "correct": 2,
+      "explanation": "Diện tích hình chữ nhật là dài × rộng = 8 × 5 = 40 cm². Không nhầm với chu vi 2×(8+5)=26 cm.",
+      "skill": "dien-tich-hinh-chu-nhat",
+      "sourceRef": {
+        "volume": 1,
+        "lesson": 20
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M07",
+      "prompt": "Tính 2/3 + 1/6 rồi rút gọn.",
+      "choices": [
+        "3/9",
+        "5/6",
+        "1/2",
+        "1"
+      ],
+      "correct": 1,
+      "explanation": "Quy đồng 2/3 = 4/6, cộng 4/6+1/6 = 5/6; tử và mẫu nguyên tố cùng nhau.",
+      "skill": "cong-phan-so",
+      "sourceRef": {
+        "volume": 2,
+        "lesson": 25
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M08",
+      "prompt": "Làm tròn 3,75 đến hàng đơn vị theo quy tắc thông thường được số nào?",
+      "choices": [
+        "3",
+        "3,7",
+        "4",
+        "5"
+      ],
+      "correct": 2,
+      "explanation": "Chữ số hàng phần mười là 7 (≥5) nên tăng hàng đơn vị 3 thành 4.",
+      "skill": "lam-tron",
+      "sourceRef": {
+        "volume": 2,
+        "lesson": 30
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M09",
+      "prompt": "25% của 160 bằng bao nhiêu?",
+      "choices": [
+        "25",
+        "40",
+        "80",
+        "64"
+      ],
+      "correct": 1,
+      "explanation": "25% = 1/4, nên 25% của 160 = 160 × 1/4 = 40.",
+      "skill": "phan-tram-cua-so",
+      "sourceRef": {
+        "volume": 2,
+        "lesson": 31
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M10",
+      "prompt": "M là trung điểm của đoạn AB dài 18 cm. Độ dài AM bằng bao nhiêu?",
+      "choices": [
+        "6 cm",
+        "9 cm",
+        "18 cm",
+        "36 cm"
+      ],
+      "correct": 1,
+      "explanation": "Vì M là trung điểm AB nên M nằm giữa hai đầu mút và AM=MB=AB/2=18/2=9 cm.",
+      "skill": "tinh-do-dai-trung-diem",
+      "sourceRef": {
+        "volume": 2,
+        "lesson": 35
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M11",
+      "prompt": "Góc có số đo 135° thuộc loại nào?",
+      "choices": [
+        "Góc nhọn",
+        "Góc vuông",
+        "Góc tù",
+        "Góc bẹt"
+      ],
+      "correct": 2,
+      "explanation": "Góc 135° lớn hơn 90° và nhỏ hơn 180° nên là góc tù.",
+      "skill": "phan-loai-goc",
+      "sourceRef": {
+        "volume": 2,
+        "lesson": 37
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "Y6-M12",
+      "prompt": "Một sự kiện xuất hiện 18 lần trong 60 lần thử. Xác suất thực nghiệm của sự kiện đó là bao nhiêu?",
+      "choices": [
+        "18%",
+        "20%",
+        "30%",
+        "60%"
+      ],
+      "correct": 2,
+      "explanation": "Tỉ số số lần xảy ra với tổng số lần thử là 18/60 = 3/10 = 30%.",
+      "skill": "xac-suat-thuc-nghiem",
+      "sourceRef": {
+        "volume": 2,
+        "lesson": 43
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    }
+  ],
+  "written": [
+    {
+      "id": "Y6-W01",
+      "prompt": "Tính giá trị biểu thức: (-8) + 3 × (-4). Trình bày thứ tự phép tính và giải thích dấu kết quả.",
+      "sourceRefs": [
+        {
+          "volume": 1,
+          "lesson": 7
+        },
+        {
+          "volume": 1,
+          "lesson": 14
+        }
+      ],
+      "modelAnswer": {
+        "steps": [
+          "Theo thứ tự thực hiện phép tính, nhân trước: 3 × (-4) = -12.",
+          "Cộng số nguyên: (-8)+(-12) = -20.",
+          "Vì cộng hai số âm nên tổng mang dấu âm."
+        ],
+        "final": "-20"
+      },
+      "rubric": [
+        {
+          "criterion": "Thực hiện phép nhân trước phép cộng",
+          "points": 3,
+          "expected": "3 × (-4) = -12"
+        },
+        {
+          "criterion": "Tính đúng tổng hai số nguyên",
+          "points": 5,
+          "expected": "(-8)+(-12)=-20"
+        },
+        {
+          "criterion": "Giải thích đúng quy tắc dấu và kết luận",
+          "points": 2,
+          "expected": "Hai số hạng âm nên tổng âm"
+        }
+      ],
+      "maxPoints": 10,
+      "requiresHumanReview": true,
+      "autoGradeAllowed": false,
+      "readyForExamEngine": false,
+      "teacherReviewed": false
+    },
+    {
+      "id": "Y6-W02",
+      "prompt": "Một hình chữ nhật có chiều dài 12 cm, chiều rộng 5 cm. Tính chu vi và diện tích, ghi đủ đơn vị.",
+      "sourceRefs": [
+        {
+          "volume": 1,
+          "lesson": 20
+        }
+      ],
+      "modelAnswer": {
+        "steps": [
+          "Chu vi: P = 2×(12+5)=34 cm.",
+          "Diện tích: S = 12×5=60 cm².",
+          "Chu vi dùng cm, diện tích dùng cm²."
+        ],
+        "final": "P=34 cm; S=60 cm²"
+      },
+      "rubric": [
+        {
+          "criterion": "Nêu đúng công thức chu vi và thay số",
+          "points": 3,
+          "expected": "P=2×(12+5)"
+        },
+        {
+          "criterion": "Tính đúng chu vi",
+          "points": 2,
+          "expected": "34 cm"
+        },
+        {
+          "criterion": "Nêu đúng công thức và tính diện tích",
+          "points": 3,
+          "expected": "S=12×5=60 cm²"
+        },
+        {
+          "criterion": "Ghi đúng đơn vị cả hai đại lượng",
+          "points": 2,
+          "expected": "cm; cm²"
+        }
+      ],
+      "maxPoints": 10,
+      "requiresHumanReview": true,
+      "autoGradeAllowed": false,
+      "readyForExamEngine": false,
+      "teacherReviewed": false
+    },
+    {
+      "id": "Y6-W03",
+      "prompt": "Một món đồ giá 240 000 đồng được giảm 15%. Tính tiền giảm và giá phải trả. Nêu phép tính.",
+      "sourceRefs": [
+        {
+          "volume": 2,
+          "lesson": 31
+        }
+      ],
+      "modelAnswer": {
+        "steps": [
+          "Tiền giảm bằng 240 000×15/100 = 36 000 đồng.",
+          "Giá phải trả bằng 240 000 - 36 000 = 204 000 đồng.",
+          "Giá còn lại nhỏ hơn giá ban đầu; đơn vị là đồng."
+        ],
+        "final": "Giảm 36 000 đồng; trả 204 000 đồng"
+      },
+      "rubric": [
+        {
+          "criterion": "Thiết lập đúng 15% của giá gốc",
+          "points": 3,
+          "expected": "240000×15/100"
+        },
+        {
+          "criterion": "Tính đúng tiền giảm",
+          "points": 3,
+          "expected": "36 000 đồng"
+        },
+        {
+          "criterion": "Tính đúng số tiền còn trả",
+          "points": 3,
+          "expected": "204 000 đồng"
+        },
+        {
+          "criterion": "Kết luận có đơn vị, hợp lý",
+          "points": 1,
+          "expected": "Đồng và giá giảm"
+        }
+      ],
+      "maxPoints": 10,
+      "requiresHumanReview": true,
+      "autoGradeAllowed": false,
+      "readyForExamEngine": false,
+      "teacherReviewed": false
+    },
+    {
+      "id": "Y6-W04",
+      "prompt": "Cho M là trung điểm của đoạn AB, biết AB = 14 cm. Giải thích vì sao M nằm giữa A, B và tính AM, MB.",
+      "sourceRefs": [
+        {
+          "volume": 2,
+          "lesson": 35
+        }
+      ],
+      "modelAnswer": {
+        "steps": [
+          "Theo định nghĩa trung điểm, M nằm giữa A, B và AM=MB.",
+          "AM=MB=AB/2=14/2=7 cm.",
+          "Kiểm tra AM+MB = 7+7 = 14 cm."
+        ],
+        "final": "AM=MB=7 cm"
+      },
+      "rubric": [
+        {
+          "criterion": "Nêu đủ hai tính chất của trung điểm",
+          "points": 4,
+          "expected": "M nằm giữa; AM=MB"
+        },
+        {
+          "criterion": "Thay số và tính hai đoạn",
+          "points": 4,
+          "expected": "14/2=7 cm mỗi đoạn"
+        },
+        {
+          "criterion": "Kiểm tra tổng độ dài và đơn vị",
+          "points": 2,
+          "expected": "7+7=14 cm"
+        }
+      ],
+      "maxPoints": 10,
+      "requiresHumanReview": true,
+      "autoGradeAllowed": false,
+      "readyForExamEngine": false,
+      "teacherReviewed": false
+    },
+    {
+      "id": "Y6-W05",
+      "prompt": "Khảo sát 20 bạn, mỗi bạn chọn đúng một loại trái cây: Táo 6, Cam 9, Chuối 5. Tính tổng, số bạn chọn Cam nhiều hơn Chuối và phần trăm chọn Cam.",
+      "sourceRefs": [
+        {
+          "volume": 2,
+          "lesson": 38
+        },
+        {
+          "volume": 2,
+          "lesson": 40
+        }
+      ],
+      "modelAnswer": {
+        "steps": [
+          "Tổng là 6+9+5=20 bạn, khớp số người khảo sát.",
+          "Cam nhiều hơn Chuối 9-5=4 bạn.",
+          "Tỉ lệ chọn Cam là 9/20×100%=45%."
+        ],
+        "final": "Tổng 20 bạn; hơn 4 bạn; Cam chiếm 45%"
+      },
+      "rubric": [
+        {
+          "criterion": "Cộng đúng tổng số học sinh",
+          "points": 3,
+          "expected": "6+9+5=20"
+        },
+        {
+          "criterion": "Tính đúng chênh lệch Cam và Chuối",
+          "points": 3,
+          "expected": "9-5=4"
+        },
+        {
+          "criterion": "Tính đúng tỉ số phần trăm",
+          "points": 3,
+          "expected": "9/20=45%"
+        },
+        {
+          "criterion": "Ghi đơn vị và bối cảnh",
+          "points": 1,
+          "expected": "bạn; phần trăm"
+        }
+      ],
+      "maxPoints": 10,
+      "requiresHumanReview": true,
+      "autoGradeAllowed": false,
+      "readyForExamEngine": false,
+      "teacherReviewed": false
+    },
+    {
+      "id": "Y6-W06",
+      "prompt": "Trong 50 lần thử có 20 lần sự kiện A xảy ra. Tính xác suất thực nghiệm của A theo phân số, số thập phân và phần trăm. Có chắc A xảy ra ở lần kế tiếp không?",
+      "sourceRefs": [
+        {
+          "volume": 2,
+          "lesson": 43
+        }
+      ],
+      "modelAnswer": {
+        "steps": [
+          "Xác suất thực nghiệm là 20/50, rút gọn bằng 2/5.",
+          "Đổi 2/5=0,4=40%.",
+          "Không thể kết luận chắc chắn lần thử tiếp theo từ số liệu thực nghiệm đã ghi."
+        ],
+        "final": "20/50=2/5=0,4=40%; không chắc chắn ở lần tiếp theo"
+      },
+      "rubric": [
+        {
+          "criterion": "Lập tỉ số đúng số lần xảy ra trên tổng số lần thử",
+          "points": 3,
+          "expected": "20/50"
+        },
+        {
+          "criterion": "Rút gọn và đổi được số thập phân/phần trăm",
+          "points": 4,
+          "expected": "2/5=0,4=40%"
+        },
+        {
+          "criterion": "Giải thích đúng giới hạn của xác suất thực nghiệm",
+          "points": 3,
+          "expected": "Không bảo đảm kết quả lần tới"
+        }
+      ],
+      "maxPoints": 10,
+      "requiresHumanReview": true,
+      "autoGradeAllowed": false,
+      "readyForExamEngine": false,
+      "teacherReviewed": false
+    }
+  ]
+}
