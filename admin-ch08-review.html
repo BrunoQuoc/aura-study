@@ -41,6 +41,7 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <label style="display:block;margin:8px 0"><input type="checkbox" value="Chọn theo lô và xem hộp xác nhận"> Chọn theo lô, xem hộp xác nhận (có thể bấm Hủy để không ghi dữ liệu)</label>
 </div><button type="button" id="deviceReport" style="margin-top:10px">Sao chép biên bản kiểm thử</button>
 <p id="deviceStatus" class="quiet" aria-live="polite"></p></section>
+<section class="panel" id="learningPanel" hidden><strong>Nội dung học Chương II — Bài 8–12</strong><p class="quiet">Bản nháp để Admin nghiệm thu; chưa hiển thị trong ứng dụng học sinh.</p><div id="learningContent"></div></section>
 <section class="panel"><strong>Cổng đóng Chương I</strong><p id="chapterGate" class="quiet">Đang chờ truy xuất thống kê chương.</p></section>
 <p id="summary" class="quiet"></p><section id="questions"></section>
 </main>
@@ -105,6 +106,21 @@ async function load(){
 el("questions").replaceChildren();notice("Đang đọc dữ liệu qua API bảo vệ…");
 try{
 const data=await send({action:"list",batch:activeCatalog().batch,lesson:el("lesson").value,level:el("level").value,state:el("state").value});
+const ch2=el("volume").value==="1"&&el("chapter").value==="II";
+el("learningPanel").hidden=!ch2;
+el("learningContent").replaceChildren();
+if(ch2){
+const learning=await send({action:"learning",batch:activeCatalog().batch});
+const lessons=Array.isArray(learning.lessons)?learning.lessons:[];
+for(const lesson of lessons.filter(x=>!el("lesson").value||x.lesson_id===el("lesson").value)){
+const article=document.createElement("div");article.style.borderTop="1px solid #dce4ef";article.style.marginTop="10px";
+const title=document.createElement("h3");title.textContent=lesson.lesson_id+" — "+((activeCatalog().items.find(i=>i[0]===lesson.lesson_id)||[])[1]||"");article.append(title);
+for(const block of lesson.knowledge_blocks||[]){
+ const p=document.createElement("p");p.textContent=block.heading+": "+block.explanation+" | Ví dụ: "+block.example+" | Lỗi thường gặp: "+block.misconception;article.append(p);
+}
+el("learningContent").append(article);
+}
+}
 const incoming=Array.isArray(data.items)?data.items:[];
 if(el("volume").value==="1"&&el("chapter").value==="I"&&el("lesson").value===""&&el("level").value===""&&el("state").value===""){
 const approvals=incoming.filter(x=>x.status==="APPROVED").length, waiting=incoming.filter(x=>x.status==="PENDING").length;
@@ -133,6 +149,10 @@ const m=document.createElement("p");m.className="meta";m.textContent=item.lesson
 cell(article,"Đề bài",q.stem);if(typeof item.svg==="string"&&item.svg.startsWith("<svg")&&item.svg.length<30000){const img=document.createElement("img");img.className="figure";img.alt="Hình minh họa "+(q.figure_id||"");img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(item.svg);article.append(img);}
 cell(article,"Đáp án",String(q.answer??""));cell(article,"Lời giải",q.explanation);
 const score=q.scoring_rubric||{};cell(article,"Thang điểm",String(score.points??"")+" điểm — "+(Array.isArray(score.criteria)?score.criteria.join("; "):"Chưa có"));
+if(q.grading_policy){
+const grade=q.grading_policy;
+cell(article,"Auto Grading (thử nghiệm)",grade.decision==="NUMERIC_EXACT_CANDIDATE"?"Ứng viên so khớp số, chấm thực tế đang tắt":"Cần người chấm; không tự quyết định điểm");
+}
 if(item.status==="PENDING"){
 const review=document.createElement("div");review.className="review";const note=document.createElement("textarea");note.placeholder="Nhận xét sư phạm bắt buộc (tối thiểu 8 ký tự)";note.setAttribute("aria-label","Nhận xét "+item.id);review.append(note);
 const actions=document.createElement("div");actions.className="actions";
