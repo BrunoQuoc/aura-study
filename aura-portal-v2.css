@@ -1,0 +1,45 @@
+
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#12253c;background:#f5f8fc;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}
+a{color:#176196;text-decoration:none}a:hover{text-decoration:underline}
+header{background:#fff;border-bottom:1px solid #dae6f1;padding:16px clamp(16px,5vw,60px);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-size:1.18rem;letter-spacing:.04em;font-weight:780;color:#19364f}
+.brand small{display:block;font-size:.62rem;letter-spacing:.16em;color:#7d8ea4;font-weight:650}
+.nav{display:flex;flex-wrap:wrap;gap:15px;font-size:.9rem}
+main{max-width:1060px;margin:28px auto;padding:0 18px 44px}
+h1{font-size:clamp(1.8rem,4.7vw,2.8rem);line-height:1.2;letter-spacing:-.025em;margin:10px 0 14px}
+h2{font-size:1.18rem;margin:0 0 14px}
+p{line-height:1.65}
+.muted{color:#60748a}.eyebrow{font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;font-weight:750;color:#2172a0}
+.hero{max-width:740px;padding:22px 0 16px}
+.role-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin-top:20px}
+.role-card,.panel{border:1px solid #dce6f0;border-radius:17px;background:#fff;box-shadow:0 8px 30px #14335608;padding:24px}
+.role-card{display:flex;flex-direction:column;gap:9px;min-height:280px}
+.role-card .visual{display:grid;place-items:center;width:56px;height:56px;border-radius:14px;background:#e7f3fa;color:#19648e;font-size:1.6rem}
+.role-card h2{margin:7px 0 0;font-size:1.4rem}
+.role-card p{margin:0 0 auto;font-size:.93rem}
+.cta,button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;border:none;border-radius:11px;padding:11px 17px;background:#165d8c;color:#fff;font:inherit;font-weight:680;cursor:pointer;touch-action:manipulation;text-decoration:none}
+.cta:hover,button:hover{background:#144c73;text-decoration:none}
+button.secondary,.cta.secondary{color:#17567a;background:#eaf2f8}
+button.secondary:hover{background:#dbeaf5}
+button:disabled{opacity:.55;cursor:default}
+.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(270px,.9fr);gap:18px;align-items:start}
+.stack{display:grid;gap:16px}
+.panel .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.stamp{display:inline-block;border:1px solid #d9e4ee;color:#506987;background:#f6f9fc;padding:5px 10px;border-radius:20px;font-size:.73rem;font-weight:700;white-space:nowrap}
+label{display:block;font-size:.89rem;font-weight:650;margin:14px 0 5px}
+input{font:inherit;width:100%;min-height:48px;border:1px solid #bbcfdf;border-radius:11px;padding:11px 13px;background:#fff;color:#102842}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #90d4ff;outline-offset:3px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 4px}
+.actions>*{flex:1 1 160px}
+.status{font-size:.92rem;white-space:pre-wrap;overflow-wrap:anywhere;color:#39546e;min-height:28px}
+.security{border-left:3px solid #6e9abd;padding:8px 13px;background:#f0f6fb;color:#46617b;font-size:.87rem;line-height:1.6;margin:15px 0}
+.ticket{background:#e9f4fa;border:1px dashed #8ebdd4;border-radius:9px;padding:15px;word-break:break-all;font-family:ui-monospace,monospace;color:#173f63}
+#captcha{min-height:65px;margin-top:12px}
+#roleDetails{display:none;margin-top:16px}
+#roleDetails[data-ready="true"]{display:block}
+#learners{display:grid;gap:8px}
+.learner{border:1px solid #dbe6f1;background:#f9fcff;border-radius:10px;padding:12px}
+.small{font-size:.83rem}
+footer{max-width:1080px;margin:auto;padding:20px 18px 35px;color:#74859a;font-size:.83rem}
+@media(max-width:780px){.role-grid{grid-template-columns:1fr}.role-card{min-height:0}.layout{grid-template-columns:1fr}main{margin:15px auto}.panel,.role-card{padding:17px}header{padding:13px 17px}.nav{gap:8px}}
