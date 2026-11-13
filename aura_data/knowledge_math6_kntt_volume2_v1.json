@@ -24,8 +24,8 @@
   },
   "expectedTotalLessons": 21,
   "expectedTotalChapters": 4,
-  "authoredLessonCount": 9,
-  "authoredPracticeCount": 27,
+  "authoredLessonCount": 15,
+  "authoredPracticeCount": 45,
   "chapters": [
     {
       "number": 6,
@@ -52,7 +52,7 @@
         32,
         37
       ],
-      "status": "NOT_AUTHORED"
+      "status": "DRAFT_CONTENT_IN_PROGRESS"
     },
     {
       "number": 9,
@@ -123,37 +123,37 @@
       "number": 32,
       "title": "Điểm và đường thẳng",
       "chapter": 8,
-      "authored": false
+      "authored": true
     },
     {
       "number": 33,
       "title": "Điểm nằm giữa hai điểm. Tia",
       "chapter": 8,
-      "authored": false
+      "authored": true
     },
     {
       "number": 34,
       "title": "Đoạn thẳng. Độ dài đoạn thẳng",
       "chapter": 8,
-      "authored": false
+      "authored": true
     },
     {
       "number": 35,
       "title": "Trung điểm của đoạn thẳng",
       "chapter": 8,
-      "authored": false
+      "authored": true
     },
     {
       "number": 36,
       "title": "Góc",
       "chapter": 8,
-      "authored": false
+      "authored": true
     },
     {
       "number": 37,
       "title": "Số đo góc",
       "chapter": 8,
-      "authored": false
+      "authored": true
     },
     {
       "number": 38,
@@ -867,7 +867,482 @@
       "status": "DRAFT_ORIGINAL_AURA",
       "requiresPedagogicalReview": true,
       "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-32",
+      "number": 32,
+      "chapter": 8,
+      "title": "Điểm và đường thẳng",
+      "objectives": [
+        "Nhận biết điểm thuộc hoặc không thuộc một đường thẳng, ba điểm thẳng hàng.",
+        "Phân biệt hai đường thẳng cắt nhau và hai đường thẳng song song trong một mặt phẳng."
+      ],
+      "concepts": [
+        {
+          "heading": "Điểm thuộc đường thẳng",
+          "body": "Khi điểm A nằm trên đường thẳng a, viết A thuộc a. Nếu C không nằm trên a, viết C không thuộc a. Tên điểm dùng chữ in hoa; tên đường thẳng thường dùng chữ thường."
+        },
+        {
+          "heading": "Ba điểm thẳng hàng",
+          "body": "Ba điểm phân biệt cùng thuộc một đường thẳng được gọi là ba điểm thẳng hàng. Nếu một điểm không thuộc đường thẳng qua hai điểm còn lại thì ba điểm không thẳng hàng."
+        },
+        {
+          "heading": "Hai đường thẳng phân biệt",
+          "body": "Hai đường thẳng phân biệt cắt nhau khi có đúng một điểm chung; nếu cùng trong mặt phẳng và không có điểm chung, chúng song song. Hai đường thẳng trùng nhau không được gọi là song song trong bài học này."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Cho điểm A và B cùng thuộc đường thẳng a, còn điểm C không thuộc a. Hỏi A, B, C có thẳng hàng không?",
+        "steps": [
+          "Vì A, B thuộc a nên đường thẳng qua hai điểm phân biệt A, B chính là a.",
+          "C không thuộc a nên C không thuộc đường thẳng qua A và B.",
+          "Vì vậy ba điểm A, B, C không thẳng hàng."
+        ],
+        "conclusion": "A và B thuộc a; C không thuộc a; ba điểm A, B, C không thẳng hàng."
+      },
+      "commonMistake": "Không suy luận ba điểm thẳng hàng chỉ vì trên hình vẽ chúng gần một đường thẳng; phải có dữ kiện điểm thuộc cùng đường thẳng.",
+      "practice": [
+        {
+          "prompt": "Cho A, B thuộc đường thẳng a và C không thuộc a. Phát biểu nào đúng?",
+          "choices": [
+            "A thuộc a",
+            "C thuộc a",
+            "A không thuộc a",
+            "B không thuộc a"
+          ],
+          "correct": 0,
+          "explanation": "Theo giả thiết A nằm trên a, nên A thuộc a. Các phát biểu còn lại đều trái giả thiết.",
+          "skill": "diem-thuoc-duong-thang"
+        },
+        {
+          "prompt": "Ba điểm P, Q, R cùng nằm trên đường thẳng d. Chúng là ba điểm thế nào?",
+          "choices": [
+            "Không thẳng hàng",
+            "Thẳng hàng",
+            "Luôn là ba đỉnh tam giác",
+            "Luôn trùng nhau"
+          ],
+          "correct": 1,
+          "explanation": "Ba điểm cùng thuộc một đường thẳng d thì thẳng hàng. Không có dữ kiện nào buộc chúng trùng nhau.",
+          "skill": "ba-diem-thang-hang"
+        },
+        {
+          "prompt": "Hai đường thẳng phân biệt cùng trong một mặt phẳng và không có điểm chung được gọi là gì?",
+          "choices": [
+            "Cắt nhau",
+            "Trùng nhau",
+            "Song song",
+            "Vuông góc"
+          ],
+          "correct": 2,
+          "explanation": "Theo định nghĩa hình học phẳng, hai đường thẳng phân biệt không có điểm chung là hai đường thẳng song song.",
+          "skill": "hai-duong-thang-song-song"
+        }
+      ],
+      "geometryModel": {
+        "kind": "line-membership",
+        "caption": "Minh họa A và B thuộc đường thẳng a; C nằm ngoài a. Hình là ví dụ tự dựng, không phải dữ kiện của câu hỏi."
+      },
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-33",
+      "number": 33,
+      "chapter": 8,
+      "title": "Điểm nằm giữa hai điểm. Tia",
+      "objectives": [
+        "Nhận biết điểm nằm giữa hai điểm khác trên một đường thẳng.",
+        "Nhận diện tia, gốc tia và hai tia đối nhau."
+      ],
+      "concepts": [
+        {
+          "heading": "Điểm nằm giữa",
+          "body": "Với ba điểm phân biệt A, M, B cùng thuộc một đường thẳng và theo thứ tự A, M, B, ta nói M nằm giữa A và B. Thông tin thứ tự phải được nêu rõ, không đoán dựa vào tên."
+        },
+        {
+          "heading": "Tia và gốc tia",
+          "body": "Tia OA gồm điểm O và tất cả điểm theo một phía của O trên đường thẳng chứa O và A. Điểm O gọi là gốc; tia kéo dài vô hạn một hướng."
+        },
+        {
+          "heading": "Hai tia đối nhau",
+          "body": "Hai tia có chung gốc, cùng nằm trên một đường thẳng và hướng về hai phía khác nhau được gọi là hai tia đối nhau."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Trên một đường thẳng có ba điểm phân biệt X, O, Y theo đúng thứ tự X — O — Y. Xác định điểm ở giữa và hai tia đối nhau.",
+        "steps": [
+          "Theo thứ tự đã cho, O nằm giữa X và Y; ba điểm cùng thuộc một đường thẳng.",
+          "Tia OX có gốc O, hướng qua X về một phía của O.",
+          "Tia OY có cùng gốc O, hướng về phía ngược lại, nên OX và OY là hai tia đối nhau."
+        ],
+        "conclusion": "O nằm giữa X và Y; OX và OY là hai tia đối nhau."
+      },
+      "commonMistake": "Hai tia chung gốc chưa chắc đối nhau; chúng còn phải thẳng hàng và hướng ngược nhau.",
+      "practice": [
+        {
+          "prompt": "Ba điểm phân biệt X, Y, Z thẳng hàng theo thứ tự X — Y — Z. Điểm nào nằm giữa hai điểm còn lại?",
+          "choices": [
+            "X",
+            "Y",
+            "Z",
+            "Không có điểm nào"
+          ],
+          "correct": 1,
+          "explanation": "Thứ tự X — Y — Z xác định Y nằm trên đoạn XZ, giữa hai đầu X và Z.",
+          "skill": "diem-nam-giua"
+        },
+        {
+          "prompt": "Trên đường thẳng, O là gốc, A ở bên phải O. Tia có gốc O hướng qua A tên là gì?",
+          "choices": [
+            "Tia AO",
+            "Tia OA",
+            "Đoạn OA",
+            "Đường thẳng A"
+          ],
+          "correct": 1,
+          "explanation": "Tia được gọi theo gốc trước, điểm xác định hướng sau: O là gốc, đi qua A nên là tia OA.",
+          "skill": "tia-goc-huong"
+        },
+        {
+          "prompt": "Hai tia Ox và Oy chung gốc O, thẳng hàng và hướng về hai phía ngược nhau là gì?",
+          "choices": [
+            "Hai tia trùng nhau",
+            "Hai đoạn thẳng",
+            "Hai tia đối nhau",
+            "Hai đường thẳng song song"
+          ],
+          "correct": 2,
+          "explanation": "Hai tia cùng gốc, cùng đường thẳng và ngược hướng thỏa đúng định nghĩa hai tia đối nhau.",
+          "skill": "hai-tia-doi-nhau"
+        }
+      ],
+      "geometryModel": {
+        "kind": "opposite-rays",
+        "caption": "Minh họa ba điểm X — O — Y thẳng hàng, O nằm giữa; hai tia OX, OY đối nhau."
+      },
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-34",
+      "number": 34,
+      "chapter": 8,
+      "title": "Đoạn thẳng. Độ dài đoạn thẳng",
+      "objectives": [
+        "Phân biệt đoạn thẳng có hai đầu mút với tia chỉ có một gốc.",
+        "Tính tổng độ dài hai đoạn khi điểm nằm giữa và có đủ độ dài."
+      ],
+      "concepts": [
+        {
+          "heading": "Khái niệm đoạn thẳng",
+          "body": "Đoạn thẳng AB gồm hai đầu mút A, B và tất cả điểm nằm giữa chúng. Đoạn AB có độ dài hữu hạn, khác đường thẳng kéo dài hai phía và tia kéo dài một phía."
+        },
+        {
+          "heading": "Đơn vị và đo độ dài",
+          "body": "Độ dài đoạn thẳng là một số không âm có đơn vị như mm, cm, m. Khi tính phải dùng cùng đơn vị; nên kiểm tra kết quả có hợp lý."
+        },
+        {
+          "heading": "Cộng độ dài có điều kiện",
+          "body": "Nếu M nằm giữa A và B thì AM + MB = AB. Không được sử dụng công thức này khi chưa biết M nằm giữa A và B."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Cho M nằm giữa A và B trên một đoạn thẳng; AM = 3 cm, MB = 5 cm. Tính AB.",
+        "steps": [
+          "Vì đã cho M nằm giữa A và B, ta dùng hệ thức cộng đoạn thẳng AM + MB = AB.",
+          "Các độ dài cùng đơn vị cm nên thay trực tiếp: AB = 3 + 5 = 8 (cm).",
+          "Kiểm tra AB dài hơn cả AM và MB; điều đó phù hợp với M nằm trong đoạn AB."
+        ],
+        "conclusion": "AB = 8 cm."
+      },
+      "commonMistake": "Không tự cho rằng AM + MB = AB khi đề chỉ nêu ba điểm thẳng hàng mà không có thứ tự hoặc M nằm giữa A, B.",
+      "practice": [
+        {
+          "prompt": "Đoạn thẳng AB gồm những điểm nào?",
+          "choices": [
+            "Chỉ điểm A",
+            "Hai đầu mút A, B và các điểm nằm giữa",
+            "Mọi điểm trên đường thẳng AB",
+            "Chỉ những điểm nằm ngoài A và B"
+          ],
+          "correct": 1,
+          "explanation": "Đoạn thẳng AB là phần hình hữu hạn bao gồm A, B và tất cả các điểm giữa hai đầu mút.",
+          "skill": "khai-niem-doan-thang"
+        },
+        {
+          "prompt": "M nằm giữa A và B, AM = 3 cm và MB = 5 cm. AB bằng bao nhiêu?",
+          "choices": [
+            "2 cm",
+            "15 cm",
+            "8 cm",
+            "4 cm"
+          ],
+          "correct": 2,
+          "explanation": "Có dữ kiện M nằm giữa A, B nên AB = AM + MB = 3 + 5 = 8 cm.",
+          "skill": "cong-do-dai-doan"
+        },
+        {
+          "prompt": "C nằm giữa A và B, AB = 9 cm và AC = 4 cm. CB bằng bao nhiêu?",
+          "choices": [
+            "13 cm",
+            "5 cm",
+            "4 cm",
+            "9 cm"
+          ],
+          "correct": 1,
+          "explanation": "Vì C nằm giữa A, B nên AB = AC + CB; suy ra CB = 9 - 4 = 5 cm.",
+          "skill": "cong-do-dai-doan"
+        }
+      ],
+      "geometryModel": {
+        "kind": "segment-length",
+        "caption": "Minh họa đoạn AB dài 6 cm với hai đầu mút. Đây là số liệu riêng của hình minh họa, không áp dụng vào mọi câu hỏi."
+      },
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-35",
+      "number": 35,
+      "chapter": 8,
+      "title": "Trung điểm của đoạn thẳng",
+      "objectives": [
+        "Nhận biết trung điểm khi có đồng thời điều kiện nằm giữa và hai đoạn bằng nhau.",
+        "Tính nửa độ dài đoạn thẳng khi biết một điểm là trung điểm."
+      ],
+      "concepts": [
+        {
+          "heading": "Định nghĩa trung điểm",
+          "body": "Điểm M là trung điểm của đoạn AB khi M nằm giữa A và B, đồng thời AM = MB. Thiếu một trong hai điều kiện thì chưa đủ để kết luận."
+        },
+        {
+          "heading": "Độ dài khi có trung điểm",
+          "body": "Nếu M là trung điểm của AB, ta có AM = MB = AB/2; ngược lại AB = 2AM = 2MB."
+        },
+        {
+          "heading": "Kiểm tra dữ kiện hình",
+          "body": "Điểm vẽ có vẻ cân đối trên màn hình không phải là chứng minh trung điểm; bài toán phải cho rõ điểm nằm giữa và độ dài bằng nhau."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Cho M nằm giữa A và B, AM = 4 cm, MB = 4 cm. Có phải M là trung điểm AB không? Tính AB.",
+        "steps": [
+          "Dữ kiện thứ nhất: M nằm giữa A và B, thỏa điều kiện vị trí của trung điểm.",
+          "Dữ kiện thứ hai: AM = MB = 4 cm, thỏa điều kiện hai đoạn bằng nhau.",
+          "Vì M nằm giữa, AB = AM + MB = 4 + 4 = 8 cm."
+        ],
+        "conclusion": "M là trung điểm của AB và AB = 8 cm."
+      },
+      "commonMistake": "Không kết luận trung điểm chỉ vì AM = MB, nếu chưa xác nhận M nằm trên đoạn thẳng AB (nằm giữa A và B).",
+      "practice": [
+        {
+          "prompt": "M nằm giữa A và B, AM = MB = 4 cm. M là điểm nào của AB?",
+          "choices": [
+            "Điểm ngoài đoạn AB",
+            "Trung điểm",
+            "Chỉ là một đầu mút",
+            "Không thể kết luận vì hai đoạn bằng nhau"
+          ],
+          "correct": 1,
+          "explanation": "Cả hai điều kiện đều đã cho: M nằm giữa A, B và AM = MB, nên M chính là trung điểm AB.",
+          "skill": "trung-diem-doan-thang"
+        },
+        {
+          "prompt": "M là trung điểm AB, AB = 14 cm. AM bằng bao nhiêu?",
+          "choices": [
+            "14 cm",
+            "28 cm",
+            "7 cm",
+            "6 cm"
+          ],
+          "correct": 2,
+          "explanation": "Trung điểm chia đoạn thẳng làm hai đoạn bằng nhau, nên AM = AB/2 = 14/2 = 7 cm.",
+          "skill": "tinh-do-dai-trung-diem"
+        },
+        {
+          "prompt": "M là trung điểm AB và AB = 16 cm. MB bằng bao nhiêu?",
+          "choices": [
+            "4 cm",
+            "16 cm",
+            "8 cm",
+            "32 cm"
+          ],
+          "correct": 2,
+          "explanation": "Theo định nghĩa trung điểm, MB = AB/2 = 16/2 = 8 cm.",
+          "skill": "tinh-do-dai-trung-diem"
+        }
+      ],
+      "geometryModel": {
+        "kind": "midpoint",
+        "caption": "Minh họa A — M — B thẳng hàng, AM = MB = 4 cm; cả hai điều kiện xác định M là trung điểm."
+      },
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-36",
+      "number": 36,
+      "chapter": 8,
+      "title": "Góc",
+      "objectives": [
+        "Nhận biết góc tạo bởi hai tia chung gốc và chỉ ra đỉnh, hai cạnh.",
+        "Nhận biết góc bẹt được tạo bởi hai tia đối nhau."
+      ],
+      "concepts": [
+        {
+          "heading": "Đỉnh và hai cạnh",
+          "body": "Góc AOB là hình tạo bởi hai tia OA và OB chung gốc O. Điểm O là đỉnh, hai tia OA và OB là hai cạnh. Khi viết tên bằng ba chữ, chữ ở giữa là đỉnh."
+        },
+        {
+          "heading": "Góc bẹt",
+          "body": "Hai tia đối nhau tạo thành góc bẹt. Hai cạnh nằm trên cùng một đường thẳng nhưng hướng về hai phía đối nhau."
+        },
+        {
+          "heading": "Nhận biết các góc",
+          "body": "Ba tia phân biệt cùng gốc và không có hai tia trùng nhau có thể tạo ra ba góc ứng với các cặp tia. Chỉ gọi tên góc từ dữ kiện rõ ràng."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Có ba tia OA, OB, OC phân biệt cùng gốc O và không tia nào trùng tia khác. Có bao nhiêu góc tạo bởi các cặp tia?",
+        "steps": [
+          "Mỗi góc được xác định bởi việc chọn hai tia khác nhau trong ba tia chung gốc.",
+          "Các cặp là OA với OB; OA với OC; OB với OC.",
+          "Vì có ba cặp khác nhau nên có ba góc: AOB, AOC và BOC."
+        ],
+        "conclusion": "Có 3 góc; cả ba đều có đỉnh O."
+      },
+      "commonMistake": "Không gọi tia là cạnh của góc mà bỏ qua gốc chung; khi ký hiệu ∠AOB, đỉnh luôn là O, không phải A hay B.",
+      "practice": [
+        {
+          "prompt": "Góc AOB tạo bởi hai tia OA và OB. Đỉnh của góc là điểm nào?",
+          "choices": [
+            "A",
+            "B",
+            "O",
+            "C"
+          ],
+          "correct": 2,
+          "explanation": "Góc AOB có hai tia OA và OB chung gốc O nên O chính là đỉnh.",
+          "skill": "dinh-va-canh-goc"
+        },
+        {
+          "prompt": "Hai tia OA và OB là hai tia đối nhau. Góc AOB gọi là góc gì?",
+          "choices": [
+            "Góc vuông",
+            "Góc nhọn",
+            "Góc tù",
+            "Góc bẹt"
+          ],
+          "correct": 3,
+          "explanation": "Hai tia đối nhau có gốc O, thẳng hàng và ngược hướng, nên góc tạo thành là góc bẹt.",
+          "skill": "goc-bet"
+        },
+        {
+          "prompt": "Có ba tia OA, OB, OC phân biệt cùng gốc O. Có bao nhiêu cặp tia khác nhau tạo góc?",
+          "choices": [
+            "2",
+            "3",
+            "4",
+            "6"
+          ],
+          "correct": 1,
+          "explanation": "Ba tia tạo các cặp OA–OB, OA–OC và OB–OC, tức 3 cặp và 3 góc.",
+          "skill": "dem-goc-tu-cac-tia"
+        }
+      ],
+      "geometryModel": {
+        "kind": "angle-definition",
+        "caption": "Minh họa góc AOB gồm hai tia OA, OB chung gốc O; hình không dùng để đo số độ."
+      },
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-37",
+      "number": 37,
+      "chapter": 8,
+      "title": "Số đo góc",
+      "objectives": [
+        "Nhận biết và phân loại góc nhọn, vuông, tù, bẹt qua số đo.",
+        "Biết cách đọc số đo góc và sử dụng thước đo góc theo quy tắc đặt tâm tại đỉnh."
+      ],
+      "concepts": [
+        {
+          "heading": "Số đo góc",
+          "body": "Số đo góc biểu thị độ mở của hai tia tạo nên góc, thường tính bằng độ (°). Trong phạm vi hình học phẳng cơ bản của lớp 6, góc được xét có số đo từ 0° đến 180°."
+        },
+        {
+          "heading": "Phân loại góc",
+          "body": "Góc nhọn lớn hơn 0° và nhỏ hơn 90°; góc vuông bằng 90°; góc tù lớn hơn 90° và nhỏ hơn 180°; góc bẹt bằng 180°. Góc 0° không xếp vào bốn nhóm trên."
+        },
+        {
+          "heading": "Cách dùng thước đo góc",
+          "body": "Đặt tâm thước trùng đỉnh, vạch 0° theo một cạnh, đọc số độ tại cạnh còn lại trên đúng thang chia. Không đổi sang thang ngược vì hình trông cân đối."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Cho ba góc lần lượt có số đo 35°, 90° và 120°. Phân loại từng góc.",
+        "steps": [
+          "Góc 35° có số đo lớn hơn 0° và nhỏ hơn 90° nên là góc nhọn.",
+          "Góc 90° đúng bằng một góc vuông theo định nghĩa.",
+          "Góc 120° lớn hơn 90° nhưng nhỏ hơn 180° nên là góc tù."
+        ],
+        "conclusion": "35° là góc nhọn; 90° là góc vuông; 120° là góc tù."
+      },
+      "commonMistake": "Khi đo không nhầm vạch thang trong và ngoài của thước; 180° là góc bẹt chứ không phải góc tù.",
+      "practice": [
+        {
+          "prompt": "Góc có số đo 35° thuộc loại nào?",
+          "choices": [
+            "Góc nhọn",
+            "Góc vuông",
+            "Góc tù",
+            "Góc bẹt"
+          ],
+          "correct": 0,
+          "explanation": "Vì 0° < 35° < 90°, góc 35° là góc nhọn.",
+          "skill": "phan-loai-goc"
+        },
+        {
+          "prompt": "Góc có số đo 120° thuộc loại nào?",
+          "choices": [
+            "Góc nhọn",
+            "Góc vuông",
+            "Góc tù",
+            "Góc bẹt"
+          ],
+          "correct": 2,
+          "explanation": "Vì 90° < 120° < 180°, góc 120° là góc tù.",
+          "skill": "phan-loai-goc"
+        },
+        {
+          "prompt": "Góc có số đo 90° thuộc loại nào?",
+          "choices": [
+            "Góc nhọn",
+            "Góc vuông",
+            "Góc tù",
+            "Góc bẹt"
+          ],
+          "correct": 1,
+          "explanation": "Số đo đúng 90° là góc vuông, không phải góc nhọn hoặc góc tù.",
+          "skill": "phan-loai-goc"
+        }
+      ],
+      "geometryModel": {
+        "kind": "angle-measure",
+        "measureDegrees": 60,
+        "caption": "Minh họa góc AOB có số đo chính xác 60° nhờ dựng cạnh OB bằng lượng giác trên hệ tọa độ SVG."
+      },
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
     }
   ],
-  "releaseNote": "Volume 2 chapter VI and VII authored drafts; remaining chapters VIII–IX not authored. No teacher signoff."
+  "releaseNote": "Chapter VI–VIII authored AURA originals; 15 of 21 main lessons have drafts. Chapter IX not authored. Teacher not approved."
 }
