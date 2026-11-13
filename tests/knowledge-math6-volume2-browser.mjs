@@ -69,7 +69,7 @@ try{
   }
   await page.locator('.submit-button').click();
   await page.locator('#quizResult').waitFor();
-  assert.match(await page.locator('#quizResult').innerText(),/3\\/3/);
+  assert.match(await page.locator('#quizResult').innerText(),/3\/3/);
   const after=await page.evaluate(()=>JSON.parse(localStorage.getItem('aura_kntt_math6_volume2_progress_v1')));
   assert.equal(after.lessons['bai-29'].score,3);
   assert.equal((await page.locator('#countCompleted').innerText()).trim(),'2');
