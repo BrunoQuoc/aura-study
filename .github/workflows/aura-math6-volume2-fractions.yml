@@ -1,4 +1,4 @@
-name: AURA Math6 Volume 2 — Full Chapters VI–IX & iPad QA
+name: AURA Math6 Volume2 + Year-End Formative & iPad QA
 
 on:
   pull_request:
@@ -17,6 +17,16 @@ on:
       - 'aura_data/knowledge_math6_kntt_volume2_chapter9_review_v1.json'
       - 'knowledge-math6-statistics-review.html'
       - 'knowledge_math6_statistics.js'
+      - 'aura_data/knowledge_math6_kntt_volume2_chapter6_review_v1.json'
+      - 'aura_data/math6_endyear_practice_v1.json'
+      - 'knowledge-math6-fractions-review.html'
+      - 'knowledge-math6-yearend.html'
+      - 'knowledge_math6_extra_chapter_review.js'
+      - 'knowledge_math6_yearend.js'
+      - 'knowledge_math6_statistics.css'
+      - 'tests/knowledge-math6-yearend-bridge.test.mjs'
+      - 'tests/knowledge-math6-yearend-bridge-browser.mjs'
+      - 'docs/math6-progress-report-full-draft-20261113.md'
       - 'tests/knowledge-math6-chapter9-statistics.test.mjs'
       - 'tests/knowledge-math6-chapter9-browser.mjs'
       - 'tests/knowledge-math6-chapter8-geometry.test.mjs'
@@ -51,11 +61,14 @@ jobs:
           node --check knowledge_math6_geometry_svg.js
           node --check knowledge_math6_geometry_review.js
           node --check knowledge_math6_statistics.js
+          node --check knowledge_math6_extra_chapter_review.js
+          node --check knowledge_math6_yearend.js
           node --check lesson_maps_ui.js
           node --test tests/knowledge-math6-volume2-fractions.test.mjs \
                       tests/knowledge-math6-chapter7-decimals.test.mjs \
                       tests/knowledge-math6-chapter8-geometry.test.mjs \
                       tests/knowledge-math6-chapter9-statistics.test.mjs \
+                      tests/knowledge-math6-yearend-bridge.test.mjs \
                       tests/knowledge-math6-volume1-v2.test.mjs \
                       tests/knowledge-math6-chapter-review.test.mjs
 
@@ -81,6 +94,7 @@ jobs:
           node tests/knowledge-math6-chapter7-browser.mjs
           node tests/knowledge-math6-chapter8-browser.mjs
           node tests/knowledge-math6-chapter9-browser.mjs
+          node tests/knowledge-math6-yearend-bridge-browser.mjs
           node tests/knowledge-math6-volume1-browser.mjs
           node tests/knowledge-math6-chapter-review-browser.mjs
       - name: Keep synthetic screenshots only
@@ -93,6 +107,7 @@ jobs:
             test-results/knowledge-math6-chapter7-decimals/
             test-results/knowledge-math6-chapter8-geometry/
             test-results/knowledge-math6-chapter9/
+            test-results/math6-yearend-bridge/
             test-results/knowledge-math6-volume1/
             test-results/knowledge-math6-chapter-review/
           retention-days: 7
