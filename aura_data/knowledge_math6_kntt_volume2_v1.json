@@ -896,7 +896,7 @@
         "steps": [
           "Vì A, B thuộc a nên đường thẳng qua hai điểm phân biệt A, B chính là a.",
           "C không thuộc a nên C không thuộc đường thẳng qua A và B.",
-          "Vì vậy ba điểm A, B, C không thẳng hàng."
+          "Vì C không nằm trên đường thẳng AB, ba điểm A, B và C không thể cùng thuộc một đường thẳng, nên không thẳng hàng."
         ],
         "conclusion": "A và B thuộc a; C không thuộc a; ba điểm A, B, C không thẳng hàng."
       },
@@ -974,7 +974,7 @@
         "prompt": "Trên một đường thẳng có ba điểm phân biệt X, O, Y theo đúng thứ tự X — O — Y. Xác định điểm ở giữa và hai tia đối nhau.",
         "steps": [
           "Theo thứ tự đã cho, O nằm giữa X và Y; ba điểm cùng thuộc một đường thẳng.",
-          "Tia OX có gốc O, hướng qua X về một phía của O.",
+          "Tia OX có gốc O, đi qua X và kéo dài vô hạn về phía có X, tức là một phía của điểm O trên đường thẳng XY.",
           "Tia OY có cùng gốc O, hướng về phía ngược lại, nên OX và OY là hai tia đối nhau."
         ],
         "conclusion": "O nằm giữa X và Y; OX và OY là hai tia đối nhau."
@@ -1121,7 +1121,7 @@
         },
         {
           "heading": "Độ dài khi có trung điểm",
-          "body": "Nếu M là trung điểm của AB, ta có AM = MB = AB/2; ngược lại AB = 2AM = 2MB."
+          "body": "Nếu M là trung điểm của AB, ta có AM = MB = AB/2; ngược lại AB = 2AM = 2MB. Quan hệ này chỉ áp dụng sau khi biết chắc M là trung điểm, không thể suy ra chỉ từ hình nhìn cân đối."
         },
         {
           "heading": "Kiểm tra dữ kiện hình",
@@ -1133,7 +1133,7 @@
         "steps": [
           "Dữ kiện thứ nhất: M nằm giữa A và B, thỏa điều kiện vị trí của trung điểm.",
           "Dữ kiện thứ hai: AM = MB = 4 cm, thỏa điều kiện hai đoạn bằng nhau.",
-          "Vì M nằm giữa, AB = AM + MB = 4 + 4 = 8 cm."
+          "Do M nằm giữa hai đầu mút A, B, ta dùng hệ thức cộng độ dài AB = AM + MB = 4 + 4 = 8 cm."
         ],
         "conclusion": "M là trung điểm của AB và AB = 8 cm."
       },
@@ -1211,7 +1211,7 @@
         "prompt": "Có ba tia OA, OB, OC phân biệt cùng gốc O và không tia nào trùng tia khác. Có bao nhiêu góc tạo bởi các cặp tia?",
         "steps": [
           "Mỗi góc được xác định bởi việc chọn hai tia khác nhau trong ba tia chung gốc.",
-          "Các cặp là OA với OB; OA với OC; OB với OC.",
+          "Liệt kê lần lượt các cặp tia phân biệt: OA với OB, OA với OC, và OB với OC; mỗi cặp xác định một góc.",
           "Vì có ba cặp khác nhau nên có ba góc: AOB, AOC và BOC."
         ],
         "conclusion": "Có 3 góc; cả ba đều có đỉnh O."
@@ -1290,7 +1290,7 @@
         "prompt": "Cho ba góc lần lượt có số đo 35°, 90° và 120°. Phân loại từng góc.",
         "steps": [
           "Góc 35° có số đo lớn hơn 0° và nhỏ hơn 90° nên là góc nhọn.",
-          "Góc 90° đúng bằng một góc vuông theo định nghĩa.",
+          "Góc có số đo đúng bằng 90° được gọi là góc vuông theo định nghĩa, không phải góc nhọn hay góc tù.",
           "Góc 120° lớn hơn 90° nhưng nhỏ hơn 180° nên là góc tù."
         ],
         "conclusion": "35° là góc nhọn; 90° là góc vuông; 120° là góc tù."
