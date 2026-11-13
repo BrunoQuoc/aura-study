@@ -30,6 +30,17 @@ function lessonSubject(id){
     const head=document.querySelector('#app .sectionhead');
     if(head)head.insertAdjacentElement('afterend',link);
     else document.getElementById('app').prepend(link);
+    // Separate volume 2 draft entry: only authored lessons 23–27 are interactive.
+    // Do not conflate an outline with finished content or centrally approved questions.
+    const vol2=document.createElement('a');
+    vol2.href='knowledge-math6-volume2.html';
+    vol2.className='math6-v2-entry math6-volume2-entry';
+    const vol2Title=document.createElement('strong');
+    vol2Title.textContent='Toán 6 · Tập 2 — Chương VI: Phân số';
+    const vol2Detail=document.createElement('span');
+    vol2Detail.textContent='Bài 23–27 có nội dung · 15 câu luyện nháp · Chương VII–IX đang xây dựng';
+    vol2.append(vol2Title,vol2Detail);
+    link.insertAdjacentElement('afterend',vol2);
   }
 }
 function lessonMap(id,tab='original',nodeId=''){let m=LESSON_MAPS.find(x=>x.id===id);if(!m)return lessons();setActive('lessons');let s=lessonSubjectInfo(m.subject),selected=nodeId||m.nodes[0].id;let tabs=`<div class="lesson-tabs"><button class="${tab==='original'?'active':''}" onclick="lessonMap('${id}','original','${selected}')">Sơ đồ gốc</button><button class="${tab==='study'?'active':''}" onclick="lessonMap('${id}','study','${selected}')">Học cùng AURA</button><button class="${tab==='practice'?'active':''}" onclick="lessonMap('${id}','practice','${selected}')">Luyện tập</button></div>`;let body=tab==='study'?lessonStudy(m):tab==='practice'?lessonPractice(m):lessonOriginal(m,selected);$('#app').innerHTML=`<button class="btn soft" onclick="lessonSubject('${m.subject}')" style="margin-bottom:12px">← ${esc(s[1])} 6</button><div class="card"><div class="small">REVIEW MAP · ${esc(s[1].toUpperCase())} 6</div><div class="lesson-hero"><div><h2>${esc(m.title)}</h2><p class="meta">${esc(m.chapter)} · ${m.nodes.length} nhánh kiến thức</p></div><span class="lesson-badge">Tiến độ ${lessonProgress(m.id)}%</span></div>${tabs}</div>${body}`}
