@@ -101,7 +101,7 @@ try{
   assert.equal(await page.locator('.annual-written textarea').count(),6);
   await page.locator('.annual-written textarea').first().fill('Lời giải tự viết chỉ trong phiên làm bài');
   await page.locator('.annual-written details').first().locator('summary').click();
-  assert.equal(await page.locator('.annual-written details').first().isOpen(),true);
+  assert.equal(await page.locator('.annual-written details').first().evaluate(el=>el.open),true);
   assert.match(await page.locator('.annual-written details').first().innerText(),/10/);
   const yearly=[0,0,2,1,3,2,1,2,1,1,2,2]; // Only first question wrong.
   for(let i=0;i<12;i++){
