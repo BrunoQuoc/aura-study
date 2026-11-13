@@ -29,7 +29,15 @@ button{font:inherit;font-weight:700;border:0;color:#fff;background:#19638f;borde
 <section class="panel" id="examPanel" hidden><h2>2. Làm bài thử</h2><p class="muted">Không hiển thị đáp án trước khi nộp. Có thể bỏ trống những câu cần giải thích.</p>
 <form id="examForm"><div id="questions"></div><button id="submitExam" type="submit">Nộp và chấm thử</button></form><p id="examStatus" class="status" role="status"></p></section>
 <section class="panel" id="resultsPanel" hidden><h2>3. Kết quả & phân tích lỗi</h2><div id="score" class="kpi"></div><p class="muted">Điểm tự động chỉ là điểm tạm theo những câu có đáp án số rõ ràng; không quy đổi thành điểm toàn bài khi còn câu cần người chấm.</p>
-<div id="grades"></div><h3>Điểm yếu và gợi ý học lại</h3><div id="weakness"></div></section>
+<div id="grades"></div>
+<section id="manualPanel" class="panel" hidden>
+<h3>4. Chấm thủ công các câu chưa có quy tắc tự động an toàn</h3>
+<p class="muted">Chỉ Admin QA xem được đáp án gốc và rubric. Mỗi quyết định phải có nhận xét, được ghi vào lịch sử và không tạo điểm học sinh thật.</p>
+<div id="manualItems"></div>
+<button id="saveManual" type="button">Lưu chấm thủ công và chốt kết quả</button>
+<p id="manualStatus" class="status" role="status"></p>
+</section>
+<h3>Điểm yếu và gợi ý học lại</h3><div id="weakness"></div></section>
 </div><aside><section class="panel"><h2>Cổng an toàn</h2><p>Chỉ tài khoản <strong>Admin Staging</strong> mới được chạy QA Lab.</p><p>Đề được khóa theo phiên bản câu hỏi. Không ghi dữ liệu vào hồ sơ học sinh.</p><p class="warning">Không phát hành bài thử này cho học sinh. 23 biểu đồ trên iPhone vẫn cần nghiệm thu thực tế.</p>
 <a href="./admin-chart-review.html?v=3">Kiểm tra 23 biểu đồ</a><p><a href="./admin-ch08-review.html">Kiểm định câu hỏi trong Admin V2</a></p></section></aside></div>
 </main><script>
@@ -114,6 +122,83 @@ async function begin(){
  }catch(e){id("startStatus").textContent="Không thể mở bài thử: "+e.message}
  finally{sending=false;id("begin").disabled=false}
 }
+
+let currentManualFields=[];
+function renderResult(result){
+ const grading=result?.grading||{},scores=id("score");scores.replaceChildren();
+ const stats=[["Tự động đúng",grading.auto_correct],["Tự động sai",grading.auto_incorrect],["Cần chấm thủ công",grading.manual_pending]];
+ if(grading.manual_pending===0&&Number.isFinite(Number(grading.final_points)))stats.push(["ĐIỂM ĐÃ CHỐT",grading.final_points+"/"+grading.total]);
+ for(const [title,value] of stats){
+  const card=document.createElement("div"),t=document.createElement("strong"),s=document.createElement("small");
+  t.textContent=value??0;s.textContent=title;card.append(t,s);scores.append(card);
+ }
+ const grades=id("grades");grades.replaceChildren();
+ for(const x of grading.results||[]){
+  const p=document.createElement("p");p.className="result";
+  p.textContent=x.question_id+" · "+(x.result==="CORRECT"?"Đúng":x.result==="INCORRECT"?"Sai":"Cần chấm thủ công")
+    +" · "+(x.grade_rule==="MANUAL_QA_ADMIN"?"Admin QA":"Quy tắc tự động");
+  grades.append(p);
+ }
+ const weakness=id("weakness");weakness.replaceChildren();
+ if(!Array.isArray(result.weakness)||!result.weakness.length){
+  const p=document.createElement("p");p.className="muted";
+  p.textContent="Chưa ghi nhận lỗi có thể kết luận; câu chưa chấm không bị coi là sai.";
+  weakness.append(p);
+ }else for(const w of result.weakness){
+  const card=document.createElement("div");card.className="result";
+  const head=document.createElement("strong");head.textContent=w.topic||w.lesson_id||"Kiến thức cần luyện thêm";
+  const p=document.createElement("p");p.textContent=w.remediation_hint||"Ôn lại lý thuyết và giải bài tương tự.";
+  card.append(head,p);weakness.append(card);
+ }
+}
+async function refreshManualReview(){
+ const root=id("manualItems"),container=id("manualPanel");root.replaceChildren();currentManualFields=[];
+ const c=selection();
+ const response=await request({action:"qa_exam_review_pending",batch:c.id,attempt_id:attemptId});
+ const pending=response.qa_review?.pending||[];
+ if(!Array.isArray(pending)||pending.length===0){container.hidden=true;return}
+ for(const q of pending){
+  const div=document.createElement("article");div.className="question";
+  const h=document.createElement("strong");h.textContent=q.question_id+" — "+q.stem;
+  const expected=document.createElement("p");
+  expected.textContent="Đáp án chuẩn: "+q.expected_answer+" | Học viên thử trả lời: "+(q.answer_submitted||"(bỏ trống)");
+  const rubric=document.createElement("p");rubric.className="muted";
+  rubric.textContent="Rubric: "+(q.rubric?.criteria||[]).join(" · ");
+  const label=document.createElement("label");label.textContent="Đánh giá thủ công";
+  const select=document.createElement("select");
+  for(const [value,title] of [["","Chưa chọn"],["CORRECT","Đúng — 1 điểm"],["INCORRECT","Sai — 0 điểm"]]){
+   const o=document.createElement("option");o.value=value;o.textContent=title;select.append(o)}
+  const noteLabel=document.createElement("label");noteLabel.textContent="Nhận xét (ít nhất 8 ký tự)";
+  const note=document.createElement("textarea");note.rows=2;note.maxLength=500;note.placeholder="Nêu căn cứ theo rubric...";
+  div.append(h,expected,rubric,label,select,noteLabel,note);root.append(div);
+  currentManualFields.push({id:q.question_id,select,note});
+ }
+ container.hidden=false;
+}
+async function gradeManual(){
+ if(sending||!attemptId)return;
+ const decisions={};
+ for(const row of currentManualFields){
+  const decision=row.select.value,note=row.note.value.trim();
+  if(!["CORRECT","INCORRECT"].includes(decision)||note.length<8){
+   id("manualStatus").textContent="Mỗi câu cần quyết định và nhận xét theo rubric (tối thiểu 8 ký tự).";return;
+  }
+  decisions[row.id]={decision,note};
+ }
+ sending=true;id("saveManual").disabled=true;
+ id("manualStatus").textContent="Đang lưu quyết định Admin QA...";
+ try{
+  const c=selection();
+  const response=await request({action:"qa_exam_manual_grade",batch:c.id,attempt_id:attemptId,decisions});
+  const result=response.qa_result;
+  if(!result?.qa_only)throw Error("Máy chủ không trả kết quả QA hợp lệ.");
+  renderResult(result);
+  await refreshManualReview();
+  id("examStatus").textContent="Đã hoàn tất chấm thử, ghi lịch sử và cập nhật điểm yếu trên Staging.";
+ }catch(e){id("manualStatus").textContent="Không lưu được quyết định: "+e.message}
+ finally{sending=false;id("saveManual").disabled=false}
+}
+
 async function submit(event){
  event.preventDefault();if(sending||!attemptId)return;
  sending=true;id("submitExam").disabled=true;id("examStatus").textContent="Đang chấm thử…";
@@ -124,22 +209,8 @@ async function submit(event){
  const result=r.qa_result||{},g=result.grading||{};
  if(!result.qa_only||!Array.isArray(g.results))throw Error("Kết quả không hợp lệ.");
  id("resultsPanel").hidden=false;id("examStatus").textContent="Đã lưu bài QA. Không tạo điểm học sinh thật.";
- const cards=id("score");cards.replaceChildren();
- for(const [label,value] of [["Tự động đúng",g.auto_correct],["Tự động sai",g.auto_incorrect],["Cần chấm thủ công",g.manual_pending]]){
-  const card=document.createElement("div"),t=document.createElement("strong"),s=document.createElement("small");
-  t.textContent=value??0;s.textContent=label;card.append(t,s);cards.append(card);
- }
- const grades=id("grades");grades.replaceChildren();
- for(const x of g.results){const p=document.createElement("p");p.className="result";
-  p.textContent=x.question_id+" · "+(x.result==="CORRECT"?"Tự động đúng":x.result==="INCORRECT"?"Tự động chưa đúng":"Cần đánh giá thủ công");grades.append(p)}
- const weakness=id("weakness");weakness.replaceChildren();
- if(!Array.isArray(result.weakness)||!result.weakness.length){
-  const p=document.createElement("p");p.className="muted";p.textContent="Không phát hiện lỗi số học được chấm xác định; các câu thủ công chưa kết luận.";weakness.append(p);
- }else for(const w of result.weakness){
-  const card=document.createElement("div");card.className="result";
-  const h=document.createElement("strong");h.textContent=w.topic||w.lesson_id||"Bài cần luyện";
-  const p=document.createElement("p");p.textContent=w.remediation_hint||"Ôn bài và làm lại câu tương tự.";
-  card.append(h,p);weakness.append(card)}
+ renderResult(result);
+ await refreshManualReview();
  id("resultsPanel").scrollIntoView({behavior:"smooth"});
  }catch(e){id("examStatus").textContent="Chưa chấm được: "+e.message}
  finally{sending=false;id("submitExam").disabled=false}
@@ -147,5 +218,6 @@ async function submit(event){
 id("chapter").addEventListener("change",renderLessons);
 id("begin").addEventListener("click",begin);
 id("examForm").addEventListener("submit",submit);
+id("saveManual").addEventListener("click",gradeManual);
 init();
 </script></body></html>
