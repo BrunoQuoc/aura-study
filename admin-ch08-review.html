@@ -38,8 +38,8 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <label>Chương <select id="chapter"></select></label>
 <label>Bài học <select id="lesson"></select></label>
 <label>Mức độ <select id="level"><option value="">Tất cả</option><option value="nhan_biet">Nhận biết</option><option value="thong_hieu">Thông hiểu</option><option value="van_dung">Vận dụng</option></select></label>
-<label>Trạng thái <select id="state"><option value="">Tất cả</option><option value="PENDING">Chờ duyệt</option><option value="CHANGES_REQUESTED">Yêu cầu sửa</option><option value="APPROVED">Đã duyệt</option><option value="REJECTED">Từ chối</option></select></label>
-<label>Đợt kiểm định <select id="audit"><option value="">Tất cả câu</option><option value="pending_all">Toàn bộ câu chờ duyệt</option><option value="revised_pending">Đã sửa — Chờ duyệt</option><option value="approved_rubric">Tái duyệt — Rubric V2</option><option value="qa_flagged">QA — Cần rà soát</option><option value="qa_high">QA — Ưu tiên cao</option></select></label>
+<label>Trạng thái <select id="state"><option value="">Tất cả</option><option value="PENDING">Chờ duyệt</option><option value="CHANGES_REQUESTED">Yêu cầu sửa</option><option value="APPROVED">Admin đã duyệt</option><option value="AI_APPROVED">AI đã duyệt · Staging</option><option value="REJECTED">Từ chối</option></select></label>
+<label>Đợt kiểm định <select id="audit"><option value="">Tất cả câu</option><option value="pending_all">Toàn bộ câu chờ duyệt</option><option value="ai_reviewed">401 câu AI đã duyệt</option><option value="revised_pending">Đã sửa — Chờ duyệt</option><option value="approved_rubric">Tái duyệt — Rubric V2</option><option value="qa_flagged">QA — Cần rà soát</option><option value="qa_high">QA — Ưu tiên cao</option></select></label>
 </section>
 <section class="panel"><strong>Độ phủ Toán 6 — 2 tập, 9 chương</strong><p class="quiet">Số liệu được tải từ API có kiểm tra quyền Admin; chỉ thể hiện hàng chờ Staging, không phải câu đã xuất bản.</p><div id="curriculumOverview" style="overflow:auto"></div></section>
 <section class="panel"><strong>Kiểm định chất lượng trước phát hành</strong>
@@ -48,7 +48,7 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <details><summary>Tiến độ nghiệm thu sư phạm theo từng bài</summary><div id="lessonQaMatrix" style="overflow:auto"></div></details>
 <p class="quiet">Kiểm tra tự động không thay thế phê duyệt sư phạm. Các câu đã duyệt có cảnh báo mức cao vẫn bị chặn xuất bản.</p>
 </section>
-<section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “QA — Ưu tiên cao” để xử lý bốn câu vừa mở lại, hoặc “Toàn bộ câu chờ duyệt” để duyệt từng nhóm (tối đa 30 câu). Hai rubric cũ đã được tạo phiên bản mới và mở lại hàng chờ để tái duyệt; lịch sử duyệt cũ được giữ nguyên. Không có tự động phê duyệt.</p></section>
+<section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Đợt AI đã phê duyệt 401 câu trên Staging, không giả chữ ký Admin. Chọn “401 câu AI đã duyệt” hoặc “QA — Ưu tiên cao” để Admin tái duyệt độc lập từng nhóm (tối đa 30 câu). Hai rubric cũ đã được tạo phiên bản mới và mở lại hàng chờ để tái duyệt; lịch sử duyệt cũ được giữ nguyên. Không có tự động phê duyệt.</p></section>
 <section class="panel" id="batchPanel" hidden><strong>Nghiệm thu theo lô — tối đa 30 câu mỗi lần</strong><p class="quiet">Chọn từng câu sau khi đọc nội dung và kiểm tra đáp án, thang điểm; không chọn tự động. Mọi quyết định áp dụng cho phiên bản đang hiển thị và được ghi lại bằng tài khoản Admin.</p><p id="pickedCount">Đã chọn 0 câu</p><textarea id="batchNote" placeholder="Nhận xét cho đợt duyệt (ít nhất 8 ký tự)" aria-label="Ghi chú duyệt theo lô"></textarea><div class="actions"><button id="batchApprove" type="button">Phê duyệt các câu đã chọn</button><button id="batchChanges" class="btnwarn" type="button">Yêu cầu sửa các câu đã chọn</button></div></section>
 <section class="panel" id="deviceAcceptance"><strong>Nghiệm thu trên điện thoại thật</strong>
 <p class="quiet">Chạy trên Safari iPhone/iPad hoặc Chrome Android. Các dấu kiểm dưới đây chỉ là xác nhận của người thao tác trên thiết bị, không được tự động coi là đã nghiệm thu.</p>
@@ -90,13 +90,13 @@ const url="https://ufqzuowjhdqpydqvcsob.supabase.co",key="sb_publishable_d7x2eMP
 const api=url+"/functions/v1/aura-admin-review-v1";
 const auth=createClient(url,key,{auth:{storageKey:"aura-stage-parent-v1",flowType:"pkce",detectSessionInUrl:false,persistSession:true,autoRefreshToken:true}});
 const el=id=>document.getElementById(id),notice=txt=>el("notice").textContent=txt;
-const labels={PENDING:"Chờ duyệt",APPROVED:"Đã duyệt",REJECTED:"Từ chối",CHANGES_REQUESTED:"Yêu cầu sửa"};
+const labels={PENDING:"Chờ duyệt",AI_APPROVED:"AI đã duyệt · Staging",APPROVED:"Admin đã duyệt",REJECTED:"Từ chối",CHANGES_REQUESTED:"Yêu cầu sửa"};
 let selected=new Map();
 function updateSelection(){
 el("pickedCount").textContent="Đã chọn "+selected.size+" câu";
 }
 async function applyBatch(decision){
-if(!["revised_pending","approved_rubric","pending_all","qa_flagged","qa_high"].includes(el("audit").value)||selected.size===0){notice("Chọn các câu đã sửa cần nghiệm thu trước.");return;}
+if(!["revised_pending","approved_rubric","pending_all","qa_flagged","qa_high","ai_reviewed"].includes(el("audit").value)||selected.size===0){notice("Chọn câu AI đã duyệt hoặc câu đang chờ cần Admin tái duyệt.");return;}
 const note=el("batchNote").value.trim();if(note.length<8){notice("Ghi chú phải có ít nhất 8 ký tự.");return;}
 const ids=[...selected.keys()],versions=Object.fromEntries(selected);
 if(!confirm("Xác nhận "+(decision==="APPROVED"?"PHÊ DUYỆT":"YÊU CẦU SỬA")+" "+ids.length+" câu đã chọn? Quyết định sẽ được ghi vào lịch sử và không thể sửa trực tiếp."))return;
@@ -190,11 +190,11 @@ function renderOverview(){
  const root=el("curriculumOverview");root.replaceChildren();
  const table=document.createElement("table");table.style.width="100%";
  const head=document.createElement("tr");
- for(const v of ["Tập / Chương","Bài","Câu","Đã duyệt","Chờ duyệt"]){const cell=document.createElement("th");cell.textContent=v;cell.style.textAlign="left";cell.style.padding="6px";head.append(cell);}
+ for(const v of ["Tập / Chương","Bài","Câu","AI đã duyệt","Admin đã duyệt","Chờ duyệt"]){const cell=document.createElement("th");cell.textContent=v;cell.style.textAlign="left";cell.style.padding="6px";head.append(cell);}
  table.append(head);
  for(const c of curriculumCatalog){
   const tr=document.createElement("tr");
-  for(const v of ["Tập "+c.volume+" · "+c.chapter+" — "+c.title,(c.lessons||[]).length,c.total,c.approved,c.pending]){
+  for(const v of ["Tập "+c.volume+" · "+c.chapter+" — "+c.title,(c.lessons||[]).length,c.total,c.ai_approved??0,c.approved,c.pending]){
    const td=document.createElement("td");td.textContent=String(v);td.style.padding="6px";td.style.borderTop="1px solid #e2e9f2";tr.append(td);
   }
   table.append(tr);
@@ -269,17 +269,17 @@ const records=Array.isArray(progression.lessons)?progression.lessons:[];
 const root=el("lessonQaMatrix");root.replaceChildren();
 const table=document.createElement("table");table.style.width="100%";
 const th=document.createElement("tr");
-for(const label of ["Bài học","Cấu trúc","Duyệt","Cảnh báo","Mở bài"]){
+for(const label of ["Bài học","Cấu trúc","AI duyệt","Admin duyệt","Cảnh báo","Mở bài"]){
 const cell=document.createElement("th");cell.textContent=label;cell.style.padding="7px";cell.style.textAlign="left";th.append(cell);
 }table.append(th);
 for(const line of records){
  const tr=document.createElement("tr");
- const vals=[line.title||line.lesson_id,(line.structural_pass||0)+"/"+line.total,(line.approved||0)+"/"+line.total,
+ const vals=[line.title||line.lesson_id,(line.structural_pass||0)+"/"+line.total,(line.ai_approved||0)+"/"+line.total,(line.approved||0)+"/"+line.total,
  (line.high_flags?line.high_flags+" cao · ":"")+(line.open_flags||0)+" mở"];
  for(const val of vals){const td=document.createElement("td");td.textContent=String(val);td.style.padding="7px";td.style.borderTop="1px solid #e1e7f1";tr.append(td);}
  const ctl=document.createElement("td");ctl.style.padding="7px";
  const btn=document.createElement("button");btn.type="button";btn.textContent="Mở";
- btn.addEventListener("click",async()=>{el("lesson").value=line.lesson_id;el("state").value="";el("level").value="";el("audit").value="pending_all";await load();el("questions").scrollIntoView({block:"start",behavior:"smooth"});});
+ btn.addEventListener("click",async()=>{el("lesson").value=line.lesson_id;el("state").value="";el("level").value="";el("audit").value="ai_reviewed";await load();el("questions").scrollIntoView({block:"start",behavior:"smooth"});});
  ctl.append(btn);tr.append(ctl);table.append(tr);
 }
 root.append(table);
@@ -289,9 +289,9 @@ renderChartGallery(incoming,chosen);
 try{
  const gateResponse=await send({action:"release_gate",batch:chosen.batch});
  const g=gateResponse.gate||{};
- const approval=(g.approved??0)+"/"+(g.total??chosen.total);
+ const approval=(g.approved??0)+" Admin, "+(g.ai_approved??0)+" AI / "+(g.total??chosen.total);
  const visual=g.requires_new_chart_acceptance?" · Biên bản thiết bị thật "+(g.new_chart_device_reports??0):"";
- el("chapterGate").textContent="Tập "+chosen.volume+" · Chương "+chosen.chapter+": "+approval+" đã duyệt, "+(g.pending??0)+" chờ; cấu trúc "+(g.structure_pass??0)+"/"+(g.total??chosen.total)+", "+(g.qa_findings_open??0)+" cảnh báo QA ("+(g.qa_high??0)+" ưu tiên cao), tham chiếu đề cũ "+(g.stale_blueprint_refs??0)+visual+". "+(g.ready_for_release_assessment?"ĐỦ ĐIỀU KIỆN XÉT NGHIỆM THU PHÁT HÀNH; chưa xuất bản.":"CHƯA ĐỦ ĐIỀU KIỆN. Exam Engine vẫn khóa.");
+ el("chapterGate").textContent="Tập "+chosen.volume+" · Chương "+chosen.chapter+": "+approval+" đã duyệt theo nguồn gốc, "+(g.pending??0)+" chờ; cấu trúc "+(g.structure_pass??0)+"/"+(g.total??chosen.total)+", "+(g.qa_findings_open??0)+" cảnh báo QA ("+(g.qa_high??0)+" ưu tiên cao), tham chiếu đề cũ "+(g.stale_blueprint_refs??0)+visual+". "+(g.ready_for_release_assessment?"ĐỦ ĐIỀU KIỆN XÉT NGHIỆM THU PHÁT HÀNH; chưa xuất bản.":"CHƯA ĐỦ ĐIỀU KIỆN. Exam Engine vẫn khóa.");
 }catch(err){el("chapterGate").textContent="Không tải được điều kiện đóng chương: "+err.message+". Exam Engine vẫn khóa.";}
 
 const audit=el("audit").value;
@@ -299,15 +299,16 @@ const items=incoming.filter(item=>{
  if(audit==="qa_flagged")return qaFlagsById.has(item.id);
  if(audit==="qa_high")return (qaFlagsById.get(item.id)||[]).some(f=>f.severity==="HIGH");
  if(audit==="pending_all")return item.status==="PENDING";
- if(audit==="revised_pending")return item.status==="PENDING"&&item.body?.qa_status==="REVISED_INTERNAL_QA_REVIEW_REQUIRED";
- if(audit==="approved_rubric")return item.status==="PENDING"&&item.body?.qa_status==="RUBRIC_V2_REOPENED_REQUIRES_APPROVAL";
+ if(audit==="ai_reviewed")return item.status==="AI_APPROVED";
+ if(audit==="revised_pending")return ["PENDING","AI_APPROVED"].includes(item.status)&&item.body?.qa_status==="REVISED_INTERNAL_QA_REVIEW_REQUIRED";
+ if(audit==="approved_rubric")return ["PENDING","AI_APPROVED"].includes(item.status)&&item.body?.qa_status==="RUBRIC_V2_REOPENED_REQUIRES_APPROVAL";
  return true;
 });
-selected.clear();updateSelection();el("batchPanel").hidden=!["pending_all","revised_pending","approved_rubric","qa_flagged","qa_high"].includes(audit);
+selected.clear();updateSelection();el("batchPanel").hidden=!["pending_all","revised_pending","approved_rubric","qa_flagged","qa_high","ai_reviewed"].includes(audit);
 el("summary").textContent="Hiển thị "+items.length+" / "+incoming.length+" câu · Đây chỉ là bộ lọc nghiệm thu, không tự phê duyệt hoặc xuất bản.";
 for(const item of items){
 const q=item.body||{},article=document.createElement("article");article.className="panel";
-if(["pending_all","revised_pending","approved_rubric","qa_flagged","qa_high"].includes(audit)&&item.status==="PENDING"){
+if(["pending_all","revised_pending","approved_rubric","qa_flagged","qa_high","ai_reviewed"].includes(audit)&&["PENDING","AI_APPROVED"].includes(item.status)){
 const selectLabel=document.createElement("label");selectLabel.style.display="block";selectLabel.style.marginBottom="9px";
 const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.style.marginRight="10px";
 checkbox.addEventListener("change",()=>{if(checkbox.checked){if(selected.size>=30){checkbox.checked=false;notice("Mỗi đợt chỉ chọn tối đa 30 câu.");return;}selected.set(item.id,item.revision);}else selected.delete(item.id);updateSelection();});
@@ -340,7 +341,7 @@ if(isNumeric){
  probe.append(textLabel,btn);article.append(probe,result);
 }
 }
-if(item.status==="PENDING"){
+if(item.status==="PENDING"||item.status==="AI_APPROVED"){
 const review=document.createElement("div");review.className="review";const note=document.createElement("textarea");note.placeholder="Nhận xét sư phạm bắt buộc (tối thiểu 8 ký tự)";note.setAttribute("aria-label","Nhận xét "+item.id);review.append(note);
 const actions=document.createElement("div");actions.className="actions";
 for(const [action,label,cls] of [["APPROVED","Phê duyệt",""],["CHANGES_REQUESTED","Yêu cầu sửa","btnwarn"],["REJECTED","Từ chối","btndanger"]]){
