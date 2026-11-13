@@ -52,7 +52,7 @@ function validate(d){
    count++;
   });ids.add(l.id);nums.add(l.number);
  });
- if(count!==63||d.authoredLessonCount!==21||d.authoredPracticeCount!==63||d.expectedTotalLessons!==21||d.expectedTotalChapters!==4||d.outline?.length!==21||d.outline.filter(x=>x.authored).length!==15)
+ if(count!==63||d.authoredLessonCount!==21||d.authoredPracticeCount!==63||d.expectedTotalLessons!==21||d.expectedTotalChapters!==4||d.outline?.length!==21||d.outline.filter(x=>x.authored).length!==21)
   throw Error('Số lượng bài và câu hỏi không khớp.');
  return d;
 }
