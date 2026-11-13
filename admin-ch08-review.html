@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Cache-Control" content="no-store"><title>AURA STUDY · Chờ duyệt Chương VIII</title>
+<meta http-equiv="Cache-Control" content="no-store"><title>AURA STUDY · Nghiệm thu Toán 6</title>
 <style>
 :root{font-family:system-ui,-apple-system,sans-serif;color:#20314a;background:#f4f7fc}
 *{box-sizing:border-box}body{margin:0}header{background:#152948;color:white;padding:16px 20px}header a{color:#d9e9ff}main{max-width:1080px;margin:auto;padding:20px}
@@ -16,12 +16,14 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 #notice{white-space:pre-wrap}.pill{background:#e6f3fb;color:#18577a;border-radius:20px;padding:4px 9px}
 </style></head><body>
 <header><a href="./admin-direct.html">← Admin V2</a>　 AURA STUDY · NGÂN HÀNG CÂU HỎI</header>
-<main><h1>Chương VIII — Hàng chờ nghiệm thu sư phạm</h1>
-<p class="quiet">STAGING · Toán 6 Kết nối tri thức · Bài 32–37. Phê duyệt tại đây KHÔNG xuất bản đề thi. Chỉ tài khoản Admin đã xác thực mới xem hoặc quyết định.</p>
+<main><h1>Toán 6 — Ngân hàng câu hỏi chờ duyệt</h1>
+<p class="quiet">STAGING · Kết nối tri thức với cuộc sống. Duyệt sư phạm không đồng nghĩa với xuất bản Exam Engine. Chỉ Admin đã xác thực mới được xem và duyệt.</p>
 <section class="panel"><p id="notice" role="status">Đang kiểm tra phiên xác thực…</p>
 <div class="tools"><a href="./aura-staging-login.html">Đăng nhập/xác minh Admin</a><button id="reload" type="button">Tải lại hàng chờ</button><button id="logout" type="button">Đăng xuất Admin</button></div></section>
 <section class="tools">
-<label>Bài học <select id="lesson"><option value="">Tất cả Bài 32–37</option><option value="M6-KNTT-C08-L32">Bài 32</option><option value="M6-KNTT-C08-L33">Bài 33</option><option value="M6-KNTT-C08-L34">Bài 34</option><option value="M6-KNTT-C08-L35">Bài 35</option><option value="M6-KNTT-C08-L36">Bài 36</option><option value="M6-KNTT-C08-L37">Bài 37</option></select></label>
+<label>Tập <select id="volume"><option value="1">Tập 1</option><option value="2">Tập 2</option></select></label>
+<label>Chương <select id="chapter"></select></label>
+<label>Bài học <select id="lesson"></select></label>
 <label>Mức độ <select id="level"><option value="">Tất cả</option><option value="nhan_biet">Nhận biết</option><option value="thong_hieu">Thông hiểu</option><option value="van_dung">Vận dụng</option></select></label>
 <label>Trạng thái <select id="state"><option value="">Tất cả</option><option value="PENDING">Chờ duyệt</option><option value="CHANGES_REQUESTED">Yêu cầu sửa</option><option value="APPROVED">Đã duyệt</option><option value="REJECTED">Từ chối</option></select></label>
 </section>
@@ -34,6 +36,19 @@ const api=url+"/functions/v1/aura-admin-review-v1";
 const auth=createClient(url,key,{auth:{storageKey:"aura-stage-parent-v1",flowType:"pkce",detectSessionInUrl:false,persistSession:true,autoRefreshToken:true}});
 const el=id=>document.getElementById(id),notice=txt=>el("notice").textContent=txt;
 const labels={PENDING:"Chờ duyệt",APPROVED:"Đã duyệt",REJECTED:"Từ chối",CHANGES_REQUESTED:"Yêu cầu sửa"};
+const catalogs={
+"1":{chapter:"I",batch:"AURA-M6-KNTT-T1-C01-DRAFT-V0.2",items:[
+["M6-KNTT-T1-L01","Bài 1 — Tập hợp"],["M6-KNTT-T1-L02","Bài 2 — Cách ghi số tự nhiên"],["M6-KNTT-T1-L03","Bài 3 — Thứ tự trong tập hợp số tự nhiên"],["M6-KNTT-T1-L04","Bài 4 — Phép cộng và phép trừ số tự nhiên"],["M6-KNTT-T1-L05","Bài 5 — Phép nhân và phép chia số tự nhiên"],["M6-KNTT-T1-L06","Bài 6 — Lũy thừa với số mũ tự nhiên"],["M6-KNTT-T1-L07","Bài 7 — Thứ tự thực hiện các phép tính"]]},
+"2":{chapter:"VIII",batch:"AURA-M6-KNTT-CH08-V0.4-PEDAGOGICAL-QUEUE",items:Array.from({length:6},(_,i)=>["M6-KNTT-C08-L"+(32+i),"Bài "+(32+i)])}
+};
+function syncVolumes(){
+const c=catalogs[el("volume").value],ch=el("chapter"),lesson=el("lesson");
+ch.replaceChildren();const o=document.createElement("option");o.value=c.chapter;o.textContent="Chương "+c.chapter;ch.append(o);
+lesson.replaceChildren();const all=document.createElement("option");all.value="";all.textContent="Tất cả bài";lesson.append(all);
+for(const [id,label] of c.items){const option=document.createElement("option");option.value=id;option.textContent=label;lesson.append(option);}
+el("state").value="";el("level").value="";
+}
+
 async function send(input){
 const {data:{session},error}=await auth.auth.getSession();
 if(error||!session?.access_token)throw Error("Chưa xác thực Admin. Mở trang Đăng nhập/xác minh Admin trước.");
@@ -44,7 +59,7 @@ function cell(parent,name,value){const p=document.createElement("p");const b=doc
 async function load(){
 el("questions").replaceChildren();notice("Đang đọc dữ liệu qua API bảo vệ…");
 try{
-const data=await send({action:"list",lesson:el("lesson").value,level:el("level").value,state:el("state").value});
+const data=await send({action:"list",batch:catalogs[el("volume").value].batch,lesson:el("lesson").value,level:el("level").value,state:el("state").value});
 const items=Array.isArray(data.items)?data.items:[];el("summary").textContent="Tìm thấy "+items.length+" câu · Không kết nối Exam Engine.";
 for(const item of items){
 const q=item.body||{},article=document.createElement("article");article.className="panel";
@@ -57,14 +72,14 @@ if(item.status==="PENDING"){
 const review=document.createElement("div");review.className="review";const note=document.createElement("textarea");note.placeholder="Nhận xét sư phạm bắt buộc (tối thiểu 8 ký tự)";note.setAttribute("aria-label","Nhận xét "+item.id);review.append(note);
 const actions=document.createElement("div");actions.className="actions";
 for(const [action,label,cls] of [["APPROVED","Phê duyệt",""],["CHANGES_REQUESTED","Yêu cầu sửa","btnwarn"],["REJECTED","Từ chối","btndanger"]]){
-const btn=document.createElement("button");btn.className=cls;btn.textContent=label;btn.addEventListener("click",async()=>{if(note.value.trim().length<8){notice("Cần ghi lý do ít nhất 8 ký tự.");return;}if(!confirm("Xác nhận "+label.toLowerCase()+" câu "+item.id+"? Quyết định được lưu lịch sử."))return;btn.disabled=true;try{await send({action:"decide",id:item.id,decision:action,note:note.value.trim()});await load();notice("Đã lưu quyết định cho "+item.id+". Exam Engine vẫn khóa.");}catch(e){notice(e.message);btn.disabled=false;}});actions.append(btn);}
+const btn=document.createElement("button");btn.className=cls;btn.textContent=label;btn.addEventListener("click",async()=>{if(note.value.trim().length<8){notice("Cần ghi lý do ít nhất 8 ký tự.");return;}if(!confirm("Xác nhận "+label.toLowerCase()+" câu "+item.id+"? Quyết định được lưu lịch sử."))return;btn.disabled=true;try{await send({action:"decide",batch:catalogs[el("volume").value].batch,id:item.id,decision:action,note:note.value.trim()});await load();notice("Đã lưu quyết định cho "+item.id+". Exam Engine vẫn khóa.");}catch(e){notice(e.message);btn.disabled=false;}});actions.append(btn);}
 review.append(actions);article.append(review);
 }
 el("questions").append(article);
 }notice("Đã xác thực và đọc hàng chờ. Các quyết định chỉ lưu trên staging.");
 }catch(e){el("summary").textContent="";notice(e.message);}
 }
-el("reload").addEventListener("click",load);for(const id of ["lesson","level","state"])el(id).addEventListener("change",load);
+el("reload").addEventListener("click",load);el("volume").addEventListener("change",()=>{syncVolumes();load();});for(const id of ["lesson","level","state"])el(id).addEventListener("change",load);
 el("logout").addEventListener("click",async()=>{await auth.auth.signOut();el("questions").replaceChildren();notice("Đã đăng xuất.");});
-load();
+syncVolumes();load();
 </script></body></html>
