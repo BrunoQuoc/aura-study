@@ -1473,7 +1473,7 @@
             "16"
           ],
           "correct": 2,
-          "explanation": "Cộng các tần số của mọi nhóm: 4 + 6 + 5 = 15 đối tượng.",
+          "explanation": "Cộng các tần số của mọi nhóm: 4 + 6 + 5 = 15 đối tượng. Hãy đối chiếu với dữ kiện của câu hỏi trước khi chọn đáp án.",
           "skill": "bang-tan-so"
         },
         {
@@ -1548,7 +1548,7 @@
             "8"
           ],
           "correct": 1,
-          "explanation": "Lấy giá trị lớn nhất trừ giá trị nhỏ nhất: 8 - 5 = 3.",
+          "explanation": "Lấy giá trị lớn nhất trừ giá trị nhỏ nhất: 8 - 5 = 3. Hãy đối chiếu với dữ kiện của câu hỏi trước khi chọn đáp án.",
           "skill": "so-sanh-bieu-do"
         },
         {
