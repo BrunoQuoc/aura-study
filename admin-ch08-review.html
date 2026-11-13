@@ -286,11 +286,13 @@ root.append(table);
 }catch(err){el("lessonQaMatrix").textContent="Không tải được tiến độ theo bài: "+err.message;}
 const incoming=Array.isArray(data.items)?data.items:[];
 renderChartGallery(incoming,chosen);
-if(el("lesson").value===""&&el("level").value===""&&el("state").value===""){
-const approved=incoming.filter(x=>x.status==="APPROVED").length,pending=incoming.filter(x=>x.status==="PENDING").length;
-const ready=approved===chosen.total&&pending===0;
-el("chapterGate").textContent="Tập "+chosen.volume+" · Chương "+chosen.chapter+": "+approved+"/"+chosen.total+" đã duyệt; "+pending+" đang chờ. "+(ready?"Đủ điều kiện xét đóng chương, nhưng chưa được xuất bản.":"Chưa đạt điều kiện đóng chương.");
-}else{el("chapterGate").textContent="Chọn Tất cả bài, Tất cả mức độ và Tất cả trạng thái để xem điều kiện đóng chương.";}
+try{
+ const gateResponse=await send({action:"release_gate",batch:chosen.batch});
+ const g=gateResponse.gate||{};
+ const approval=(g.approved??0)+"/"+(g.total??chosen.total);
+ const visual=g.requires_new_chart_acceptance?" · Biên bản thiết bị thật "+(g.new_chart_device_reports??0):"";
+ el("chapterGate").textContent="Tập "+chosen.volume+" · Chương "+chosen.chapter+": "+approval+" đã duyệt, "+(g.pending??0)+" chờ; cấu trúc "+(g.structure_pass??0)+"/"+(g.total??chosen.total)+", "+(g.qa_findings_open??0)+" cảnh báo QA ("+(g.qa_high??0)+" ưu tiên cao), tham chiếu đề cũ "+(g.stale_blueprint_refs??0)+visual+". "+(g.ready_for_release_assessment?"ĐỦ ĐIỀU KIỆN XÉT NGHIỆM THU PHÁT HÀNH; chưa xuất bản.":"CHƯA ĐỦ ĐIỀU KIỆN. Exam Engine vẫn khóa.");
+}catch(err){el("chapterGate").textContent="Không tải được điều kiện đóng chương: "+err.message+". Exam Engine vẫn khóa.";}
 
 const audit=el("audit").value;
 const items=incoming.filter(item=>{
