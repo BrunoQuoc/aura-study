@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#15385d">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="icon.svg">
+  <link rel="stylesheet" href="knowledge_math6_v2.css?v=20261113">
+  <link rel="stylesheet" href="knowledge_math6_decimals.css?v=20261113">
+  <title>AURA STUDY — Số thập phân · Ôn tập và trực quan Toán 6</title>
+</head>
+<body>
+<div class="decimal-app">
+  <header class="decimal-hero">
+    <a class="back-link" href="knowledge-math6-volume2.html#bai-28">← Toán 6 Tập 2 · Bài 28–31</a>
+    <p class="eyebrow">AURA STUDY · KIẾN THỨC TOÁN 6 · CHƯƠNG VII</p>
+    <h1>Khám phá Số thập phân</h1>
+    <p>Làm tròn bằng tia số, nhìn trực quan phần trăm và luyện 6 câu do AURA tự biên soạn. Đây là bản học thử chưa có xác nhận sư phạm.</p>
+    <div class="decimal-hero-stats">
+      <span>4 bài liên quan: 28–31</span><span>2 hoạt động trực quan</span><span>6 câu ôn chương</span>
+    </div>
+  </header>
+  <p class="decimal-warning"><strong>Trạng thái: BẢN NHÁP.</strong> Kết quả chỉ là tự luyện trên thiết bị này, không ghi điểm thi, Question Bank hay Weakness Map chính thức.</p>
+  <main>
+    <section class="decimal-card" aria-labelledby="roundTitle">
+      <h2 id="roundTitle">01 · Làm tròn trên tia số</h2>
+      <p>Chọn một số thập phân dương. Quan sát số đó nằm gần số nguyên nào hơn. Khi phần thập phân từ 0,5 trở lên, làm tròn lên số nguyên tiếp theo.</p>
+      <label class="decimal-control-label" for="roundSlider">Kéo điểm trên tia số</label>
+      <input id="roundSlider" type="range" min="0" max="10" step="0.1" value="3.4">
+      <svg id="decimalNumberLine" viewBox="0 0 600 125" role="img" aria-label="Tia số minh họa số thập phân và hai số nguyên gần nhất">
+        <line x1="70" y1="68" x2="530" y2="68" stroke="currentColor" stroke-width="2"></line>
+        <line x1="70" y1="56" x2="70" y2="80" stroke="currentColor" stroke-width="2"></line>
+        <line x1="530" y1="56" x2="530" y2="80" stroke="currentColor" stroke-width="2"></line>
+        <line x1="300" y1="61" x2="300" y2="75" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"></line>
+        <circle id="decimalPoint" cx="254" cy="68" r="9" fill="#2778bf"></circle>
+        <text id="decimalLeft" x="70" y="106" text-anchor="middle">3</text>
+        <text id="decimalMiddle" x="300" y="106" text-anchor="middle">3,5</text>
+        <text id="decimalRight" x="530" y="106" text-anchor="middle">4</text>
+        <text id="decimalPointLabel" x="254" y="37" text-anchor="middle">3,4</text>
+      </svg>
+      <p class="decimal-result" id="roundResult" role="status">3,4 làm tròn đến hàng đơn vị là 3.</p>
+    </section>
+    <section class="decimal-card" aria-labelledby="percentTitle">
+      <h2 id="percentTitle">02 · Phần trăm trong 20 ô bằng nhau</h2>
+      <p>20 ô thể hiện 100%; mỗi ô tương ứng 5%. Di chuyển thanh để thấy số phần trăm của 200 đơn vị thay đổi thế nào.</p>
+      <label class="decimal-control-label" for="percentSlider">Chọn tỉ lệ phần trăm</label>
+      <input id="percentSlider" type="range" min="0" max="100" step="5" value="25">
+      <div id="percentGrid" class="percent-grid" aria-label="20 ô minh họa tỉ số phần trăm"></div>
+      <p id="percentResult" class="decimal-result" role="status">25% của 200 = 50.</p>
+    </section>
+    <section class="decimal-card decimal-quiz" aria-labelledby="reviewTitle">
+      <h2 id="reviewTitle">03 · Ôn tập cuối Chương VII — 6 câu</h2>
+      <p>Trả lời các câu về số thập phân âm, phép tính, làm tròn và phần trăm. Nếu làm sai, AURA sẽ dẫn em về đúng bài cần ôn.</p>
+      <form id="decimalReviewForm">
+        <div id="decimalReviewQuestions"></div>
+        <button id="decimalReviewSubmit" class="decimal-submit" type="submit">Nộp 6 câu và xem giải thích</button>
+      </form>
+      <div id="decimalReviewResult" class="decimal-review-result" role="status"></div>
+      <button id="decimalReviewRetry" class="decimal-retry" type="button" hidden>Làm lại 6 câu</button>
+    </section>
+  </main>
+  <footer class="decimal-footer">Nội dung và mô hình được AURA biên soạn độc lập theo mục lục công khai. Chưa đối chiếu toàn văn bản in chính thức và chưa kiểm định độc lập bởi giáo viên.</footer>
+</div>
+<script src="knowledge_math6_decimals.js?v=20261113"></script>
+</body>
+</html>
