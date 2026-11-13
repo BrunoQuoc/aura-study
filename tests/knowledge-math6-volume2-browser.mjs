@@ -30,7 +30,7 @@ try{
   assert.equal((await page.locator('#countQuestions').innerText()).trim(),'27');
   assert.match(await page.locator('.lesson-title h2').innerText(),/Mở rộng khái niệm phân số/);
   assert.equal(await page.locator('.quiz-card').count(),3);
-  assert.match(await page.locator('.knowledge-warning').innerText(),/Chương VIII–IX chỉ có tên trong mục lục/);
+  assert.match(await page.locator('p.knowledge-warning').innerText(),/Chương VIII–IX chỉ có tên trong mục lục/);
   const current=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
   assert.ok(current<=3,'overflow initial on '+v.name+': '+current);
   await page.screenshot({path:'test-results/knowledge-math6-volume2/'+v.name+'-home.png',fullPage:true});
