@@ -52,7 +52,7 @@ jobs:
 
   signed-browser:
     name: Signed release with mock keys to generator and skill stats
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: approval-contract
     timeout-minutes: 15
     steps:
