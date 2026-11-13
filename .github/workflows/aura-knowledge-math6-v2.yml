@@ -22,7 +22,7 @@ permissions:
 jobs:
   content-schema-qa:
     name: Verify 22 authored lessons, 66 answers and zero Question Bank promotion
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +38,7 @@ jobs:
   reader-browser:
     name: Study on iPad, phone, desktop (offline synthetic Chromium)
     needs: content-schema-qa
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
