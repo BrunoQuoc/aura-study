@@ -8,7 +8,7 @@ const html=readFileSync('knowledge-math6-volume2.html','utf8');
 const legacy=readFileSync('lesson_maps_ui.js','utf8');
 const student=readFileSync('student-direct.html','utf8');
 
-test('Volume 2: official TOC 4 chapters, lessons 23–43; only 5 actually authored',()=>{
+test('Volume 2: official TOC 4 chapters, lessons 23–43; 9 lessons actually authored across VI–VII',()=>{
  assert.equal(data.schemaVersion,1);
  assert.equal(data.libraryId,'AURA-KNTT6-MATH-VOLUME2');
  assert.equal(data.subject,'TOAN');
@@ -20,17 +20,17 @@ test('Volume 2: official TOC 4 chapters, lessons 23–43; only 5 actually author
  assert.equal(data.outline.length,21);
  assert.deepEqual(data.outline.map(x=>x.number),
   Array.from({length:21},(_,i)=>i+23));
- assert.equal(data.outline.filter(x=>x.authored).length,5);
- assert.deepEqual(data.lessons.map(x=>x.number),[23,24,25,26,27]);
- assert.ok(data.chapters.slice(1).every(x=>x.status==='NOT_AUTHORED'));
- assert.equal(data.authoredLessonCount,5);
+ assert.equal(data.outline.filter(x=>x.authored).length,9);
+ assert.deepEqual(data.lessons.map(x=>x.number),[23,24,25,26,27,28,29,30,31]);
+ assert.ok(data.chapters.slice(2).every(x=>x.status==='NOT_AUTHORED'));
+ assert.equal(data.authoredLessonCount,9);
  assert.equal(data.expectedTotalLessons,21);
- assert.equal(data.authoredPracticeCount,15);
- assert.equal(data.lessons.reduce((sum,l)=>sum+l.practice.length,0),15);
+ assert.equal(data.authoredPracticeCount,27);
+ assert.equal(data.lessons.reduce((sum,l)=>sum+l.practice.length,0),27);
 });
 test('Chapter VI 5 lessons have original explanations, worked problems, 15 unique questions',()=>{
  const seen=new Set();
- for(const l of data.lessons){
+ for(const l of data.lessons.filter(l=>l.chapter===6)){
   assert.equal(l.chapter,6);
   assert.ok(l.objectives.length>=2);
   assert.ok(l.concepts.length>=2);
@@ -65,7 +65,7 @@ test('Independent expected answer choices for all 15 original tasks',()=>{
   26:['(-2)/3','(-4)/3','0'],
   27:['27','32','45']
  };
- for(const l of data.lessons){
+ for(const l of data.lessons.filter(l=>l.chapter===6)){
   assert.deepEqual(l.practice.map(q=>q.choices[q.correct]),keys[l.number],
    'Mismatch in manual independent answer ledger for lesson '+l.number);
  }
@@ -80,7 +80,7 @@ test('No publisher pages copied, no source content promoted to official bank',()
   questionBankPromotionEnabled:false,examEngineLinkEnabled:false,
   weaknessMapWriteEnabled:false
  });
- assert.match(html,/Chương VII–IX chưa soạn/);
+ assert.match(html,/Chương VIII–IX chỉ có tên/);
  assert.match(html,/knowledge_math6_volume2\.js/);
  assert.match(html,/connect-src 'self'/);
  assert.match(legacy,/href='knowledge-math6-volume2\.html'/);
@@ -93,7 +93,7 @@ test('Only authored chapters are selectable; Tập 1 reader and content stay iso
  assert.match(js,/const available=state\.data\.lessons\.some/);
  assert.match(js,/!available\);/);
  assert.match(js,/state\.selected===23/);
- assert.match(js,/state\.selected===27/);
- assert.match(js,/count!==15/);
- assert.match(js,/d\.lessons\.length!==5/);
+ assert.match(js,/state\.selected===31/);
+ assert.match(js,/count!==27/);
+ assert.match(js,/d\.lessons\.length!==9/);
 });
