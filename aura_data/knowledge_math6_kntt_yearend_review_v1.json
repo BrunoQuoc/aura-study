@@ -268,7 +268,7 @@
           "50"
         ],
         "correct": 2,
-        "explanation": "20% = 1/5, lấy 150 × 1/5 = 30.",
+        "explanation": "Đổi 20% thành phân số 1/5, rồi tính 150 × 1/5 = 30. Kết quả 30 là một phần năm của 150.",
         "sourceLessons": [
           31
         ],
@@ -431,7 +431,7 @@
             "points": 0.5
           },
           {
-            "criterion": "Tính A = 1/12.",
+            "criterion": "Thực hiện phép cộng hai tử số và kết luận chính xác A = 1/12.",
             "points": 0.5
           },
           {
@@ -439,7 +439,7 @@
             "points": 0.5
           },
           {
-            "criterion": "Tính và rút gọn B = -3/2.",
+            "criterion": "Thực hiện phép nhân, rút gọn thương và kết luận B = -3/2.",
             "points": 0.5
           }
         ],
