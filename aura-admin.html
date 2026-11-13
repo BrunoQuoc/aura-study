@@ -1,0 +1,16 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>AURA STUDY · Quản trị hệ thống</title><link rel="stylesheet" href="./aura-portal-v2.css"></head>
+<body data-role="admin"><header><a class="brand" href="./aura-portal.html">AURA STUDY<small>ADMIN PORTAL</small></a><nav class="nav"><a href="./aura-portal.html">Chọn vai trò</a><a href="./aura-staging-login.html">Xác thực Staging cũ</a></nav></header>
+<main><section class="hero"><span class="eyebrow">Không gian ADMIN · Staging V2</span><h1>Quản trị hệ thống</h1><p class="muted">Quản lý học liệu, ngân hàng câu hỏi và nghiệm thu sư phạm.</p></section>
+<div class="layout"><section class="panel"><div class="panel-head"><h2>Đăng nhập bằng email</h2><span class="stamp">STAGING</span></div><label for="email">Email đã được cấp quyền</label><input id="email" type="email" autocomplete="email" inputmode="email" placeholder="email@domain.com">
+ <div id="captcha" aria-label="Xác thực chống bot"></div>
+ <button type="button" id="signIn" style="width:100%">Gửi liên kết đăng nhập</button>
+ <p class="muted small">Liên kết gửi qua email. Sau khi mở, hệ thống xác thực rồi chuyển về khu vực này. Tài khoản không có quyền tương ứng sẽ bị từ chối.</p>
+<div id="authStatus" class="status" role="status" aria-live="polite">Đang kiểm tra phiên đăng nhập…</div>
+<div class="actions"><button type="button" id="checkRole" class="secondary">Kiểm tra quyền</button><button type="button" id="signOut" class="secondary">Đăng xuất phiên này</button></div></section>
+<section class="panel"><div class="panel-head"><h2>Bảng quản trị</h2><span class="stamp">Xác thực vai trò</span></div>
+<p id="roleStatus" class="status">Chưa có quyền truy cập được xác minh.</p><div id="roleDetails"><p class="muted small">Sau khi được cấp quyền, Admin có thể đi tới bộ công cụ kiểm định trong Staging.</p>
+ <a class="cta" id="adminReview" href="./admin-ch08-review.html">Ngân hàng câu hỏi & kiểm định</a>
+ <a class="cta secondary" href="./admin-chart-review.html?v=3">Kiểm tra biểu đồ trên iPhone</a></div>
+<div class="security">Chỉ các chức năng thuộc đúng vai trò mới được hiển thị. Máy chủ tiếp tục xác minh quyền trước khi trả dữ liệu.</div></section></div></main>
+<footer>AURA STUDY · STAGING — Trang kỹ thuật cũ vẫn được giữ để dự phòng. Không nhập dữ liệu học thật; Exam Engine khóa.</footer>
+<script type="module" src="./aura-portal-v2.js"></script></body></html>
