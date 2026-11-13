@@ -156,7 +156,7 @@
         "correct": 1,
         "explanation": "Các ước chung của 24 và 36 gồm 1, 2, 3, 4, 6, 12; lớn nhất là 12.",
         "sourceLessons": [
-          8
+          11
         ],
         "skill": "uoc-chung-lon-nhat",
         "status": "DRAFT_ORIGINAL_AURA",
@@ -175,7 +175,7 @@
         "correct": 2,
         "explanation": "6 = 2×3 và 8 = 2³, nên BCNN = 2³×3 = 24.",
         "sourceLessons": [
-          9
+          12
         ],
         "skill": "boi-chung-nho-nhat",
         "status": "DRAFT_ORIGINAL_AURA",
@@ -194,7 +194,7 @@
         "correct": 2,
         "explanation": "Cộng hai số nguyên trái dấu: lấy 12 - 7 = 5 và giữ dấu của số có giá trị tuyệt đối lớn hơn.",
         "sourceLessons": [
-          11
+          14
         ],
         "skill": "cong-so-nguyen",
         "status": "DRAFT_ORIGINAL_AURA",
@@ -213,7 +213,7 @@
         "correct": 1,
         "explanation": "Một thừa số âm và một thừa số dương nên tích âm; 3 × 4 = 12, vậy tích là -12.",
         "sourceLessons": [
-          12
+          16
         ],
         "skill": "nhan-so-nguyen",
         "status": "DRAFT_ORIGINAL_AURA",
@@ -406,8 +406,8 @@
           }
         ],
         "sourceLessons": [
-          8,
-          9
+          11,
+          12
         ],
         "skill": "uoc-boi",
         "maxPoints": 2,
