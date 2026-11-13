@@ -32,7 +32,7 @@ function validate(d){
    l.number<23||l.number>37||!chapters.has(l.chapter)||
    !d.chapters.some(c=>c.number===l.chapter&&l.number>=c.range[0]&&l.number<=c.range[1])||
    l.status!=='DRAFT_ORIGINAL_AURA'||l.readyForQuestionBank!==false||
-   l.requiresPedagogicalReview!==true||typeof l.title!=='string'||l.title.length<4||
+   l.requiresPedagogicalReview!==true||typeof l.title!=='string'||l.title.trim().length<3||
    !Array.isArray(l.objectives)||l.objectives.length<2||
    !Array.isArray(l.concepts)||l.concepts.length<2||
    !Array.isArray(l.workedExample?.steps)||l.workedExample.steps.length<2||
