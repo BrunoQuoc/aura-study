@@ -75,7 +75,11 @@ try{
   assert.equal((await page.locator('#countCompleted').innerText()).trim(),'2');
   await page.locator('.lesson-button[data-lesson="31"]').click();
   assert.match(await page.locator('.lesson-title h2').innerText(),/tỉ số và tỉ số phần trăm/);
-  assert.equal(await page.locator('.pager-button.primary').isDisabled(),true);
+  // Chapter VII now continues into authored Bài32: it must not be a dead end.
+  assert.equal(await page.locator('.pager-button.primary').isDisabled(),false);
+  await page.locator('.pager-button.primary').click();
+  assert.match(await page.locator('.lesson-title h2').innerText(),/Điểm và đường thẳng/);
+  assert.equal(await page.locator('.aura-geometry-figure').count(),1);
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
   assert.ok(overflow<=3,'overflow after interaction '+v.name+': '+overflow);
   assert.deepEqual(errors,[],'browser errors '+v.name);
