@@ -1,0 +1,151 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="robots" content="noindex,nofollow"/><meta http-equiv="Cache-Control" content="no-store"/><title>AURA STUDY · QA Learning + Exam Lab</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#18314b;background:#f4f8fc}*{box-sizing:border-box}
+body{margin:0;min-height:100vh}header{background:#123855;color:#fff;padding:18px max(16px,calc((100vw - 1080px)/2));display:flex;justify-content:space-between;align-items:center;gap:10px}header a{color:#d6edff;text-decoration:none}
+main{max-width:1080px;margin:22px auto;padding:0 17px 40px}
+h1{font-size:clamp(1.5rem,4vw,2.3rem);margin:0 0 8px}h2{font-size:1.25rem}h3{font-size:1.02rem}
+p{line-height:1.55}.muted{color:#587086}.tag{display:inline-block;background:#e7eff7;color:#315977;border-radius:30px;padding:4px 11px;font-size:.8rem;font-weight:650}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,.36fr);gap:18px}.panel{background:#fff;border-radius:14px;border:1px solid #d9e3ee;box-shadow:0 5px 25px #1a46700a;padding:18px;margin:12px 0}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}.control{flex:1 1 220px}label{display:block;font-size:.89rem;font-weight:700;margin:8px 0}select,input,textarea{width:100%;border:1px solid #abc0d3;background:#fff;color:#17334c;border-radius:9px;padding:11px;font:inherit;min-height:44px}
+button{font:inherit;font-weight:700;border:0;color:#fff;background:#19638f;border-radius:10px;padding:12px 17px;min-height:46px;cursor:pointer;touch-action:manipulation}button.secondary{color:#225b83;background:#e7f1f7}button:disabled{opacity:.5;cursor:default}
+.question{padding:15px 0;border-top:1px solid #e3ebf2}.question img{max-width:100%;height:auto;display:block;margin:12px 0}.question .id{color:#74889b;font-size:.77rem;overflow-wrap:anywhere}
+.status{padding:9px 0;min-height:34px;white-space:pre-wrap;overflow-wrap:anywhere}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.kpi div{border:1px solid #dae5ef;border-radius:9px;padding:12px}.kpi strong{font-size:1.5rem;display:block}
+.result{border-left:4px solid #82acbb;margin:9px 0;padding:8px 10px;background:#f3f8fa}
+.warning{border-left:4px solid #bd8c45;background:#fff7e9;padding:12px}
+#lessonList{max-height:450px;overflow:auto}
+@media(max-width:740px){.layout{grid-template-columns:1fr}.panel{padding:14px}.kpi{gap:7px}.kpi div{padding:9px}.kpi strong{font-size:1.2rem}header{padding:14px}}
+</style></head>
+<body><header><strong>AURA STUDY · QA LAB</strong><a href="./aura-admin.html">Quay lại Admin</a></header>
+<main><span class="tag">STAGING · ADMIN ONLY · KHÔNG GHI ĐIỂM HỌC SINH</span>
+<h1>Học → Luyện → Thi thử → Chấm thử → Phân tích lỗi</h1>
+<p class="muted">Mô phỏng một luồng học tập bằng ngân hàng Toán 6 Kết nối tri thức. Tự động đối chiếu đáp án số với quy tắc rõ ràng; các đáp án khác giữ trạng thái cần người chấm. Exam Engine chính thức chưa kích hoạt.</p>
+<div class="layout"><div>
+<section class="panel"><h2>1. Chọn chương và kiến thức</h2>
+<div class="row"><div class="control"><label for="chapter">Chương học</label><select id="chapter"><option>Đang tải danh mục...</option></select></div>
+<div class="control"><label for="mode">Loại bài</label><select id="mode"><option value="PRACTICE">Luyện tập (9 câu)</option><option value="EXAM">Đề chương (15 câu)</option></select></div>
+</div><div id="lessonList" class="muted" aria-live="polite"></div>
+<button id="begin" type="button">Bắt đầu bài thử</button><p id="startStatus" class="status muted" role="status">Đang kiểm tra đăng nhập...</p></section>
+<section class="panel" id="examPanel" hidden><h2>2. Làm bài thử</h2><p class="muted">Không hiển thị đáp án trước khi nộp. Có thể bỏ trống những câu cần giải thích.</p>
+<form id="examForm"><div id="questions"></div><button id="submitExam" type="submit">Nộp và chấm thử</button></form><p id="examStatus" class="status" role="status"></p></section>
+<section class="panel" id="resultsPanel" hidden><h2>3. Kết quả & phân tích lỗi</h2><div id="score" class="kpi"></div><p class="muted">Điểm tự động chỉ là điểm tạm theo những câu có đáp án số rõ ràng; không quy đổi thành điểm toàn bài khi còn câu cần người chấm.</p>
+<div id="grades"></div><h3>Điểm yếu và gợi ý học lại</h3><div id="weakness"></div></section>
+</div><aside><section class="panel"><h2>Cổng an toàn</h2><p>Chỉ tài khoản <strong>Admin Staging</strong> mới được chạy QA Lab.</p><p>Đề được khóa theo phiên bản câu hỏi. Không ghi dữ liệu vào hồ sơ học sinh.</p><p class="warning">Không phát hành bài thử này cho học sinh. 23 biểu đồ trên iPhone vẫn cần nghiệm thu thực tế.</p>
+<a href="./admin-chart-review.html?v=3">Kiểm tra 23 biểu đồ</a><p><a href="./admin-ch08-review.html">Kiểm định câu hỏi trong Admin V2</a></p></section></aside></div>
+</main><script>
+"use strict";
+const URL="https://ufqzuowjhdqpydqvcsob.supabase.co",KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p",STORE="aura-stage-parent-v1";
+const id=x=>document.getElementById(x);
+let catalog=[],attemptId=null,activeQuestions=[],sending=false,refreshTask=null;
+function localSession(){try{return JSON.parse(localStorage.getItem(STORE)||"null")}catch(e){return null}}
+async function accessToken(){
+ const current=localSession();
+ if(!current?.access_token)throw Error("Chưa có phiên Admin trong Safari. Hãy đăng nhập ở trang Admin trước.");
+ if(!current.expires_at||current.expires_at*1000>Date.now()+60000)return current.access_token;
+ if(!current.refresh_token)throw Error("Phiên Admin đã hết hạn. Vui lòng đăng nhập lại.");
+ if(!refreshTask)refreshTask=(async()=>{
+  const r=await fetch(URL+"/auth/v1/token?grant_type=refresh_token",{method:"POST",cache:"no-store",headers:{"apikey":KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:current.refresh_token})});
+  if(!r.ok)throw Error("Không thể gia hạn phiên. Đăng nhập lại Admin.");
+  const next=await r.json();if(!next.access_token||!next.refresh_token)throw Error("Phiên trả về không hợp lệ.");
+  const old=localSession();
+  if(old?.access_token===current.access_token)localStorage.setItem(STORE,JSON.stringify({...old,...next,expires_at:Math.floor(Date.now()/1000)+(Number(next.expires_in)||3600)}));
+  return localSession()?.access_token||next.access_token;
+ })().finally(()=>refreshTask=null);
+ return refreshTask;
+}
+async function request(body){
+ const access=await accessToken();
+ const resp=await fetch(URL+"/functions/v1/aura-admin-review-v1",{
+ method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+access},body:JSON.stringify(body)});
+ let json={};try{json=await resp.json()}catch(e){}
+ if(!resp.ok)throw Error((resp.status===401||resp.status===403)?"Phiên hoặc quyền Admin không hợp lệ. Đăng nhập lại trên cùng trình duyệt.":json.error||"Yêu cầu thất bại ("+resp.status+")");
+ return json;
+}
+const romans=["I","II","III","IV","V","VI","VII","VIII","IX"];
+function selection(){return catalog.find(x=>x.id===id("chapter").value)}
+function buildBlueprint(c,kind){
+ const index=romans.indexOf(c.chapter)+1;
+ if(index<1)throw Error("Mã chương không hợp lệ.");
+ return "AURA-M6-T"+c.volume+"-C"+String(index).padStart(2,"0")+"-"+kind+"-V01";
+}
+function renderLessons(){
+ const c=selection();const root=id("lessonList");root.replaceChildren();
+ if(!c)return;
+ const h=document.createElement("h3");h.textContent="Nội dung "+c.chapter+" — "+c.title;root.append(h);
+ for(const l of c.lessons||[]){const details=document.createElement("details"),summary=document.createElement("summary");
+ summary.textContent="Bài "+l.number+" — "+l.title;
+ const content=document.createElement("p");content.className="muted";content.textContent=l.core_knowledge||"Các mục kiến thức thuộc bài học";
+ details.append(summary,content);root.append(details)}
+}
+async function init(){
+ try{
+ const res=await request({action:"catalog"});
+ catalog=Array.isArray(res.chapters)?res.chapters:[];
+ if(catalog.length!==9)throw Error("Danh mục chưa đủ 9 chương.");
+ const sel=id("chapter");sel.replaceChildren();
+ for(const c of catalog){const o=document.createElement("option");o.value=c.id;o.textContent="Tập "+c.volume+" · Chương "+c.chapter+" — "+c.title;sel.append(o)}
+ renderLessons();id("startStatus").textContent="Đã kết nối 9 chương. Chọn chương và Bắt đầu bài thử.";
+ }catch(e){id("startStatus").textContent=e.message}
+}
+async function begin(){
+ if(sending)return;
+ const c=selection();if(!c){id("startStatus").textContent="Chưa chọn chương.";return}
+ sending=true;id("begin").disabled=true;id("startStatus").textContent="Đang khởi tạo bản thi thử trên Staging…";
+ try{
+ const result=await request({action:"qa_exam_start",batch:c.id,blueprint_id:buildBlueprint(c,id("mode").value)});
+ const exam=result.qa_exam||{};
+ if(!exam.qa_only||exam.exam_engine_enabled||!Array.isArray(exam.questions))throw Error("Máy chủ không trả bản QA hợp lệ.");
+ activeQuestions=exam.questions;attemptId=exam.attempt_id;
+ id("examPanel").hidden=false;id("resultsPanel").hidden=true;
+ const root=id("questions");root.replaceChildren();
+ for(const [i,q] of activeQuestions.entries()){
+  const section=document.createElement("section");section.className="question";
+  const tag=document.createElement("div");tag.className="id";tag.textContent=(i+1)+". "+q.id+" · "+q.level;
+  const prompt=document.createElement("p");prompt.textContent=q.stem||"";section.append(tag,prompt);
+  if(typeof q.svg==="string"&&q.svg.startsWith("<svg")){
+   const img=document.createElement("img");img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(q.svg);img.alt="Hình vẽ câu "+q.id;section.append(img);
+  }
+  const label=document.createElement("label");label.textContent="Trả lời";label.htmlFor="ans-"+i;
+  const input=document.createElement("input");input.id="ans-"+i;input.name=q.id;input.autocomplete="off";input.maxLength=200;input.placeholder="Nhập câu trả lời";
+  section.append(label,input);root.append(section);
+ }
+ id("startStatus").textContent="Đã tải "+activeQuestions.length+" câu vào bản thi thử không ghi điểm học sinh.";
+ id("examPanel").scrollIntoView({behavior:"smooth"});
+ }catch(e){id("startStatus").textContent="Không thể mở bài thử: "+e.message}
+ finally{sending=false;id("begin").disabled=false}
+}
+async function submit(event){
+ event.preventDefault();if(sending||!attemptId)return;
+ sending=true;id("submitExam").disabled=true;id("examStatus").textContent="Đang chấm thử…";
+ try{
+ const answers={};for(const [i,q] of activeQuestions.entries())answers[q.id]=id("ans-"+i).value.trim();
+ const c=selection();
+ const r=await request({action:"qa_exam_submit",batch:c.id,attempt_id:attemptId,answers});
+ const result=r.qa_result||{},g=result.grading||{};
+ if(!result.qa_only||!Array.isArray(g.results))throw Error("Kết quả không hợp lệ.");
+ id("resultsPanel").hidden=false;id("examStatus").textContent="Đã lưu bài QA. Không tạo điểm học sinh thật.";
+ const cards=id("score");cards.replaceChildren();
+ for(const [label,value] of [["Tự động đúng",g.auto_correct],["Tự động sai",g.auto_incorrect],["Cần chấm thủ công",g.manual_pending]]){
+  const card=document.createElement("div"),t=document.createElement("strong"),s=document.createElement("small");
+  t.textContent=value??0;s.textContent=label;card.append(t,s);cards.append(card);
+ }
+ const grades=id("grades");grades.replaceChildren();
+ for(const x of g.results){const p=document.createElement("p");p.className="result";
+  p.textContent=x.question_id+" · "+(x.result==="CORRECT"?"Tự động đúng":x.result==="INCORRECT"?"Tự động chưa đúng":"Cần đánh giá thủ công");grades.append(p)}
+ const weakness=id("weakness");weakness.replaceChildren();
+ if(!Array.isArray(result.weakness)||!result.weakness.length){
+  const p=document.createElement("p");p.className="muted";p.textContent="Không phát hiện lỗi số học được chấm xác định; các câu thủ công chưa kết luận.";weakness.append(p);
+ }else for(const w of result.weakness){
+  const card=document.createElement("div");card.className="result";
+  const h=document.createElement("strong");h.textContent=w.topic||w.lesson_id||"Bài cần luyện";
+  const p=document.createElement("p");p.textContent=w.remediation_hint||"Ôn bài và làm lại câu tương tự.";
+  card.append(h,p);weakness.append(card)}
+ id("resultsPanel").scrollIntoView({behavior:"smooth"});
+ }catch(e){id("examStatus").textContent="Chưa chấm được: "+e.message}
+ finally{sending=false;id("submitExam").disabled=false}
+}
+id("chapter").addEventListener("change",renderLessons);
+id("begin").addEventListener("click",begin);
+id("examForm").addEventListener("submit",submit);
+init();
+</script></body></html>
