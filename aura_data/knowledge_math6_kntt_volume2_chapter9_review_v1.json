@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "libraryId": "AURA-KNTT6-MATH-VOLUME2-CHAPTER9-REVIEW",
+  "parentLibraryId": "AURA-KNTT6-MATH-VOLUME2",
+  "subject": "TOAN",
+  "grade": 6,
+  "volume": 2,
+  "chapter": 9,
+  "status": "DRAFT_NEEDS_PEDAGOGICAL_REVIEW",
+  "teacherApproved": false,
+  "questionBankPromotionEnabled": false,
+  "weaknessMapWriteEnabled": false,
+  "provenance": "Original AURA questions with explicit source table/experimental facts; no copied textbook tables or figures",
+  "questions": [
+    {
+      "id": "C9-01",
+      "prompt": "Trong cuộc khảo sát về màu áo yêu thích, dữ liệu 'màu xanh' thuộc loại dữ liệu nào?",
+      "choices": [
+        "Định lượng",
+        "Định tính",
+        "Số tự nhiên",
+        "Không phải dữ liệu"
+      ],
+      "correct": 1,
+      "explanation": "Màu xanh là tên một nhóm phân loại (nhãn), không phải số đếm hoặc số đo; vì vậy là dữ liệu định tính.",
+      "skill": "phan-loai-du-lieu",
+      "sourceLessons": [
+        38
+      ],
+      "datasetFacts": {
+        "dataType": "categorical",
+        "example": "màu xanh"
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C9-02",
+      "prompt": "Một biểu đồ tranh có 4 hình chiếc lá. Chú giải: mỗi hình ứng với 3 cây xanh. Có bao nhiêu cây?",
+      "choices": [
+        "7",
+        "12",
+        "4",
+        "16"
+      ],
+      "correct": 1,
+      "explanation": "Chú giải mỗi hình tượng trưng cho 3 cây. Vì có 4 hình nên số cây tương ứng là 4 × 3 = 12 cây.",
+      "skill": "doc-bieu-do-tranh",
+      "sourceLessons": [
+        39
+      ],
+      "datasetFacts": {
+        "symbols": 4,
+        "weightPerIcon": 3,
+        "unit": "cây"
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C9-03",
+      "prompt": "Biểu đồ cột có ba nhóm không chồng lặp ghi lần lượt 7, 5 và 3 học sinh. Tổng số học sinh là bao nhiêu?",
+      "choices": [
+        "12",
+        "13",
+        "15",
+        "18"
+      ],
+      "correct": 2,
+      "explanation": "Cộng ba giá trị cột của ba nhóm không chồng lặp: 7 + 5 + 3 = 15 học sinh.",
+      "skill": "tong-tu-bieu-do",
+      "sourceLessons": [
+        40
+      ],
+      "datasetFacts": {
+        "values": [
+          7,
+          5,
+          3
+        ],
+        "unit": "học sinh",
+        "disjoint": true
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C9-04",
+      "prompt": "Trong biểu đồ cột kép cùng ngày, lớp 6A có 8 lượt đến thư viện, lớp 6B có 5 lượt. Lớp 6A nhiều hơn bao nhiêu?",
+      "choices": [
+        "2 lượt",
+        "3 lượt",
+        "5 lượt",
+        "13 lượt"
+      ],
+      "correct": 1,
+      "explanation": "Hai cột cùng ngày và cùng đơn vị lượt. Chênh lệch là 8 - 5 = 3 lượt đến thư viện.",
+      "skill": "so-sanh-cot-kep",
+      "sourceLessons": [
+        41
+      ],
+      "datasetFacts": {
+        "classA": 8,
+        "classB": 5,
+        "unit": "lượt"
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C9-05",
+      "prompt": "Gieo một con xúc xắc chuẩn đánh số từ 1 đến 6. Sự kiện 'số chấm là số nguyên tố' gồm các kết quả nào?",
+      "choices": [
+        "{1,2,3}",
+        "{2,3,5}",
+        "{2,4,6}",
+        "{3,5,7}"
+      ],
+      "correct": 1,
+      "explanation": "Trong các số 1–6, số nguyên tố là 2,3,5. Số 1 không phải nguyên tố và số 7 không xuất hiện trên xúc xắc này.",
+      "skill": "su-kien-thi-nghiem",
+      "sourceLessons": [
+        42
+      ],
+      "datasetFacts": {
+        "outcomes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "favorable": [
+          2,
+          3,
+          5
+        ]
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    },
+    {
+      "id": "C9-06",
+      "prompt": "Một sự kiện xuất hiện 12 lần trong 40 lần thử. Xác suất thực nghiệm của sự kiện đó là bao nhiêu phần trăm?",
+      "choices": [
+        "12%",
+        "25%",
+        "30%",
+        "40%"
+      ],
+      "correct": 2,
+      "explanation": "Tỉ số thực nghiệm là 12/40 = 3/10 = 0,3 = 30%. Đây là tần suất đã ghi, không bảo đảm kết quả ở lần thử sau.",
+      "skill": "xac-suat-thuc-nghiem",
+      "sourceLessons": [
+        43
+      ],
+      "datasetFacts": {
+        "occurrences": 12,
+        "trials": 40
+      },
+      "requiresPedagogicalReview": true,
+      "eligibleForQuestionBank": false
+    }
+  ]
+}
