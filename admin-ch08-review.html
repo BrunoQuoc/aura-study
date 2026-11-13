@@ -26,7 +26,9 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <label>Bài học <select id="lesson"></select></label>
 <label>Mức độ <select id="level"><option value="">Tất cả</option><option value="nhan_biet">Nhận biết</option><option value="thong_hieu">Thông hiểu</option><option value="van_dung">Vận dụng</option></select></label>
 <label>Trạng thái <select id="state"><option value="">Tất cả</option><option value="PENDING">Chờ duyệt</option><option value="CHANGES_REQUESTED">Yêu cầu sửa</option><option value="APPROVED">Đã duyệt</option><option value="REJECTED">Từ chối</option></select></label>
+<label>Đợt kiểm định <select id="audit"><option value="">Tất cả câu</option><option value="revised_pending">Đã sửa — Chờ duyệt</option><option value="approved_rubric">Đã duyệt — Cần kiểm tra rubric</option></select></label>
 </section>
+<section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “Đã sửa — Chờ duyệt” để kiểm tra bản mới trước khi xác nhận. Hai câu đã duyệt có rubric cần rà soát vẫn giữ nguyên bản và lịch sử; chưa được xem là đủ điều kiện xuất bản. Không có nút phê duyệt hàng loạt tự động.</p></section>
 <p id="summary" class="quiet"></p><section id="questions"></section>
 </main>
 <script type="module">
@@ -46,7 +48,7 @@ const c=catalogs[el("volume").value],ch=el("chapter"),lesson=el("lesson");
 ch.replaceChildren();const o=document.createElement("option");o.value=c.chapter;o.textContent="Chương "+c.chapter;ch.append(o);
 lesson.replaceChildren();const all=document.createElement("option");all.value="";all.textContent="Tất cả bài";lesson.append(all);
 for(const [id,label] of c.items){const option=document.createElement("option");option.value=id;option.textContent=label;lesson.append(option);}
-el("state").value="";el("level").value="";
+el("state").value="";el("level").value="";el("audit").value="";
 }
 
 async function send(input){
@@ -60,7 +62,14 @@ async function load(){
 el("questions").replaceChildren();notice("Đang đọc dữ liệu qua API bảo vệ…");
 try{
 const data=await send({action:"list",batch:catalogs[el("volume").value].batch,lesson:el("lesson").value,level:el("level").value,state:el("state").value});
-const items=Array.isArray(data.items)?data.items:[];el("summary").textContent="Tìm thấy "+items.length+" câu · Không kết nối Exam Engine.";
+const incoming=Array.isArray(data.items)?data.items:[];
+const audit=el("audit").value;
+const items=incoming.filter(item=>{
+ if(audit==="revised_pending")return item.status==="PENDING"&&item.body?.qa_status==="REVISED_INTERNAL_QA_REVIEW_REQUIRED";
+ if(audit==="approved_rubric")return item.status==="APPROVED"&&["M6-KNTT-T1-L01-Q01","M6-KNTT-T1-L01-Q02"].includes(item.id);
+ return true;
+});
+el("summary").textContent="Hiển thị "+items.length+" / "+incoming.length+" câu · Đây chỉ là bộ lọc nghiệm thu, không tự phê duyệt hoặc xuất bản.";
 for(const item of items){
 const q=item.body||{},article=document.createElement("article");article.className="panel";
 const h=document.createElement("h2");h.style.fontSize="1.06rem";h.textContent=item.id+" · "+(labels[item.status]||item.status);article.append(h);
@@ -79,7 +88,7 @@ el("questions").append(article);
 }notice("Đã xác thực và đọc hàng chờ. Các quyết định chỉ lưu trên staging.");
 }catch(e){el("summary").textContent="";notice(e.message);}
 }
-el("reload").addEventListener("click",load);el("volume").addEventListener("change",()=>{syncVolumes();load();});for(const id of ["lesson","level","state"])el(id).addEventListener("change",load);
+el("reload").addEventListener("click",load);el("volume").addEventListener("change",()=>{syncVolumes();load();});for(const id of ["lesson","level","state","audit"])el(id).addEventListener("change",load);
 el("logout").addEventListener("click",async()=>{await auth.auth.signOut();el("questions").replaceChildren();notice("Đã đăng xuất.");});
 syncVolumes();load();
 </script></body></html>
