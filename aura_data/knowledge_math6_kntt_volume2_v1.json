@@ -1581,7 +1581,7 @@
             "14"
           ],
           "correct": 2,
-          "explanation": "Lấy số chọn Cam trừ số chọn Chuối: 9 - 5 = 4 bạn.",
+          "explanation": "Cam có 9 bạn và Chuối có 5 bạn, nên lấy chênh lệch 9 - 5 = 4 bạn. Hai giá trị dùng cùng đơn vị và cùng cuộc khảo sát.",
           "skill": "so-sanh-cot"
         },
         {
@@ -1861,7 +1861,7 @@
             "20"
           ],
           "correct": 1,
-          "explanation": "Hiệu số lượt ngửa và sấp đã ghi là 12 - 8 = 4 lần.",
+          "explanation": "Trong dữ liệu đã cho, mặt ngửa xuất hiện 12 lần còn sấp xuất hiện 8 lần, nên ngửa nhiều hơn sấp 12 - 8 = 4 lần.",
           "skill": "dem-tan-so-su-kien"
         },
         {
@@ -1873,7 +1873,7 @@
             "50%"
           ],
           "correct": 2,
-          "explanation": "Tính số lần xảy ra chia số lần thử: 15/50 = 0,3 = 30%.",
+          "explanation": "Tổng số lần thử là 50, sự kiện xuất hiện 15 lần. Xác suất thực nghiệm bằng 15/50 = 0,3 = 30%, không phải 15%.",
           "skill": "xac-suat-thuc-nghiem"
         }
       ],
