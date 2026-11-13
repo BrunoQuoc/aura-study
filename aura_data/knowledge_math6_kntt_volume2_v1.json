@@ -1444,8 +1444,8 @@
       "workedExample": {
         "prompt": "Biểu đồ tranh quy ước mỗi hình tròn là 2 cây. Nhóm A có 3 hình, nhóm B có 5 hình. Tìm tổng số cây.",
         "steps": [
-          "Nhóm A có 3 × 2 = 6 cây.",
-          "Nhóm B có 5 × 2 = 10 cây.",
+          "Nhóm A có 3 hình, mỗi hình thay cho 2 cây, do đó số cây của nhóm A là 3 × 2 = 6 cây.",
+          "Nhóm B có 5 hình, mỗi hình cũng thay cho 2 cây, vì thế số cây của nhóm B là 5 × 2 = 10 cây.",
           "Tổng số cây là 6 + 10 = 16 cây; nhóm B nhiều hơn 4 cây."
         ],
         "conclusion": "Hai nhóm có 16 cây; nhóm B nhiều hơn nhóm A 4 cây."
@@ -1595,7 +1595,7 @@
         "prompt": "Lớp 6A và 6B tham gia trồng cây: tuần 1 lần lượt 5 và 8 cây; tuần 2 lần lượt 7 và 6 cây. So sánh tuần 2 và tổng hai tuần.",
         "steps": [
           "Tuần 2 có 6A = 7 cây và 6B = 6 cây, vậy 6A hơn 6B là 7 - 6 = 1 cây.",
-          "Tổng hai tuần của 6A là 5 + 7 = 12 cây.",
+          "Tổng hai tuần của lớp 6A là 5 + 7 = 12 cây, cộng lần lượt số cây ở cả hai tuần.",
           "Tổng hai tuần của 6B là 8 + 6 = 14 cây, nhiều hơn 6A 2 cây."
         ],
         "conclusion": "Tuần 2: 6A hơn 6B 1 cây; cả hai tuần 6B trồng hơn 6A 2 cây."
@@ -1669,8 +1669,8 @@
       "workedExample": {
         "prompt": "Gieo một xúc xắc 6 mặt chuẩn. Liệt kê các kết quả và những mặt thỏa sự kiện 'số chấm chia hết cho 3'.",
         "steps": [
-          "Không gian các kết quả có thể là 1, 2, 3, 4, 5, 6.",
-          "Các số từ 1 đến 6 chia hết cho 3 là 3 và 6.",
+          "Với một xúc xắc sáu mặt chuẩn, tập hợp các kết quả có thể xảy ra là {1, 2, 3, 4, 5, 6}.",
+          "Kiểm tra từng kết quả từ 1 đến 6, chỉ có hai số chia hết cho 3 là số 3 và số 6.",
           "Sự kiện gồm hai kết quả thuận lợi: {3, 6}; không có kết quả 0 hoặc 9 trong thí nghiệm này."
         ],
         "conclusion": "Các kết quả có thể {1,2,3,4,5,6}; sự kiện chia hết cho 3 là {3,6}."
@@ -1745,7 +1745,7 @@
         "prompt": "Tung đồng xu 30 lần, trong đó có 18 lần xuất hiện mặt ngửa. Tìm xác suất thực nghiệm mặt ngửa và mặt sấp.",
         "steps": [
           "Tổng số lần thử là 30, số lần mặt ngửa xuất hiện là 18.",
-          "Xác suất thực nghiệm ngửa = 18/30 = 3/5 = 60%.",
+          "Xác suất thực nghiệm của mặt ngửa = 18/30 = 3/5 = 60% từ chính 30 lần đã tung.",
           "Số lần sấp = 30 - 18 = 12; xác suất thực nghiệm sấp = 12/30 = 2/5 = 40%."
         ],
         "conclusion": "Xác suất thực nghiệm ngửa 60%, sấp 40% từ dữ liệu 30 lần thử."
