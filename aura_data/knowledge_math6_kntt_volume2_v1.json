@@ -24,8 +24,8 @@
   },
   "expectedTotalLessons": 21,
   "expectedTotalChapters": 4,
-  "authoredLessonCount": 15,
-  "authoredPracticeCount": 45,
+  "authoredLessonCount": 21,
+  "authoredPracticeCount": 63,
   "chapters": [
     {
       "number": 6,
@@ -61,7 +61,7 @@
         38,
         43
       ],
-      "status": "NOT_AUTHORED"
+      "status": "DRAFT_CONTENT_IN_PROGRESS"
     }
   ],
   "outline": [
@@ -159,37 +159,37 @@
       "number": 38,
       "title": "Dữ liệu và thu thập dữ liệu",
       "chapter": 9,
-      "authored": false
+      "authored": true
     },
     {
       "number": 39,
       "title": "Bảng thống kê và biểu đồ tranh",
       "chapter": 9,
-      "authored": false
+      "authored": true
     },
     {
       "number": 40,
       "title": "Biểu đồ cột",
       "chapter": 9,
-      "authored": false
+      "authored": true
     },
     {
       "number": 41,
       "title": "Biểu đồ cột kép",
       "chapter": 9,
-      "authored": false
+      "authored": true
     },
     {
       "number": 42,
       "title": "Kết quả có thể và sự kiện trong trò chơi, thí nghiệm",
       "chapter": 9,
-      "authored": false
+      "authored": true
     },
     {
       "number": 43,
       "title": "Xác suất thực nghiệm",
       "chapter": 9,
-      "authored": false
+      "authored": true
     }
   ],
   "lessons": [
@@ -1342,7 +1342,457 @@
       "status": "DRAFT_ORIGINAL_AURA",
       "requiresPedagogicalReview": true,
       "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-38",
+      "number": 38,
+      "chapter": 9,
+      "title": "Dữ liệu và thu thập dữ liệu",
+      "objectives": [
+        "Phân biệt dữ liệu dạng số và dạng không phải số qua một bảng thống kê đơn giản.",
+        "Tổ chức thu thập dữ liệu bằng câu hỏi khảo sát rõ ràng và kiểm tra tính hợp lí của kết quả."
+      ],
+      "concepts": [
+        {
+          "heading": "Dữ liệu là gì?",
+          "body": "Dữ liệu là thông tin thu được từ quan sát, điều tra hoặc đo đạc. Ví dụ chiều cao học sinh (dữ liệu số) và môn thể thao yêu thích (dữ liệu phân loại)."
+        },
+        {
+          "heading": "Cách thu thập",
+          "body": "Đặt câu hỏi rõ đối tượng, thời điểm, đơn vị và lựa chọn trả lời; lập bảng kiểm đếm hoặc ghi nhận số liệu theo từng đối tượng để tránh bỏ sót."
+        },
+        {
+          "heading": "Kiểm tra tính hợp lí",
+          "body": "Đối chiếu dữ liệu với điều kiện thực tế: nếu khảo sát 20 bạn thì tổng số lượt lựa chọn cho câu hỏi chỉ chọn một đáp án phải bằng 20."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Khảo sát môn thể thao yêu thích của 12 học sinh: bóng đá 5, cầu lông 4, bơi 3. Đây là dữ liệu gì và tổng có hợp lệ không?",
+        "steps": [
+          "Môn thể thao yêu thích là dữ liệu phân loại, không phải số đo chiều dài hay khối lượng.",
+          "Cộng số lượt: 5 + 4 + 3 = 12, đúng bằng số bạn được khảo sát.",
+          "Nếu mỗi bạn chỉ chọn một môn, bảng số liệu hợp lệ về tổng; vẫn cần kiểm tra có bạn nào chọn lặp không."
+        ],
+        "conclusion": "Dữ liệu phân loại; tổng 12 lượt khớp 12 học sinh nếu mỗi bạn chọn một môn."
+      },
+      "commonMistake": "Không coi mã số gắn cho một nhóm như 1 = bóng đá, 2 = cầu lông là dữ liệu đo lường; và không kết luận tổng đúng khi có lượt trả lời trùng.",
+      "practice": [
+        {
+          "prompt": "Dữ liệu nào dưới đây là dữ liệu phân loại, không phải số đo?",
+          "choices": [
+            "Chiều cao của học sinh",
+            "Số cuốn vở trong cặp",
+            "Môn thể thao yêu thích",
+            "Nhiệt độ phòng"
+          ],
+          "correct": 2,
+          "explanation": "Môn thể thao yêu thích phân loại theo tên môn; các phương án còn lại đều thể hiện lượng đo hoặc số đếm.",
+          "skill": "phan-loai-du-lieu"
+        },
+        {
+          "prompt": "Khảo sát 18 bạn, mỗi bạn chọn đúng một màu. Kết quả: đỏ 7, xanh 6, vàng 5. Bảng có tổng số lượt hợp lệ không?",
+          "choices": [
+            "Không, vì tổng là 17",
+            "Có, vì 7 + 6 + 5 = 18",
+            "Không, vì tổng là 19",
+            "Không thể cộng số lượt"
+          ],
+          "correct": 1,
+          "explanation": "Tổng lượt chọn là 7 + 6 + 5 = 18, trùng số người được hỏi nên phù hợp điều kiện mỗi bạn một lựa chọn.",
+          "skill": "kiem-tra-du-lieu"
+        },
+        {
+          "prompt": "Muốn khảo sát số phút đọc sách mỗi ngày của lớp, câu hỏi nào rõ đơn vị nhất?",
+          "choices": [
+            "Bạn thích sách không?",
+            "Bạn đọc nhiều hay ít?",
+            "Hôm qua bạn đọc sách bao nhiêu phút?",
+            "Bạn muốn đọc sách không?"
+          ],
+          "correct": 2,
+          "explanation": "Câu hỏi này xác định thời điểm hôm qua và số phút, giúp thu dữ liệu số có cùng đơn vị để so sánh.",
+          "skill": "thu-thap-du-lieu"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-39",
+      "number": 39,
+      "chapter": 9,
+      "title": "Bảng thống kê và biểu đồ tranh",
+      "objectives": [
+        "Hoàn thành bảng tần số đơn giản từ các phiếu kiểm đếm.",
+        "Đọc biểu đồ tranh có quy ước số lượng cho mỗi hình và nhận biết phần dư khi quy ước phù hợp."
+      ],
+      "concepts": [
+        {
+          "heading": "Bảng thống kê",
+          "body": "Dữ liệu được nhóm theo từng giá trị hoặc nhóm, ghi số lần xuất hiện. Tổng các tần số cần bằng tổng số đối tượng khi mỗi đối tượng thuộc đúng một nhóm."
+        },
+        {
+          "heading": "Biểu đồ tranh",
+          "body": "Biểu đồ dùng biểu tượng để biểu diễn số lượng. Phải đọc quy ước, ví dụ mỗi hình ngôi sao đại diện 2 quyển sách; ba hình đại diện 6 quyển."
+        },
+        {
+          "heading": "So sánh nhóm",
+          "body": "Đọc số từ từng hàng rồi so sánh hoặc tính tổng. Không dùng chiều cao hình vẽ hay kích cỡ biểu tượng làm đơn vị đo nếu không có quy ước."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Biểu đồ tranh quy ước mỗi hình tròn là 2 cây. Nhóm A có 3 hình, nhóm B có 5 hình. Tìm tổng số cây.",
+        "steps": [
+          "Nhóm A có 3 × 2 = 6 cây.",
+          "Nhóm B có 5 × 2 = 10 cây.",
+          "Tổng số cây là 6 + 10 = 16 cây; nhóm B nhiều hơn 4 cây."
+        ],
+        "conclusion": "Hai nhóm có 16 cây; nhóm B nhiều hơn nhóm A 4 cây."
+      },
+      "commonMistake": "Không coi mỗi hình tự động là một đơn vị; phải đọc quy ước và tính tổng trên các số liệu thật.",
+      "practice": [
+        {
+          "prompt": "Mỗi hình ngôi sao trong biểu đồ tranh đại diện 3 quyển sách. Bốn ngôi sao là bao nhiêu quyển?",
+          "choices": [
+            "7 quyển",
+            "12 quyển",
+            "4 quyển",
+            "3 quyển"
+          ],
+          "correct": 1,
+          "explanation": "Dùng đúng quy ước: 4 hình × 3 quyển mỗi hình = 12 quyển sách.",
+          "skill": "bieu-do-tranh"
+        },
+        {
+          "prompt": "Bảng tần số có các nhóm lần lượt là 4, 6, 5. Tổng số đối tượng là bao nhiêu?",
+          "choices": [
+            "11",
+            "14",
+            "15",
+            "16"
+          ],
+          "correct": 2,
+          "explanation": "Cộng các tần số của mọi nhóm: 4 + 6 + 5 = 15 đối tượng.",
+          "skill": "bang-tan-so"
+        },
+        {
+          "prompt": "Trong biểu đồ tranh, một biểu tượng tương ứng 5 chiếc bút. Hai biểu tượng biểu diễn số bút nào?",
+          "choices": [
+            "2 chiếc",
+            "5 chiếc",
+            "7 chiếc",
+            "10 chiếc"
+          ],
+          "correct": 3,
+          "explanation": "Hai biểu tượng nhân với 5 chiếc mỗi biểu tượng bằng 2 × 5 = 10 chiếc.",
+          "skill": "bieu-do-tranh"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-40",
+      "number": 40,
+      "chapter": 9,
+      "title": "Biểu đồ cột",
+      "objectives": [
+        "Đọc giá trị một cột theo trục số và biết trục phải có đơn vị, khoảng chia phù hợp.",
+        "Từ bảng đơn giản xác định cột cao nhất, thấp nhất và chênh lệch giữa hai nhóm."
+      ],
+      "concepts": [
+        {
+          "heading": "Các thành phần",
+          "body": "Biểu đồ cột gồm trục nhóm, trục giá trị, tên biểu đồ, đơn vị và các cột. Số lượng của nhóm được đọc theo vạch chia trên trục dọc."
+        },
+        {
+          "heading": "Vẽ cột đúng số liệu",
+          "body": "Giữ độ rộng cột và khoảng cách phù hợp, chọn cùng thang chia cho các cột. Ví dụ số sách 4, 7, 5 thì các đỉnh cột phải tại 4, 7, 5."
+        },
+        {
+          "heading": "Đọc và nhận xét",
+          "body": "Đọc từng cột rồi so sánh lớn nhỏ hoặc tính tổng/chênh lệch; không nhầm nhãn nhóm với giá trị số học trên trục."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Số cây trồng của ba tổ A, B, C lần lượt là 5, 8, 6. Tổ nào trồng nhiều nhất và hơn tổ ít nhất bao nhiêu cây?",
+        "steps": [
+          "Lập các cột theo cùng một trục từ 0: A = 5, B = 8, C = 6.",
+          "Tổ B có 8 cây, là giá trị lớn nhất; tổ A có 5 cây, là nhỏ nhất.",
+          "Tính chênh lệch giữa lớn nhất và nhỏ nhất: 8 - 5 = 3 cây."
+        ],
+        "conclusion": "Tổ B nhiều nhất; hơn tổ A 3 cây."
+      },
+      "commonMistake": "Không đọc giá trị từ độ cao tương đối nếu biểu đồ bị cắt trục mà không ghi rõ; trước khi kết luận cần kiểm tra trục giá trị và đơn vị.",
+      "practice": [
+        {
+          "prompt": "Biểu đồ cột số cây của A, B, C lần lượt là 5, 8, 6. Nhóm nhiều nhất là nhóm nào?",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "Ba nhóm bằng nhau"
+          ],
+          "correct": 1,
+          "explanation": "So sánh 5, 8, 6 cho thấy 8 là lớn nhất, nên cột B cao nhất.",
+          "skill": "doc-bieu-do-cot"
+        },
+        {
+          "prompt": "Ba cột có giá trị 5, 8, 6. Chênh lệch giữa cột cao nhất và thấp nhất là bao nhiêu?",
+          "choices": [
+            "2",
+            "3",
+            "6",
+            "8"
+          ],
+          "correct": 1,
+          "explanation": "Lấy giá trị lớn nhất trừ giá trị nhỏ nhất: 8 - 5 = 3.",
+          "skill": "so-sanh-bieu-do"
+        },
+        {
+          "prompt": "Trục dọc biểu đồ ghi 'số cuốn sách' và chia từng 2 đơn vị. Cột đạt vạch thứ tư phía trên 0 biểu diễn bao nhiêu cuốn?",
+          "choices": [
+            "4 cuốn",
+            "6 cuốn",
+            "8 cuốn",
+            "10 cuốn"
+          ],
+          "correct": 2,
+          "explanation": "Mỗi khoảng chia bằng 2, nên vạch thứ tư trên 0 có giá trị 4 × 2 = 8 cuốn.",
+          "skill": "doc-truc-so"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-41",
+      "number": 41,
+      "chapter": 9,
+      "title": "Biểu đồ cột kép",
+      "objectives": [
+        "Đọc hai dãy số liệu cùng nhóm trên biểu đồ cột kép và xác định đúng chú giải.",
+        "So sánh hai dãy qua từng nhóm; tính tổng và chênh lệch từ các giá trị cụ thể."
+      ],
+      "concepts": [
+        {
+          "heading": "Hai dãy số liệu",
+          "body": "Mỗi nhóm có hai cột thể hiện hai đối tượng hoặc hai thời điểm, dùng chú giải rõ để phân biệt; cả hai phải dùng cùng một thang giá trị."
+        },
+        {
+          "heading": "Đọc theo nhóm",
+          "body": "Chọn đúng nhãn nhóm và cột theo chú giải, đọc giá trị trên trục dọc; so sánh hai cột trong cùng nhóm trước khi kết luận."
+        },
+        {
+          "heading": "Tính chênh lệch",
+          "body": "Lấy số lớn trừ số nhỏ trong cùng nhóm, hoặc so sánh tổng hai dãy sau khi đã đọc đủ các cột."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Lớp 6A và 6B tham gia trồng cây: tuần 1 lần lượt 5 và 8 cây; tuần 2 lần lượt 7 và 6 cây. So sánh tuần 2 và tổng hai tuần.",
+        "steps": [
+          "Tuần 2 có 6A = 7 cây và 6B = 6 cây, vậy 6A hơn 6B là 7 - 6 = 1 cây.",
+          "Tổng hai tuần của 6A là 5 + 7 = 12 cây.",
+          "Tổng hai tuần của 6B là 8 + 6 = 14 cây, nhiều hơn 6A 2 cây."
+        ],
+        "conclusion": "Tuần 2: 6A hơn 6B 1 cây; cả hai tuần 6B trồng hơn 6A 2 cây."
+      },
+      "commonMistake": "Không đọc hai cột theo màu mà bỏ qua chú giải; nếu đổi màu giữa các nhóm sẽ khiến kết luận sai.",
+      "practice": [
+        {
+          "prompt": "Biểu đồ cột kép: Tuần 1 lớp 6A trồng 5 cây, 6B trồng 8 cây. 6B hơn 6A bao nhiêu?",
+          "choices": [
+            "2 cây",
+            "3 cây",
+            "5 cây",
+            "13 cây"
+          ],
+          "correct": 1,
+          "explanation": "Trong cùng tuần 1, 6B = 8, 6A = 5; chênh lệch 8 - 5 = 3 cây.",
+          "skill": "cot-kep-so-sanh"
+        },
+        {
+          "prompt": "Tuần 2: lớp 6A trồng 7 cây, 6B trồng 6 cây. Nhận xét nào đúng?",
+          "choices": [
+            "6B nhiều hơn 1 cây",
+            "Hai lớp bằng nhau",
+            "6A nhiều hơn 1 cây",
+            "6A nhiều hơn 7 cây"
+          ],
+          "correct": 2,
+          "explanation": "Chú giải cho biết 6A = 7 và 6B = 6, vì vậy 6A hơn 6B đúng 1 cây.",
+          "skill": "cot-kep-so-sanh"
+        },
+        {
+          "prompt": "Hai tuần lớp 6A trồng 5 và 7 cây; 6B trồng 8 và 6 cây. Lớp nào nhiều hơn và hơn bao nhiêu?",
+          "choices": [
+            "6A hơn 2 cây",
+            "6B hơn 2 cây",
+            "6B hơn 1 cây",
+            "Hai lớp bằng nhau"
+          ],
+          "correct": 1,
+          "explanation": "Cộng đúng hai tuần: 6A = 5 + 7 = 12 cây, 6B = 8 + 6 = 14 cây; 6B hơn 2 cây.",
+          "skill": "cot-kep-tong"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-42",
+      "number": 42,
+      "chapter": 9,
+      "title": "Kết quả có thể và sự kiện trong trò chơi, thí nghiệm",
+      "objectives": [
+        "Liệt kê được những kết quả có thể xảy ra trong thí nghiệm đơn giản.",
+        "Phân biệt sự kiện chắc chắn, có thể và không thể dựa trên danh sách kết quả."
+      ],
+      "concepts": [
+        {
+          "heading": "Các kết quả có thể",
+          "body": "Trong thí nghiệm tung một đồng xu, các kết quả được xét là sấp hoặc ngửa. Khi gieo xúc xắc sáu mặt chuẩn, các kết quả là 1, 2, 3, 4, 5, 6."
+        },
+        {
+          "heading": "Sự kiện và điều kiện",
+          "body": "Sự kiện là một điều mô tả kết quả thỏa điều kiện, ví dụ gieo xúc xắc được số chẵn: {2, 4, 6}. Nếu không có kết quả nào thỏa thì sự kiện không thể xảy ra."
+        },
+        {
+          "heading": "Lập danh sách rõ ràng",
+          "body": "Trước khi đếm, xác định đúng loại đồ vật và quy ước thí nghiệm. Không đưa kết quả 7 vào xúc xắc chỉ có các mặt từ 1 đến 6."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Gieo một xúc xắc 6 mặt chuẩn. Liệt kê các kết quả và những mặt thỏa sự kiện 'số chấm chia hết cho 3'.",
+        "steps": [
+          "Không gian các kết quả có thể là 1, 2, 3, 4, 5, 6.",
+          "Các số từ 1 đến 6 chia hết cho 3 là 3 và 6.",
+          "Sự kiện gồm hai kết quả thuận lợi: {3, 6}; không có kết quả 0 hoặc 9 trong thí nghiệm này."
+        ],
+        "conclusion": "Các kết quả có thể {1,2,3,4,5,6}; sự kiện chia hết cho 3 là {3,6}."
+      },
+      "commonMistake": "Không đồng nhất 'số chấm chẵn' với 'chia hết cho 3'; phải liệt kê kết quả và kiểm tra từng giá trị.",
+      "practice": [
+        {
+          "prompt": "Khi gieo một xúc xắc 6 mặt chuẩn, kết quả nào không thể xuất hiện?",
+          "choices": [
+            "1",
+            "4",
+            "6",
+            "8"
+          ],
+          "correct": 3,
+          "explanation": "Xúc xắc chuẩn có đúng các mặt 1 đến 6; mặt 8 không tồn tại nên không thể xuất hiện.",
+          "skill": "ket-qua-co-the"
+        },
+        {
+          "prompt": "Sự kiện 'gieo xúc xắc được số chẵn' gồm các kết quả nào?",
+          "choices": [
+            "1, 3, 5",
+            "2, 4, 6",
+            "2, 3, 6",
+            "1, 2, 3"
+          ],
+          "correct": 1,
+          "explanation": "Các số chẵn trong danh sách mặt xúc xắc {1,2,3,4,5,6} là 2, 4, 6.",
+          "skill": "su-kien"
+        },
+        {
+          "prompt": "Khi tung một đồng xu, sự kiện 'xuất hiện mặt sấp hoặc mặt ngửa' thuộc loại nào?",
+          "choices": [
+            "Không thể",
+            "Ngẫu nhiên nhưng không chắc chắn",
+            "Chắc chắn",
+            "Chỉ có thể nếu tung hai lần"
+          ],
+          "correct": 2,
+          "explanation": "Theo mô hình thí nghiệm đồng xu có hai mặt sấp và ngửa, mọi lần tung đều nhận một trong hai kết quả; sự kiện là chắc chắn.",
+          "skill": "su-kien-chac-chan"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
+    },
+    {
+      "id": "KNTT6-MATH-V2-43",
+      "number": 43,
+      "chapter": 9,
+      "title": "Xác suất thực nghiệm",
+      "objectives": [
+        "Tính xác suất thực nghiệm bằng số lần sự kiện xuất hiện chia cho tổng số lần thử.",
+        "Biết xác suất thực nghiệm có thể thay đổi theo số lần thử và không nhất thiết bằng giá trị lí thuyết."
+      ],
+      "concepts": [
+        {
+          "heading": "Công thức tần suất",
+          "body": "Xác suất thực nghiệm của sự kiện E = (số lần E xuất hiện) / (tổng số lần thực hiện thí nghiệm), với tổng số lần thử phải lớn hơn 0."
+        },
+        {
+          "heading": "Dùng kết quả đã ghi",
+          "body": "Nếu tung xu 20 lần và gặp ngửa 12 lần, xác suất thực nghiệm của ngửa bằng 12/20 = 3/5 = 60%; đây là số liệu thu được, không phải cam kết cho lần sau."
+        },
+        {
+          "heading": "Ý nghĩa khi tăng số lần thử",
+          "body": "Số lần thử tăng giúp tần suất được khảo sát trên nhiều dữ liệu hơn, nhưng không bảo đảm mỗi lần thực nghiệm đều có tỉ lệ 50% đối với một đồng xu."
+        }
+      ],
+      "workedExample": {
+        "prompt": "Tung đồng xu 30 lần, trong đó có 18 lần xuất hiện mặt ngửa. Tìm xác suất thực nghiệm mặt ngửa và mặt sấp.",
+        "steps": [
+          "Tổng số lần thử là 30, số lần mặt ngửa xuất hiện là 18.",
+          "Xác suất thực nghiệm ngửa = 18/30 = 3/5 = 60%.",
+          "Số lần sấp = 30 - 18 = 12; xác suất thực nghiệm sấp = 12/30 = 2/5 = 40%."
+        ],
+        "conclusion": "Xác suất thực nghiệm ngửa 60%, sấp 40% từ dữ liệu 30 lần thử."
+      },
+      "commonMistake": "Không lấy tỉ số thuận lợi chia cho số mặt của đồng xu khi hỏi xác suất thực nghiệm; phải lấy số lần xuất hiện chia cho số lần thử thật.",
+      "practice": [
+        {
+          "prompt": "Tung đồng xu 20 lần, mặt ngửa xuất hiện 12 lần. Xác suất thực nghiệm của mặt ngửa là bao nhiêu?",
+          "choices": [
+            "12/2",
+            "3/5",
+            "1/2",
+            "2/5"
+          ],
+          "correct": 1,
+          "explanation": "Có 12 lần ngửa trên 20 lần tung, nên xác suất thực nghiệm = 12/20 = 3/5.",
+          "skill": "xac-suat-thuc-nghiem"
+        },
+        {
+          "prompt": "Một trò chơi được thử 50 lần, sự kiện A xuất hiện 15 lần. Tần suất thực nghiệm của A là bao nhiêu phần trăm?",
+          "choices": [
+            "15%",
+            "25%",
+            "30%",
+            "50%"
+          ],
+          "correct": 2,
+          "explanation": "Tính 15/50 × 100% = 30%; đây là tỉ lệ của 50 lần thực nghiệm đã thực hiện.",
+          "skill": "tan-suat-phan-tram"
+        },
+        {
+          "prompt": "Gieo xúc xắc 40 lần, xuất hiện mặt 6 đúng 5 lần. Xác suất thực nghiệm mặt 6 là số nào?",
+          "choices": [
+            "1/6",
+            "1/8",
+            "5/6",
+            "1/5"
+          ],
+          "correct": 1,
+          "explanation": "Lấy số lần xuất hiện mặt 6 là 5 chia tổng 40 lần thử: 5/40 = 1/8.",
+          "skill": "xac-suat-thuc-nghiem"
+        }
+      ],
+      "status": "DRAFT_ORIGINAL_AURA",
+      "requiresPedagogicalReview": true,
+      "readyForQuestionBank": false
     }
   ],
-  "releaseNote": "Chapter VI–VIII authored AURA originals; 15 of 21 main lessons have drafts. Chapter IX not authored. Teacher not approved."
+  "releaseNote": "All 21 main Volume2 lessons now have authored AURA drafts; chapter reviews, general exercises and educator signoff remain separate."
 }
