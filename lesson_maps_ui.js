@@ -36,9 +36,9 @@ function lessonSubject(id){
     vol2.href='knowledge-math6-volume2.html';
     vol2.className='math6-v2-entry math6-volume2-entry';
     const vol2Title=document.createElement('strong');
-    vol2Title.textContent='Toán 6 · Tập 2 — Phân số, Số thập phân và Hình học';
+    vol2Title.textContent='Toán 6 · Tập 2 — Đủ 4 chương chính';
     const vol2Detail=document.createElement('span');
-    vol2Detail.textContent='Bài 23–37 có nội dung · 45 câu luyện nháp · Ôn Chương VII–VIII · Chương IX đang xây dựng';
+    vol2Detail.textContent='Bài 23–43 có nội dung · 63 câu luyện nháp · Ôn Chương VII–IX · Cần kiểm định và ôn cuối năm';
     vol2.append(vol2Title,vol2Detail);
     link.insertAdjacentElement('afterend',vol2);
   }
