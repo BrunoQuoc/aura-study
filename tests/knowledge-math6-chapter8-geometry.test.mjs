@@ -23,21 +23,21 @@ const reviewGolden=[
  '12 cm','M là trung điểm của AB','Điểm O','Góc tù'
 ];
 
-test('All six real geometry lessons authored in fixed curriculum order; Ch IX still missing',()=>{
+test('All six geometry lessons retained in full 21-lesson Volume2 course',()=>{
  assert.equal(d.libraryId,'AURA-KNTT6-MATH-VOLUME2');
- assert.equal(d.lessons.length,15);
- assert.equal(d.authoredLessonCount,15);
- assert.equal(d.authoredPracticeCount,45);
- assert.equal(d.lessons.reduce((sum,l)=>sum+l.practice.length,0),45);
+ assert.equal(d.lessons.length,21);
+ assert.equal(d.authoredLessonCount,21);
+ assert.equal(d.authoredPracticeCount,63);
+ assert.equal(d.lessons.reduce((sum,l)=>sum+l.practice.length,0),63);
  assert.equal(d.expectedTotalLessons,21);
- assert.deepEqual(d.lessons.map(l=>l.number),Array.from({length:15},(_,i)=>i+23));
+ assert.deepEqual(d.lessons.map(l=>l.number),Array.from({length:21},(_,i)=>i+23));
  assert.deepEqual(d.chapters.map(c=>c.status),[
   'DRAFT_CONTENT_IN_PROGRESS','DRAFT_CONTENT_IN_PROGRESS',
-  'DRAFT_CONTENT_IN_PROGRESS','NOT_AUTHORED'
+  'DRAFT_CONTENT_IN_PROGRESS','DRAFT_CONTENT_IN_PROGRESS'
  ]);
  assert.deepEqual(d.outline.filter(o=>o.authored).map(x=>x.number),
   Array.from({length:15},(_,i)=>i+23));
- assert.deepEqual(d.outline.filter(o=>!o.authored).map(x=>x.number),[38,39,40,41,42,43]);
+ assert.deepEqual(d.outline.filter(o=>!o.authored).map(x=>x.number),[]);
  assert.equal(d.rollout.teacherReviewed,false);
  assert.equal(d.rollout.questionBankPromotionEnabled,false);
  assert.equal(d.rollout.examEngineLinkEnabled,false);
