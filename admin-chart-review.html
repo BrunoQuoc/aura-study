@@ -84,21 +84,62 @@ const BATCH="AURA-M6-KNTT-T2-C09-DRAFT-V0.1";
 const BUILD="AURA-ADMIN-V2-VISUAL-CHART-QA-R2";
 const byId=id=>document.getElementById(id);
 let charts=[],inspected=new Set(),active=null,zoomSize=760;
-function token(){
- let data=null;
- try{data=JSON.parse(localStorage.getItem("aura-stage-parent-v1")||"null")}catch(_){}
- if(!data||!data.access_token)throw Error("Chưa đăng nhập Admin trên trình duyệt này. Bấm “Đăng nhập lại Admin”.");
- if(data.expires_at&&data.expires_at*1000<Date.now()+10000)throw Error("Phiên Admin đã hết hạn. Đăng nhập lại rồi mở 23 biểu đồ.");
- return data.access_token;
+const AUTH_KEY="aura-stage-parent-v1";
+let refreshTask=null;
+function storedSession(){
+ try{return JSON.parse(localStorage.getItem(AUTH_KEY)||"null")}catch(_){return null}
+}
+async function sessionToken(){
+ const current=storedSession();
+ if(!current||!current.access_token)throw Error("Chưa có phiên Admin ở trình duyệt Safari này. Vui lòng đăng nhập Admin trong cùng Safari.");
+ if(!current.expires_at||current.expires_at*1000>Date.now()+60000)return current.access_token;
+ if(!current.refresh_token)throw Error("Phiên đã hết hạn và không có mã gia hạn. Vui lòng đăng nhập lại Admin.");
+ if(!refreshTask){
+  refreshTask=(async()=>{
+   const latest=storedSession();
+   if(!latest||!latest.access_token)throw Error("Phiên Admin không còn tồn tại. Hãy đăng nhập lại.");
+   if(latest.expires_at&&latest.expires_at*1000>Date.now()+60000)return latest.access_token;
+   const res=await fetch(URL+"/auth/v1/token?grant_type=refresh_token",{
+    method:"POST",cache:"no-store",
+    headers:{"apikey":KEY,"Content-Type":"application/json"},
+    body:JSON.stringify({refresh_token:latest.refresh_token})
+   });
+   if(!res.ok)throw Error("Không gia hạn được phiên Admin. Hãy đăng nhập lại trong Safari.");
+   const updated=await res.json();
+   if(!updated.access_token||!updated.refresh_token)throw Error("Máy chủ không trả phiên hợp lệ. Hãy đăng nhập lại.");
+   const after=storedSession();
+   if(after&&after.access_token!==latest.access_token&&after.expires_at&&after.expires_at*1000>Date.now()+60000)return after.access_token;
+   const expires=Math.floor(Date.now()/1000)+(Number(updated.expires_in)||3600);
+   localStorage.setItem(AUTH_KEY,JSON.stringify({...latest,...updated,expires_at:expires}));
+   return updated.access_token;
+  })().finally(()=>{refreshTask=null});
+ }
+ return refreshTask;
 }
 async function send(payload){
- const res=await fetch(URL+"/functions/v1/aura-admin-review-v1",{
+ let access=await sessionToken();
+ let res=await fetch(URL+"/functions/v1/aura-admin-review-v1",{
   method:"POST",cache:"no-store",
-  headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+token()},
+  headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+access},
   body:JSON.stringify(payload)
  });
+ // If another tab refreshed a token in the meantime, retry once with the newest token.
+ if(res.status===401){
+  const newest=storedSession();
+  if(newest?.access_token&&newest.access_token!==access){
+   access=newest.access_token;
+   res=await fetch(URL+"/functions/v1/aura-admin-review-v1",{
+    method:"POST",cache:"no-store",
+    headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+access},
+    body:JSON.stringify(payload)
+   });
+  }
+ }
  let body={};try{body=await res.json()}catch(_){}
- if(!res.ok)throw Error(body.error||("API báo lỗi "+res.status));
+ if(!res.ok){
+  if(res.status===401||res.status===403)throw Error("Phiên đăng nhập hoặc quyền Admin chưa hợp lệ trong Safari. Đăng nhập lại Admin rồi thử tiếp.");
+  throw Error(body.error||("API báo lỗi "+res.status));
+ }
  return body;
 }
 function loadedCount(){
