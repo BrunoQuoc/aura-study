@@ -96,6 +96,8 @@ function show(data){
  ["Khối kiến thức",s.knowledge_blocks_ai],
  ["Luyện tập chung",s.common_practice_modules],
  ["Liên kết câu luyện",s.common_practice_question_references],
+ ["Mục từ tra cứu AI",s.glossary_entries_ai],
+ ["Giải thích thuật ngữ AI",s.glossary_definitions_ai],
  ["Đề luyện/ôn",s.blueprints_ai],
  ["Đơn vị còn thiếu",s.source_alignment_missing_units],
  ["Câu gốc SGK đã xác minh",s.exact_sgk_questions_verified]
@@ -116,6 +118,20 @@ function show(data){
  row.append(label,format(sec.title,sec.alignment_status));
  if(sec.question_count){const n=document.createElement("span");n.textContent=" · "+sec.question_count+" câu AI";row.append(n)}
  if(sec.practice_refs){const n=document.createElement("span");n.textContent=" · "+sec.practice_refs+" câu luyện bổ trợ";row.append(n)}
+ if(sec.type==="REFERENCE_APPENDIX"){
+   const terms=(data.glossary||[]).filter(t=>t.section_id===sec.section_id);
+   const n=document.createElement("span");n.textContent=" · "+terms.length+" thuật ngữ AURA";row.append(n);
+   if(terms.length){
+     const sub=document.createElement("details");sub.style.marginLeft="12px";
+     const sum=document.createElement("summary");sum.textContent="Xem mục từ AURA tự biên soạn — không phải bản SGK gốc";sub.append(sum);
+     for(const term of terms){
+       const p=document.createElement("p");p.className="muted";
+       p.textContent=term.term+" · Bài "+term.lesson_number+(term.definition?" — "+term.definition:"");
+       sub.append(p);
+     }
+     inside.append(sub);
+   }
+ }
  inside.append(row);
  }detail.append(inside);blocks.append(detail);
  }
