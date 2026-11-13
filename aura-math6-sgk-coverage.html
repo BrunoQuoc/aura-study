@@ -1,0 +1,135 @@
+<!doctype html><html lang="vi"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta http-equiv="Cache-Control" content="no-store">
+<title>AURA STUDY · Chuẩn hóa SGK Toán 6</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#17314d;background:#f3f7fb}
+*{box-sizing:border-box}body{margin:0}a{color:#16618f}a:hover{text-decoration:none}
+header{background:#183956;color:#fff;padding:17px max(16px,calc((100vw - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+header a{color:#e3f2ff}
+main{max-width:1120px;margin:22px auto;padding:0 16px 35px}h1{font-size:clamp(1.5rem,3.8vw,2.3rem);margin:8px 0 12px}h2{font-size:1.2rem}
+p{line-height:1.6}.muted{color:#66798c}.eyebrow{font-size:.78rem;letter-spacing:.12em;font-weight:800;color:#276b98}
+.card{background:#fff;border:1px solid #d6e3f0;border-radius:15px;padding:18px;margin:14px 0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.stat{background:#f3f8fc;border-radius:10px;padding:12px;min-width:0}.stat b{display:block;font-size:1.65rem;line-height:1.2;margin:4px 0}
+.stat span{font-size:.84rem;color:#5b7289}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #e1e9f1;padding:11px 8px;font-size:.91rem}
+th{color:#526c84;background:#f5f8fc}
+summary{font-weight:680;cursor:pointer;min-height:36px;display:flex;align-items:center}
+details{border-bottom:1px solid #e4ebf2;padding:8px 0}
+.tag{display:inline-block;border-radius:14px;padding:4px 8px;background:#e9f3fa;color:#2d6282;font-size:.75rem;font-weight:750}
+.tag.missing{background:#fff2e0;color:#85571c}
+button{background:#17618e;color:#fff;border:0;border-radius:10px;min-height:46px;padding:10px 15px;font:inherit;font-weight:680;cursor:pointer}
+button:disabled{opacity:.55}
+.note{border-left:4px solid #d59944;background:#fff8ed;padding:12px 15px;margin:12px 0}
+#status{white-space:pre-wrap;overflow-wrap:anywhere}
+.links{display:flex;flex-wrap:wrap;gap:12px}
+.chapter-detail{padding:8px}
+.chapter-detail p{font-size:.91rem;margin:7px 0}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:12px}th,td{font-size:.82rem;padding:9px 5px}header{padding:12px}main{padding:0 10px}table{table-layout:fixed}}
+</style></head>
+<body><header><strong>AURA STUDY · SGK ALIGNMENT</strong><a href="./aura-admin.html">Về Admin</a></header>
+<main>
+<span class="eyebrow">TOÁN 6 · KẾT NỐI TRI THỨC · TẬP 1 + TẬP 2</span>
+<h1>Chuẩn hóa SGK và nguồn gốc nội dung</h1>
+<p class="muted">Kiểm kê theo mục lục tham chiếu và dữ liệu thực có. Phân biệt cấu trúc bài học SGK với 402 câu AI tự biên soạn. Không đánh dấu đã xác minh bài tập gốc nếu thiếu số trang, mã bài và bằng chứng.</p>
+<section class="card"><h2>Độ phủ và xuất xứ</h2><div class="stats" id="stats"></div>
+<p id="status" role="status" class="muted">Đang yêu cầu quyền Admin và tải ma trận...</p>
+<button id="reload" type="button">Cập nhật dữ liệu</button>
+<div class="note"><strong>Kiểm soát nguồn:</strong> Nội dung chỉ được ghép với mục lục SGK công khai. Chưa có bản SGK gốc được xác minh từng trang, chưa có bài nào được xác nhận là trích nguyên văn hợp lệ. Các đề thi và bài luyện vẫn chỉ hoạt động trên Staging.</div>
+</section>
+<section class="card"><h2>Ba lớp nội dung AURA STUDY</h2>
+<p><strong>1. Khung SGK:</strong> đúng thứ tự 43 bài, 9 chương; có các đơn vị luyện tập chung, ôn chương, hoạt động và thuật ngữ.</p>
+<p><strong>2. Học liệu và bài tập bổ trợ:</strong> 104 khối kiến thức, 402 câu có đáp án/lời giải/rubric, 15 bộ luyện tập chung AI tự tổ chức và 7 hoạt động.</p>
+<p><strong>3. Luyện tập, thi thử và cá nhân hóa:</strong> 18 cấu hình luyện/ôn và bản đồ lỗi. Không tự thay SGK gốc bằng tài liệu AI.</p>
+</section>
+<section class="card"><h2>Đối chiếu 9 chương</h2><div style="overflow-x:auto">
+<table><thead><tr><th>Tập / Chương</th><th>Bài</th><th>Luyện tập chung</th><th>Câu AI</th><th>Đơn vị chưa có</th></tr></thead><tbody id="chapterRows"></tbody></table></div>
+</section>
+<section class="card"><h2>Chi tiết các đơn vị SGK</h2><p class="muted">Mục “Chưa có” chỉ ra phần chưa được mô hình thành học liệu riêng; “AI bổ trợ” không đồng nghĩa bài tập nguyên bản SGK.</p><div id="details"></div></section>
+<section class="card"><h2>Đầu mục nguồn tham chiếu</h2><div id="sources" class="links"></div><p class="muted">Nguồn mục lục công khai để xác định tên/chương/bài; cần bản SGK hợp pháp để đối chiếu chi tiết, số trang và mã bài tập.</p></section>
+</main>
+<script>
+"use strict";
+const BASE="https://ufqzuowjhdqpydqvcsob.supabase.co",KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
+const $=id=>document.getElementById(id);
+function session(){try{return JSON.parse(localStorage.getItem("aura-stage-parent-v1")||"null")}catch(e){return null}}
+let refreshTask=null;
+async function token(){
+ const s=session();if(!s?.access_token)throw Error("Chưa có phiên Admin. Đăng nhập tại mục Admin trong cùng trình duyệt.");
+ if(!s.expires_at||s.expires_at*1000>Date.now()+60000)return s.access_token;
+ if(!s.refresh_token)throw Error("Phiên đã hết hạn; đăng nhập lại Admin.");
+ if(!refreshTask)refreshTask=(async()=>{
+  const res=await fetch(BASE+"/auth/v1/token?grant_type=refresh_token",{method:"POST",cache:"no-store",headers:{"apikey":KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:s.refresh_token})});
+  if(!res.ok)throw Error("Không gia hạn được phiên Admin.");
+  const next=await res.json();
+  if(!next.access_token||!next.refresh_token)throw Error("Phiên mới không hợp lệ.");
+  const current=session();
+  if(current?.access_token===s.access_token)localStorage.setItem("aura-stage-parent-v1",JSON.stringify({...current,...next,expires_at:Math.floor(Date.now()/1000)+(Number(next.expires_in)||3600)}));
+  return session()?.access_token||next.access_token;
+ })().finally(()=>refreshTask=null);
+ return refreshTask;
+}
+async function request(){
+ const res=await fetch(BASE+"/functions/v1/aura-admin-review-v1",{method:"POST",cache:"no-store",
+ headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+await token()},
+ body:JSON.stringify({action:"sgk_coverage"})});
+ let data={};try{data=await res.json()}catch(e){}
+ if(!res.ok)throw Error((res.status===401||res.status===403)?"Phiên hoặc quyền Admin không hợp lệ. Đăng nhập lại.":data.error||"API lỗi "+res.status);
+ return data.coverage;
+}
+function stat(label,value){
+ const div=document.createElement("div");div.className="stat";const a=document.createElement("span"),b=document.createElement("b");
+ a.textContent=label;b.textContent=value;div.append(a,b);return div;
+}
+function format(name,status){
+ const s=document.createElement("span");s.className="tag "+(status==="MISSING_DEDICATED_SECTION"?"missing":"");
+ s.textContent=status==="TOC_TITLE_MATCHED"?"Khớp mục lục":status==="MISSING_DEDICATED_SECTION"?"Chưa có mục riêng":"AI bổ trợ";
+ return s;
+}
+function show(data){
+ if(!data?.summary||!Array.isArray(data.chapters))throw Error("Dữ liệu đối chiếu chưa hợp lệ.");
+ const s=data.summary;const root=$("stats");root.replaceChildren();
+ for(const [label,val] of [
+ ["Chương / Bài",s.chapters+" / "+s.lessons],
+ ["Câu AI đã gắn nguồn",s.ai_origin_declared+"/"+s.questions],
+ ["Khối kiến thức",s.knowledge_blocks_ai],
+ ["Luyện tập chung",s.common_practice_modules],
+ ["Liên kết câu luyện",s.common_practice_question_references],
+ ["Đề luyện/ôn",s.blueprints_ai],
+ ["Đơn vị còn thiếu",s.source_alignment_missing_units],
+ ["Câu gốc SGK đã xác minh",s.exact_sgk_questions_verified]
+ ])root.append(stat(label,String(val)));
+ const chapters=$("chapterRows");chapters.replaceChildren();
+ for(const c of data.chapters){
+ const row=document.createElement("tr");for(const val of [
+ "Tập "+c.volume+" — Chương "+c.chapter,c.lessons,c.common_practice,c.lesson_questions,c.missing_units
+ ]){const td=document.createElement("td");td.textContent=String(val??0);row.append(td)}chapters.append(row)}
+ const blocks=$("details");blocks.replaceChildren();
+ for(const c of data.chapters){
+ const detail=document.createElement("details"),summary=document.createElement("summary");
+ summary.textContent="Tập "+c.volume+" / Chương "+c.chapter+" — "+c.lessons+" bài; "+c.common_practice+" luyện tập chung";detail.append(summary);
+ const inside=document.createElement("div");inside.className="chapter-detail";
+ for(const sec of (data.sections||[]).filter(z=>z.volume===c.volume&&z.chapter===c.chapter)){
+ const row=document.createElement("p"),label=document.createElement("strong");
+ label.textContent=sec.type==="LESSON"?sec.title+" — ":sec.title+" — ";
+ row.append(label,format(sec.title,sec.alignment_status));
+ if(sec.question_count){const n=document.createElement("span");n.textContent=" · "+sec.question_count+" câu AI";row.append(n)}
+ if(sec.practice_refs){const n=document.createElement("span");n.textContent=" · "+sec.practice_refs+" câu luyện bổ trợ";row.append(n)}
+ inside.append(row);
+ }detail.append(inside);blocks.append(detail);
+ }
+ const sources=$("sources");sources.replaceChildren();
+ for(const ref of data.sources||[]){
+  const a=document.createElement("a");a.href=ref.toc_reference_url;a.target="_blank";a.rel="noopener noreferrer";
+  a.textContent="Mục lục tham chiếu Tập "+ref.volume;sources.append(a);
+ }
+ $("status").textContent="Đã tải "+s.questions+" câu, "+s.knowledge_blocks_ai+" khối kiến thức, "+s.common_practice_modules+" mục Luyện tập chung. Chưa xác minh bài tập gốc theo trang. Kiểm tra lúc "+new Date().toLocaleString("vi-VN");
+}
+async function load(){
+ $("reload").disabled=true;$("status").textContent="Đang tải nguồn gốc học liệu...";
+ try{show(await request())}catch(e){$("status").textContent="Không tải được: "+e.message}
+ finally{$("reload").disabled=false}
+}
+$("reload").addEventListener("click",load);load();
+</script></body></html>
