@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#174d43">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'self'">
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="knowledge_math6_decimals.css?v=20261113">
+<title>AURA STUDY — Toán 6 Chương IX · Dữ liệu và xác suất thực nghiệm</title></head>
+<body><div class="decimal-app">
+<header class="decimal-hero"><a style="color:#fff" href="knowledge-math6-volume2.html#bai-38">← Toán 6 Tập 2 · Bài 38–43</a>
+<p class="eyebrow">AURA STUDY · CHƯƠNG IX · DỮ LIỆU VÀ XÁC SUẤT</p>
+<h1>Khám phá dữ liệu</h1>
+<p>Quan sát biểu đồ cột và so sánh xác suất thực nghiệm dựa trên số liệu giả lập do AURA tự tạo.</p>
+<div class="decimal-hero-stats"><span>6 bài liên quan: 38–43</span><span>2 hoạt động tương tác</span><span>6 câu ôn chương</span></div>
+</header>
+<p class="decimal-warning"><strong>Bản nháp học tập:</strong> Không ghi điểm thi, không cập nhật Weakness Map chính thức và chưa được giáo viên xác nhận.</p>
+<main>
+<section class="decimal-card">
+<h2>01 · Đọc biểu đồ cột từ bảng thống kê</h2>
+<p>Ba nhóm A, B, C có lần lượt 5, 8, 6 quyển sách. Chọn nhóm để xem cột tương ứng và chênh lệch với nhóm ít nhất.</p>
+<label class="decimal-control-label" for="statsGroup">Chọn nhóm để đọc giá trị</label>
+<select id="statsGroup" style="width:100%;min-height:45px;border:1px solid #cadfe9;border-radius:9px;padding:9px"><option value="A">Nhóm A</option><option value="B">Nhóm B</option><option value="C">Nhóm C</option></select>
+<svg id="statsBarChart" viewBox="0 0 600 240" role="img" aria-label="Biểu đồ cột thể hiện A 5, B 8, C 6 quyển sách" style="width:100%;height:auto;max-height:280px">
+<line x1="72" y1="20" x2="72" y2="198" stroke="#365f7a" stroke-width="2"/>
+<line x1="72" y1="198" x2="550" y2="198" stroke="#365f7a" stroke-width="2"/>
+<g id="statsBars"></g>
+<text x="14" y="20" fill="#406079" font-size="13">Số sách</text></svg>
+<p class="decimal-result" id="statsBarResult" role="status"></p>
+</section>
+<section class="decimal-card">
+<h2>02 · Xác suất thực nghiệm khi thay đổi số lần xuất hiện</h2>
+<p>Giả sử gieo xúc xắc 20 lần. Kéo thanh để thay đổi số lần xuất hiện mặt 6 trong bộ dữ liệu giả lập; kết quả không phải dự báo lần gieo tiếp theo.</p>
+<label class="decimal-control-label" for="statsFrequency">Số lần xuất hiện mặt 6 (trên 20 lần thử)</label>
+<input id="statsFrequency" type="range" min="0" max="20" step="1" value="5">
+<div id="statsTrialGrid" class="percent-grid" aria-label="20 lần thử minh họa"></div>
+<p class="decimal-result" id="statsProbabilityResult" role="status"></p>
+</section>
+<section class="decimal-card">
+<h2>03 · Ôn tập cuối chương IX — 6 câu</h2>
+<p>Đọc số liệu, biểu đồ tranh, cột đơn/cột kép, sự kiện và xác suất thực nghiệm.</p>
+<form id="statsReviewForm"><div id="statsReviewQuestions"></div>
+<button id="statsReviewSubmit" class="decimal-submit" type="submit">Nộp 6 câu và xem lời giải</button></form>
+<div id="statsReviewResult" class="decimal-review-result" role="status"></div>
+<button id="statsReviewRetry" class="decimal-retry" type="button" hidden>Làm lại 6 câu</button>
+</section></main>
+<footer class="decimal-footer">Nội dung, số liệu và biểu đồ do AURA biên soạn mới. Dữ liệu giả lập để minh họa; bài học và đáp án chưa được kiểm định sư phạm độc lập.</footer>
+</div><script src="knowledge_math6_statistics.js?v=20261113"></script>
+</body></html>

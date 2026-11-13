@@ -28,9 +28,9 @@ try{
   await page.goto(origin+'/knowledge-math6-volume2.html',{waitUntil:'load'});
   await page.locator('.chapter-button').first().waitFor({timeout:15000});
   assert.equal(await page.locator('.chapter-button').count(),4);
-  assert.equal(await page.locator('.chapter-button:disabled').count(),1);
-  assert.equal((await page.locator('#countLessons').innerText()).trim(),'15');
-  assert.equal((await page.locator('#countQuestions').innerText()).trim(),'45');
+  assert.equal(await page.locator('.chapter-button:disabled').count(),0);
+  assert.equal((await page.locator('#countLessons').innerText()).trim(),'21');
+  assert.equal((await page.locator('#countQuestions').innerText()).trim(),'63');
   await page.locator('.chapter-button').nth(2).click();
   assert.equal(await page.locator('.lesson-button').count(),6);
   for(let lesson=32;lesson<=37;lesson++){
