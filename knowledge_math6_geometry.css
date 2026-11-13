@@ -1,0 +1,31 @@
+.aura-geometry-figure{margin:13px 0 18px;padding:10px 12px;background:#f3f8fd;border:1px solid #cee3f1;border-radius:13px;max-width:100%;overflow:hidden}
+.aura-geometry-svg{display:block;width:100%;max-height:250px;height:auto;min-width:0;background:white;border-radius:10px;border:1px solid #e5edf5}
+.aura-geometry-figure figcaption{margin:7px 0 0;font-size:12px;line-height:1.65;color:#506f8b}
+.geometry-header{background:linear-gradient(112deg,#16385f,#287b9a);color:white;padding:26px 30px;border-radius:18px}
+.geometry-header a{color:#effaff;font-size:13px;text-decoration:none;font-weight:740}
+.geometry-header h1{font-size:clamp(25px,3.7vw,34px);margin:12px 0}
+.geometry-header p{font-size:13px;line-height:1.7;color:#e0f4fc}
+.geometry-app{max-width:1060px;margin:0 auto;padding:14px 16px 40px;font-family:system-ui,-apple-system,sans-serif;color:#244c69}
+.geometry-notice{padding:13px;border:1px solid #eddbb6;background:#fff8e9;color:#785b32;border-radius:12px;font-size:12px;line-height:1.7;margin:15px 0}
+.geometry-card{background:#fff;border:1px solid #d6e5f0;border-radius:15px;padding:20px;margin:15px 0}
+.geometry-card h2{font-size:20px;margin:0 0 11px}
+.geometry-card p{font-size:13px;line-height:1.75;color:#577087}
+.geometry-card label{display:block;font-weight:700;font-size:13px;margin:13px 0 6px}
+.geometry-card input[type=range]{display:block;width:100%;min-height:43px;accent-color:#2679ae}
+.geometry-model{background:#f4f8fc;border:1px solid #d9e7f2;border-radius:11px;min-height:140px;overflow:hidden}
+.geometry-model svg{width:100%;max-height:260px;display:block}
+.geometry-output{background:#ecf6ff;color:#195c8e!important;border-radius:10px;padding:12px 15px;font-weight:750;font-size:13px}
+.geometry-quiz fieldset{border:1px solid #d8e6f0;border-radius:12px;padding:13px 14px;margin:12px 0}
+.geometry-quiz legend{font-size:13px;font-weight:760;line-height:1.7}
+.geometry-choice{display:flex!important;align-items:center;gap:9px;margin:8px 0!important;padding:9px 11px;background:#f9fbfe;border:1px solid #e0eaf3;border-radius:10px;font-weight:400!important;cursor:pointer;min-height:43px}
+.geometry-choice input{width:18px;height:18px;accent-color:#2577ab}
+.geometry-choice.correct{background:#e9f6ee;border-color:#9fd0b0}
+.geometry-choice.wrong{background:#fff0ed;border-color:#e9a99e}
+.geometry-feedback{font-size:12px;line-height:1.7;padding:9px 2px;color:#355c7c}
+.geometry-submit,.geometry-retry{min-height:45px;padding:12px 17px;font:750 13px system-ui,sans-serif;border:0;border-radius:10px;cursor:pointer;background:#2567aa;color:white}
+.geometry-retry{background:#edf5fd;color:#22669a;border:1px solid #bed8ec;margin-top:10px}
+.geometry-result{font-size:13px;line-height:1.7;color:#23597d;margin:13px 0}
+.geometry-result a{color:#175b8b;font-weight:700}
+.geometry-result strong{font-size:17px}
+.geometry-footer{font-size:11px;color:#74879b;line-height:1.75;margin:20px 4px}
+@media(max-width:650px){.geometry-app{padding:9px}.geometry-header{padding:20px 17px}.geometry-card{padding:13px}.geometry-card h2{font-size:17px}}
