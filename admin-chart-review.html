@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>AURA STUDY · Kiểm tra 23 biểu đồ trên điện thoại</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;color:#1a314b;background:#f3f7fc}
+*{box-sizing:border-box}
+body{margin:0}
+header{background:#173653;color:#fff;padding:16px}
+header a{color:#d8edff}
+main{max-width:850px;margin:auto;padding:12px}
+h1{font-size:1.35rem;margin:10px 0}
+h2{font-size:1.08rem}
+.panel{background:#fff;border:1px solid #d7e2ed;border-radius:14px;padding:14px;margin:12px 0}
+small,.muted{color:#60748b;line-height:1.5}
+button,input{font:inherit}
+button{min-height:48px;border:0;border-radius:10px;padding:12px;background:#176497;color:#fff;cursor:pointer;touch-action:manipulation}
+button:disabled{opacity:.45;cursor:wait}
+button.secondary{background:#e9f2f9;color:#173a59}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.actions button{flex:1 1 120px}
+#gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px}
+.card{background:#fff;border:1px solid #cbd9e7;border-radius:12px;padding:12px;min-width:0}
+.card.done{border:2px solid #328b74;background:#effaf5}
+.card p{font-size:.9rem;overflow-wrap:anywhere}
+.card img{display:block;width:100%;height:auto;background:#fff;border:1px solid #d9e2ec}
+.card button{width:100%;margin-top:8px}
+#progress,#status,#result{white-space:pre-wrap;overflow-wrap:anywhere}
+label.check{display:block;padding:10px 0;line-height:1.4}
+label.check input{width:20px;height:20px;vertical-align:middle;margin-right:10px}
+#device{width:100%;padding:12px;border:1px solid #b6c8d9;border-radius:8px;margin:7px 0}
+#overlay{position:fixed;inset:0;z-index:9999;background:rgba(9,26,42,.87);padding:6px;display:flex;align-items:center;justify-content:center}
+#overlay[hidden]{display:none!important}
+.sheet{background:#fff;border-radius:12px;padding:12px;display:flex;flex-direction:column;width:min(100%,920px);max-height:99%;overflow:hidden}
+.sheet .actions{margin:0 0 8px}
+#zoomTitle{margin:7px 0;font-size:.92rem;overflow-wrap:anywhere}
+.scroller{overflow:auto;max-height:68vh;-webkit-overflow-scrolling:touch;touch-action:auto;background:#fff;border:1px solid #d9e2ec;border-radius:8px}
+#zoomImg{display:block;width:760px;max-width:none;height:auto}
+#mark{margin-top:10px;flex:none}
+@media(max-width:480px){header{padding:12px}main{padding:8px}.panel{padding:11px}.sheet{padding:7px}.actions button{flex:1 1 100px}}
+</style>
+</head>
+<body>
+<header><a href="./admin-ch08-review.html">← Admin V2</a> · AURA STUDY · STAGING</header>
+<main>
+<h1>Kiểm tra 23 biểu đồ — phiên bản tối ưu iPhone</h1>
+<p class="muted">Bài 39–41, Chương IX, Toán 6 Tập 2. Màn hình này chỉ tải 23 hình, không tải toàn bộ ngân hàng câu hỏi. Đăng nhập Admin là bắt buộc.</p>
+<section class="panel">
+<div class="actions"><button id="load" type="button">Mở 23 biểu đồ</button><a href="./aura-staging-login.html" style="align-self:center">Đăng nhập lại Admin</a></div>
+<p id="status" role="status">Sẵn sàng. Bấm “Mở 23 biểu đồ”.</p>
+<p id="progress" class="muted">Đã kiểm tra 0/23 hình.</p>
+</section>
+<div id="gallery"></div>
+<section class="panel">
+<h2>Lưu nghiệm thu trực tiếp từ điện thoại</h2>
+<p class="muted">Mở từng hình, xem nhãn/số liệu, bấm “Đã kiểm tra hình này”. Sau khi đủ 23/23 và đạt cả bốn tiêu chí, biên bản mới có thể được lưu. Đây là xác nhận của Admin, không tự kích hoạt Exam Engine.</p>
+<label>Thiết bị kiểm thử<input id="device" value="iPhone 12 Pro Max · Safari" maxlength="120"></label>
+<label class="check"><input type="checkbox" id="all"> Đã mở và kiểm tra đủ 23 biểu đồ, không có hình trống</label>
+<label class="check"><input type="checkbox" id="readable"> Chữ, chú giải, nhãn và số liệu đều đọc được</label>
+<label class="check"><input type="checkbox" id="zoomed"> Đã thử tăng/giảm kích thước và cuộn ngang</label>
+<label class="check"><input type="checkbox" id="admin"> Các nút và bộ lọc Admin thao tác được trên iPhone</label>
+<button id="save" type="button" style="width:100%">Lưu biên bản nghiệm thu</button>
+<p id="result" role="status" class="muted">Chưa có xác nhận mới.</p>
+</section>
+</main>
+<div id="overlay" hidden role="dialog" aria-modal="true" aria-label="Biểu đồ phóng to">
+<div class="sheet">
+<div class="actions"><button id="close" type="button" class="secondary">Đóng</button><button id="minus" type="button" class="secondary">− Thu nhỏ</button><button id="plus" type="button" class="secondary">+ Phóng to</button></div>
+<p id="zoomTitle"></p>
+<div class="scroller"><img id="zoomImg" alt="Biểu đồ phóng to"></div>
+<button id="mark" type="button">Đã kiểm tra hình này</button>
+<small>Vuốt ngang trên hình để xem số liệu; bấm +/− để điều chỉnh.</small>
+</div>
+</div>
+<script>
+(function(){
+"use strict";
+const URL="https://ufqzuowjhdqpydqvcsob.supabase.co";
+const KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
+const BATCH="AURA-M6-KNTT-T2-C09-DRAFT-V0.1";
+const BUILD="AURA-ADMIN-V2-VISUAL-CHART-QA-R2";
+const byId=id=>document.getElementById(id);
+let charts=[],inspected=new Set(),active=null,zoomSize=760;
+function token(){
+ let data=null;
+ try{data=JSON.parse(localStorage.getItem("aura-stage-parent-v1")||"null")}catch(_){}
+ if(!data||!data.access_token)throw Error("Chưa đăng nhập Admin trên trình duyệt này. Bấm “Đăng nhập lại Admin”.");
+ if(data.expires_at&&data.expires_at*1000<Date.now()+10000)throw Error("Phiên Admin đã hết hạn. Đăng nhập lại rồi mở 23 biểu đồ.");
+ return data.access_token;
+}
+async function send(payload){
+ const res=await fetch(URL+"/functions/v1/aura-admin-review-v1",{
+  method:"POST",cache:"no-store",
+  headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+token()},
+  body:JSON.stringify(payload)
+ });
+ let body={};try{body=await res.json()}catch(_){}
+ if(!res.ok)throw Error(body.error||("API báo lỗi "+res.status));
+ return body;
+}
+function loadedCount(){
+ return Array.from(byId("gallery").querySelectorAll("img")).filter(img=>img.complete&&img.naturalWidth>0).length;
+}
+function status(){
+ byId("progress").textContent="Đã xem "+inspected.size+"/23 · hình tải thành công "+loadedCount()+"/"+charts.length+".";
+ Array.from(byId("gallery").children).forEach(card=>{
+  const done=inspected.has(card.dataset.id);card.classList.toggle("done",done);
+  card.querySelector("button").textContent=done?"✓ Đã kiểm tra — Xem lại":"Mở / phóng to hình";
+ });
+}
+function open(item){
+ active=item;zoomSize=760;
+ const img=byId("zoomImg");img.style.width=zoomSize+"px";
+ img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(item.svg);
+ img.alt="Biểu đồ "+item.id;
+ byId("zoomTitle").textContent=item.id+" — "+item.stem+" · Đáp án: "+item.answer;
+ byId("overlay").hidden=false;document.body.style.overflow="hidden";
+ byId("mark").textContent=inspected.has(item.id)?"✓ Đã xem — Đóng":"Đã kiểm tra hình này";
+}
+function close(){byId("overlay").hidden=true;document.body.style.overflow="";active=null}
+function resize(delta){zoomSize=Math.max(360,Math.min(1500,zoomSize+delta));byId("zoomImg").style.width=zoomSize+"px"}
+function mark(){
+ if(!active)return;
+ if(!byId("zoomImg").complete||!byId("zoomImg").naturalWidth){byId("result").textContent="Hình chưa tải được, hãy thử lại.";return}
+ inspected.add(active.id);status();close();
+}
+function render(){
+ const root=byId("gallery");root.replaceChildren();inspected.clear();
+ charts.forEach(item=>{
+  const card=document.createElement("article");card.className="card";card.dataset.id=item.id;
+  const label=document.createElement("p");label.textContent=item.id+" — "+item.stem;
+  const img=document.createElement("img");img.alt="Biểu đồ "+item.id;img.loading="eager";
+  img.addEventListener("load",status);img.addEventListener("error",status);
+  img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(item.svg);
+  const button=document.createElement("button");button.type="button";button.textContent="Mở / phóng to hình";
+  button.addEventListener("click",()=>open(item));
+  card.append(label,img,button);root.append(card);
+ });
+ status();
+}
+async function load(){
+ const b=byId("load");b.disabled=true;byId("status").textContent="Đang đọc 23 hình qua API Admin…";
+ try{
+  const result=await send({action:"chart_gallery",batch:BATCH});
+  if(!Array.isArray(result.charts)||result.charts.length!==23)throw Error("Không nhận đủ 23 biểu đồ. Chưa thể nghiệm thu.");
+  charts=result.charts;render();
+  byId("status").textContent="Đã nhận 23/23 biểu đồ. Bấm vào từng hình để phóng to và kiểm tra.";
+  byId("gallery").scrollIntoView({behavior:"smooth",block:"start"});
+ }catch(e){charts=[];inspected.clear();byId("gallery").replaceChildren();byId("status").textContent="Không tải được: "+e.message;}
+ finally{b.disabled=false}
+}
+async function save(){
+ const output=byId("result");
+ if(charts.length!==23||loadedCount()!==23||inspected.size!==23){output.textContent="Chưa đủ 23/23 hình được mở, kiểm tra và tải thành công ("+inspected.size+"/23 đã xem).";return}
+ const checks={all_charts_inspected:byId("all").checked,numbers_and_labels_legible:byId("readable").checked,zoom_and_horizontal_scroll:byId("zoomed").checked,admin_filters_and_actions:byId("admin").checked};
+ if(Object.values(checks).some(v=>!v)){output.textContent="Vui lòng xác nhận cả bốn tiêu chí sau khi thực sự kiểm tra trên điện thoại.";return}
+ const device=byId("device").value.trim();
+ if(device.length<3){output.textContent="Chưa có tên thiết bị.";return}
+ const b=byId("save");b.disabled=true;output.textContent="Đang ghi biên bản qua tài khoản Admin…";
+ try{
+  const result=await send({action:"device_visual_attest",batch:BATCH,report:{
+   ui_build:BUILD,device_label:device,user_agent:navigator.userAgent.slice(0,400),
+   viewport_width:document.documentElement.clientWidth||window.innerWidth,
+   expected_figures:23,loaded_figures:loadedCount(),inspected_ids:Array.from(inspected).sort(),checks
+  }});
+  output.textContent="Đã lưu biên bản #"+result.acceptance.record_id+" — 23/23 hình — do Admin xác nhận. Exam Engine vẫn khóa.";
+ }catch(e){output.textContent="Không lưu được: "+e.message}
+ finally{b.disabled=false}
+}
+byId("load").addEventListener("click",load);
+byId("close").addEventListener("click",close);
+byId("plus").addEventListener("click",()=>resize(170));
+byId("minus").addEventListener("click",()=>resize(-170));
+byId("mark").addEventListener("click",mark);
+byId("save").addEventListener("click",save);
+window.addEventListener("keydown",e=>{if(e.key==="Escape"&&!byId("overlay").hidden)close()});
+})();
+</script>
+</body></html>
