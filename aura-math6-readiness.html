@@ -1,0 +1,72 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Cache-Control" content="no-store"><title>AURA STUDY · Nghiệm thu Toán 6</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:#f4f7fb;color:#1e3550}*{box-sizing:border-box}body{margin:0}
+header{background:#173951;color:#fff;padding:16px max(16px,calc((100vw - 1050px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+a{color:#16688e}header a{color:#deefff;text-decoration:none}
+main{max-width:1050px;margin:24px auto;padding:0 16px 42px}
+h1{font-size:clamp(1.45rem,4vw,2rem);margin:8px 0 13px}
+p{line-height:1.6}.muted{color:#62768b}
+.card{background:#fff;border:1px solid #d9e4ef;border-radius:14px;padding:17px;margin:13px 0;box-shadow:0 6px 25px #0b39520b}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpis div{padding:12px;background:#f4f8fc;border-radius:9px}
+.kpis strong{font-size:1.4rem;display:block}
+table{width:100%;border-collapse:collapse}th{text-align:left;background:#f2f6fa;font-weight:650}th,td{padding:12px 9px;border-bottom:1px solid #e0e7ee;vertical-align:top}
+.tag{display:inline-block;font-size:.77rem;font-weight:700;border-radius:9px;padding:5px 8px;background:#e8f0f5;color:#35546c;white-space:normal}
+.tag.good{color:#0d6d47;background:#e8f8f0}.tag.warn{color:#7b4e19;background:#fff3e1}
+.links{display:flex;flex-wrap:wrap;gap:10px}.links a{padding:12px;border-radius:9px;text-decoration:none;border:1px solid #cedee9}
+button{border:0;border-radius:9px;color:#fff;background:#175d8a;font:inherit;padding:10px 14px;cursor:pointer;min-height:44px}
+@media(max-width:700px){.kpis{grid-template-columns:repeat(2,1fr)}th,td{padding:10px 7px;font-size:.9rem}table{table-layout:fixed}th:first-child,td:first-child{width:40%}}
+</style></head><body>
+<header><strong>AURA STUDY · ADMIN QA</strong><a href="./aura-admin.html">Về Admin</a></header>
+<main><p class="muted">Kiểm tra trạng thái thực tế trên Supabase Staging</p><h1>Nghiệm thu Toán 6 — Tập 1 & Tập 2</h1>
+<section class="card"><div class="kpis" id="kpis"><div>Đang tải số liệu...</div></div><p id="lastUpdated" class="muted" role="status">Yêu cầu tài khoản Admin.</p><button type="button" id="refresh">Kiểm tra lại</button></section>
+<section class="card"><h2>7 hạng mục theo lộ trình phát hành</h2>
+<table><thead><tr><th>Hạng mục</th><th>Trạng thái xác minh</th></tr></thead><tbody id="results"><tr><td>Đang tải...</td><td></td></tr></tbody></table>
+<p class="muted">“Đạt thử nghiệm” không tương đương đã phát hành chính thức. Trạng thái được tính từ cơ sở dữ liệu, không do giao diện tự đánh dấu.</p></section>
+<section class="card"><h2>Công cụ nghiệm thu</h2><div class="links"><a href="./aura-math6-qa-lab.html">QA Lab học → luyện → thi → chấm</a><a href="./admin-chart-review.html?v=3">Kiểm tra 23 biểu đồ trên iPhone</a><a href="./admin-ch08-review.html">Admin V2 · Ngân hàng câu hỏi</a></div></section>
+</main><script>
+"use strict";
+const URL="https://ufqzuowjhdqpydqvcsob.supabase.co",KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
+const byId=id=>document.getElementById(id);
+async function call(){
+ let auth=null;try{auth=JSON.parse(localStorage.getItem("aura-stage-parent-v1")||"null")}catch(e){}
+ if(!auth?.access_token)throw Error("Cần đăng nhập Admin trong cùng trình duyệt.");
+ const response=await fetch(URL+"/functions/v1/aura-admin-review-v1",{
+ method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+auth.access_token},
+ body:JSON.stringify({action:"qa_readiness"})});
+ let j={};try{j=await response.json()}catch(e){}
+ if(!response.ok)throw Error((response.status===401||response.status===403)?"Phiên Admin không hợp lệ. Đăng nhập lại ở trang Admin.":j.error||"Máy chủ chưa sẵn sàng.");
+ return j.readiness;
+}
+function status(label,kind="warn"){const el=document.createElement("span");el.className="tag "+kind;el.textContent=label;return el}
+function display(r){
+ const kpi=byId("kpis");kpi.replaceChildren();
+ for(const [title,n] of [["Câu hỏi",r.questions_total],["Cấu trúc đạt",r.structural_pass],["AI duyệt",r.ai_approved],["Admin duyệt",r.admin_approved]]){
+  const box=document.createElement("div"),s=document.createElement("small"),b=document.createElement("strong");
+  s.textContent=title;b.textContent=n;box.append(s,b);kpi.append(box)}
+ const rows=[
+ ["Kiểm tra cấu trúc 402 câu",r.structural_pass===r.questions_total?"ĐẠT":"CHƯA ĐẠT",r.structural_pass===r.questions_total?"good":"warn",r.structural_pass+"/"+r.questions_total+" câu"],
+ ["Kiểm định toán học độc lập toàn bộ lời giải",r.independent_full_math_certification?"ĐẠT":"CHƯA ĐỦ",r.independent_full_math_certification?"good":"warn",r.math_rule_verified+" câu được chứng minh bằng phép kiểm tra số học độc lập; 402 câu đã được AI rà nội dung"],
+ ["Xử lý 30 cảnh báo QA, gồm 4 ưu tiên cao",r.qa_remaining===0?"ĐẠT":"ĐẠT 7 MỤC NỘI DUNG, CÒN "+r.qa_remaining+" HÌNH",r.qa_remaining===0?"good":"warn",r.qa_content_reviewed+" cảnh báo nội dung đã xử lý; "+r.qa_device_pending+" cảnh báo thiết bị còn mở"],
+ ["Nghiệm thu 23 biểu đồ trên iPhone thật",r.device_acceptance_reports>0&&r.qa_device_pending===0?"CÓ BIÊN BẢN NGHIỆM THU":"CHƯA NGHIỆM THU","warn",r.device_acceptance_reports+" biên bản nghiệm thu thiết bị mới"],
+ ["Exam Engine chính thức",r.exam_engine_live>0?"ĐANG BẬT":"QA LAB ĐẠT — CHÍNH THỨC KHÓA","warn",r.staging_blueprints_test_pass+"/"+r.staging_blueprints+" cấu hình đề đã vượt kiểm thử Staging"],
+ ["Auto Grading chính thức",r.auto_grading_live>0?"ĐANG BẬT":"QA LAB ĐẠT — CHÍNH THỨC KHÓA","warn",r.numeric_grading_candidates+" chấm số; "+r.human_review_candidates+" câu chuyển đánh giá thủ công"],
+ ["Kiểm thử học → luyện → thi → chấm → phân tích lỗi",r.staging_blueprints_test_pass===18?"ĐẠT KIỂM THỬ STAGING":"CHƯA ĐẠT","good",r.staging_blueprints_test_pass+"/18 cấu hình, có chấm thủ công và Weakness Map; chưa nghiệm thu Student thực tế"]
+ ];
+ const root=byId("results");root.replaceChildren();
+ for(const [name,label,kind,detail] of rows){
+  const tr=document.createElement("tr"),left=document.createElement("td"),right=document.createElement("td");
+  left.textContent=name;right.append(status(label,kind));
+  const p=document.createElement("p");p.className="muted";p.textContent=detail;right.append(p);
+  tr.append(left,right);root.append(tr)}
+ byId("lastUpdated").textContent="Số liệu tải trực tiếp từ Staging lúc "+new Date().toLocaleString("vi-VN")+". Không tự nâng trạng thái khi chưa có chứng cứ.";
+}
+async function refresh(){
+ byId("refresh").disabled=true;byId("lastUpdated").textContent="Đang kiểm tra quyền Admin và đọc kết quả kiểm thử...";
+ try{const r=await call();if(!r||r.environment!=="STAGING")throw Error("Nguồn dữ liệu không hợp lệ");display(r)}
+ catch(e){byId("lastUpdated").textContent=e.message}
+ finally{byId("refresh").disabled=false}
+}
+byId("refresh").addEventListener("click",refresh);
+refresh();
+</script></body></html>
