@@ -26,10 +26,10 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <label>Bài học <select id="lesson"></select></label>
 <label>Mức độ <select id="level"><option value="">Tất cả</option><option value="nhan_biet">Nhận biết</option><option value="thong_hieu">Thông hiểu</option><option value="van_dung">Vận dụng</option></select></label>
 <label>Trạng thái <select id="state"><option value="">Tất cả</option><option value="PENDING">Chờ duyệt</option><option value="CHANGES_REQUESTED">Yêu cầu sửa</option><option value="APPROVED">Đã duyệt</option><option value="REJECTED">Từ chối</option></select></label>
-<label>Đợt kiểm định <select id="audit"><option value="">Tất cả câu</option><option value="revised_pending">Đã sửa — Chờ duyệt</option><option value="approved_rubric">Tái duyệt — Rubric V2</option></select></label>
+<label>Đợt kiểm định <select id="audit"><option value="">Tất cả câu</option><option value="pending_all">Toàn bộ câu chờ duyệt</option><option value="revised_pending">Đã sửa — Chờ duyệt</option><option value="approved_rubric">Tái duyệt — Rubric V2</option></select></label>
 </section>
-<section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “Đã sửa — Chờ duyệt” để kiểm tra và chọn rõ các câu cho một quyết định theo lô. Hai rubric cũ đã được tạo phiên bản mới và mở lại hàng chờ để tái duyệt; lịch sử duyệt cũ được giữ nguyên. Không có tự động phê duyệt.</p></section>
-<section class="panel" id="batchPanel" hidden><strong>Đợt duyệt 22 phiên bản đã sửa</strong><p class="quiet">Chọn từng câu sau khi đọc nội dung; không chọn tự động. Mọi quyết định áp dụng cho phiên bản đang hiển thị và được ghi lại bằng tài khoản Admin.</p><p id="pickedCount">Đã chọn 0 câu</p><textarea id="batchNote" placeholder="Nhận xét cho đợt duyệt (ít nhất 8 ký tự)" aria-label="Ghi chú duyệt theo lô"></textarea><div class="actions"><button id="batchApprove" type="button">Phê duyệt các câu đã chọn</button><button id="batchChanges" class="btnwarn" type="button">Yêu cầu sửa các câu đã chọn</button></div></section>
+<section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “Đã sửa — Chờ duyệt”, “Tái duyệt — Rubric V2” hoặc “Toàn bộ câu chờ duyệt” để kiểm tra và chọn rõ các câu cho quyết định theo lô (tối đa 30). Hai rubric cũ đã được tạo phiên bản mới và mở lại hàng chờ để tái duyệt; lịch sử duyệt cũ được giữ nguyên. Không có tự động phê duyệt.</p></section>
+<section class="panel" id="batchPanel" hidden><strong>Nghiệm thu theo lô — tối đa 30 câu mỗi lần</strong><p class="quiet">Chọn từng câu sau khi đọc nội dung và kiểm tra đáp án, thang điểm; không chọn tự động. Mọi quyết định áp dụng cho phiên bản đang hiển thị và được ghi lại bằng tài khoản Admin.</p><p id="pickedCount">Đã chọn 0 câu</p><textarea id="batchNote" placeholder="Nhận xét cho đợt duyệt (ít nhất 8 ký tự)" aria-label="Ghi chú duyệt theo lô"></textarea><div class="actions"><button id="batchApprove" type="button">Phê duyệt các câu đã chọn</button><button id="batchChanges" class="btnwarn" type="button">Yêu cầu sửa các câu đã chọn</button></div></section>
 <section class="panel" id="deviceAcceptance"><strong>Nghiệm thu trên điện thoại thật</strong>
 <p class="quiet">Chạy trên Safari iPhone/iPad hoặc Chrome Android. Các dấu kiểm dưới đây chỉ là xác nhận của người thao tác trên thiết bị, không được tự động coi là đã nghiệm thu.</p>
 <label>Thiết bị / trình duyệt <input id="deviceName" placeholder="Ví dụ: iPhone 13 · Safari" style="width:100%;padding:11px;margin:8px 0;border-radius:9px;border:1px solid #becce0"></label>
@@ -41,6 +41,7 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <label style="display:block;margin:8px 0"><input type="checkbox" value="Chọn theo lô và xem hộp xác nhận"> Chọn theo lô, xem hộp xác nhận (có thể bấm Hủy để không ghi dữ liệu)</label>
 </div><button type="button" id="deviceReport" style="margin-top:10px">Sao chép biên bản kiểm thử</button>
 <p id="deviceStatus" class="quiet" aria-live="polite"></p></section>
+<section class="panel"><strong>Cổng đóng Chương I</strong><p id="chapterGate" class="quiet">Đang chờ truy xuất thống kê chương.</p></section>
 <p id="summary" class="quiet"></p><section id="questions"></section>
 </main>
 <script type="module">
@@ -55,7 +56,7 @@ function updateSelection(){
 el("pickedCount").textContent="Đã chọn "+selected.size+" câu";
 }
 async function applyBatch(decision){
-if(el("audit").value!=="revised_pending"||selected.size===0){notice("Chọn các câu đã sửa cần nghiệm thu trước.");return;}
+if(!["revised_pending","approved_rubric","pending_all"].includes(el("audit").value)||selected.size===0){notice("Chọn các câu đã sửa cần nghiệm thu trước.");return;}
 const note=el("batchNote").value.trim();if(note.length<8){notice("Ghi chú phải có ít nhất 8 ký tự.");return;}
 const ids=[...selected.keys()],versions=Object.fromEntries(selected);
 if(!confirm("Xác nhận "+(decision==="APPROVED"?"PHÊ DUYỆT":"YÊU CẦU SỬA")+" "+ids.length+" câu đã chọn? Quyết định sẽ được ghi vào lịch sử và không thể sửa trực tiếp."))return;
@@ -91,20 +92,26 @@ el("questions").replaceChildren();notice("Đang đọc dữ liệu qua API bảo
 try{
 const data=await send({action:"list",batch:catalogs[el("volume").value].batch,lesson:el("lesson").value,level:el("level").value,state:el("state").value});
 const incoming=Array.isArray(data.items)?data.items:[];
+if(el("volume").value==="1"&&el("lesson").value===""&&el("level").value===""&&el("state").value===""){
+const approvals=incoming.filter(x=>x.status==="APPROVED").length, waiting=incoming.filter(x=>x.status==="PENDING").length;
+el("chapterGate").textContent="Chương I: "+approvals+"/63 đã duyệt; "+waiting+" chờ duyệt. "+(approvals===63&&waiting===0?"Đủ điều kiện kiểm tra đóng chương; Exam Engine vẫn khóa.":"CHƯA ĐỦ ĐIỀU KIỆN ĐÓNG CHƯƠNG.");
+}else{el("chapterGate").textContent="Đặt Tập 1 · Tất cả bài · Tất cả mức độ/trạng thái để xem tổng tiến độ đóng Chương I.";}
+
 const audit=el("audit").value;
 const items=incoming.filter(item=>{
+ if(audit==="pending_all")return item.status==="PENDING";
  if(audit==="revised_pending")return item.status==="PENDING"&&item.body?.qa_status==="REVISED_INTERNAL_QA_REVIEW_REQUIRED";
  if(audit==="approved_rubric")return item.status==="PENDING"&&item.body?.qa_status==="RUBRIC_V2_REOPENED_REQUIRES_APPROVAL";
  return true;
 });
-selected.clear();updateSelection();el("batchPanel").hidden=audit!=="revised_pending";
+selected.clear();updateSelection();el("batchPanel").hidden=!["pending_all","revised_pending","approved_rubric"].includes(audit);
 el("summary").textContent="Hiển thị "+items.length+" / "+incoming.length+" câu · Đây chỉ là bộ lọc nghiệm thu, không tự phê duyệt hoặc xuất bản.";
 for(const item of items){
 const q=item.body||{},article=document.createElement("article");article.className="panel";
-if(audit==="revised_pending"){
+if(["pending_all","revised_pending","approved_rubric"].includes(audit)&&item.status==="PENDING"){
 const selectLabel=document.createElement("label");selectLabel.style.display="block";selectLabel.style.marginBottom="9px";
 const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.style.marginRight="10px";
-checkbox.addEventListener("change",()=>{if(checkbox.checked)selected.set(item.id,item.revision);else selected.delete(item.id);updateSelection();});
+checkbox.addEventListener("change",()=>{if(checkbox.checked){if(selected.size>=30){checkbox.checked=false;notice("Mỗi đợt chỉ chọn tối đa 30 câu.");return;}selected.set(item.id,item.revision);}else selected.delete(item.id);updateSelection();});
 selectLabel.append(checkbox,document.createTextNode("Chọn câu này cho nghiệm thu theo lô"));article.append(selectLabel);
 }
 const h=document.createElement("h2");h.style.fontSize="1.06rem";h.textContent=item.id+" · "+(labels[item.status]||item.status);article.append(h);
