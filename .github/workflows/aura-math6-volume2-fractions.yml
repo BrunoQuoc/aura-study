@@ -1,0 +1,69 @@
+name: AURA Math6 Volume 2 — Fractions Content & iPad QA
+
+on:
+  pull_request:
+    paths:
+      - 'aura_data/knowledge_math6_kntt_volume2_v1.json'
+      - 'knowledge-math6-volume2.html'
+      - 'knowledge_math6_volume2.js'
+      - 'lesson_maps_ui.js'
+      - 'student-direct.html'
+      - 'tests/knowledge-math6-volume2-fractions.test.mjs'
+      - 'tests/knowledge-math6-volume2-browser.mjs'
+      - '.github/workflows/aura-math6-volume2-fractions.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-content:
+    name: 21-lesson TOC, 5 original chapters VI lessons and 15 answer keys
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate fraction source, safety gates and legacy Volume 1
+        run: |
+          node --check knowledge_math6_volume2.js
+          node --check lesson_maps_ui.js
+          node --test tests/knowledge-math6-volume2-fractions.test.mjs \
+                      tests/knowledge-math6-volume1-v2.test.mjs \
+                      tests/knowledge-math6-chapter-review.test.mjs
+
+  chromium:
+    name: iPad / Phone / Desktop fraction reader and Volume 1 regression
+    needs: static-content
+    runs-on: ubuntu-24.04
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser and system packages
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Exercise original chapter and existing Volume 1 independently
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/aura-math6-volume2-http.log 2>&1 &
+          sleep 2
+          node tests/knowledge-math6-volume2-browser.mjs
+          node tests/knowledge-math6-volume1-browser.mjs
+          node tests/knowledge-math6-chapter-review-browser.mjs
+      - name: Keep synthetic screenshots only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aura-math6-volume2-fractions-preview
+          path: |
+            test-results/knowledge-math6-volume2/
+            test-results/knowledge-math6-volume1/
+            test-results/knowledge-math6-chapter-review/
+          retention-days: 7
+
+# No teacher signoff, protected key, official Exam Engine or Question Bank writes.
