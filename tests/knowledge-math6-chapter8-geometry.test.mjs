@@ -36,7 +36,7 @@ test('All six real geometry lessons authored in fixed curriculum order; Ch IX no
   'DRAFT_CONTENT_IN_PROGRESS','DRAFT_CONTENT_IN_PROGRESS'
  ]);
  assert.deepEqual(d.outline.filter(o=>o.authored).map(x=>x.number),
-  Array.from({length:15},(_,i)=>i+23));
+  Array.from({length:21},(_,i)=>i+23));
  assert.deepEqual(d.outline.filter(o=>!o.authored).map(x=>x.number),[]);
  assert.equal(d.rollout.teacherReviewed,false);
  assert.equal(d.rollout.questionBankPromotionEnabled,false);
