@@ -28,6 +28,7 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <label>Trạng thái <select id="state"><option value="">Tất cả</option><option value="PENDING">Chờ duyệt</option><option value="CHANGES_REQUESTED">Yêu cầu sửa</option><option value="APPROVED">Đã duyệt</option><option value="REJECTED">Từ chối</option></select></label>
 <label>Đợt kiểm định <select id="audit"><option value="">Tất cả câu</option><option value="pending_all">Toàn bộ câu chờ duyệt</option><option value="revised_pending">Đã sửa — Chờ duyệt</option><option value="approved_rubric">Tái duyệt — Rubric V2</option></select></label>
 </section>
+<section class="panel"><strong>Độ phủ Toán 6 — 2 tập, 9 chương</strong><p class="quiet">Số liệu được tải từ API có kiểm tra quyền Admin; chỉ thể hiện hàng chờ Staging, không phải câu đã xuất bản.</p><div id="curriculumOverview" style="overflow:auto"></div></section>
 <section class="panel"><strong>Hướng dẫn nghiệm thu V2</strong><p class="quiet">Dùng “Đã sửa — Chờ duyệt”, “Tái duyệt — Rubric V2” hoặc “Toàn bộ câu chờ duyệt” để kiểm tra và chọn rõ các câu cho quyết định theo lô (tối đa 30). Hai rubric cũ đã được tạo phiên bản mới và mở lại hàng chờ để tái duyệt; lịch sử duyệt cũ được giữ nguyên. Không có tự động phê duyệt.</p></section>
 <section class="panel" id="batchPanel" hidden><strong>Nghiệm thu theo lô — tối đa 30 câu mỗi lần</strong><p class="quiet">Chọn từng câu sau khi đọc nội dung và kiểm tra đáp án, thang điểm; không chọn tự động. Mọi quyết định áp dụng cho phiên bản đang hiển thị và được ghi lại bằng tài khoản Admin.</p><p id="pickedCount">Đã chọn 0 câu</p><textarea id="batchNote" placeholder="Nhận xét cho đợt duyệt (ít nhất 8 ký tự)" aria-label="Ghi chú duyệt theo lô"></textarea><div class="actions"><button id="batchApprove" type="button">Phê duyệt các câu đã chọn</button><button id="batchChanges" class="btnwarn" type="button">Yêu cầu sửa các câu đã chọn</button></div></section>
 <section class="panel" id="deviceAcceptance"><strong>Nghiệm thu trên điện thoại thật</strong>
@@ -41,8 +42,8 @@ img.figure{display:block;max-width:100%;width:420px;height:auto;border:1px solid
 <label style="display:block;margin:8px 0"><input type="checkbox" value="Chọn theo lô và xem hộp xác nhận"> Chọn theo lô, xem hộp xác nhận (có thể bấm Hủy để không ghi dữ liệu)</label>
 </div><button type="button" id="deviceReport" style="margin-top:10px">Sao chép biên bản kiểm thử</button>
 <p id="deviceStatus" class="quiet" aria-live="polite"></p></section>
-<section class="panel" id="learningPanel" hidden><strong>Nội dung học Chương II — Bài 8–12</strong><p class="quiet">Bản nháp để Admin nghiệm thu; chưa hiển thị trong ứng dụng học sinh.</p><div id="learningContent"></div></section>
-<section class="panel"><strong>Cổng đóng Chương I</strong><p id="chapterGate" class="quiet">Đang chờ truy xuất thống kê chương.</p></section>
+<section class="panel" id="learningPanel" hidden><strong>Nội dung học của chương được chọn</strong><p class="quiet">Bản nháp để Admin nghiệm thu; chưa hiển thị trong ứng dụng học sinh.</p><div id="learningContent"></div></section>
+<section class="panel"><strong>Cổng đóng chương</strong><p id="chapterGate" class="quiet">Đang chờ truy xuất thống kê chương.</p></section>
 <p id="summary" class="quiet"></p><section id="questions"></section>
 </main>
 <script type="module">
@@ -68,33 +69,53 @@ selected.clear();updateSelection();await load();notice("Đã ghi quyết định
 }catch(e){notice(e.message);}finally{el("batchApprove").disabled=false;el("batchChanges").disabled=false;}
 }
 
-const catalogs={
-"1":{chapter:"I",batch:"AURA-M6-KNTT-T1-C01-DRAFT-V0.2",items:[
-["M6-KNTT-T1-L01","Bài 1 — Tập hợp"],["M6-KNTT-T1-L02","Bài 2 — Cách ghi số tự nhiên"],["M6-KNTT-T1-L03","Bài 3 — Thứ tự trong tập hợp số tự nhiên"],["M6-KNTT-T1-L04","Bài 4 — Phép cộng và phép trừ số tự nhiên"],["M6-KNTT-T1-L05","Bài 5 — Phép nhân và phép chia số tự nhiên"],["M6-KNTT-T1-L06","Bài 6 — Lũy thừa với số mũ tự nhiên"],["M6-KNTT-T1-L07","Bài 7 — Thứ tự thực hiện các phép tính"]]},
-"2":{chapter:"VIII",batch:"AURA-M6-KNTT-CH08-V0.4-PEDAGOGICAL-QUEUE",items:Array.from({length:6},(_,i)=>["M6-KNTT-C08-L"+(32+i),"Bài "+(32+i)])}
-};
-const chapter2={chapter:"II",batch:"AURA-M6-KNTT-T1-C02-DRAFT-V0.1",items:[
-["M6-KNTT-T1-L08","Bài 8 — Quan hệ chia hết và tính chất"],
-["M6-KNTT-T1-L09","Bài 9 — Dấu hiệu chia hết"],
-["M6-KNTT-T1-L10","Bài 10 — Số nguyên tố"],
-["M6-KNTT-T1-L11","Bài 11 — Ước chung, ƯCLN"],
-["M6-KNTT-T1-L12","Bài 12 — Bội chung, BCNN"]
-]};
-function activeCatalog(){return el("volume").value==="1"&&el("chapter").value==="II"?chapter2:catalogs[el("volume").value];}
+
+let curriculumCatalog=[];
+function activeCatalog(){
+ const c=curriculumCatalog.find(x=>String(x.volume)===el("volume").value&&x.chapter===el("chapter").value);
+ if(!c)return null;
+ return {...c,batch:c.id,items:(Array.isArray(c.lessons)?c.lessons:[]).map(l=>[l.lesson_id,"Bài "+(l.number??"")+" — "+(l.title||l.lesson_id)])};
+}
 function syncLesson(){
  const c=activeCatalog(),lesson=el("lesson");lesson.replaceChildren();
  const all=document.createElement("option");all.value="";all.textContent="Tất cả bài";lesson.append(all);
- for(const [id,label] of c.items){const option=document.createElement("option");option.value=id;option.textContent=label;lesson.append(option);}
+ if(c)for(const [id,label] of c.items){const opt=document.createElement("option");opt.value=id;opt.textContent=label;lesson.append(opt);}
  el("state").value="";el("level").value="";el("audit").value="";
 }
 function syncVolumes(){
-const c=catalogs[el("volume").value],ch=el("chapter");
-ch.replaceChildren();
-const chapters=el("volume").value==="1"?["I","II"]:["VIII"];
-for(const title of chapters){const option=document.createElement("option");option.value=title;option.textContent="Chương "+title;ch.append(option);}
-syncLesson();
+ const ch=el("chapter");ch.replaceChildren();
+ for(const c of curriculumCatalog.filter(x=>String(x.volume)===el("volume").value)){
+ const option=document.createElement("option");option.value=c.chapter;option.textContent="Chương "+c.chapter+" — "+c.title;ch.append(option);
+ }
+ syncLesson();
 }
-
+function renderOverview(){
+ const root=el("curriculumOverview");root.replaceChildren();
+ const table=document.createElement("table");table.style.width="100%";
+ const head=document.createElement("tr");
+ for(const v of ["Tập / Chương","Bài","Câu","Đã duyệt","Chờ duyệt"]){const cell=document.createElement("th");cell.textContent=v;cell.style.textAlign="left";cell.style.padding="6px";head.append(cell);}
+ table.append(head);
+ for(const c of curriculumCatalog){
+  const tr=document.createElement("tr");
+  for(const v of ["Tập "+c.volume+" · "+c.chapter+" — "+c.title,(c.lessons||[]).length,c.total,c.approved,c.pending]){
+   const td=document.createElement("td");td.textContent=String(v);td.style.padding="6px";td.style.borderTop="1px solid #e2e9f2";tr.append(td);
+  }
+  table.append(tr);
+ }
+ root.append(table);
+}
+async function initializeCatalog(){
+ try{
+ const response=await send({action:"catalog"});
+ curriculumCatalog=Array.isArray(response.chapters)?response.chapters:[];
+ const volume=el("volume");volume.replaceChildren();
+ for(const v of [...new Set(curriculumCatalog.map(x=>String(x.volume)))]){
+ const o=document.createElement("option");o.value=v;o.textContent="Tập "+v;volume.append(o);
+ }
+ if(curriculumCatalog.length===0)throw Error("Chưa có chương nào được mở trong danh mục Admin.");
+ syncVolumes();renderOverview();await load();
+ }catch(e){notice(e.message);el("questions").replaceChildren();}
+}
 async function send(input){
 const {data:{session},error}=await auth.auth.getSession();
 if(error||!session?.access_token)throw Error("Chưa xác thực Admin. Mở trang Đăng nhập/xác minh Admin trước.");
@@ -105,27 +126,33 @@ function cell(parent,name,value){const p=document.createElement("p");const b=doc
 async function load(){
 el("questions").replaceChildren();notice("Đang đọc dữ liệu qua API bảo vệ…");
 try{
-const data=await send({action:"list",batch:activeCatalog().batch,lesson:el("lesson").value,level:el("level").value,state:el("state").value});
-const ch2=el("volume").value==="1"&&el("chapter").value==="II";
-el("learningPanel").hidden=!ch2;
+const chosen=activeCatalog();if(!chosen)throw Error("Chọn Tập và Chương hợp lệ.");
+const data=await send({action:"list",batch:chosen.batch,lesson:el("lesson").value,level:el("level").value,state:el("state").value});
+el("learningPanel").hidden=false;
 el("learningContent").replaceChildren();
-if(ch2){
-const learning=await send({action:"learning",batch:activeCatalog().batch});
-const lessons=Array.isArray(learning.lessons)?learning.lessons:[];
-for(const lesson of lessons.filter(x=>!el("lesson").value||x.lesson_id===el("lesson").value)){
-const article=document.createElement("div");article.style.borderTop="1px solid #dce4ef";article.style.marginTop="10px";
-const title=document.createElement("h3");title.textContent=lesson.lesson_id+" — "+((activeCatalog().items.find(i=>i[0]===lesson.lesson_id)||[])[1]||"");article.append(title);
-for(const block of lesson.knowledge_blocks||[]){
- const p=document.createElement("p");p.textContent=block.heading+": "+block.explanation+" | Ví dụ: "+block.example+" | Lỗi thường gặp: "+block.misconception;article.append(p);
-}
-el("learningContent").append(article);
-}
+const learning=await send({action:"learning",batch:chosen.batch});
+const notes=Array.isArray(learning.lessons)?learning.lessons:[];
+for(const lesson of notes.filter(x=>!el("lesson").value||x.lesson_id===el("lesson").value)){
+ const article=document.createElement("div");article.style.borderTop="1px solid #dce4ef";article.style.marginTop="10px";
+ const heading=document.createElement("h3");
+ heading.textContent=lesson.lesson_id+" — "+(lesson.title||((chosen.items.find(i=>i[0]===lesson.lesson_id)||[])[1]||""));
+ article.append(heading);
+ for(const block of lesson.knowledge_blocks||[]){
+  const p=document.createElement("p");
+  p.textContent=block.heading+": "+block.explanation+" | Ví dụ: "+block.example+" | Lỗi thường gặp: "+(block.misconception||"Chưa phân loại");
+  article.append(p);
+ }
+ if(!Array.isArray(lesson.knowledge_blocks)||lesson.knowledge_blocks.length===0){
+ const p=document.createElement("p");p.className="quiet";p.textContent="Có hồ sơ bài học; kiến thức chi tiết đang được rà soát bổ sung.";article.append(p);
+ }
+ el("learningContent").append(article);
 }
 const incoming=Array.isArray(data.items)?data.items:[];
-if(el("volume").value==="1"&&el("chapter").value==="I"&&el("lesson").value===""&&el("level").value===""&&el("state").value===""){
-const approvals=incoming.filter(x=>x.status==="APPROVED").length, waiting=incoming.filter(x=>x.status==="PENDING").length;
-el("chapterGate").textContent="Chương I: "+approvals+"/63 đã duyệt; "+waiting+" chờ duyệt. "+(approvals===63&&waiting===0?"Đủ điều kiện kiểm tra đóng chương; Exam Engine vẫn khóa.":"CHƯA ĐỦ ĐIỀU KIỆN ĐÓNG CHƯƠNG.");
-}else{el("chapterGate").textContent="Đặt Tập 1 · Chương I · Tất cả bài · Tất cả mức độ/trạng thái để xem tổng tiến độ đóng Chương I.";}
+if(el("lesson").value===""&&el("level").value===""&&el("state").value===""){
+const approved=incoming.filter(x=>x.status==="APPROVED").length,pending=incoming.filter(x=>x.status==="PENDING").length;
+const ready=approved===chosen.total&&pending===0;
+el("chapterGate").textContent="Tập "+chosen.volume+" · Chương "+chosen.chapter+": "+approved+"/"+chosen.total+" đã duyệt; "+pending+" đang chờ. "+(ready?"Đủ điều kiện xét đóng chương, nhưng chưa được xuất bản.":"Chưa đạt điều kiện đóng chương.");
+}else{el("chapterGate").textContent="Chọn Tất cả bài, Tất cả mức độ và Tất cả trạng thái để xem điều kiện đóng chương.";}
 
 const audit=el("audit").value;
 const items=incoming.filter(item=>{
@@ -171,7 +198,7 @@ try{await navigator.clipboard.writeText(report);el("deviceStatus").textContent="
 });
 el("batchApprove").addEventListener("click",()=>applyBatch("APPROVED"));
 el("batchChanges").addEventListener("click",()=>applyBatch("CHANGES_REQUESTED"));
-el("reload").addEventListener("click",load);el("volume").addEventListener("change",()=>{syncVolumes();load();});el("chapter").addEventListener("change",()=>{syncLesson();load();});for(const id of ["lesson","level","state","audit"])el(id).addEventListener("change",load);
+el("reload").addEventListener("click",initializeCatalog);el("volume").addEventListener("change",()=>{syncVolumes();load();});el("chapter").addEventListener("change",()=>{syncLesson();load();});for(const id of ["lesson","level","state","audit"])el(id).addEventListener("change",load);
 el("logout").addEventListener("click",async()=>{await auth.auth.signOut();el("questions").replaceChildren();notice("Đã đăng xuất.");});
-syncVolumes();load();
+initializeCatalog();
 </script></body></html>
