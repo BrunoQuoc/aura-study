@@ -18,14 +18,14 @@ const reviewGolden=['-0,35','-1,8 < -1,08','1,85','-1,2','6,85','10'];
 
 test('Math6 Volume2 adds four original Decimal lessons 28-31 and 12 complete practice questions',()=>{
  assert.equal(course.chapters.length,4);
- assert.equal(course.lessons.length,15);
- assert.equal(course.lessons.reduce((n,l)=>n+l.practice.length,0),45);
- assert.equal(course.authoredLessonCount,15);
- assert.equal(course.authoredPracticeCount,45);
- assert.equal(course.outline.filter(o=>o.authored).length,15);
+ assert.equal(course.lessons.length,21);
+ assert.equal(course.lessons.reduce((n,l)=>n+l.practice.length,0),63);
+ assert.equal(course.authoredLessonCount,21);
+ assert.equal(course.authoredPracticeCount,63);
+ assert.equal(course.outline.filter(o=>o.authored).length,21);
  assert.ok(course.chapters.slice(0,3).every(c=>c.status==='DRAFT_CONTENT_IN_PROGRESS'));
- assert.ok(course.chapters.slice(3).every(c=>c.status==='NOT_AUTHORED'));
- assert.deepEqual(course.lessons.map(l=>l.number),Array.from({length:15},(_,i)=>i+23));
+ assert.ok(course.chapters.every(c=>c.status==='DRAFT_CONTENT_IN_PROGRESS'));
+ assert.deepEqual(course.lessons.map(l=>l.number),Array.from({length:21},(_,i)=>i+23));
  assert.equal(course.expectedTotalLessons,21);
  const seen=new Set();
  for(const l of course.lessons.filter(l=>l.chapter===7)){
