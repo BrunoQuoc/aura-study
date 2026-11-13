@@ -12,6 +12,11 @@ on:
       - 'smart_engine.js'
       - 'student-direct.html'
       - 'knowledge-approval.html'
+      - 'knowledge-review-packet.html'
+      - 'knowledge_review_packet.js'
+      - 'knowledge_review_packet.css'
+      - 'tests/knowledge-review-packet.test.mjs'
+      - 'tests/knowledge-review-packet-browser.mjs'
       - 'knowledge_approval_status.js'
       - 'tests/knowledge-approval-gate.test.mjs'
       - 'tests/knowledge-approval-browser.mjs'
@@ -35,12 +40,13 @@ jobs:
         run: |
           node --check approved_knowledge_runtime.js
           node --check knowledge_approval_status.js
+          node --check knowledge_review_packet.js
           node --check generator.js
           node --check smart_engine.js
           node --check scripts/knowledge-release-core.mjs
           node --check scripts/knowledge-approval-pipeline.mjs
           node scripts/qa-knowledge-math6-v2.mjs
-          node --test tests/knowledge-approval-gate.test.mjs
+          node --test tests/knowledge-approval-gate.test.mjs tests/knowledge-review-packet.test.mjs
           node scripts/knowledge-approval-pipeline.mjs status
           node --test tests/knowledge-math6-volume1-v2.test.mjs tests/knowledge-math6-chapter-review.test.mjs
 
@@ -63,6 +69,7 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/aura-knowledge-approval.log 2>&1 &
           sleep 2
           node tests/knowledge-approval-browser.mjs
+          node tests/knowledge-review-packet-browser.mjs
           node tests/knowledge-math6-volume1-browser.mjs
           node tests/knowledge-math6-chapter-review-browser.mjs
       - name: Synthetic QA screenshots
