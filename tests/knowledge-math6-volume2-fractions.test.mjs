@@ -80,7 +80,7 @@ test('No publisher pages copied, no source content promoted to official bank',()
   questionBankPromotionEnabled:false,examEngineLinkEnabled:false,
   weaknessMapWriteEnabled:false
  });
- assert.match(html,/Chương IX (Bài 38–43) chỉ có mục lục/);
+ assert.match(html,/Chương IX \(Bài 38–43\) chỉ có mục lục/);
  assert.match(html,/knowledge_math6_volume2\.js/);
  assert.match(html,/connect-src 'self'/);
  assert.match(legacy,/href='knowledge-math6-volume2\.html'/);
