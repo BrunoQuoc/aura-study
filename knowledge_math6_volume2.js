@@ -16,20 +16,20 @@ function validate(d){
  if(!d||d.schemaVersion!==1||d.libraryId!=='AURA-KNTT6-MATH-VOLUME2'||
   d.rollout?.status!=='DRAFT_PREVIEW_PARTIAL'||d.rollout?.teacherReviewed!==false||d.rollout?.weaknessMapWriteEnabled!==false||d.rollout?.questionBankPromotionEnabled!==false||
   d.rollout?.examEngineLinkEnabled!==false||!Array.isArray(d.chapters)||d.chapters.length!==4||
-  !Array.isArray(d.lessons)||d.lessons.length!==15)throw Error('Kho bài học chưa hợp lệ hoặc chưa an toàn.');
+  !Array.isArray(d.lessons)||d.lessons.length!==21)throw Error('Kho bài học chưa hợp lệ hoặc chưa an toàn.');
  const ids=new Set(),nums=new Set(),chapters=new Set(d.chapters.map(c=>c.number));
  if(d.chapters.find(c=>c.number===8)?.status!=='DRAFT_CONTENT_IN_PROGRESS'||
-    d.chapters.find(c=>c.number===9)?.status!=='NOT_AUTHORED'||
+    d.chapters.find(c=>c.number===9)?.status!=='DRAFT_CONTENT_IN_PROGRESS'||
     d.chapters.find(c=>c.number===6)?.status!=='DRAFT_CONTENT_IN_PROGRESS'||
     d.chapters.find(c=>c.number===7)?.status!=='DRAFT_CONTENT_IN_PROGRESS'||
-    d.outline?.some((o,i)=>o.number!==i+23||o.authored!==(i<15)))
+    d.outline?.some((o,i)=>o.number!==i+23||o.authored!==true))
     throw Error('Chương chưa biên soạn hoặc số bài không đúng phiên bản.');
  if(chapters.size!==4||d.chapters.some(c=>!Array.isArray(c.range)||c.range.length!==2))
   throw Error('Danh mục chương không hợp lệ.');
  let count=0;
  d.lessons.forEach(l=>{
   if(!/^KNTT6-MATH-V2-\d{2}$/.test(l.id)||ids.has(l.id)||nums.has(l.number)||
-   l.number<23||l.number>37||!chapters.has(l.chapter)||
+   l.number<23||l.number>43||!chapters.has(l.chapter)||
    !d.chapters.some(c=>c.number===l.chapter&&l.number>=c.range[0]&&l.number<=c.range[1])||
    l.status!=='DRAFT_ORIGINAL_AURA'||l.readyForQuestionBank!==false||
    l.requiresPedagogicalReview!==true||typeof l.title!=='string'||l.title.trim().length<3||
@@ -52,7 +52,7 @@ function validate(d){
    count++;
   });ids.add(l.id);nums.add(l.number);
  });
- if(count!==45||d.authoredLessonCount!==15||d.authoredPracticeCount!==45||d.expectedTotalLessons!==21||d.expectedTotalChapters!==4||d.outline?.length!==21||d.outline.filter(x=>x.authored).length!==15)
+ if(count!==63||d.authoredLessonCount!==21||d.authoredPracticeCount!==63||d.expectedTotalLessons!==21||d.expectedTotalChapters!==4||d.outline?.length!==21||d.outline.filter(x=>x.authored).length!==15)
   throw Error('Số lượng bài và câu hỏi không khớp.');
  return d;
 }
@@ -206,7 +206,7 @@ function content(){
  const pager=$('lessonPager');pager.replaceChildren();
  pager.append(btn('← Bài trước',()=>select(state.selected-1),'pager-button',state.selected===23));
  pager.append(el('span','','Bài '+state.selected+' / 43'));
- pager.append(btn('Bài tiếp →',()=>select(state.selected+1),'pager-button primary',state.selected===37));
+ pager.append(btn('Bài tiếp →',()=>select(state.selected+1),'pager-button primary',state.selected===43));
 }
 function render(){
  if(!state.data)return;
