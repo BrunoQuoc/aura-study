@@ -33,7 +33,7 @@ ul{line-height:1.7}#result{min-height:30px;white-space:pre-wrap;overflow-wrap:an
 <ul>
 <li><a href="./aura-student.html">Ghép thiết bị Student và kiểm tra quyền</a></li>
 <li><a href="./aura-student-math6.html">Mở Toán 6 — xem đủ 9 chương, chọn bài học</a></li>
-<li>Thử một bài luyện có câu đã kiểm định, nộp bài và xem kết quả.</li>
+<li>Thử một bài luyện có câu đã kiểm định, nộp bài và xem kết quả. Sau đó mở một bài tự luyện bổ trợ và xem lời giải (không tính điểm).</li>
 <li>Thử một bài kiểm tra chương, nộp bài có câu cần chấm thủ công.</li>
 <li><a href="./aura-student-math6-admin-review.html">Admin chấm câu thủ công và ghi nhận xét</a>.</li>
 <li>Quay về Student để xem điểm cuối, lịch sử và phần cần ôn.</li>
@@ -117,7 +117,9 @@ function render(data){
  const root=$("kpis");root.replaceChildren();
  for(const [label,n] of [
   ["Bài học có học liệu AI",r.study_content_available_lessons+"/43"],
-  ["Bài có luyện an toàn",r.practice_ready_lessons+"/43"],
+  ["Bài có luyện theo hai hình thức",r.any_practice_available_lessons+"/43"],
+  ["Luyện chấm thử đã kiểm định",r.practice_ready_lessons+"/43"],
+  ["Bài tự luyện bổ trợ không tính điểm",r.formative_self_check_lessons+"/43"],
   ["Câu kiểm định độc lập",r.student_preview_safe_question_pool],
   ["Bài Student đã nộp",r.completed_student_previews],
   ["Câu chấm thủ công",r.admin_manual_reviews],
