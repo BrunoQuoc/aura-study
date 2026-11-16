@@ -71,7 +71,18 @@ footer{max-width:1080px;margin:auto;padding:10px 15px 36px;font-size:.81rem;colo
 <div class="controls"><button id="practiceLesson" type="button">Luyện bài này</button><button id="nextLesson" type="button" class="secondary">Bài tiếp theo</button></div></section>
 <section class="card" id="practiceView" hidden><h2>2. Luyện tập theo chương</h2><p>Mỗi lượt tối đa 3 câu đã có bằng chứng kiểm định quy tắc; câu chưa được xác minh không xuất hiện trong bài luyện thử.</p><button id="startPractice" type="button">Bắt đầu 3 câu luyện</button></section>
 <section class="card" id="examView" hidden><h2>3. Kiểm tra thử theo chương</h2><p>Bản kiểm tra ngắn tối đa 6 câu đã kiểm định, không thay thế đề kiểm tra chính thức 15 câu. Không có giới hạn thời gian.</p><button id="startExam" type="button">Làm bài kiểm tra thử</button></section>
-<section class="card" id="attemptView" hidden><h2 id="attemptTitle">Bài làm</h2><p id="attemptMeta" class="muted small"></p><form id="answerForm"><div class="questions" id="questions"></div><button id="submit" type="submit">Nộp bài và xem kết quả</button></form><p id="examStatus" role="status"></p></section>
+<section class="card" id="formativeView" hidden>
+  <h2>Ôn tập tự kiểm tra · không tính điểm</h2>
+  <p class="muted small">Ba câu hỏi bổ trợ do AURA biên soạn. Bài này giúp bạn hiểu kiến thức, không phải đề SGK gốc hoặc bài thi chính thức. Kết quả không lưu điểm.</p>
+  <form id="formativeForm"><div id="formativeQuestions"></div>
+   <button id="submitFormative" type="submit">Kiểm tra câu trả lời</button>
+  </form>
+  <p id="formativeStatus" class="state" role="status"></p>
+  <div id="formativeResults" aria-live="polite"></div>
+  <div class="controls"><button id="retryFormative" type="button" class="secondary" hidden>Làm lại 3 câu</button>
+  <button id="returnFromFormative" type="button" class="secondary">Về danh sách bài</button></div>
+  </section>
+  <section class="card" id="attemptView" hidden><h2 id="attemptTitle">Bài làm</h2><p id="attemptMeta" class="muted small"></p><form id="answerForm"><div class="questions" id="questions"></div><button id="submit" type="submit">Nộp bài và xem kết quả</button></form><p id="examStatus" role="status"></p></section>
 <section class="card" id="resultsView" hidden><h2>4. Kết quả bài làm</h2><div class="kpis" id="resultKpis"></div><div id="gradeList"></div>
 <h3>Kiến thức nên ôn lại</h3><div id="weaknesses"></div><button type="button" class="secondary" id="returnToStudy">Tiếp tục học</button></section>
 <section class="card" id="progressView" hidden><h2>5. Lịch sử học tập và bài làm thử</h2><div class="kpis" id="progressKpis"></div><div id="history"></div><div class="state">Những câu cần giáo viên xem xét chưa được tính điểm cuối. Không quy đổi thành điểm chính thức.</div></section>
@@ -88,7 +99,7 @@ const URL="https://ufqzuowjhdqpydqvcsob.supabase.co",KEY="sb_publishable_d7x2eMP
 const STORAGE_KEY="aura-stage-student-v1",ENDPOINT=URL+"/functions/v1/aura-student-math6-preview-v1";
 const $=id=>document.getElementById(id);
 let catalog=[],historyData=[],chaptersMap=new Map(),currentChapter=null,currentLessonId=null,attempt=null,currentQuestions=[],lastResults=null,refreshTask=null,busy=false;
-let currentTab="learn";
+let currentTab="learn",formativeLessonId=null,formativeItems=[];
 const DRAFT_PREFIX="aura-math6-preview-draft-v1:",ACTIVE_KEY="aura-math6-preview-active-v1";
 function storedSession(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"null")}catch{return null}}
 async function accessToken(){
@@ -134,7 +145,7 @@ function showTab(tab){
  for(const b of document.querySelectorAll(".menu button[data-tab]"))b.setAttribute("aria-selected",String(b.dataset.tab===tab));
  for(const name of ["learn","practice","exam","progress"])$(name+"View").hidden=name!==tab;
  if(tab!=="learn")$("lessonView").hidden=true;
- $("attemptView").hidden=true;$("resultsView").hidden=true;
+ $("attemptView").hidden=true;$("resultsView").hidden=true;$("formativeView").hidden=true;
  if(tab==="learn")renderLessons();
  if(tab==="progress")renderHistory();
 }
@@ -149,10 +160,12 @@ function renderLessons(){
   left.append(textNode("p",(l.studied?"Đã mở học · ":"Chưa mở học · ")+(Number(l.verified_question_count)||0)+" câu đã kiểm định","muted small"));
   const actions=document.createElement("div");actions.className="actions";
   actions.append(makeButton("Học bài",()=>loadLesson(l.id)));
-  const quiz=makeButton("Luyện",()=>startLesson(l.id),true);
-  if(!Number(l.verified_question_count)){
-   quiz.disabled=true;quiz.title="Bài này chưa có câu luyện đạt kiểm định độc lập";
-   left.append(textNode("p","Bài này vẫn học kiến thức được; luyện có chấm điểm sẽ mở sau khi câu hỏi được kiểm định.","muted small"));
+  const verified=Number(l.verified_question_count)||0;
+  const quiz=makeButton(verified?"Luyện có chấm thử":"Tự luyện 3 câu",
+    ()=>verified?startLesson(l.id):startFormative(l.id),true);
+  if(!verified){
+   quiz.title="Bài tự luyện có giải thích, không ghi điểm học sinh.";
+   left.append(textNode("p","Có 3 câu tự luyện bổ trợ, không chấm điểm chính thức. Câu hỏi ngân hàng sẽ mở sau khi đạt kiểm định độc lập.","muted small"));
   }
   actions.append(quiz);card.append(left,actions);root.append(card);
  }
@@ -228,8 +241,10 @@ async function loadLesson(id){
   const c=chapter();
   const current=(c?.lessons||[]).find(z=>z.id===id);
   if(current)current.studied=true;
-  $("practiceLesson").disabled=!Number(current?.verified_question_count);
-  $("practiceLesson").title=current?.verified_question_count?"":"Chỉ mở khi bài có câu đã kiểm định độc lập và không phụ thuộc hình chưa nghiệm thu.";
+  const canGrade=Number(current?.verified_question_count)>0;
+  $("practiceLesson").disabled=false;
+  $("practiceLesson").textContent=canGrade?"Luyện bài này":"Tự luyện 3 câu (không tính điểm)";
+  $("practiceLesson").title=canGrade?"Câu hỏi đã có kiểm định độc lập":"Bài tự luyện bổ trợ, chưa tính điểm chính thức.";
   $("nextLesson").disabled=!(c?.lessons||[]).some(x=>x.number>l.number);
   status("Đã mở bài học. Mời bạn đọc kiến thức và làm luyện tập.");
   await refreshHistory();
@@ -240,6 +255,74 @@ async function loadLesson(id){
 function hideLesson(){
  $("lessonView").hidden=true;$("learnView").hidden=false;renderLessons();
 }
+
+async function startFormative(lessonId){
+ if(busy)return;
+ busy=true;
+ formativeLessonId=lessonId;formativeItems=[];
+ try{
+  status("Đang tải 3 câu tự luyện bổ trợ...");
+  const data=await api("formative_get",{lesson_id:lessonId});
+  if(!data.staging_preview||!data.not_official_grade||
+     !Array.isArray(data.items)||data.items.length!==3)throw Error("Bài tự luyện chưa sẵn sàng.");
+  formativeItems=data.items;
+  for(const name of ["learnView","lessonView","practiceView","examView","progressView","attemptView","resultsView"])$(name).hidden=true;
+  $("formativeView").hidden=false;
+  $("formativeStatus").textContent="Chọn một đáp án cho mỗi câu rồi bấm Kiểm tra.";
+  $("formativeResults").replaceChildren();
+  $("submitFormative").disabled=false;$("submitFormative").hidden=false;
+  $("retryFormative").hidden=true;
+  const root=$("formativeQuestions");root.replaceChildren();
+  for(const [index,item] of formativeItems.entries()){
+   const wrap=document.createElement("fieldset");wrap.className="question";
+   const title=document.createElement("legend");title.textContent="Câu "+(index+1)+": "+item.prompt;
+   wrap.append(title);
+   for(const [j,labelText] of item.choices.entries()){
+    const label=document.createElement("label");
+    label.style.display="flex";label.style.alignItems="center";label.style.gap="10px";
+    const radio=document.createElement("input");radio.type="radio";
+    radio.name="formative-"+index;radio.value=String(j);radio.style.width="auto";radio.style.minHeight="0";
+    label.append(radio,document.createTextNode(labelText));wrap.append(label);
+   }
+   root.append(wrap);
+  }
+  status("Đã mở tự luyện. Kết quả chỉ để ôn tập, không ghi điểm.");
+  $("formativeView").scrollIntoView({behavior:"smooth"});
+ }catch(e){status("Không mở được tự luyện: "+e.message)}
+ finally{busy=false}
+}
+async function submitFormative(event){
+ event.preventDefault();
+ if(busy||!formativeLessonId||formativeItems.length!==3)return;
+ const selections={};
+ for(const [i,item] of formativeItems.entries()){
+  const selected=document.querySelector('input[name="formative-'+i+'"]:checked');
+  if(!selected){$("formativeStatus").textContent="Bạn hãy chọn đủ cả 3 câu trước khi kiểm tra.";return}
+  selections[item.id]=Number(selected.value);
+ }
+ busy=true;$("submitFormative").disabled=true;
+ $("formativeStatus").textContent="Đang đối chiếu đáp án và giải thích...";
+ try{
+  const r=await api("formative_check",{lesson_id:formativeLessonId,selections});
+  if(!r.staging_preview||!r.not_official_grade||r.saved_to_gradebook!==false||
+    !Array.isArray(r.items)||r.items.length!==3)throw Error("Kết quả tự luyện không hợp lệ.");
+  const root=$("formativeResults");root.replaceChildren();
+  root.append(textNode("h3","Bạn trả lời đúng "+r.correct+"/"+r.total+" câu · Không tính điểm chính thức"));
+  for(const [index,item] of r.items.entries()){
+   const wrap=document.createElement("div");wrap.className="answer-card";
+   wrap.append(textNode("strong","Câu "+(index+1)+": "+(item.is_correct?"Đúng":"Cần ôn lại")),
+               textNode("p","Đáp án phù hợp: "+item.correct_choice),
+               textNode("p",item.explanation,"muted"));
+   root.append(wrap);
+  }
+  $("formativeStatus").textContent="Đã tự kiểm tra xong. Bạn có thể xem giải thích hoặc làm lại.";
+  $("submitFormative").hidden=true;$("retryFormative").hidden=false;
+  for(const input of document.querySelectorAll('#formativeQuestions input[type="radio"]'))input.disabled=true;
+  status("Đã trả lời tự luyện, không ghi điểm vào hồ sơ học sinh.");
+ }catch(e){$("formativeStatus").textContent="Chưa kiểm tra được: "+e.message;$("submitFormative").disabled=false}
+ finally{busy=false}
+}
+
 async function startLesson(lessonId){
  if(busy)return;
  await createAttempt("start_lesson",{lesson_id:lessonId});
@@ -258,7 +341,7 @@ async function createAttempt(action,details){
 }
 function renderAttempt(data){
  attempt=data.attempt_id;currentQuestions=data.questions;lastResults=null;
- for(const name of ["learnView","practiceView","examView","lessonView","progressView","resultsView"])$(name).hidden=true;
+ for(const name of ["learnView","practiceView","examView","lessonView","progressView","resultsView","formativeView"])$(name).hidden=true;
  $("attemptView").hidden=false;$("submit").disabled=false;
  $("attemptTitle").textContent=data.mode==="PRACTICE"?"Bài luyện Toán 6 — Staging":"Kiểm tra thử Toán 6 — Staging";
  $("attemptMeta").textContent="Gồm "+currentQuestions.length+" câu đã kiểm định; không phải điểm kiểm tra chính thức.";
@@ -394,7 +477,12 @@ for(const b of document.querySelectorAll(".menu button[data-tab]")){
 }
 $("chapter").addEventListener("change",chooseChapter);
 $("backToLessons").addEventListener("click",hideLesson);
-$("practiceLesson").addEventListener("click",()=>{if(currentLessonId)startLesson(currentLessonId)});
+$("practiceLesson").addEventListener("click",()=>{
+  if(!currentLessonId)return;
+  const l=(chapter()?.lessons||[]).find(x=>x.id===currentLessonId);
+  if(Number(l?.verified_question_count)>0)startLesson(currentLessonId);
+  else startFormative(currentLessonId);
+ });
 $("nextLesson").addEventListener("click",()=>{
  const c=chapter();const index=(c?.lessons||[]).findIndex(x=>x.id===currentLessonId);
  if(index>=0&&c.lessons[index+1])loadLesson(c.lessons[index+1].id);
@@ -402,6 +490,9 @@ $("nextLesson").addEventListener("click",()=>{
 $("startPractice").addEventListener("click",()=>{const c=chapter();if(c)createAttempt("start",{batch_id:c.id,mode:"PRACTICE"})});
 $("startExam").addEventListener("click",()=>{const c=chapter();if(c)createAttempt("start",{batch_id:c.id,mode:"CHAPTER_TEST"})});
 $("answerForm").addEventListener("submit",submitAnswers);
+$("formativeForm").addEventListener("submit",submitFormative);
+$("retryFormative").addEventListener("click",()=>{if(formativeLessonId)startFormative(formativeLessonId)});
+$("returnFromFormative").addEventListener("click",()=>showTab("learn"));
 $("returnToStudy").addEventListener("click",()=>showTab("learn"));
 initialize();
 </script>
