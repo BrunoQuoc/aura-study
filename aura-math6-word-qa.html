@@ -61,7 +61,48 @@ hr{border:0;border-top:1px solid #e0eaf2;margin:17px 0}ul{line-height:1.7}
 <ul><li><a href="./aura-student-math6.html">Student — học và giải toán đố</a></li>
 <li><a href="./aura-student-math6-admin-review.html">Admin — rà lời giải tự luận</a></li>
 <li><a href="./aura-student-math6-acceptance.html">Checklist nghiệm thu Student tổng hợp</a></li></ul>
-</section></main>
+</section><section class="panel">
+<span class="tag">BƯỚC 4 · KHÔNG BỎ SÓT CÂU</span>
+<h2>Rà thêm 331 câu chưa được bộ lọc đánh dấu</h2>
+<p class="muted">Bộ lọc chưa đánh dấu không có nghĩa câu không phải toán đố. Admin xem từng câu theo trang, xác định loại và lưu lý do. Không tự tạo rubric/chứng nhận SGK.</p>
+<div class="row"><button id="unflaggedPrev" type="button" class="secondary">Trước</button><span id="unflaggedPage" class="muted">Đang tải...</span><button id="unflaggedNext" type="button" class="secondary">Tiếp</button></div>
+<label for="unflaggedQuestion">Chọn câu</label><select id="unflaggedQuestion"></select>
+<p id="unflaggedStem" class="status"></p>
+<label for="unflaggedLabel">Kết luận phân loại</label>
+<select id="unflaggedLabel">
+<option value="">Chọn loại</option>
+<option value="WORD_PROBLEM">Có bài toán đố/có lời văn</option>
+<option value="NOT_WORD_PROBLEM">Không phải bài toán đố</option>
+<option value="NEEDS_CONTEXT">Thiếu nguồn/hình — cần xem lại</option>
+</select>
+<label for="unflaggedNote">Bằng chứng phân loại</label>
+<textarea id="unflaggedNote" maxlength="800" placeholder="Giải thích tại sao xác định là toán có lời văn hoặc không..."></textarea>
+<button id="unflaggedSave" type="button">Lưu phân loại (không tạo điểm)</button>
+<p id="unflaggedStatus" role="status" class="muted"></p>
+</section>
+<section class="panel">
+<span class="tag">BƯỚC 5 · 246 CÂU KIỂM ĐỊNH TOÁN HỌC</span>
+<h2>Ghi bằng chứng toán độc lập</h2>
+<p class="muted">Ưu tiên câu đáp án số không có hình. Sau khi Admin ghi phép tính độc lập, câu vẫn chờ người có thẩm quyền xác minh; không tự chuyển ngân hàng sang đã kiểm định.</p>
+<label for="mathAuditFilter">Trạng thái hàng chờ</label><select id="mathAuditFilter">
+<option value="ALL">Tất cả</option>
+<option value="PENDING_INDEPENDENT_CHECK">Chưa có bằng chứng bổ sung</option>
+<option value="EVIDENCE_SUBMITTED">Có bằng chứng, chưa chứng nhận</option>
+<option value="NEEDS_SOURCE_OR_DIAGRAM">Cần hình/nguồn SGK</option>
+</select>
+<div class="row"><button id="mathAuditPrev" type="button" class="secondary">Trước</button><span id="mathAuditPage" class="muted">Đang tải...</span><button id="mathAuditNext" type="button" class="secondary">Tiếp</button></div>
+<label for="mathAuditQuestion">Chọn câu</label><select id="mathAuditQuestion"></select>
+<p id="mathAuditStem" class="status"></p>
+<label for="mathAuditDecision">Mức độ bằng chứng</label><select id="mathAuditDecision">
+<option value="EVIDENCE_SUBMITTED">Đã ghi phép tính độc lập, đang chờ người kiểm định</option>
+<option value="NEEDS_SOURCE_OR_DIAGRAM">Cần hình/nguồn SGK trước khi kiểm định</option>
+</select>
+<label for="mathAuditEvidence">Bằng chứng hoặc vướng mắc cụ thể</label>
+<textarea id="mathAuditEvidence" maxlength="2500" placeholder="Ghi phép tính hoặc lập luận độc lập, thử ngược đáp án, số trang còn thiếu, hình cần đối chiếu (tối thiểu 35 ký tự)..."></textarea>
+<button id="mathAuditSave" type="button">Lưu hồ sơ kiểm định (không công nhận câu)</button>
+<p id="mathAuditStatus" class="muted" role="status"></p>
+</section>
+</main>
 <script>
 "use strict";
 const BASE="https://ufqzuowjhdqpydqvcsob.supabase.co";
@@ -247,4 +288,113 @@ $("needsFix").addEventListener("click",()=>saveRubric("NEEDS_FIX"));
 $("saveCandidate").addEventListener("click",saveCandidate);
 $("attestDevice").addEventListener("click",attestDevice);
 refresh();
+
+const unflaggedState={offset:0,limit:20,total:0,items:[],loading:false};
+const mathAuditState={offset:0,limit:20,total:0,items:[],loading:false,filter:"ALL"};
+function optionList(id,items){
+ const el=$(id);el.replaceChildren();
+ const lead=document.createElement("option");lead.value="";
+ lead.textContent=items.length?"Chọn câu trong trang":"Không có câu trên trang này";el.append(lead);
+ for(const x of items){const item=document.createElement("option");item.value=x.question_id;item.textContent=x.question_id+" · "+x.lesson_id;el.append(item)}
+}
+function displayUnflagged(){
+ const x=unflaggedState.items.find(x=>x.question_id===$("unflaggedQuestion").value);
+ $("unflaggedStem").textContent=x?
+ "Đề: "+x.stem+"\nĐáp án ngân hàng: "+x.answer+(x.has_figure?"\nChưa kiểm chứng hình đi kèm":""):
+ "Chọn một câu từ danh sách.";
+ $("unflaggedStem").style.whiteSpace="pre-wrap";
+ $("unflaggedLabel").value="";$("unflaggedNote").value="";
+}
+async function loadUnflagged(){
+ const st=unflaggedState;if(st.loading)return;st.loading=true;
+ $("unflaggedStatus").textContent="Đang tải danh sách...";
+ try{
+ let d=await api("math6_word_inventory_page",{bucket:"NOT_FLAGGED",offset:st.offset,limit:st.limit});
+ if(!d.inventory||!Array.isArray(d.inventory.items))throw Error("Hàng chờ không hợp lệ.");
+ st.items=d.inventory.items;st.total=d.inventory.total;
+ if(st.offset>0&&!st.items.length){
+   st.offset=Math.max(0,st.offset-st.limit);
+   d=await api("math6_word_inventory_page",{bucket:"NOT_FLAGGED",offset:st.offset,limit:st.limit});
+   st.items=d.inventory.items;st.total=d.inventory.total;
+ }
+ optionList("unflaggedQuestion",st.items);
+ $("unflaggedPage").textContent=st.items.length?
+  (st.offset+1)+"–"+Math.min(st.offset+st.limit,st.total)+" / "+st.total:("0 / "+st.total);
+ $("unflaggedPrev").disabled=st.offset===0;
+ $("unflaggedNext").disabled=st.offset+st.limit>=st.total;
+ displayUnflagged();
+ $("unflaggedStatus").textContent="Lọc toàn bộ nhóm chưa được đánh dấu, mỗi trang 20 câu. Chưa có công nhận sư phạm.";
+ }catch(e){$("unflaggedStatus").textContent=e.message}
+ finally{st.loading=false}
+}
+async function saveUnflagged(){
+ const id=$("unflaggedQuestion").value,label=$("unflaggedLabel").value,note=$("unflaggedNote").value.trim();
+ if(!id||!label||note.length<12){$("unflaggedStatus").textContent="Chọn câu, loại và ghi lý do ít nhất 12 ký tự.";return}
+ $("unflaggedSave").disabled=true;
+ try{
+ const out=await api("math6_word_inventory_label_v2",{question_id:id,label,note});
+ if(out.classification?.rubric_created!==false||out.classification?.bank_audit_certified!==false)throw Error("Phản hồi không an toàn.");
+ $("unflaggedStatus").textContent="Đã ghi nhận phân loại; không tự tạo rubric hoặc điểm thi.";
+ await loadUnflagged();
+ }catch(e){$("unflaggedStatus").textContent=e.message}
+ finally{$("unflaggedSave").disabled=false}
+}
+function displayMathAudit(){
+ const x=mathAuditState.items.find(x=>x.question_id===$("mathAuditQuestion").value);
+ $("mathAuditStem").textContent=x?
+ "Đề: "+x.stem+"\nĐáp án ngân hàng: "+x.answer+
+ "\nNhóm bài: "+(x.priority===1?"Đáp án số":x.priority===2?"Cần lập luận":"Có hình chưa nghiệm thu")+
+ "\nKiểm định toán: Chưa đạt chứng nhận độc lập.":
+ "Chọn câu cần xem.";
+ $("mathAuditStem").style.whiteSpace="pre-wrap";
+ $("mathAuditEvidence").value=x?.evidence_text||"";
+ $("mathAuditDecision").value=x?.review_state==="NEEDS_SOURCE_OR_DIAGRAM"?"NEEDS_SOURCE_OR_DIAGRAM":"EVIDENCE_SUBMITTED";
+}
+async function loadMathAudit(){
+ const st=mathAuditState;if(st.loading)return;st.loading=true;
+ $("mathAuditStatus").textContent="Đang đọc bằng chứng toán học...";
+ try{
+ let d=await api("math6_math_audit_page",{filter:st.filter,offset:st.offset,limit:st.limit});
+ if(!d.audit_queue||!Array.isArray(d.audit_queue.items))throw Error("Hàng chờ kiểm định chưa hợp lệ.");
+ st.items=d.audit_queue.items;st.total=d.audit_queue.total;
+ if(st.offset>0&&!st.items.length){
+  st.offset=Math.max(0,st.offset-st.limit);
+  d=await api("math6_math_audit_page",{filter:st.filter,offset:st.offset,limit:st.limit});
+  st.items=d.audit_queue.items;st.total=d.audit_queue.total;
+ }
+ optionList("mathAuditQuestion",st.items);
+ $("mathAuditPage").textContent=st.items.length?
+  (st.offset+1)+"–"+Math.min(st.offset+st.limit,st.total)+" / "+st.total:("0 / "+st.total);
+ $("mathAuditPrev").disabled=st.offset===0;
+ $("mathAuditNext").disabled=st.offset+st.limit>=st.total;
+ displayMathAudit();
+ $("mathAuditStatus").textContent="Đã đọc. Ghi bằng chứng không nâng trạng thái kiểm định toán.";
+ }catch(e){$("mathAuditStatus").textContent=e.message}
+ finally{st.loading=false}
+}
+async function saveMathAudit(){
+ const question_id=$("mathAuditQuestion").value,review_state=$("mathAuditDecision").value,
+ evidence=$("mathAuditEvidence").value.trim();
+ if(!question_id||evidence.length<35){$("mathAuditStatus").textContent="Chọn câu và nhập bằng chứng ít nhất 35 ký tự.";return}
+ $("mathAuditSave").disabled=true;
+ try{
+ const d=await api("math6_math_audit_evidence",{question_id,review_state,evidence});
+ if(d.audit_note?.independently_certified!==false||d.audit_note?.bank_verification_status!=="NEEDS_INDEPENDENT_CHECK")
+  throw Error("Không có xác nhận rằng trạng thái kiểm định vẫn được giữ.");
+ $("mathAuditStatus").textContent="Đã lưu hồ sơ. Câu vẫn chờ kiểm định độc lập.";
+ await loadMathAudit();
+ }catch(e){$("mathAuditStatus").textContent=e.message}
+ finally{$("mathAuditSave").disabled=false}
+}
+$("unflaggedQuestion").addEventListener("change",displayUnflagged);
+$("unflaggedPrev").addEventListener("click",()=>{unflaggedState.offset=Math.max(0,unflaggedState.offset-unflaggedState.limit);loadUnflagged()});
+$("unflaggedNext").addEventListener("click",()=>{if(unflaggedState.offset+unflaggedState.limit<unflaggedState.total)unflaggedState.offset+=unflaggedState.limit;loadUnflagged()});
+$("unflaggedSave").addEventListener("click",saveUnflagged);
+$("mathAuditFilter").addEventListener("change",()=>{mathAuditState.filter=$("mathAuditFilter").value;mathAuditState.offset=0;loadMathAudit()});
+$("mathAuditQuestion").addEventListener("change",displayMathAudit);
+$("mathAuditPrev").addEventListener("click",()=>{mathAuditState.offset=Math.max(0,mathAuditState.offset-mathAuditState.limit);loadMathAudit()});
+$("mathAuditNext").addEventListener("click",()=>{if(mathAuditState.offset+mathAuditState.limit<mathAuditState.total)mathAuditState.offset+=mathAuditState.limit;loadMathAudit()});
+$("mathAuditSave").addEventListener("click",saveMathAudit);
+loadUnflagged();loadMathAudit();
+
 </script></body></html>
