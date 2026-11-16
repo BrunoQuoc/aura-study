@@ -43,3 +43,47 @@ input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #90d4
 .small{font-size:.83rem}
 footer{max-width:1080px;margin:auto;padding:20px 18px 35px;color:#74859a;font-size:.83rem}
 @media(max-width:780px){.role-grid{grid-template-columns:1fr}.role-card{min-height:0}.layout{grid-template-columns:1fr}main{margin:15px auto}.panel,.role-card{padding:17px}header{padding:13px 17px}.nav{gap:8px}}
+
+/* AURA simple Admin -> Student experience (Staging V3). */
+[hidden]{display:none!important}
+.simple-portal main{max-width:900px}
+.simple-portal .hero{max-width:800px}
+.simple-portal .role-grid.two-roles{grid-template-columns:repeat(2,minmax(0,1fr));max-width:850px}
+.simple-role{min-height:280px}
+.simple-role .cta{width:100%;margin-top:12px}
+.simple-role .visual{width:65px;height:65px;font-size:1.95rem}
+.simple-portal .panel{margin:14px 0}
+.simple-box{max-width:640px}
+.student-entry .simple-box{max-width:640px}
+.simple-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:0 0 12px}
+.simple-head h2{margin:4px 0 0}
+.simple-form{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.simple-form input{flex:1 1 230px}
+.simple-form button{flex:0 1 auto}
+.wide{width:100%;margin-top:13px}
+.big-action{min-height:60px;font-size:1.13rem}
+#captchaBox{margin:12px 0;min-height:62px}
+.student-list{display:grid;gap:8px}
+.student-row{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#f8fbfe;border:1px solid #dce8f2;border-radius:12px;padding:12px 13px}
+.student-row strong{display:block;font-size:.96rem}
+.student-row small{display:block;margin-top:4px;color:#667a8d}
+.student-actions{display:flex;flex-wrap:wrap;align-items:center;gap:9px}
+.student-actions button{min-height:40px;padding:9px 14px;font-size:.9rem}
+.link-panel{margin:20px 0 8px;padding:16px;background:#eaf6fc;border:1px solid #a8cfdf;border-radius:13px}
+.link-panel input{font-size:.9rem}
+.extra-tools{margin-top:20px;border-top:1px solid #e4edf5;padding-top:14px}
+.extra-tools summary,.manage-devices summary{cursor:pointer;color:#22638c;font-weight:650;padding:4px 0}
+.manage-devices{font-size:.82rem}
+.student-actions button.danger{background:#9c4444;color:#fff;font-size:.8rem;margin-top:6px}
+.tool-links{display:grid;gap:10px;padding:14px 0}
+.tool-links a{border-left:3px solid #86bbd5;padding-left:11px;line-height:1.5}
+.simple-portal .status{line-height:1.6;margin-top:15px}
+@media(max-width:780px){
+ .simple-portal .role-grid.two-roles{grid-template-columns:1fr}
+ .simple-role{min-height:0}
+ .simple-form{display:grid}
+ .student-row{align-items:flex-start;flex-direction:column}
+ .student-actions{width:100%}
+ .student-actions button{flex:1 1 150px}
+ .simple-portal header .nav{display:none}
+}
