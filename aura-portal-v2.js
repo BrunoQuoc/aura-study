@@ -89,6 +89,7 @@ async function checkRole(){
     card.append(name,p);list.append(card);
    }
    status("roleStatus","Quyền Parent hợp lệ. Chỉ hiển thị học sinh thuộc hộ gia đình được cấp.");
+   await loadParentMath6();
   }else{
    details=await gateway(cfg.portal,"student_summary");
    const records=Array.isArray(details.summary?.learners)?details.summary.learners:[];
@@ -143,6 +144,41 @@ async function pairStudent(){
  note(result.role==="student"?"Thiết bị đã ghép thành công.":"Chưa xác nhận được liên kết.");
  await checkRole();
 }
+async function loadParentMath6(){
+ const root=$("math6Progress");if(!root)return;
+ root.replaceChildren();
+ const message=document.createElement("p");message.className="muted";message.textContent="Đang tải tiến độ học...";root.append(message);
+ try{
+  const data=await gateway(cfg.portal,"parent_math6_summary");
+  const learners=Array.isArray(data.math6?.learners)?data.math6.learners:[];
+  root.replaceChildren();
+  if(!learners.length){
+   const p=document.createElement("p");p.className="muted";p.textContent="Chưa có hồ sơ học sinh được liên kết.";root.append(p);return;
+  }
+  for(const l of learners){
+   const card=document.createElement("div");card.className="learner";
+   const name=document.createElement("strong");name.textContent=l.name||"Học sinh";card.append(name);
+   const summary=document.createElement("p");summary.className="muted small";
+   summary.textContent="Bài đã mở: "+Number(l.lessons_opened||0)+"/43 · Bài thử đã nộp: "+Number(l.submitted_previews||0);
+   card.append(summary);
+   const latest=Array.isArray(l.latest)?l.latest:[];
+   if(latest.length){
+    const p=document.createElement("p");p.className="small";
+    p.textContent="Gần nhất — Tập "+latest[0].volume+", Chương "+latest[0].chapter+
+    ": "+(latest[0].correct??0)+" đúng tự động · "+(latest[0].needs_review??0)+" chờ đánh giá"+
+    (latest[0].final_score!==null&&latest[0].final_score!==undefined?" · Điểm thử "+latest[0].final_score+"/"+latest[0].total:"");
+    card.append(p);
+    const topics=Array.isArray(latest[0].weakness_topics)?latest[0].weakness_topics.filter(Boolean):[];
+    if(topics.length){const w=document.createElement("p");w.className="muted small";w.textContent="Nên ôn: "+topics.join("; ");card.append(w);}
+   }
+   root.append(card);
+  }
+ }catch(e){
+  root.replaceChildren();
+  const p=document.createElement("p");p.className="muted";p.textContent="Chưa tải được tiến độ Toán 6: "+(e?.message||"Lỗi kết nối");
+  root.append(p);
+ }
+}
 async function issuePairCode(){
  const data=await gateway(cfg.identity,"create_pairing_code");
  if(!/^[A-Za-z0-9_-]{32}$/.test(data.pairing_code||""))throw Error("Máy chủ không trả mã hợp lệ.");
@@ -167,6 +203,7 @@ bind("signIn",signIn);
 bind("startStudent",startStudent);
 bind("pairStudent",pairStudent);
 bind("issuePairCode",issuePairCode);
+bind("refreshMath6",loadParentMath6);
 bind("checkRole",checkRole);
 bind("signOut",signOut);
 initializeCaptcha().then(()=>checkRole()).catch(e=>{
