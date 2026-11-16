@@ -75,6 +75,12 @@ textarea{font:inherit;line-height:1.5;min-height:78px;resize:vertical;width:100%
 <section class="card" id="wordView" hidden>
 <h2>Toán đố — giải từng bước</h2>
 <p>Em thử tự xác định dữ kiện, điều cần tìm, viết phép tính và kết luận trước khi xem lời giải mẫu. Bài này chỉ dùng để học, không tính điểm kiểm tra.</p>
+<div id="wordFilters" class="answer-card">
+<label for="wordSearch">Tìm bài toán theo chủ đề hoặc nội dung</label>
+<input id="wordSearch" type="search" placeholder="Ví dụ: chia đều, phần trăm, quãng đường" autocomplete="off">
+<label for="wordVolumeFilter">Chọn tập</label>
+<select id="wordVolumeFilter"><option value="all">Cả hai tập</option><option value="1">Toán 6 · Tập 1</option><option value="2">Toán 6 · Tập 2</option></select>
+</div>
 <div id="wordList"></div>
 <section id="wordHistory" class="answer-card" aria-live="polite"><p class="muted">Lịch sử toán đố và điểm yếu luyện tập sẽ hiển thị tại đây.</p></section>
 <div id="wordProblemPanel" hidden>
@@ -292,19 +298,26 @@ function hideLesson(){
 }
 
 
+function wordSearchKey(x){
+ return String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+}
 function showWordList(){
- activeWord=null;$("wordProblemPanel").hidden=true;$("wordList").hidden=false;
- const root=$("wordList");root.replaceChildren();
+ activeWord=null;$("wordProblemPanel").hidden=true;$("wordFilters").hidden=false;
+ $("wordList").hidden=false;const root=$("wordList");root.replaceChildren();
  if(!wordItems.length){root.append(textNode("p","Chưa có toán đố hướng dẫn trên Staging.","muted"));return}
- root.append(textNode("p","Có "+wordItems.length+" bài toán có lời văn đã chuẩn bị hướng dẫn giải thử.","muted"));
- for(const [index,x] of wordItems.entries()){
+ const needle=wordSearchKey($("wordSearch").value),volume=$("wordVolumeFilter").value;
+ const matching=wordItems.filter(x=>(volume==="all"||String(x.volume)===volume)
+ &&(!needle||wordSearchKey([x.stem,x.theme,x.lesson_id,x.chapter].join(" ")).includes(needle)));
+ root.append(textNode("p","Hiển thị "+matching.length+"/"+wordItems.length+
+ " bài toán có lời văn · nội dung AI cần giáo viên duyệt.","muted small"));
+ if(!matching.length){root.append(textNode("p","Không tìm thấy bài phù hợp. Thử từ khóa khác hoặc chọn cả hai tập.","muted"));return}
+ for(const [index,x] of matching.entries()){
   const row=document.createElement("div");row.className="lesson";
   const info=document.createElement("div");
-  info.append(textNode("strong","Bài "+(index+1)+" · "+x.theme),
-    textNode("p",x.stem,"muted small"),
-    textNode("p","Tập "+x.volume+" · Chương "+x.chapter+" · "+x.level,"muted small"));
-  row.append(info,makeButton("Giải bài",()=>openWordProblem(x),true));
-  root.append(row);
+  info.append(textNode("strong",x.theme),
+   textNode("p",x.stem,"muted small"),
+   textNode("p","Tập "+x.volume+" · Chương "+x.chapter+" · "+x.level,"muted small"));
+  row.append(info,makeButton("Giải bài",()=>openWordProblem(x),true));root.append(row);
  }
 }
 async function loadWordCatalog(){
@@ -332,7 +345,7 @@ function wordDropdown(id,options){
 async function openWordProblem(x){
  if(busy)return;
  activeWord=x;wordRubric=null;
- $("wordList").hidden=true;$("wordProblemPanel").hidden=false;
+ $("wordList").hidden=true;$("wordFilters").hidden=true;$("wordProblemPanel").hidden=false;
  $("wordTitle").textContent=x.theme;$("wordPrompt").textContent=x.stem;
  for(const id of ["wordFacts","wordGoal","wordReason","wordNumeric","wordConclusion"])$(id).value="";
  for(const id of ["wordGoalChoice","wordPlanChoice","wordUnitChoice"])wordDropdown(id,[]);
@@ -695,6 +708,8 @@ $("toLessonList").addEventListener("click",()=>showTab("learn"));
 $("startExam").addEventListener("click",()=>{const c=chapter();if(c)createAttempt("start",{batch_id:c.id,mode:"CHAPTER_TEST"})});
 $("answerForm").addEventListener("submit",submitAnswers);
 $("wordForm").addEventListener("submit",checkWordProblem);
+$("wordSearch").addEventListener("input",()=>{if(wordItems.length)showWordList()});
+$("wordVolumeFilter").addEventListener("change",()=>{if(wordItems.length)showWordList()});
 $("backWordList").addEventListener("click",showWordList);
 $("formativeForm").addEventListener("submit",submitFormative);
 $("retryFormative").addEventListener("click",()=>{if(formativeLessonId)startFormative(formativeLessonId)});
