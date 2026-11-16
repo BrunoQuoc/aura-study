@@ -76,23 +76,32 @@ textarea{font:inherit;line-height:1.5;min-height:78px;resize:vertical;width:100%
 <h2>Toán đố — giải từng bước</h2>
 <p>Em thử tự xác định dữ kiện, điều cần tìm, viết phép tính và kết luận trước khi xem lời giải mẫu. Bài này chỉ dùng để học, không tính điểm kiểm tra.</p>
 <div id="wordList"></div>
+<section id="wordHistory" class="answer-card" aria-live="polite"><p class="muted">Lịch sử toán đố và điểm yếu luyện tập sẽ hiển thị tại đây.</p></section>
 <div id="wordProblemPanel" hidden>
 <button type="button" class="secondary" id="backWordList">Chọn bài toán khác</button>
 <h3 id="wordTitle"></h3>
 <p id="wordPrompt" class="answer-card"></p>
 <form id="wordForm">
-<label for="wordFacts">1. Đề cho biết gì?</label>
-<textarea id="wordFacts" maxlength="230" rows="3" placeholder="Ghi các số liệu và điều kiện quan trọng"></textarea>
-<label for="wordGoal">2. Đề hỏi điều gì?</label>
-<textarea id="wordGoal" maxlength="230" rows="2" placeholder="Ghi điều cần tìm"></textarea>
-<label for="wordReason">3. Em lập phép tính và giải thế nào?</label>
-<textarea id="wordReason" maxlength="800" rows="4" placeholder="Viết các bước giải bằng lời và phép tính"></textarea>
-<label for="wordNumeric">4. Đáp số (chỉ nhập số)</label>
-<input id="wordNumeric" type="text" maxlength="50" inputmode="decimal" autocomplete="off" placeholder="Ví dụ: 665">
-<button id="submitWord" type="submit">Kiểm tra đáp số và xem từng bước giải</button>
+<label for="wordFacts">1. Dữ kiện em đọc được</label>
+<textarea id="wordFacts" maxlength="230" rows="3" placeholder="Viết dữ kiện quan trọng của đề bài"></textarea>
+<label for="wordGoal">Đề đang yêu cầu tìm gì? (viết bằng lời)</label>
+<textarea id="wordGoal" maxlength="230" rows="2" placeholder="Viết đại lượng cần tìm"></textarea>
+<label for="wordGoalChoice">Chọn đúng đại lượng cần tìm <small>(máy chấm 1 điểm)</small></label>
+<select id="wordGoalChoice" required><option value="">Đang tải lựa chọn...</option></select>
+<label for="wordReason">2. Em giải bằng các phép tính và lập luận nào?</label>
+<textarea id="wordReason" maxlength="800" rows="4" placeholder="Viết đầy đủ các bước giải bằng lời và phép tính"></textarea>
+<label for="wordPlanChoice">Chọn cách lập phép tính <small>(máy chấm 1 điểm)</small></label>
+<select id="wordPlanChoice" required><option value="">Đang tải lựa chọn...</option></select>
+<label for="wordNumeric">3. Kết quả tính được (chỉ nhập số)</label>
+<input id="wordNumeric" type="text" maxlength="50" inputmode="decimal" autocomplete="off" placeholder="Ví dụ: 665" required>
+<label for="wordUnitChoice">4. Chọn đơn vị kết luận</label>
+<select id="wordUnitChoice" required><option value="">Đang tải lựa chọn...</option></select>
+<label for="wordConclusion">Viết câu kết luận bằng lời</label>
+<textarea id="wordConclusion" maxlength="230" rows="2" placeholder="Vậy ... (ghi đầy đủ số và đơn vị)"></textarea>
+<button id="submitWord" type="submit" disabled>Chấm thử 4 phần và phân tích lỗi</button>
 </form>
 <div id="wordResult" role="status" aria-live="polite"></div>
-<p class="muted small">Hệ thống chỉ đối chiếu con số; các bước lập luận cần được tự so sánh với lời giải mẫu hoặc Admin đánh giá. Không lưu điểm.</p>
+<p class="muted small">Điểm 4 phần là đánh giá tạm thời theo các lựa chọn và đáp số. Phần lời giải tự viết chưa được máy hiểu/chấm; Admin sẽ rà và nhận xét. Không ghi điểm thi chính thức.</p>
 </div></section>
 <section class="card" id="practiceView" hidden><h2>2. Luyện tập theo chương</h2><p>Mỗi lượt tối đa 3 câu đã có bằng chứng kiểm định quy tắc; câu chưa được xác minh không xuất hiện trong bài luyện thử.</p><p class="muted small">Với 13 bài chưa có câu đủ điều kiện chấm thử, hãy vào <strong>Học bài</strong> rồi chọn <strong>Tự luyện 3 câu</strong>. Phần này không tính điểm.</p><button id="toLessonList" type="button" class="secondary">Chọn bài tự luyện</button><button id="startPractice" type="button">Bắt đầu 3 câu luyện</button></section>
 <section class="card" id="examView" hidden><h2>3. Kiểm tra thử theo chương</h2><p>Bản kiểm tra ngắn tối đa 6 câu đã kiểm định, không thay thế đề kiểm tra chính thức 15 câu. Không có giới hạn thời gian.</p><button id="startExam" type="button">Làm bài kiểm tra thử</button></section>
@@ -124,7 +133,7 @@ const URL="https://ufqzuowjhdqpydqvcsob.supabase.co",KEY="sb_publishable_d7x2eMP
 const STORAGE_KEY="aura-stage-student-v1",ENDPOINT=URL+"/functions/v1/aura-student-math6-preview-v1";
 const $=id=>document.getElementById(id);
 let catalog=[],historyData=[],chaptersMap=new Map(),currentChapter=null,currentLessonId=null,attempt=null,currentQuestions=[],lastResults=null,refreshTask=null,busy=false;
-let currentTab="learn",formativeLessonId=null,formativeItems=[],wordItems=[],activeWord=null;
+let currentTab="learn",formativeLessonId=null,formativeItems=[],wordItems=[],activeWord=null,wordRubric=null;
 const DRAFT_PREFIX="aura-math6-preview-draft-v1:",ACTIVE_KEY="aura-math6-preview-active-v1";
 function storedSession(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"null")}catch{return null}}
 async function accessToken(){
@@ -173,7 +182,7 @@ function showTab(tab){
  $("attemptView").hidden=true;$("resultsView").hidden=true;$("formativeView").hidden=true;
  if(tab==="learn")renderLessons();
  if(tab==="progress")renderHistory();
- if(tab==="word")loadWordCatalog();
+ if(tab==="word"){loadWordCatalog();loadWordHistory()}
 }
 function renderLessons(){
  const c=chapter();const root=$("lessons");root.replaceChildren();
@@ -312,51 +321,119 @@ async function loadWordCatalog(){
  }catch(e){root.replaceChildren(textNode("p","Không tải được bài toán đố: "+e.message,"muted"))}
  finally{busy=false}
 }
-function openWordProblem(x){
- activeWord=x;
+
+function wordDropdown(id,options){
+ const el=$(id);el.replaceChildren();
+ const lead=document.createElement("option");lead.value="";lead.textContent="Chọn một phương án";el.append(lead);
+ for(const [index,t] of options.entries()){
+  const o=document.createElement("option");o.value=String(index);o.textContent=t;el.append(o);
+ }
+}
+async function openWordProblem(x){
+ if(busy)return;
+ activeWord=x;wordRubric=null;
  $("wordList").hidden=true;$("wordProblemPanel").hidden=false;
- $("wordTitle").textContent=x.theme;
- $("wordPrompt").textContent=x.stem;
- for(const id of ["wordFacts","wordGoal","wordReason","wordNumeric"])$(id).value="";
+ $("wordTitle").textContent=x.theme;$("wordPrompt").textContent=x.stem;
+ for(const id of ["wordFacts","wordGoal","wordReason","wordNumeric","wordConclusion"])$(id).value="";
+ for(const id of ["wordGoalChoice","wordPlanChoice","wordUnitChoice"])wordDropdown(id,[]);
  $("wordResult").replaceChildren();
- $("submitWord").disabled=false;
- $("wordProblemPanel").scrollIntoView({behavior:"smooth"});
+ $("submitWord").disabled=true;
+ busy=true;
+ try{
+  const data=await api("word_step_get",{question_id:x.question_id});
+  if(!data?.staging_preview||data.official_grade_created!==false||
+     !Array.isArray(data.goal_choices)||!Array.isArray(data.plan_choices)||
+     !Array.isArray(data.unit_choices) || data.goal_choices.length!==3 ||
+     data.plan_choices.length!==3 || data.unit_choices.length!==3)
+    throw Error("Câu hỏi chấm từng bước chưa sẵn sàng.");
+  wordRubric=data;
+  wordDropdown("wordGoalChoice",data.goal_choices);
+  wordDropdown("wordPlanChoice",data.plan_choices);
+  wordDropdown("wordUnitChoice",data.unit_choices);
+  $("submitWord").disabled=false;
+  $("wordProblemPanel").scrollIntoView({behavior:"smooth"});
+ }catch(e){
+  $("wordResult").replaceChildren(textNode("p","Chưa tải được hướng dẫn chấm từng bước: "+e.message,"state warning"));
+ }finally{busy=false}
+}
+async function loadWordHistory(){
+ const root=$("wordHistory");
+ try{
+  const d=await api("word_step_history");
+  if(!d?.staging_preview||!Array.isArray(d.attempts)||!Array.isArray(d.weakness_map))
+   throw Error("Lịch sử chưa sẵn sàng.");
+  root.replaceChildren(textNode("h3","Lịch sử luyện toán đố"));
+  if(!d.attempts.length){
+   root.append(textNode("p","Chưa có lượt luyện bài toán đố nào được lưu trên Staging.","muted"));
+   return;
+  }
+  for(const x of d.attempts.slice(0,10)){
+   const div=document.createElement("div");div.className="answer-card";
+   div.append(textNode("strong",x.question_id),
+    textNode("p","Điểm thử theo mẫu: "+x.provisional_score+"/4. "+(x.review_status==="ADMIN_REVIEWED"?"Admin đã xem xét · điểm rà soát: "+x.admin_score+"/4":"Đang chờ Admin rà lời giải")+".","muted small"));
+   if(x.admin_note)div.append(textNode("p","Nhận xét Admin: "+x.admin_note));
+   root.append(div);
+  }
+  if(d.weakness_map.length){
+   root.append(textNode("h3","Lỗi cần ôn (90 ngày)"));
+   for(const x of d.weakness_map){
+    root.append(textNode("p","• "+x.code+" · "+x.count+" lượt — "+x.remediation,"muted small"));
+   }
+  }
+ }catch(e){
+  root.replaceChildren(textNode("p","Chưa đọc được lịch sử: "+e.message,"muted"));
+ }
 }
 async function checkWordProblem(e){
- e.preventDefault();if(!activeWord||busy)return;
+ e.preventDefault();
+ if(!activeWord||!wordRubric||busy)return;
  const facts=$("wordFacts").value.trim(),goal=$("wordGoal").value.trim(),
- reason=$("wordReason").value.trim(),finalNumeric=$("wordNumeric").value.trim();
- if(!facts||!goal||!reason||!finalNumeric){
-  $("wordResult").replaceChildren(textNode("p","Hãy viết đủ dữ kiện, điều cần tìm, phép tính và đáp số trước khi kiểm tra.","state warning"));return;
+ reason=$("wordReason").value.trim(),conclusion=$("wordConclusion").value.trim(),
+ numeric=$("wordNumeric").value.trim(),goalChoice=$("wordGoalChoice").value,
+ planChoice=$("wordPlanChoice").value,unitChoice=$("wordUnitChoice").value;
+ if(!facts||!goal||!reason||!conclusion||!numeric||
+ !goalChoice||!planChoice||!unitChoice||[facts,goal,reason,conclusion].some(x=>x.length<4)){
+  $("wordResult").replaceChildren(textNode("p",
+   "Hãy điền đủ dữ kiện, yêu cầu, phép tính, đáp số, đơn vị và câu kết luận.","state warning"));return;
  }
- const joined="Dữ kiện: "+facts+"\nCần tìm: "+goal+"\nCách giải: "+reason;
- if(joined.length>1400)return;
+ const submission={goal_choice:Number(goalChoice),plan_choice:Number(planChoice),
+ unit_choice:Number(unitChoice),final_numeric:numeric,
+ prose:{facts,goal,steps:reason,conclusion}};
  busy=true;$("submitWord").disabled=true;
- $("wordResult").replaceChildren(textNode("p","Đang đối chiếu đáp số và tải lời giải mẫu...","muted"));
+ const root=$("wordResult");
+ root.replaceChildren(textNode("p","Đang đối chiếu bốn phần và xây dựng gợi ý ôn tập...","muted"));
  try{
-  const res=await api("word_check",{question_id:activeWord.question_id,final_numeric:finalNumeric,reasoning:joined});
-  if(res.staging_preview!==true||res.official_grade_created!==false||res.reasoning_reviewed!==false)
-   throw Error("Phản hồi kiểm tra chưa đảm bảo nguyên tắc không chấm điểm.");
-  const root=$("wordResult");root.replaceChildren();
-  const statusText=res.numeric_match_only?
-   "Đáp số khớp! Em hãy đối chiếu tiếp từng bước; hệ thống chưa chấm cách lập luận.":
-   "Đáp số chưa khớp. Em xem lời giải từng bước để tìm chỗ cần sửa.";
-  root.append(textNode("h3",statusText),textNode("p","Đáp số tham khảo: "+res.expected_numeric+" "+res.expected_unit));
-  root.append(textNode("h3","1. Xác định dữ kiện"));
-  for(const fact of res.known_facts||[])root.append(textNode("p","• "+fact));
-  root.append(textNode("h3","2. Điều cần tìm"),textNode("p",res.find_goal));
-  root.append(textNode("h3","3. Lời giải từng bước"));
-  for(const [i,step] of (res.worked_steps||[]).entries()){
-   const box=document.createElement("div");box.className="answer-card";
-   box.append(textNode("strong","Bước "+(i+1)+": "+step.label),
-    textNode("p",step.calculation),
-    textNode("p",step.explanation||"","muted small"));root.append(box);
+  const res=await api("word_step_submit",{question_id:activeWord.question_id,submission});
+  if(res.staging_preview!==true||res.official_grade_created!==false||
+   res.gradebook_updated!==false||res.reasoning_autograded!==false ||
+   !Array.isArray(res.stage_results)||!Array.isArray(res.weakness_map))
+   throw Error("Máy chủ chưa chứng minh được tính an toàn của kết quả thử.");
+  root.replaceChildren(textNode("h3","Điểm luyện tạm thời: "+res.provisional_score+"/4"));
+  root.append(textNode("p","Máy chỉ kiểm tra lựa chọn và đáp số. Các câu giải thích em viết vẫn cần Admin rà soát.","muted"));
+  for(const step of res.stage_results){
+   const card=document.createElement("div");card.className="answer-card";
+   card.append(textNode("strong",step.label+": "+step.points+"/"+step.max_points+" điểm"),
+     textNode("p","Gợi ý: "+step.hint));
+   if(!step.correct)card.append(textNode("p","Đáp án/kết quả tham khảo: "+step.expected,"muted"));
+   root.append(card);
   }
-  root.append(textNode("h3","4. Kết luận"),textNode("p",res.final_sentence));
-  root.append(textNode("p","Lỗi dễ gặp: "+res.common_mistake,"state warning"));
-  root.append(textNode("p","Lời giải mẫu là học liệu AURA trên Staging, chưa được giáo viên nghiệm thu.","muted small"));
+  if(res.weakness_map.length){
+   root.append(textNode("h3","Cần ôn lại"));
+   for(const w of res.weakness_map)root.append(textNode("p","• "+w.code+": "+w.remediation,"state warning"));
+  }
+  root.append(textNode("h3","Lời giải tham khảo"));
+  for(const [index,item] of (res.worked_steps||[]).entries()){
+   const card=document.createElement("div");card.className="answer-card";
+   card.append(textNode("strong","Bước "+(index+1)+": "+item.label),
+     textNode("p",item.calculation));
+   root.append(card);
+  }
+  root.append(textNode("p",res.final_sentence));
+  if(res.common_mistake)root.append(textNode("p","Lỗi dễ gặp: "+res.common_mistake,"muted small"));
+  root.append(textNode("p","Lượt luyện đã được lưu riêng trên Staging để xem lại điểm yếu. Chưa ghi vào học bạ hoặc kết quả thi.","muted small"));
+  await loadWordHistory();
  }catch(err){
-  $("wordResult").replaceChildren(textNode("p","Chưa kiểm tra được bài: "+err.message,"state warning"));
+  root.replaceChildren(textNode("p","Chưa chấm được bài: "+err.message,"state warning"));
  }finally{busy=false;$("submitWord").disabled=false}
 }
 
