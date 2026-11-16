@@ -1,22 +1,40 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>AURA STUDY · Quản trị hệ thống</title><link rel="stylesheet" href="./aura-portal-v2.css"></head>
-<body data-role="admin"><header><a class="brand" href="./aura-portal.html">AURA STUDY<small>ADMIN PORTAL</small></a><nav class="nav"><a href="./aura-portal.html">Chọn vai trò</a><a href="./aura-staging-login.html">Xác thực Staging cũ</a></nav></header>
-<main><section class="hero"><span class="eyebrow">Không gian ADMIN · Staging V2</span><h1>Quản trị hệ thống</h1><p class="muted">Quản lý học liệu, ngân hàng câu hỏi và nghiệm thu sư phạm.</p></section>
-<div class="layout"><section class="panel"><div class="panel-head"><h2>Đăng nhập bằng email</h2><span class="stamp">STAGING</span></div><label for="email">Email đã được cấp quyền</label><input id="email" type="email" autocomplete="email" inputmode="email" placeholder="email@domain.com">
- <div id="captcha" aria-label="Xác thực chống bot"></div>
- <button type="button" id="signIn" style="width:100%">Gửi liên kết đăng nhập</button>
- <p class="muted small">Liên kết gửi qua email. Sau khi mở, hệ thống xác thực rồi chuyển về khu vực này. Tài khoản không có quyền tương ứng sẽ bị từ chối.</p>
-<div id="authStatus" class="status" role="status" aria-live="polite">Đang kiểm tra phiên đăng nhập…</div>
-<div class="actions"><button type="button" id="checkRole" class="secondary">Kiểm tra quyền</button><button type="button" id="signOut" class="secondary">Đăng xuất phiên này</button></div></section>
-<section class="panel"><div class="panel-head"><h2>Bảng quản trị</h2><span class="stamp">Xác thực vai trò</span></div>
-<p id="roleStatus" class="status">Chưa có quyền truy cập được xác minh.</p><div id="roleDetails"><p class="muted small">Sau khi được cấp quyền, Admin có thể đi tới bộ công cụ kiểm định trong Staging.</p>
- <a class="cta" id="adminReview" href="./admin-ch08-review.html">Ngân hàng câu hỏi & kiểm định</a>
-<a class="cta secondary" href="./aura-student-math6-admin-review.html">Chấm bài Student Toán 6 · Staging</a>
-<a class="cta secondary" href="./aura-student-math6-acceptance.html">Nghiệm thu Student Toán 6 trên thiết bị thật</a>
-<a class="cta secondary" href="./aura-math6-qa-lab.html">Chạy thử học → luyện → thi → chấm</a>
-<a class="cta secondary" href="./aura-math6-readiness.html">Xem trạng thái 7 hạng mục Toán 6</a>
-<a class="cta secondary" href="./aura-math6-sgk-coverage.html">Đối chiếu SGK &amp; nguồn gốc 402 câu</a>
-<a class="cta secondary" href="./aura-math6-math-audit.html">Kiểm định toán học 402 câu theo chương</a>
- <a class="cta secondary" href="./admin-chart-review.html?v=3">Kiểm tra biểu đồ trên iPhone</a></div>
-<div class="security">Chỉ các chức năng thuộc đúng vai trò mới được hiển thị. Máy chủ tiếp tục xác minh quyền trước khi trả dữ liệu.</div></section></div></main>
-<footer>AURA STUDY · STAGING — Trang kỹ thuật cũ vẫn được giữ để dự phòng. Không nhập dữ liệu học thật; Exam Engine khóa.</footer>
-<script type="module" src="./aura-portal-v2.js"></script></body></html>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>AURA STUDY · Admin</title><link rel="stylesheet" href="./aura-portal-v2.css"></head>
+<body data-role="admin" class="simple-portal"><header><a class="brand" href="./aura-portal.html">AURA STUDY<small>ADMIN</small></a><nav class="nav"><a href="./aura-portal.html">Trang chủ</a></nav></header>
+<main>
+<section class="hero"><span class="eyebrow">KHU VỰC ADMIN</span><h1>Admin tạo — Student học</h1><p class="muted">Tạo học sinh, nhận một liên kết và gửi cho thiết bị học. Không cần qua tài khoản Parent.</p></section>
+<section id="loginPanel" class="panel simple-box" hidden>
+<h2>Đăng nhập Admin</h2><p class="muted">Dùng email Admin đã được cấp quyền, không cần nhớ mật khẩu.</p>
+<label for="email">Email Admin</label><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="email@example.com">
+<div id="captchaBox" hidden><div id="captcha" aria-label="Xác minh chống bot"></div></div>
+<button id="sendEmail" type="button" class="wide">Gửi link đăng nhập vào email</button>
+<p id="loginStatus" class="status" role="status" aria-live="polite">Đang kiểm tra đăng nhập...</p>
+</section>
+<div id="adminWorkspace" hidden>
+<section class="panel"><div class="simple-head"><div><span class="eyebrow">BƯỚC 1</span><h2>Tạo học sinh</h2></div><span class="stamp">STAGING</span></div>
+<p class="muted">Nhập tên hiển thị của học sinh thử nghiệm. Hệ thống tự tạo link học.</p>
+<label for="studentName">Tên học sinh</label>
+<div class="simple-form"><input id="studentName" maxlength="60" autocomplete="off" placeholder="Ví dụ: Học sinh 01"><button id="createStudent" type="button">Tạo học sinh + link học</button></div>
+<div id="linkPanel" class="link-panel" hidden><span class="eyebrow">BƯỚC 2 · GỬI CHO HỌC SINH</span>
+<p id="linkStudent">Liên kết học mới</p>
+<label for="activationLink">Liên kết kích hoạt một lần</label>
+<input id="activationLink" readonly spellcheck="false" autocomplete="off">
+<button id="copyLink" type="button" class="wide">Sao chép liên kết</button>
+<p class="muted small">Gửi link riêng cho học sinh. Link dùng một lần trong 48 giờ; không đăng công khai. Mở lần đầu trên chính thiết bị học.</p></div>
+<p id="adminStatus" role="status" class="status" aria-live="polite">Đang tải danh sách...</p></section>
+<section class="panel"><div class="simple-head"><div><span class="eyebrow">QUẢN LÝ</span><h2>Danh sách học sinh</h2></div><button type="button" id="refreshStudents" class="secondary">Làm mới</button></div>
+<div id="studentList" class="student-list"></div>
+<p class="muted small">Học sinh cũ và các thiết bị đã ghép vẫn giữ nguyên. Khi mất thiết bị có thể ngắt liên kết từ danh sách này.</p></section>
+<section class="panel"><h2>Quản lý nội dung Toán 6</h2>
+<a class="cta wide" href="./admin-ch08-review.html">Vào quản lý bài tập và đề thi</a>
+<details class="extra-tools"><summary>Công cụ kiểm định &amp; nghiệm thu (nâng cao)</summary>
+<div class="tool-links">
+<a href="./aura-student-math6-admin-review.html">Chấm bài Student cần đánh giá</a>
+<a href="./aura-student-math6-acceptance.html">Nghiệm thu Student trên thiết bị thật</a>
+<a href="./aura-math6-readiness.html">Tổng quan chất lượng Toán 6</a>
+<a href="./aura-math6-sgk-coverage.html">Kiểm định nguồn SGK</a>
+<a href="./admin-chart-review.html?v=3">Kiểm tra hình và biểu đồ</a>
+</div></details>
+<div class="actions"><button id="adminLogout" type="button" class="secondary">Đăng xuất</button></div></section>
+</div>
+</main><footer>AURA STUDY · Staging: tạo học sinh và thử nghiệm nội dung, chưa phát hành điểm chính thức.</footer>
+<script type="module" src="./aura-simple-access.js"></script></body></html>
