@@ -110,7 +110,7 @@ async function api(action,extra={}){
  const r=await fetch(ENDPOINT,{method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+await accessToken()},body:JSON.stringify({action,...extra})});
  let v={};try{v=await r.json()}catch{}
  if(!r.ok){
-  if(r.status===401||r.status===403)throw Error("Phiên Student chưa hợp lệ hoặc thiết bị chưa ghép. Mở trang Tài khoản & thiết bị.");
+  if(r.status===401||r.status===403){$("workspace").hidden=true;throw Error("Phiên Student chưa hợp lệ, thiết bị bị thu hồi hoặc chưa ghép. Mở trang Tài khoản & thiết bị.");}
   throw Error(v.error||"Máy chủ thử nghiệm chưa sẵn sàng.");
  }
  if(!v.staging_preview||v.live_exam_enabled!==false)throw Error("Phiên phản hồi không thuộc môi trường Student Preview.");
@@ -150,7 +150,10 @@ function renderLessons(){
   const actions=document.createElement("div");actions.className="actions";
   actions.append(makeButton("Học bài",()=>loadLesson(l.id)));
   const quiz=makeButton("Luyện",()=>startLesson(l.id),true);
-  if(!Number(l.verified_question_count)){quiz.disabled=true;quiz.title="Bài này chưa có câu luyện đạt kiểm định độc lập";}
+  if(!Number(l.verified_question_count)){
+   quiz.disabled=true;quiz.title="Bài này chưa có câu luyện đạt kiểm định độc lập";
+   left.append(textNode("p","Bài này vẫn học kiến thức được; luyện có chấm điểm sẽ mở sau khi câu hỏi được kiểm định.","muted small"));
+  }
   actions.append(quiz);card.append(left,actions);root.append(card);
  }
 }
@@ -193,20 +196,28 @@ async function loadLesson(id){
   const warn=$("lessonLevelNote")||document.createElement("div");
   warn.id="lessonLevelNote";warn.className="state"+(lessonLevel==="DETAILED_AI_LESSON"?"":" warning");
   warn.textContent=lessonLevel==="DETAILED_AI_LESSON"?
-   "Bài có ví dụ/khối kiến thức AURA chi tiết, vẫn chờ nghiệm thu sư phạm.":
-   lessonLevel==="OBJECTIVES_ONLY"?
-   "Bài hiện mới có mục tiêu học tập, chưa có bài giảng và hình vẽ được nghiệm thu đầy đủ.":
-   "Bài hiện mới là bản tóm tắt kiến thức; bài giảng và ví dụ đầy đủ chưa được nghiệm thu.";
+   "Học liệu AURA có khối kiến thức và ví dụ, vẫn chờ nghiệm thu sư phạm.":
+   lessonLevel==="GUIDED_AI_STAGING"?
+   "Học liệu AI bổ trợ gồm 5 bước có hướng dẫn. Không phải nội dung nguyên văn SGK; chưa nghiệm thu sư phạm.":
+   "Bài mới có tóm tắt, chưa đủ điều kiện xác nhận bài giảng chi tiết.";
   $("lessonSummary").insertAdjacentElement("afterend",warn);
 
   const root=$("knowledge");root.replaceChildren();
+  const stages=Array.isArray(l.guided_stages)?l.guided_stages:[];
+  for(const [stageIndex,stage] of stages.entries()){
+   const section=document.createElement("section");section.className="answer-card";
+   section.append(textNode("h3",(stageIndex+1)+". "+(stage.stage||"Bước học")),textNode("p",stage.text||""));
+   root.append(section);
+  }
+  if(!stages.length||lessonLevel==="DETAILED_AI_LESSON")
   for(const k of l.knowledge_blocks||[]){
    const section=document.createElement("section");section.className="answer-card";
    section.append(textNode("h3",k.heading||"Kiến thức"),textNode("p",k.explanation||""));
    if(k.example)section.append(textNode("p","Ví dụ: "+k.example,"muted"));
    root.append(section);
   }
-  if(l.worked_example)root.append(textNode("p","Ví dụ giải mẫu: "+l.worked_example));
+  if(l.worked_example&&(!stages.length||lessonLevel==="DETAILED_AI_LESSON"))
+   root.append(textNode("p","Ví dụ giải mẫu: "+l.worked_example));
   const list=l.study_workflow||[];
   if(list.length){
    root.append(textNode("h3","Cách học bài này"));
@@ -218,6 +229,7 @@ async function loadLesson(id){
   const current=(c?.lessons||[]).find(z=>z.id===id);
   if(current)current.studied=true;
   $("practiceLesson").disabled=!Number(current?.verified_question_count);
+  $("practiceLesson").title=current?.verified_question_count?"":"Chỉ mở khi bài có câu đã kiểm định độc lập và không phụ thuộc hình chưa nghiệm thu.";
   $("nextLesson").disabled=!(c?.lessons||[]).some(x=>x.number>l.number);
   status("Đã mở bài học. Mời bạn đọc kiến thức và làm luyện tập.");
   await refreshHistory();
@@ -294,6 +306,7 @@ function renderResults(scores,weakness){
  const root=$("resultKpis");root.replaceChildren();
  stat(root,"Đúng tự động",scores.correct??0);stat(root,"Sai tự động",scores.incorrect??0);
  stat(root,"Chờ đánh giá",scores.needs_review??0);
+ stat(root,"Chưa trả lời",scores.unanswered??0);
  const list=$("gradeList");list.replaceChildren();
  const summary=document.createElement("div");summary.className="state";
  summary.textContent=scores.final_score!==null&&scores.final_score!==undefined?
