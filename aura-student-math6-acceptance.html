@@ -34,7 +34,7 @@ ul{line-height:1.7}#result{min-height:30px;white-space:pre-wrap;overflow-wrap:an
 <li><a href="./aura-student.html">Ghép thiết bị Student và kiểm tra quyền</a></li>
 <li><a href="./aura-student-math6.html">Mở Toán 6 — xem đủ 9 chương, chọn bài học</a></li>
 <li>Thử một bài luyện có câu đã kiểm định, nộp bài và xem kết quả. Sau đó mở một bài tự luyện bổ trợ và xem lời giải (không tính điểm).</li>
-<li>Chọn tab <strong>Toán đố từng bước</strong>, nhập dữ kiện, điều cần tìm, các bước giải và đáp số; kiểm tra cách trình bày lời giải mẫu.</li>
+<li>Chọn tab <strong>Toán đố từng bước</strong>, điền đủ dữ kiện, chọn phép tính, nhập đáp số và đơn vị, xem điểm tạm 4 phần cùng lỗi cần ôn. Admin phải chấm lại lời giải viết tự do.</li>
 <li>Thử một bài kiểm tra chương, nộp bài có câu cần chấm thủ công.</li>
 <li><a href="./aura-student-math6-admin-review.html">Admin chấm câu thủ công và ghi nhận xét</a>.</li>
 <li>Quay về Student để xem điểm cuối, lịch sử và phần cần ôn.</li>
@@ -122,6 +122,9 @@ function render(data){
   ["Luyện chấm thử đã kiểm định",r.practice_ready_lessons+"/43"],
   ["Bài tự luyện bổ trợ không tính điểm",r.formative_self_check_lessons+"/43"],
   ["Toán đố có hướng dẫn từng bước",r.word_problem_guides_staging],
+  ["Bài toán đố có rubric 4 phần",r.word_step_rubrics_staging],
+  ["Toán đố chờ Admin rà",r.word_step_pending_admin_review],
+  ["Toán đố Admin đã rà",r.word_step_admin_reviewed],
   ["Câu kiểm định độc lập",r.student_preview_safe_question_pool],
   ["Bài Student đã nộp",r.completed_student_previews],
   ["Câu chấm thủ công",r.admin_manual_reviews],
