@@ -175,7 +175,7 @@ function render(){
  ["Cần sửa",o.needs_fix],
  ["Sẵn sàng chuyển giáo viên",o.ready_for_teacher],
  ["Giáo viên đã duyệt",o.teacher_approved],
- ["Biên bản thiết bị thật",0]
+ ["Biên bản Admin tự xác nhận trên thiết bị",o.word_device_admin_reports]
  ]){const block=document.createElement("div");block.className="kpi";block.append(element("strong",String(value??0)),element("small",label));root.append(block)}
  selectOptions("rubricId",contents.rubrics||[],x=>({id:x.question_id,title:x.question_id+" · "+x.review_state}),"Chọn bài để rà");
  selectOptions("candidateId",contents.triage||[],x=>({id:x.question_id,title:x.question_id+" · "+x.lesson_id}),"Chọn ứng viên");
