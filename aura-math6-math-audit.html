@@ -1,0 +1,112 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Cache-Control" content="no-store"><title>AURA STUDY · Kiểm định toán học độc lập</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:#f5f8fc;color:#1b3550}*{box-sizing:border-box}
+body{margin:0}header{background:#173a57;color:#fff;padding:16px max(16px,calc((100vw - 1050px)/2));display:flex;justify-content:space-between;gap:12px}
+header a{color:#e0f3ff}main{max-width:1050px;margin:22px auto;padding:0 15px 35px}h1{font-size:clamp(1.5rem,3vw,2.1rem)}p{line-height:1.55}.muted{color:#64788e}
+.card{border:1px solid #d9e4f0;border-radius:14px;background:#fff;padding:18px;margin:14px 0}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.stat{background:#f3f8fc;border-radius:10px;padding:12px}
+.stat strong{display:block;font-size:1.65rem}.stat small{color:#5a6e83}label{display:block;margin:9px 0 4px;font-weight:700}
+select,button{font:inherit;border-radius:9px;min-height:46px;padding:10px}select{width:100%;border:1px solid #c4d2de;background:#fff}
+button{background:#19628d;color:#fff;border:none;cursor:pointer}button:disabled{opacity:.55}
+.filters{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:10px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px;border-bottom:1px solid #e1e8f0;vertical-align:top}th{color:#526d86}
+.tag{display:inline-block;border-radius:9px;font-size:.75rem;padding:5px 8px;font-weight:750;background:#eef2f5;color:#405872}
+.good{background:#e8f8f1;color:#12724d}.warning{background:#fff4e8;color:#8d5a19}
+.row{border-bottom:1px solid #e5edf4;padding:14px 0}.row summary{cursor:pointer;font-weight:700;overflow-wrap:anywhere}.row p{margin:6px 0}.note{border-left:4px solid #c59143;background:#fff7e8;padding:12px}
+#status{white-space:pre-wrap;overflow-wrap:anywhere}.sub{font-size:.87rem}.inline{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+@media(max-width:680px){.filters{grid-template-columns:1fr}.card{padding:12px}.stats{gap:7px}.stat{padding:9px}.stat strong{font-size:1.35rem}table{font-size:.86rem}th,td{padding:8px 5px}}
+</style></head>
+<body><header><strong>AURA STUDY · KIỂM ĐỊNH TOÁN 6</strong><a href="./aura-admin.html">Về Admin</a></header>
+<main><h1>Kiểm định toán học độc lập</h1><p class="muted">Theo dõi 402 câu trong 9 chương. “Đạt quy tắc độc lập” nghĩa là phép tính/quan hệ toán học được máy tính lại bằng một quy tắc xác định; không có nghĩa toàn bộ lời giải và bài tập SGK gốc đã được kiểm định.</p>
+<div class="card"><div class="stats" id="stats"></div><p id="status" role="status" class="muted">Đang xác minh phiên Admin…</p><div class="note">Đối chiếu SGK theo trang: chưa có bản sách gốc được xác minh, nên không cấp chứng nhận nội dung SGK. Các câu còn chờ kiểm định không được tự chuyển thành đạt.</div></div>
+<div class="card"><h2>Độ phủ kiểm định theo chương</h2><div style="overflow-x:auto"><table><thead><tr><th>Chương</th><th>Tổng</th><th>Đạt quy tắc</th><th>Cần kiểm định tiếp</th></tr></thead><tbody id="chapters"></tbody></table></div></div>
+<div class="card"><h2>Tra cứu câu hỏi cần kiểm định</h2>
+<div class="filters"><div><label for="chapter">Chương</label><select id="chapter"></select></div><div><label for="filter">Trạng thái</label><select id="filter"><option value="NEEDS_INDEPENDENT_CHECK">Cần kiểm định tiếp</option><option value="RULE_VERIFIED">Đạt quy tắc độc lập</option><option value="ALL">Tất cả câu trong chương</option></select></div></div>
+<p id="questionStatus" class="muted">Chọn chương để xem bằng chứng.</p><div id="questions"></div></div>
+<p class="muted">Nguồn thông tin bộ SGK: <a href="https://nxbgd.vn/bai-viet/gioi-thieu-sach-giao-khoa-lop-6-bo-sach-ket-noi-tri-thuc-voi-cuoc-song" target="_blank" rel="noopener noreferrer">Giới thiệu SGK Toán 6 từ Nhà xuất bản Giáo dục</a>. Trang này không cung cấp dữ liệu bài tập gốc từng trang.</p>
+</main>
+<script>
+"use strict";
+const BASE="https://ufqzuowjhdqpydqvcsob.supabase.co";
+const KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
+const STORE="aura-stage-parent-v1";
+const el=id=>document.getElementById(id);
+let chapters=[],items=[],refreshTokenPromise=null;
+function session(){try{return JSON.parse(localStorage.getItem(STORE)||"null")}catch{return null}}
+async function token(){
+ const s=session();if(!s?.access_token)throw Error("Cần đăng nhập Admin trong cùng trình duyệt.");
+ if(!s.expires_at||s.expires_at*1000>Date.now()+60000)return s.access_token;
+ if(!s.refresh_token)throw Error("Phiên Admin hết hạn; vui lòng đăng nhập lại.");
+ if(!refreshTokenPromise){
+  refreshTokenPromise=(async()=>{
+   const r=await fetch(BASE+"/auth/v1/token?grant_type=refresh_token",{
+    method:"POST",cache:"no-store",headers:{"apikey":KEY,"Content-Type":"application/json"},
+    body:JSON.stringify({refresh_token:s.refresh_token})});
+   if(!r.ok)throw Error("Không gia hạn được phiên Admin.");
+   const next=await r.json();if(!next.access_token||!next.refresh_token)throw Error("Phiên mới không hợp lệ.");
+   const latest=session();
+   if(latest?.access_token===s.access_token)localStorage.setItem(STORE,JSON.stringify({...latest,...next,expires_at:Math.floor(Date.now()/1000)+(Number(next.expires_in)||3600)}));
+   return session()?.access_token||next.access_token;
+  })().finally(()=>refreshTokenPromise=null);
+ }
+ return refreshTokenPromise;
+}
+async function api(volume=null,chapter=null){
+ const r=await fetch(BASE+"/functions/v1/aura-admin-review-v1",{
+ method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+await token()},
+ body:JSON.stringify({action:"math_independent_audit",volume,chapter})
+ });
+ let result={};try{result=await r.json()}catch{}
+ if(!r.ok)throw Error([401,403].includes(r.status)?"Phiên hoặc quyền Admin chưa hợp lệ. Đăng nhập lại trong Safari.":result.error||("API lỗi "+r.status));
+ return result.audit;
+}
+function metric(label,n){
+ const d=document.createElement("div"),b=document.createElement("strong"),s=document.createElement("small");d.className="stat";b.textContent=n;s.textContent=label;d.append(b,s);return d;
+}
+function showSummary(data){
+ const root=el("stats");root.replaceChildren();
+ root.append(metric("Ngân hàng câu hỏi",data.total_questions),metric("Đạt quy tắc độc lập",data.rule_verified),metric("Còn chờ chứng minh",data.awaiting_independent));
+ const ch=el("chapter"),table=el("chapters");ch.replaceChildren();table.replaceChildren();chapters=data.chapters||[];
+ for(const row of chapters){
+  const value=row.volume+":"+row.chapter;
+  const o=document.createElement("option");o.value=value;o.textContent="Tập "+row.volume+" · Chương "+row.chapter+" — "+row.chapter_title;ch.append(o);
+  const tr=document.createElement("tr");
+  for(const n of ["Tập "+row.volume+" · "+row.chapter,row.question_count,row.rule_verified,row.awaiting_independent]){
+   const td=document.createElement("td");td.textContent=String(n);tr.append(td);
+  }
+  table.append(tr);
+ }
+ el("status").textContent="Đã tải kiểm định hiện hành; "+data.rule_verified+" câu có bằng chứng quy tắc, "+data.awaiting_independent+" câu chưa chứng nhận độc lập.";
+}
+function render(){
+ const root=el("questions");root.replaceChildren();
+ const desired=el("filter").value;let subset=items.filter(x=>desired==="ALL"||x.status===desired);
+ el("questionStatus").textContent="Hiển thị "+subset.length+"/"+items.length+" câu trong chương. Không có thao tác duyệt hàng loạt từ trang này.";
+ for(const q of subset){
+  const node=document.createElement("details");node.className="row";
+  const summary=document.createElement("summary");
+  summary.textContent=q.id+" — "+(q.status==="RULE_VERIFIED"?"Đạt quy tắc ":"Chờ kiểm định ");
+  const tag=document.createElement("span");tag.className="tag "+(q.status==="RULE_VERIFIED"?"good":"warning");tag.textContent=q.status==="RULE_VERIFIED"?"RULE VERIFIED":"NEEDS CHECK";
+  const text=document.createElement("p");text.textContent=q.stem;
+  const key=document.createElement("p");key.className="sub";key.textContent="Đáp án đang lưu: "+q.answer;
+  const note=document.createElement("p");note.className="muted sub";
+  note.textContent=q.status==="RULE_VERIFIED"?"Quy tắc "+q.rule+" · kết quả tính lại "+q.expected+"; đáp án quy đổi "+q.observed+".":
+  "Chưa có chứng cứ kiểm định độc lập bằng quy tắc xác định. AI đã duyệt nội dung không thay thế bước này.";
+  node.append(summary,tag,text,key,note);root.append(node);
+ }
+}
+async function showChapter(){
+ const [volume,chapter]=el("chapter").value.split(":");
+ if(!volume||!chapter)return;
+ el("questionStatus").textContent="Đang tải chứng cứ kiểm định theo chương…";
+ try{const data=await api(Number(volume),chapter);items=data.questions||[];render()}
+ catch(e){el("questionStatus").textContent=e.message}
+}
+async function start(){
+ try{const data=await api();showSummary(data);await showChapter()}
+ catch(e){el("status").textContent="Không kết nối được: "+e.message}
+}
+el("chapter").addEventListener("change",showChapter);
+el("filter").addEventListener("change",render);
+start();
+</script></body></html>
