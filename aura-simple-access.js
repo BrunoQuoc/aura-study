@@ -25,7 +25,7 @@ if(role==="student"){
 }
 function show(id,visible){const node=$(id);if(node)node.hidden=!visible;}
 function errorText(e){return e?.message||"Thao tác chưa thành công, vui lòng thử lại."}
-async function captchaToken(){
+async function captchaToken(requireResponse=true){
  if(AURA_AUTH_SECURITY.captchaMode!=="turnstile")return null;
  if(!challengeLoading){
   challengeLoading=(async()=>{
@@ -44,6 +44,7 @@ async function captchaToken(){
   })().catch(e=>{challengeLoading=null;throw e});
  }
  await challengeLoading;
+ if(!requireResponse)return null;
  const value=globalThis.turnstile?.getResponse?.(turnstileId);
  if(typeof value!=="string"||value.length<10)throw Error("Vui lòng hoàn thành xác minh bên dưới nút đăng nhập.");
  return value;
@@ -51,7 +52,7 @@ async function captchaToken(){
 function ensureCaptcha(){
  if(AURA_AUTH_SECURITY.captchaMode!=="turnstile")return;
  show("captchaBox",true);
- if(!challengeLoading)captchaToken().catch(e=>set("loginStatus",errorText(e)));
+ if(!challengeLoading)captchaToken(false).catch(e=>set("loginStatus",errorText(e)));
 }
 function resetChallenge(){
  if(turnstileId!==null)globalThis.turnstile?.reset?.(turnstileId);
