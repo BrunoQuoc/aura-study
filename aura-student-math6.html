@@ -189,6 +189,16 @@ async function loadLesson(id){
   showTab("learn");$("lessonView").hidden=false;$("learnView").hidden=true;
   $("lessonTitle").textContent="Bài "+l.number+" · "+l.title;
   $("lessonSummary").textContent=l.core_knowledge||"Nội dung trọng tâm";
+  const lessonLevel=l.content_level||"SUMMARY_ONLY";
+  const warn=$("lessonLevelNote")||document.createElement("div");
+  warn.id="lessonLevelNote";warn.className="state"+(lessonLevel==="DETAILED_AI_LESSON"?"":" warning");
+  warn.textContent=lessonLevel==="DETAILED_AI_LESSON"?
+   "Bài có ví dụ/khối kiến thức AURA chi tiết, vẫn chờ nghiệm thu sư phạm.":
+   lessonLevel==="OBJECTIVES_ONLY"?
+   "Bài hiện mới có mục tiêu học tập, chưa có bài giảng và hình vẽ được nghiệm thu đầy đủ.":
+   "Bài hiện mới là bản tóm tắt kiến thức; bài giảng và ví dụ đầy đủ chưa được nghiệm thu.";
+  $("lessonSummary").insertAdjacentElement("afterend",warn);
+
   const root=$("knowledge");root.replaceChildren();
   for(const k of l.knowledge_blocks||[]){
    const section=document.createElement("section");section.className="answer-card";
@@ -206,6 +216,7 @@ async function loadLesson(id){
   }
   const c=chapter();
   const current=(c?.lessons||[]).find(z=>z.id===id);
+  if(current)current.studied=true;
   $("practiceLesson").disabled=!Number(current?.verified_question_count);
   $("nextLesson").disabled=!(c?.lessons||[]).some(x=>x.number>l.number);
   status("Đã mở bài học. Mời bạn đọc kiến thức và làm luyện tập.");
