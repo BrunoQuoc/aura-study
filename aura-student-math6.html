@@ -1,0 +1,384 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Cache-Control" content="no-store"><title>AURA STUDY · Toán 6 · Student Preview</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#20364c;background:#f4f7fb;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}button,input,select{font:inherit}
+header{background:#fff;border-bottom:1px solid #dfe6ef;padding:13px clamp(15px,4vw,54px);display:flex;align-items:center;justify-content:space-between;gap:12px}
+header a{color:#1c6488;text-decoration:none;font-weight:650}
+.brand{font-weight:850;letter-spacing:.045em;color:#123956;font-size:1.06rem}
+.brand small{font-size:.67rem;color:#66849c;display:block;letter-spacing:.12em}
+main{max-width:1080px;margin:22px auto;padding:0 15px 42px}
+h1{font-size:clamp(1.7rem,4vw,2.45rem);line-height:1.2;margin:7px 0 12px;letter-spacing:-.025em}
+h2{font-size:1.16rem;margin:0 0 11px}
+h3{font-size:1.04rem;margin:12px 0 8px}p{line-height:1.6;margin:8px 0}
+.muted{color:#5d7086}.small{font-size:.87rem}.eyebrow{color:#1e7397;font-weight:800;font-size:.77rem;letter-spacing:.13em;text-transform:uppercase}
+.tag{font-size:.73rem;color:#56728a;background:#edf3f8;border:1px solid #dce7ef;padding:5px 9px;border-radius:18px;font-weight:750;white-space:nowrap}
+.hero{padding:15px 0 12px;max-width:760px}
+.card{background:#fff;border:1px solid #dee8f2;border-radius:17px;padding:19px;box-shadow:0 7px 25px #1b395108;margin:12px 0}
+.menu{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.menu button{background:#e8f1f8;color:#245a7b;border:1px solid #d8e4ee;padding:10px 15px;min-height:44px}
+.menu button[aria-selected="true"]{background:#175f89;color:#fff;border-color:#175f89}
+button{background:#17638c;color:#fff;border:0;border-radius:11px;min-height:45px;padding:11px 16px;font-weight:700;cursor:pointer;touch-action:manipulation}
+button.secondary{background:#eaf2f8;color:#1b5b83}
+button:disabled{opacity:.48;cursor:default}
+button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #8dcff6;outline-offset:3px}
+select,input{min-height:46px;width:100%;padding:10px 12px;border:1px solid #b5c9dc;border-radius:10px;background:#fff;color:#1a3550}
+label{display:block;margin:10px 0 6px;font-weight:700;font-size:.88rem}
+.controls{display:flex;flex-wrap:wrap;align-items:end;gap:10px}.controls>*{flex:1 1 180px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.42fr);gap:18px}
+.lesson{display:flex;gap:12px;justify-content:space-between;align-items:center;border-top:1px solid #e3ebf2;padding:12px 0}
+.lesson h3{font-size:.97rem;margin:0}.lesson p{margin:5px 0;font-size:.83rem}
+.lesson .actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.lesson .actions button{font-size:.81rem;padding:8px 11px;min-height:38px}
+.question{padding:18px 0;border-top:1px solid #e3ebf2}
+.question h3{margin:5px 0 10px;font-size:1rem}.question .number{font-size:.75rem;font-weight:800;color:#5b7894}
+.questions label{margin-top:14px}
+.answer-card{border-left:4px solid #b6d7e8;background:#f3f8fc;border-radius:8px;padding:11px;margin:10px 0}
+.answer-card strong{display:block}.answer-card .small{margin-top:4px}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kpi{border:1px solid #dfeaf3;border-radius:11px;padding:13px;background:#f8fbfe}
+.kpi strong{display:block;font-size:1.5rem}.kpi small{color:#60758b}
+.state{border-left:4px solid #6ca7bd;background:#f0f8fc;border-radius:8px;padding:12px 14px;color:#335b70;font-size:.91rem;line-height:1.6;margin:13px 0}
+.warning{border-left-color:#b98b48;background:#fff7eb;color:#74552e}
+#status,#examStatus{white-space:pre-wrap;overflow-wrap:anywhere;min-height:20px}
+.history{border-top:1px solid #e2eaf3;padding:12px 0;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.history strong{display:block;font-size:.94rem}
+.history p{font-size:.82rem;color:#667b90;margin:4px 0}
+[hidden]{display:none!important}
+footer{max-width:1080px;margin:auto;padding:10px 15px 36px;font-size:.81rem;color:#8493a5}
+@media(max-width:780px){.layout{grid-template-columns:1fr}.card{padding:14px}main{margin:12px auto}.lesson{align-items:flex-start;flex-direction:column}.lesson .actions{justify-content:flex-start}.kpis{gap:7px}.kpi{padding:8px}.kpi strong{font-size:1.2rem}.menu{gap:7px}.menu button{padding:9px 12px}}
+</style></head><body>
+<header><a href="./aura-portal.html" class="brand">AURA STUDY<small>STUDENT · TOÁN 6</small></a><a href="./aura-student.html">Tài khoản &amp; thiết bị</a></header>
+<main>
+<section class="hero"><span class="eyebrow">Student Preview · Staging</span><h1 id="greeting">Học Toán 6 theo từng bước</h1>
+<p>Chọn bài để học kiến thức, làm luyện tập hoặc kiểm tra thử. Hệ thống gợi ý ôn tập dựa trên những câu có thể chấm an toàn.</p></section>
+<div class="state warning"><strong>Phiên bản thử nghiệm:</strong> Chỉ dành cho thiết bị Student đã ghép. Nội dung AURA tự biên soạn theo chủ đề SGK; chưa phải bộ bài tập gốc đã đối chiếu toàn bộ. Điểm thử không phải kết quả chính thức. Exam Engine live vẫn khóa.</div>
+<p id="status" role="status" aria-live="polite">Đang xác minh kết nối thiết bị và tải nội dung Toán 6...</p>
+<div id="workspace" hidden>
+<nav class="menu" aria-label="Chức năng học tập">
+<button type="button" data-tab="learn" aria-selected="true">Học bài</button>
+<button type="button" data-tab="practice" aria-selected="false">Luyện tập</button>
+<button type="button" data-tab="exam" aria-selected="false">Kiểm tra thử</button>
+<button type="button" data-tab="progress" aria-selected="false">Kết quả &amp; điểm yếu</button>
+</nav>
+<div class="layout">
+<div>
+<section class="card"><h2>Chọn chương học</h2><label for="chapter">Toán 6 — Tập 1 và Tập 2</label>
+<select id="chapter" aria-label="Chương học"></select>
+<p id="chapterHint" class="muted small"></p></section>
+<section class="card" id="learnView"><h2>1. Nội dung bài học</h2><div id="lessons"></div></section>
+<section class="card" id="lessonView" hidden><button type="button" id="backToLessons" class="secondary">Về danh sách bài</button><h2 id="lessonTitle" style="margin-top:15px"></h2>
+<p id="lessonSummary"></p><div id="knowledge"></div><div class="state">Ví dụ và kiến thức trong bài là học liệu AURA tự biên soạn. Hãy đối chiếu với SGK trên lớp.</div>
+<div class="controls"><button id="practiceLesson" type="button">Luyện bài này</button><button id="nextLesson" type="button" class="secondary">Bài tiếp theo</button></div></section>
+<section class="card" id="practiceView" hidden><h2>2. Luyện tập theo chương</h2><p>Mỗi lượt tối đa 3 câu đã có bằng chứng kiểm định quy tắc; câu chưa được xác minh không xuất hiện trong bài luyện thử.</p><button id="startPractice" type="button">Bắt đầu 3 câu luyện</button></section>
+<section class="card" id="examView" hidden><h2>3. Kiểm tra thử theo chương</h2><p>Bản kiểm tra ngắn tối đa 6 câu đã kiểm định, không thay thế đề kiểm tra chính thức 15 câu. Không có giới hạn thời gian.</p><button id="startExam" type="button">Làm bài kiểm tra thử</button></section>
+<section class="card" id="attemptView" hidden><h2 id="attemptTitle">Bài làm</h2><p id="attemptMeta" class="muted small"></p><form id="answerForm"><div class="questions" id="questions"></div><button id="submit" type="submit">Nộp bài và xem kết quả</button></form><p id="examStatus" role="status"></p></section>
+<section class="card" id="resultsView" hidden><h2>4. Kết quả bài làm</h2><div class="kpis" id="resultKpis"></div><div id="gradeList"></div>
+<h3>Kiến thức nên ôn lại</h3><div id="weaknesses"></div><button type="button" class="secondary" id="returnToStudy">Tiếp tục học</button></section>
+<section class="card" id="progressView" hidden><h2>5. Lịch sử học tập và bài làm thử</h2><div class="kpis" id="progressKpis"></div><div id="history"></div><div class="state">Những câu cần giáo viên xem xét chưa được tính điểm cuối. Không quy đổi thành điểm chính thức.</div></section>
+</div>
+<aside><section class="card"><h2>Tiến độ của bạn</h2><div id="overview" class="kpis"></div>
+<p class="muted small">Học theo từng bài · luyện theo chương · xem lại lỗi sau khi nộp.</p>
+<div class="state">Đang dùng dữ liệu Staging để nghiệm thu chức năng Student, chưa dùng cho học sinh chính thức.</div></section></aside>
+</div>
+</div>
+</main><footer>AURA STUDY · STUDENT STAGING V1 — Không nhập dữ liệu học sinh thật; 23 hình đang chờ nghiệm thu iPhone chưa được đưa vào bài thử.</footer>
+<script>
+"use strict";
+const URL="https://ufqzuowjhdqpydqvcsob.supabase.co",KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
+const STORAGE_KEY="aura-stage-student-v1",ENDPOINT=URL+"/functions/v1/aura-student-math6-preview-v1";
+const $=id=>document.getElementById(id);
+let catalog=[],historyData=[],chaptersMap=new Map(),currentChapter=null,currentLessonId=null,attempt=null,currentQuestions=[],lastResults=null,refreshTask=null,busy=false;
+let currentTab="learn";
+const DRAFT_PREFIX="aura-math6-preview-draft-v1:",ACTIVE_KEY="aura-math6-preview-active-v1";
+function storedSession(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"null")}catch{return null}}
+async function accessToken(){
+ const s=storedSession();
+ if(!s?.access_token)throw Error("Chưa có phiên Student. Mở trang Thiết bị và ghép đôi trước.");
+ if(!s.expires_at||s.expires_at*1000>Date.now()+60000)return s.access_token;
+ if(!s.refresh_token)throw Error("Phiên Student đã hết hạn. Đăng nhập lại trên thiết bị này.");
+ if(!refreshTask)refreshTask=(async()=>{
+  const res=await fetch(URL+"/auth/v1/token?grant_type=refresh_token",{method:"POST",cache:"no-store",headers:{"apikey":KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:s.refresh_token})});
+  if(!res.ok)throw Error("Không gia hạn được phiên Student. Quay lại màn hình tài khoản.");
+  const next=await res.json();if(!next.access_token||!next.refresh_token)throw Error("Phiên mới không hợp lệ.");
+  const current=storedSession();
+  if(current?.access_token===s.access_token)localStorage.setItem(STORAGE_KEY,JSON.stringify({...current,...next,expires_at:Math.floor(Date.now()/1000)+(Number(next.expires_in)||3600)}));
+  return storedSession()?.access_token||next.access_token;
+ })().finally(()=>refreshTask=null);
+ return refreshTask;
+}
+async function api(action,extra={}){
+ const r=await fetch(ENDPOINT,{method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+await accessToken()},body:JSON.stringify({action,...extra})});
+ let v={};try{v=await r.json()}catch{}
+ if(!r.ok){
+  if(r.status===401||r.status===403)throw Error("Phiên Student chưa hợp lệ hoặc thiết bị chưa ghép. Mở trang Tài khoản & thiết bị.");
+  throw Error(v.error||"Máy chủ thử nghiệm chưa sẵn sàng.");
+ }
+ if(!v.staging_preview||v.live_exam_enabled!==false)throw Error("Phiên phản hồi không thuộc môi trường Student Preview.");
+ return v.content;
+}
+function textNode(tag,text,cls){
+ const node=document.createElement(tag);node.textContent=text??"";if(cls)node.className=cls;return node;
+}
+function status(message){$("status").textContent=message}
+function makeButton(label,fn,secondary=false){
+ const b=document.createElement("button");b.type="button";b.textContent=label;if(secondary)b.className="secondary";
+ b.addEventListener("click",fn);return b;
+}
+function stat(container,label,value){
+ const card=document.createElement("div");card.className="kpi";
+ const b=textNode("strong",String(value)),s=textNode("small",label);card.append(b,s);container.append(card);
+}
+function chapter(){return chaptersMap.get($("chapter").value)}
+function showTab(tab){
+ currentTab=tab;
+ for(const b of document.querySelectorAll(".menu button[data-tab]"))b.setAttribute("aria-selected",String(b.dataset.tab===tab));
+ for(const name of ["learn","practice","exam","progress"])$(name+"View").hidden=name!==tab;
+ if(tab!=="learn")$("lessonView").hidden=true;
+ $("attemptView").hidden=true;$("resultsView").hidden=true;
+ if(tab==="learn")renderLessons();
+ if(tab==="progress")renderHistory();
+}
+function renderLessons(){
+ const c=chapter();const root=$("lessons");root.replaceChildren();
+ if(!c)return;
+ for(const l of c.lessons||[]){
+  const card=document.createElement("div");card.className="lesson";
+  const left=document.createElement("div");
+  left.append(textNode("h3","Bài "+l.number+" · "+l.title));
+  left.append(textNode("p",l.summary||"Ôn kiến thức của bài","muted"));
+  left.append(textNode("p",(l.studied?"Đã mở học · ":"Chưa mở học · ")+(Number(l.verified_question_count)||0)+" câu đã kiểm định","muted small"));
+  const actions=document.createElement("div");actions.className="actions";
+  actions.append(makeButton("Học bài",()=>loadLesson(l.id)));
+  const quiz=makeButton("Luyện",()=>startLesson(l.id),true);
+  if(!Number(l.verified_question_count)){quiz.disabled=true;quiz.title="Bài này chưa có câu luyện đạt kiểm định độc lập";}
+  actions.append(quiz);card.append(left,actions);root.append(card);
+ }
+}
+function renderCatalog(data){
+ catalog=data.chapters||[];
+ if(catalog.length!==9)throw Error("Danh mục Toán 6 chưa đủ 9 chương.");
+ $("greeting").textContent="Chào "+(data.learner?.name||"bạn")+"! Cùng học Toán 6 nhé";
+ const select=$("chapter");select.replaceChildren();chaptersMap=new Map();
+ for(const c of catalog){
+  const option=document.createElement("option");option.value=c.id;option.textContent="Tập "+c.volume+" · Chương "+c.chapter+" — "+c.title;
+  chaptersMap.set(c.id,c);select.append(option);
+ }
+ $("workspace").hidden=false;chooseChapter();
+}
+function chooseChapter(){
+ currentChapter=chapter();
+ $("chapterHint").textContent=currentChapter?"Có "+currentChapter.question_count+" câu đã kiểm định độc lập cho bản luyện thử trong chương này.":"Chưa chọn chương.";
+ $("startPractice").disabled=!currentChapter?.question_count;
+ $("startExam").disabled=!currentChapter?.question_count;
+ renderLessons();renderOverview();
+}
+function renderOverview(){
+ const d=$("overview");d.replaceChildren();
+ const studied=Number(historyData?.lessons_opened||0);
+ const completed=Array.isArray(historyData?.attempts)?historyData.attempts.filter(x=>x.status==="SUBMITTED").length:0;
+ stat(d,"Bài đã mở",studied+"/43");stat(d,"Bài thử đã nộp",completed);
+}
+async function loadLesson(id){
+ if(busy)return;busy=true;
+ try{
+  status("Đang mở nội dung bài học...");
+  const data=await api("lesson",{lesson_id:id});
+  const l=data.lesson;
+  if(!l)throw Error("Không tìm được nội dung bài");
+  currentLessonId=id;
+  showTab("learn");$("lessonView").hidden=false;$("learnView").hidden=true;
+  $("lessonTitle").textContent="Bài "+l.number+" · "+l.title;
+  $("lessonSummary").textContent=l.core_knowledge||"Nội dung trọng tâm";
+  const root=$("knowledge");root.replaceChildren();
+  for(const k of l.knowledge_blocks||[]){
+   const section=document.createElement("section");section.className="answer-card";
+   section.append(textNode("h3",k.heading||"Kiến thức"),textNode("p",k.explanation||""));
+   if(k.example)section.append(textNode("p","Ví dụ: "+k.example,"muted"));
+   root.append(section);
+  }
+  if(l.worked_example)root.append(textNode("p","Ví dụ giải mẫu: "+l.worked_example));
+  const list=l.study_workflow||[];
+  if(list.length){
+   root.append(textNode("h3","Cách học bài này"));
+   const ul=document.createElement("ol");
+   for(const item of list)ul.append(textNode("li",item));
+   root.append(ul);
+  }
+  const c=chapter();
+  const current=(c?.lessons||[]).find(z=>z.id===id);
+  $("practiceLesson").disabled=!Number(current?.verified_question_count);
+  $("nextLesson").disabled=!(c?.lessons||[]).some(x=>x.number>l.number);
+  status("Đã mở bài học. Mời bạn đọc kiến thức và làm luyện tập.");
+  await refreshHistory();
+  $("lessonView").scrollIntoView({behavior:"smooth"});
+ }catch(e){status(e.message)}
+ finally{busy=false}
+}
+function hideLesson(){
+ $("lessonView").hidden=true;$("learnView").hidden=false;renderLessons();
+}
+async function startLesson(lessonId){
+ if(busy)return;
+ await createAttempt("start_lesson",{lesson_id:lessonId});
+}
+async function createAttempt(action,details){
+ if(busy)return;busy=true;
+ try{
+  status("Đang chọn những câu đã kiểm định toán học…");
+  const data=await api(action,details);
+  if(!data?.staging_preview||!Array.isArray(data.questions)||!data.questions.length)throw Error("Chưa có câu phù hợp.");
+  sessionStorage.setItem(ACTIVE_KEY,data.attempt_id);
+  renderAttempt(data);
+  status("Đã sẵn sàng. Bạn có thể làm bài và nộp để xem kết quả.");
+ }catch(e){status(e.message)}
+ finally{busy=false}
+}
+function renderAttempt(data){
+ attempt=data.attempt_id;currentQuestions=data.questions;lastResults=null;
+ for(const name of ["learnView","practiceView","examView","lessonView","progressView","resultsView"])$(name).hidden=true;
+ $("attemptView").hidden=false;$("submit").disabled=false;
+ $("attemptTitle").textContent=data.mode==="PRACTICE"?"Bài luyện Toán 6 — Staging":"Kiểm tra thử Toán 6 — Staging";
+ $("attemptMeta").textContent="Gồm "+currentQuestions.length+" câu đã kiểm định; không phải điểm kiểm tra chính thức.";
+ $("examStatus").textContent="Các câu trả lời được lưu nháp trong thiết bị này cho đến khi bạn nộp bài.";
+ const root=$("questions");root.replaceChildren();
+ let draft={};try{draft=JSON.parse(sessionStorage.getItem(DRAFT_PREFIX+attempt)||"{}")}catch{}
+ for(const [index,q] of currentQuestions.entries()){
+  const section=document.createElement("section");section.className="question";
+  section.append(textNode("div","Câu "+(index+1)+" · "+q.level,"number"),textNode("h3",q.stem));
+  const label=document.createElement("label");label.textContent="Câu trả lời";label.htmlFor="answer-"+index;
+  const input=document.createElement("input");input.id="answer-"+index;input.name=q.id;
+  input.autocomplete="off";input.spellcheck=false;input.maxLength=200;input.value=draft[q.id]||"";
+  input.placeholder="Nhập đáp án hoặc lời giải ngắn";
+  input.addEventListener("input",saveDraft);
+  section.append(label,input);root.append(section);
+ }
+ $("attemptView").scrollIntoView({behavior:"smooth"});
+}
+function saveDraft(){
+ if(!attempt)return;const answers={};
+ for(const [i,q] of currentQuestions.entries())answers[q.id]=$("answer-"+i).value;
+ sessionStorage.setItem(DRAFT_PREFIX+attempt,JSON.stringify(answers));
+}
+async function submitAnswers(event){
+ event.preventDefault();if(busy||!attempt)return;
+ busy=true;$("submit").disabled=true;
+ try{
+  $("examStatus").textContent="Đang chấm thử và phân tích những câu cần ôn...";
+  const answers={};
+  for(const [i,q] of currentQuestions.entries())answers[q.id]=$("answer-"+i).value.trim();
+  const result=await api("submit",{attempt_id:attempt,answers});
+  if(!result?.staging_preview||!result.results)throw Error("Kết quả chưa được trả về.");
+  sessionStorage.removeItem(DRAFT_PREFIX+attempt);
+  sessionStorage.removeItem(ACTIVE_KEY);
+  renderResults(result.results,result.weakness||[]);
+  $("attemptView").hidden=true;$("resultsView").hidden=false;
+  $("examStatus").textContent="Đã nộp bài";
+  status("Đã nhận kết quả thử. Hệ thống không ghi điểm chính thức.");
+  await refreshHistory();
+  $("resultsView").scrollIntoView({behavior:"smooth"});
+ }catch(e){$("examStatus").textContent=e.message}
+ finally{busy=false;$("submit").disabled=false}
+}
+function renderResults(scores,weakness){
+ const root=$("resultKpis");root.replaceChildren();
+ stat(root,"Đúng tự động",scores.correct??0);stat(root,"Sai tự động",scores.incorrect??0);
+ stat(root,"Chờ đánh giá",scores.needs_review??0);
+ const list=$("gradeList");list.replaceChildren();
+ const summary=document.createElement("div");summary.className="state";
+ summary.textContent=scores.final_score!==null&&scores.final_score!==undefined?
+  "Điểm bài thử: "+scores.final_score+"/"+scores.total+" (không phải điểm chính thức).":
+  "Chưa có điểm cuối: một số câu cần người đánh giá. Câu chưa chấm không bị tính là sai.";
+ list.append(summary);
+ for(const [i,x] of (scores.items||[]).entries()){
+  const node=document.createElement("div");node.className="answer-card";
+  const labels={CORRECT:"Đúng",INCORRECT:"Chưa đúng",REVIEW_REQUIRED:"Cần đánh giá",UNANSWERED:"Chưa trả lời"};
+  node.append(textNode("strong","Câu "+(i+1)+" · "+(labels[x.result]||x.result)));
+  node.append(textNode("p","Bạn trả lời: "+(x.submitted_answer||"(bỏ trống)"),"small"));
+  node.append(textNode("p","Đáp án tham khảo: "+(x.expected_answer||"Chưa có"),"small"));
+  if(x.explanation)node.append(textNode("p","Giải thích: "+x.explanation,"muted small"));
+  list.append(node);
+ }
+ const w=$("weaknesses");w.replaceChildren();
+ if(!weakness?.length)w.append(textNode("p","Chưa ghi nhận lỗi được kết luận. Hãy học tiếp hoặc thử một bài khác.","muted"));
+ else for(const item of weakness){
+  const node=document.createElement("div");node.className="answer-card";
+  node.append(textNode("strong",item.topic||item.lesson_id||"Kiến thức cần luyện"));
+  node.append(textNode("p",item.remediation_hint||"Ôn lại kiến thức và làm bài tương tự.","small"));
+  w.append(node);
+ }
+}
+async function refreshHistory(){
+ try{historyData=await api("history");renderOverview();if(currentTab==="progress")renderHistory()}
+ catch(e){status("Không tải được lịch sử: "+e.message)}
+}
+function renderHistory(){
+ const root=$("history"),kpi=$("progressKpis");root.replaceChildren();kpi.replaceChildren();
+ const all=historyData?.attempts||[];
+ stat(kpi,"Bài đã xem",historyData?.lessons_opened||0);
+ stat(kpi,"Đã nộp",all.filter(x=>x.status==="SUBMITTED").length);
+ stat(kpi,"Còn làm dở",all.filter(x=>x.status==="IN_PROGRESS").length);
+ if(!all.length){root.append(textNode("p","Bạn chưa làm bài thử nào. Hãy chọn Luyện tập để bắt đầu.","muted"));return}
+ for(const a of all){
+  const card=document.createElement("div");card.className="history";
+  const left=document.createElement("div");
+  const label=a.mode==="CHAPTER_TEST"?"Kiểm tra thử":"Luyện tập";
+  left.append(textNode("strong",label+" · Tập "+a.volume+" / Chương "+a.chapter));
+  const date=new Date(a.started_at);
+  left.append(textNode("p",(Number.isNaN(date.getTime())?"":date.toLocaleString("vi-VN"))+
+    (a.status==="SUBMITTED"?" · Đã nộp":" · Chưa nộp")));
+  if(a.status==="SUBMITTED"&&a.results){
+   const s=a.results;left.append(textNode("p",(s.correct??0)+" đúng tự động · "+(s.incorrect??0)+" sai · "+(s.needs_review??0)+" cần đánh giá"));
+  }
+  const action=makeButton(a.status==="SUBMITTED"?"Xem lại":"Tiếp tục",()=>resumeAttempt(a.attempt_id),true);
+  card.append(left,action);root.append(card);
+ }
+}
+async function resumeAttempt(id){
+ if(busy)return;busy=true;
+ try{
+  status("Đang tải bài làm của bạn...");
+  const data=await api("resume",{attempt_id:id});
+  if(data.status==="SUBMITTED"){
+   renderResults(data.results,data.weakness||[]);
+   for(const x of ["learnView","practiceView","examView","lessonView","progressView","attemptView"])$(x).hidden=true;
+   $("resultsView").hidden=false;
+   $("resultsView").scrollIntoView({behavior:"smooth"});
+  }else{
+   sessionStorage.setItem(ACTIVE_KEY,id);
+   renderAttempt(data);
+  }
+  status("Đã mở lại bài làm của bạn.");
+ }catch(e){status(e.message);sessionStorage.removeItem(ACTIVE_KEY)}
+ finally{busy=false}
+}
+async function initialize(){
+ try{
+  const data=await api("catalog");
+  if(!data?.staging_preview||data.live_exam_enabled!==false)throw Error("Không thể mở môi trường thử nghiệm.");
+  renderCatalog(data);
+  await refreshHistory();
+  status("Thiết bị đã được xác minh. Có thể bắt đầu học Toán 6.");
+  const active=sessionStorage.getItem(ACTIVE_KEY);
+  if(active)await resumeAttempt(active);
+ }catch(e){
+  status(e.message+" Mở trang Tài khoản & thiết bị để kiểm tra liên kết Student.");
+  $("workspace").hidden=true;
+ }
+}
+for(const b of document.querySelectorAll(".menu button[data-tab]")){
+ b.addEventListener("click",()=>showTab(b.dataset.tab));
+}
+$("chapter").addEventListener("change",chooseChapter);
+$("backToLessons").addEventListener("click",hideLesson);
+$("practiceLesson").addEventListener("click",()=>{if(currentLessonId)startLesson(currentLessonId)});
+$("nextLesson").addEventListener("click",()=>{
+ const c=chapter();const index=(c?.lessons||[]).findIndex(x=>x.id===currentLessonId);
+ if(index>=0&&c.lessons[index+1])loadLesson(c.lessons[index+1].id);
+});
+$("startPractice").addEventListener("click",()=>{const c=chapter();if(c)createAttempt("start",{batch_id:c.id,mode:"PRACTICE"})});
+$("startExam").addEventListener("click",()=>{const c=chapter();if(c)createAttempt("start",{batch_id:c.id,mode:"CHAPTER_TEST"})});
+$("answerForm").addEventListener("submit",submitAnswers);
+$("returnToStudy").addEventListener("click",()=>showTab("learn"));
+initialize();
+</script>
+</body></html>
