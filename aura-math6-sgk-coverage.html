@@ -36,7 +36,7 @@ button:disabled{opacity:.55}
 <section class="card"><h2>Độ phủ và xuất xứ</h2><div class="stats" id="stats"></div>
 <p id="status" role="status" class="muted">Đang yêu cầu quyền Admin và tải ma trận...</p>
 <button id="reload" type="button">Cập nhật dữ liệu</button>
-<div class="note"><strong>Kiểm soát nguồn:</strong> Nội dung chỉ được ghép với mục lục SGK công khai. Chưa có bản SGK gốc được xác minh từng trang, chưa có bài nào được xác nhận là trích nguyên văn hợp lệ. Các đề thi và bài luyện vẫn chỉ hoạt động trên Staging.</div>
+<p class="muted"><a href="./aura-math6-math-audit.html">Xem 95 câu đã kiểm tra lại toán học và 307 câu cần kiểm định tiếp</a></p><div class="note"><strong>Kiểm soát nguồn:</strong> Nội dung chỉ được ghép với mục lục SGK công khai. Chưa có bản SGK gốc được xác minh từng trang, chưa có bài nào được xác nhận là trích nguyên văn hợp lệ. Các đề thi và bài luyện vẫn chỉ hoạt động trên Staging.</div>
 </section>
 <section class="card"><h2>Ba lớp nội dung AURA STUDY</h2>
 <p><strong>1. Khung SGK:</strong> đúng thứ tự 43 bài, 9 chương; có các đơn vị luyện tập chung, ôn chương, hoạt động và thuật ngữ.</p>
@@ -100,7 +100,9 @@ function show(data){
  ["Giải thích thuật ngữ AI",s.glossary_definitions_ai],
  ["Đề luyện/ôn",s.blueprints_ai],
  ["Đơn vị còn thiếu",s.source_alignment_missing_units],
- ["Câu gốc SGK đã xác minh",s.exact_sgk_questions_verified]
+ ["Câu gốc SGK đã xác minh",s.exact_sgk_questions_verified],
+ ["Bài chưa đối chiếu đủ bốn bước",s.lesson_four_stage_unverified],
+ ["Nguồn giới thiệu NXB chính thức",s.official_publisher_overview_references]
  ])root.append(stat(label,String(val)));
  const chapters=$("chapterRows");chapters.replaceChildren();
  for(const c of data.chapters){
