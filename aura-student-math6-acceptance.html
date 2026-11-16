@@ -1,0 +1,169 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Cache-Control" content="no-store"><title>AURA STUDY · Nghiệm thu Student Toán 6</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:#f5f8fc;color:#1a3650}*{box-sizing:border-box}body{margin:0;min-height:100vh}
+header{background:#153b58;color:white;padding:16px max(16px,calc((100vw - 1040px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+a{color:#14638f}header a{color:#d6edff}main{max-width:1040px;margin:24px auto;padding:0 17px 50px}
+h1{font-size:clamp(1.5rem,4vw,2.1rem)}h2{font-size:1.23rem}p{line-height:1.57}
+.muted{color:#61788d}.card{border:1px solid #dbe6ef;background:white;border-radius:14px;padding:19px;margin:14px 0}
+.status{background:#edf5fa;border-left:4px solid #6193b0;padding:11px 13px;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere}
+.warn{background:#fff7e9;border-left-color:#c79751}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.kpi{padding:12px;border-radius:11px;background:#f5f9fd;border:1px solid #e1eaf2}.kpi strong{font-size:1.55rem;display:block}
+button{min-height:44px;padding:11px 15px;border:0;background:#176690;color:#fff;font:inherit;font-weight:700;border-radius:10px;cursor:pointer;touch-action:manipulation}button.secondary{background:#e7eff6;color:#174a6e}
+button:disabled{opacity:.55;cursor:default}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8fccfa;outline-offset:3px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}label{display:block;font-weight:650;margin:10px 0 5px}
+input,select{width:100%;padding:12px;border:1px solid #b6cada;border-radius:9px;background:#fff;font:inherit;min-height:46px}
+.check{display:flex;align-items:flex-start;gap:11px;border-bottom:1px solid #e7edf3;padding:13px 3px}.check input{width:20px;min-width:20px;height:20px;min-height:20px;accent-color:#176690;margin:2px 0}.check span{line-height:1.48}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.tag{display:inline-flex;background:#eaf3fa;border-radius:20px;padding:5px 10px;color:#286489;font-size:.78rem;font-weight:700}
+ul{line-height:1.7}#result{min-height:30px;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:740px){.grid{grid-template-columns:1fr}.kpis{gap:6px}.kpi{padding:9px}.kpi strong{font-size:1.2rem}.card{padding:14px}main{padding:0 12px}}
+</style></head><body>
+<header><strong>AURA STUDY · STUDENT QA</strong><a href="./aura-admin.html">Về Admin</a></header>
+<main>
+<span class="tag">STAGING · BIÊN BẢN THIẾT BỊ THẬT</span>
+<h1>Nghiệm thu chức năng Student Toán 6</h1>
+<p class="muted">Phân biệt kiểm thử backend với nghiệm thu sử dụng thật. Admin chỉ đánh dấu sau khi tự thao tác và xác nhận trên thiết bị Student đã ghép. Không nhập mã ghép đôi hoặc token vào trang này.</p>
+<section class="card"><h2>1. Kiểm tra hệ thống</h2>
+<div id="kpis" class="kpis"></div><p id="status" role="status" class="status">Đang kiểm tra phiên Admin…</p>
+<button type="button" id="refresh" class="secondary">Đọc lại trạng thái Staging</button>
+<p class="status warn">Bài Toán 6 trên Student hiện chỉ dùng những câu đã kiểm định toán học và không phụ thuộc hình chưa nghiệm thu. Không được coi trạng thái QA là phát hành thật.</p>
+</section>
+<div class="grid">
+<section class="card"><h2>2. Chạy thử trên Student</h2>
+<ul>
+<li><a href="./aura-student.html">Ghép thiết bị Student và kiểm tra quyền</a></li>
+<li><a href="./aura-student-math6.html">Mở Toán 6 — xem đủ 9 chương, chọn bài học</a></li>
+<li>Thử một bài luyện có câu đã kiểm định, nộp bài và xem kết quả.</li>
+<li>Thử một bài kiểm tra chương, nộp bài có câu cần chấm thủ công.</li>
+<li><a href="./aura-student-math6-admin-review.html">Admin chấm câu thủ công và ghi nhận xét</a>.</li>
+<li>Quay về Student để xem điểm cuối, lịch sử và phần cần ôn.</li>
+<li><a href="./aura-parent.html">Parent kiểm tra tiến độ Toán 6</a> bằng tài khoản Parent tương ứng.</li>
+<li>Thử xoay dọc/ngang và các thao tác cảm ứng, kiểm tra không tràn ngang.</li>
+</ul>
+<p class="muted">Lưu ý: Nếu tài khoản Admin và Student dùng hai trình duyệt hoặc thiết bị khác nhau, việc kiểm thử vẫn hợp lệ miễn có đúng hồ sơ học sinh được ghép.</p>
+</section>
+<section class="card"><h2>3. Chọn bài kiểm tra thực tế</h2>
+<label for="attempt">Bài kiểm tra chương đã nộp trong 30 ngày</label><select id="attempt"><option value="">Chưa tải danh sách</option></select>
+<label for="device">Tên thiết bị thực tế (ít nhất 3 ký tự)</label>
+<input id="device" placeholder="iPhone 12 Pro Max / Safari" maxlength="100" autocomplete="off">
+<p class="muted" id="attemptInfo">Danh sách chỉ bao gồm bài kiểm tra chương đã thực sự được nộp trong Staging. Không tạo bài giả để nghiệm thu.</p>
+</section></div>
+<section class="card"><h2>4. Checklist nghiệm thu vật lý</h2>
+<p class="muted">Chỉ đánh dấu sau khi xác nhận thực tế. Tất cả 9 điều kiện là bắt buộc; máy chủ sẽ kiểm tra thêm lịch sử học, bài luyện, bài kiểm tra và chấm thủ công.</p>
+<div id="checks"></div>
+<div class="row" style="margin-top:18px">
+<button id="submit" type="button" disabled>Ghi biên bản nghiệm thu Student</button>
+<button id="uncheck" class="secondary" type="button">Bỏ tất cả dấu xác nhận</button>
+</div>
+<p id="result" role="status"></p>
+</section>
+</main>
+<script>
+"use strict";
+const BASE="https://ufqzuowjhdqpydqvcsob.supabase.co",KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p",STORAGE="aura-stage-parent-v1";
+const $=id=>document.getElementById(id);
+const required=[
+["student_device_pair_verified","Phiên Student đã ghép đúng thiết bị và chỉ nhìn thấy hồ sơ được cấp."],
+["lesson_content_displayed","Đã mở một bài học và thấy đủ nội dung học/từng bước có hướng dẫn."],
+["practice_submitted_real_device","Đã thực sự nộp một bài luyện tập trên thiết bị."],
+["chapter_test_submitted_real_device","Đã thực sự nộp một bài kiểm tra thử chương."],
+["manual_review_result_confirmed","Admin đã chấm câu thủ công; Student xem được điểm cuối và nhận xét."],
+["history_and_weakness_visible","Student xem được lịch sử bài làm và phần cần ôn sau khi nộp."],
+["touch_and_rotation_verified","Các nút bấm, chọn bài, nhập bài, xoay dọc/ngang hoạt động tốt."],
+["no_mobile_overflow","Giao diện không bị che khuất hoặc tràn ngang trên thiết bị."],
+["parent_progress_visible","Parent mở được tiến độ học và bài kiểm tra của đúng học sinh."]
+];
+let refreshTask=null,readiness=null,candidates=[];
+function localSession(){try{return JSON.parse(localStorage.getItem(STORAGE)||"null")}catch{return null}}
+async function token(){
+ const s=localSession();if(!s?.access_token)throw Error("Cần đăng nhập bằng tài khoản Admin Staging trong cùng trình duyệt.");
+ if(!s.expires_at||s.expires_at*1000>Date.now()+60000)return s.access_token;
+ if(!s.refresh_token)throw Error("Phiên đã hết hạn, hãy đăng nhập lại Admin.");
+ if(!refreshTask)refreshTask=(async()=>{
+ const r=await fetch(BASE+"/auth/v1/token?grant_type=refresh_token",{method:"POST",cache:"no-store",headers:{"apikey":KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:s.refresh_token})});
+ if(!r.ok)throw Error("Không gia hạn được phiên Admin.");
+ const next=await r.json();if(!next.access_token||!next.refresh_token)throw Error("Phiên mới không hợp lệ.");
+ const now=localSession();
+ if(now?.access_token===s.access_token)localStorage.setItem(STORAGE,JSON.stringify({...now,...next,expires_at:Math.floor(Date.now()/1000)+(Number(next.expires_in)||3600)}));
+ return localSession()?.access_token||next.access_token;
+ })().finally(()=>refreshTask=null);
+ return refreshTask;
+}
+async function api(action,extra={}){
+ const res=await fetch(BASE+"/functions/v1/aura-admin-review-v1",{method:"POST",cache:"no-store",
+ headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+await token()},
+ body:JSON.stringify({action,...extra})});
+ let data={};try{data=await res.json()}catch{}
+ if(!res.ok)throw Error([401,403].includes(res.status)?"Phiên hoặc quyền Admin không hợp lệ.":data.error||"Không thực hiện được ("+res.status+")");
+ if(data.staging_only===false||data.live_exam_enabled===true)throw Error("Nguồn dữ liệu nghiệm thu không hợp lệ.");
+ return data;
+}
+function element(tag,text,cls){const e=document.createElement(tag);e.textContent=text??"";if(cls)e.className=cls;return e}
+function renderChecks(){
+ const root=$("checks");root.replaceChildren();
+ for(const [key,label] of required){
+  const wrapper=document.createElement("label");wrapper.className="check";wrapper.htmlFor="check-"+key;
+  const check=document.createElement("input");check.type="checkbox";check.id="check-"+key;check.dataset.key=key;
+  check.addEventListener("change",updateSubmit);
+  wrapper.append(check,element("span",label));root.append(wrapper);
+ }
+}
+function updateSubmit(){
+ const valid=required.every(([key])=>$("check-"+key).checked);
+ $("submit").disabled=!(valid&&candidates.length&&$("attempt").value&&$("device").value.trim().length>=3);
+}
+function render(data){
+ const r=data.readiness;readiness=r;
+ const root=$("kpis");root.replaceChildren();
+ for(const [label,n] of [
+  ["Bài học có học liệu AI",r.study_content_available_lessons+"/43"],
+  ["Bài có luyện an toàn",r.practice_ready_lessons+"/43"],
+  ["Câu kiểm định độc lập",r.student_preview_safe_question_pool],
+  ["Bài Student đã nộp",r.completed_student_previews],
+  ["Câu chấm thủ công",r.admin_manual_reviews],
+  ["Biên bản thiết bị thật",r.real_device_admin_attestations]
+ ]){const card=document.createElement("div");card.className="kpi";card.append(element("strong",String(n)),element("small",label));root.append(card)}
+ $("status").textContent=r.student_real_device_accepted?"Đã có ít nhất một biên bản nghiệm thu Student do Admin xác nhận. Vẫn giữ Staging và các cổng nội dung/SGK riêng.":"Chưa có biên bản nghiệm thu Student thiết bị thật. Chức năng backend đã có kiểm thử, cần thao tác trên thiết bị để xác nhận.";
+}
+function renderCandidates(data){
+ candidates=Array.isArray(data?.candidates?.attempts)?data.candidates.attempts:[];
+ const select=$("attempt");select.replaceChildren();
+ const empty=document.createElement("option");empty.value="";empty.textContent="Chọn bài đã nộp";select.append(empty);
+ for(const x of candidates){
+  const option=document.createElement("option");option.value=x.attempt_id;
+  const date=new Date(x.submitted_at);
+  option.textContent="Tập "+x.volume+" / Chương "+x.chapter+" · "+(Number.isNaN(date.getTime())?"":date.toLocaleDateString("vi-VN"));
+  select.append(option);
+ }
+ $("attemptInfo").textContent=candidates.length?
+  "Có "+candidates.length+" bài kiểm tra chương Staging. Chọn bài mà anh vừa thao tác trên thiết bị thật.":
+  "Chưa có bài kiểm tra chương đã nộp. Hãy thao tác trên Student trước rồi cập nhật danh sách.";
+ updateSubmit();
+}
+async function refresh(){
+ $("refresh").disabled=true;$("status").textContent="Đang kiểm tra quyền Admin và đọc số liệu...";
+ try{
+ const [a,b]=await Promise.all([api("student_math6_readiness"),api("student_math6_device_candidates")]);
+ render(a);renderCandidates(b);
+ }catch(e){$("status").textContent=e.message}
+ finally{$("refresh").disabled=false}
+}
+async function submit(){
+ updateSubmit();if($("submit").disabled)return;
+ $("submit").disabled=true;$("result").textContent="Đang lưu xác nhận với tài khoản Admin...";
+ try{
+  const checklist={};for(const [key] of required)checklist[key]=$("check-"+key).checked;
+  const d=await api("student_math6_device_attest",{attempt_id:$("attempt").value,device_label:$("device").value.trim(),checklist});
+  if(d?.acceptance?.status!=="ADMIN_USER_ATTESTED")throw Error("Máy chủ chưa ghi được biên bản.");
+  $("result").textContent="Đã ghi biên bản Admin xác nhận trên Staging. Mã biên bản: "+d.acceptance.attestation_id+". Không tự phát hành nội dung hay Exam Engine.";
+  await refresh();
+ }catch(e){$("result").textContent="Chưa thể nghiệm thu: "+e.message}
+ finally{updateSubmit()}
+}
+$("attempt").addEventListener("change",()=>{updateSubmit()});
+$("device").addEventListener("input",updateSubmit);
+$("refresh").addEventListener("click",refresh);
+$("submit").addEventListener("click",submit);
+$("uncheck").addEventListener("click",()=>{for(const [key] of required)$("check-"+key).checked=false;updateSubmit()});
+renderChecks();refresh();
+</script></body></html>
