@@ -1,32 +1,33 @@
 <!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>AURA STUDY · Admin</title><link rel="stylesheet" href="./aura-portal-v2.css"></head>
 <body data-role="admin" class="simple-portal"><header><a class="brand" href="./aura-portal.html">AURA STUDY<small>ADMIN</small></a><nav class="nav"><a href="./aura-portal.html">Trang chủ</a></nav></header>
 <main>
-<section class="hero"><span class="eyebrow">KHU VỰC ADMIN</span><h1>Admin tạo — Student học</h1><p class="muted">Tạo học sinh, nhận một liên kết và gửi cho thiết bị học. Không cần qua tài khoản Parent.</p></section>
+<section class="hero"><span class="eyebrow">AURA STUDY · QUẢN LÝ</span><h1>Quản lý lớp học thật dễ</h1><p class="muted">Anh chỉ cần tạo học sinh và quản lý bài học, bài tập. Phần kỹ thuật được giữ ở phía sau.</p></section>
 <section id="loginPanel" class="panel simple-box" hidden>
-<h2>Đăng nhập Admin</h2><p class="muted">Dùng email Admin đã được cấp quyền, không cần nhớ mật khẩu.</p>
+<h2>Đăng nhập Admin</h2><p class="muted">Nhập email Admin của anh. Hệ thống gửi liên kết đăng nhập, không cần mật khẩu.</p>
 <label for="email">Email Admin</label><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="email@example.com">
 <div id="captchaBox" hidden><div id="captcha" aria-label="Xác minh chống bot"></div></div>
 <button id="sendEmail" type="button" class="wide">Gửi link đăng nhập vào email</button>
 <p id="loginStatus" class="status" role="status" aria-live="polite">Đang kiểm tra đăng nhập...</p>
 </section>
 <div id="adminWorkspace" hidden>
-<section class="panel"><div class="simple-head"><div><span class="eyebrow">BƯỚC 1</span><h2>Tạo học sinh</h2></div><span class="stamp">STAGING</span></div>
-<p class="muted">Nhập tên hiển thị của học sinh thử nghiệm. Hệ thống tự tạo link học.</p>
+<section class="panel" id="manageStudents"><div class="simple-head"><div><span class="eyebrow">HỌC SINH</span><h2>Tạo học sinh</h2></div><span class="stamp">BẢN HỌC THỬ</span></div>
+<p class="muted">Nhập tên học sinh. AURA sẽ cấp một liên kết để anh gửi cho bạn ấy.</p>
 <label for="studentName">Tên học sinh</label>
-<div class="simple-form"><input id="studentName" maxlength="60" autocomplete="off" placeholder="Ví dụ: Học sinh 01"><button id="createStudent" type="button">Tạo học sinh + link học</button></div>
-<div id="linkPanel" class="link-panel" hidden><span class="eyebrow">BƯỚC 2 · GỬI CHO HỌC SINH</span>
+<div class="simple-form"><input id="studentName" maxlength="60" autocomplete="off" placeholder="Ví dụ: Học sinh 01"><button id="createStudent" type="button">Tạo học sinh</button></div>
+<div id="linkPanel" class="link-panel" hidden><span class="eyebrow">GỬI CHO HỌC SINH</span>
 <p id="linkStudent">Liên kết học mới</p>
 <label for="activationLink">Liên kết kích hoạt một lần</label>
 <input id="activationLink" readonly spellcheck="false" autocomplete="off">
 <button id="copyLink" type="button" class="wide">Sao chép liên kết</button>
-<p class="muted small">Gửi link riêng cho học sinh. Link dùng một lần trong 48 giờ; không đăng công khai. Mở lần đầu trên chính thiết bị học.</p></div>
+<p class="muted small">Gửi riêng liên kết cho học sinh. Mở lần đầu trên đúng thiết bị học; liên kết dùng một lần và hết hạn sau 48 giờ.</p></div>
 <p id="adminStatus" role="status" class="status" aria-live="polite">Đang tải danh sách...</p></section>
-<section class="panel"><div class="simple-head"><div><span class="eyebrow">QUẢN LÝ</span><h2>Danh sách học sinh</h2></div><button type="button" id="refreshStudents" class="secondary">Làm mới</button></div>
+<section class="panel"><div class="simple-head"><div><span class="eyebrow">DANH SÁCH</span><h2>Học sinh đã tạo</h2></div><button type="button" id="refreshStudents" class="secondary">Làm mới</button></div>
 <div id="studentList" class="student-list"></div>
 <p class="muted small">Học sinh cũ và các thiết bị đã ghép vẫn giữ nguyên. Khi mất thiết bị có thể ngắt liên kết từ danh sách này.</p></section>
-<section class="panel"><h2>Quản lý nội dung Toán 6</h2>
-<a class="cta wide" href="./admin-ch08-review.html">Vào quản lý bài tập và đề thi</a>
-<details class="extra-tools"><summary>Công cụ kiểm định &amp; nghiệm thu (nâng cao)</summary>
+<section class="panel" id="manageContent"><span class="eyebrow">NỘI DUNG HỌC</span><h2>Bài học và bài tập Toán 6</h2>
+<p class="muted">Xem và duyệt nội dung đang có trong ngân hàng câu hỏi. Hệ thống xử lý kiểm định phía sau; anh không cần vào các màn hình kỹ thuật khi học sinh học bình thường.</p>
+<a class="cta wide" href="./admin-ch08-review.html">Xem bài tập Toán 6</a>
+<details class="extra-tools"><summary>Công cụ nâng cao (chỉ mở khi cần)</summary>
 <div class="tool-links">
 <a href="./aura-math6-word-qa.html">Toán đố · Rà rubric và nghiệm thu thiết bị</a>
 <a href="./aura-student-math6-admin-review.html">Chấm bài Student cần đánh giá</a>
@@ -35,7 +36,7 @@
 <a href="./aura-math6-sgk-coverage.html">Kiểm định nguồn SGK</a>
 <a href="./admin-chart-review.html?v=3">Kiểm tra hình và biểu đồ</a>
 </div></details>
-<div class="actions"><button id="adminLogout" type="button" class="secondary">Đăng xuất</button></div></section>
+<div class="actions"><button id="adminLogout" type="button" class="secondary">Đăng xuất Admin</button></div></section>
 </div>
 </main><footer>AURA STUDY · Staging: tạo học sinh và thử nghiệm nội dung, chưa phát hành điểm chính thức.</footer>
 <script type="module" src="./aura-simple-access.js"></script></body></html>
