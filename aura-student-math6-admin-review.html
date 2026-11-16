@@ -1,0 +1,117 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Cache-Control" content="no-store"><title>AURA STUDY · Chấm bài Student Preview</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#1d354d;background:#f4f7fc;box-sizing:border-box}
+*{box-sizing:border-box}body{margin:0}header{background:#153955;color:#fff;padding:16px max(16px,calc((100vw - 1020px)/2));display:flex;justify-content:space-between;align-items:center;gap:10px}
+header a{color:#e3f2ff}main{max-width:1020px;margin:24px auto;padding:0 16px 38px}h1{font-size:clamp(1.5rem,4vw,2.1rem);margin:10px 0}h2{font-size:1.17rem}
+p{line-height:1.55}.muted{color:#5d738b}.tag{display:inline-block;border-radius:18px;background:#e9f2f7;padding:5px 9px;font-size:.76rem;color:#41657b}
+.panel{border:1px solid #d8e5f0;background:#fff;border-radius:15px;padding:18px;margin:14px 0;box-shadow:0 5px 25px #264a6c09}
+.queue-item{padding:15px 0;border-top:1px solid #dfe9f2}.question{padding:13px 0;border-top:1px solid #e3edf4}
+label{display:block;font-weight:680;margin:10px 0 5px;font-size:.86rem}
+select,textarea{width:100%;border:1px solid #b9cbdc;border-radius:10px;background:#fff;color:#193953;padding:10px;font:inherit}
+button{background:#19628f;color:#fff;border:0;border-radius:10px;padding:12px 17px;min-height:45px;font:inherit;font-weight:700;cursor:pointer}
+button:disabled{opacity:.5}
+#status{min-height:28px;overflow-wrap:anywhere;white-space:pre-wrap}
+.note{border-left:4px solid #b99351;background:#fff6e6;padding:11px 14px;margin:13px 0}
+strong{overflow-wrap:anywhere}
+@media(max-width:700px){main{margin:14px auto}.panel{padding:13px}}
+</style></head><body>
+<header><strong>AURA STUDY · ADMIN QA</strong><a href="./aura-admin.html">Quay lại Admin</a></header>
+<main><span class="tag">STAGING · ADMIN ONLY</span>
+<h1>Chấm các bài Student cần đánh giá thủ công</h1>
+<p class="muted">Các câu số được chấm bằng quy tắc thử nghiệm; các câu không thể chấm an toàn được chuyển vào hàng đợi này. Mỗi quyết định cần nhận xét theo rubric, lưu lịch sử và cập nhật kết quả trên trang Student.</p>
+<div class="note"><strong>Lưu ý:</strong> Đây là quyết định chấm bài thử Staging, không phải ký duyệt SGK, không phát hành Exam Engine và không ghi điểm học sinh thật.</div>
+<section class="panel"><button type="button" id="refresh">Lấy danh sách bài cần chấm</button><p id="status" class="muted" role="status">Đang kiểm tra quyền Admin và tải hàng chờ...</p></section>
+<div id="queue"></div>
+</main>
+<script>
+"use strict";
+const URL="https://ufqzuowjhdqpydqvcsob.supabase.co";
+const KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p",STORE="aura-stage-parent-v1";
+const ENDPOINT=URL+"/functions/v1/aura-admin-review-v1";
+const $=id=>document.getElementById(id);
+let refreshing=false,tokenTask=null;
+function session(){try{return JSON.parse(localStorage.getItem(STORE)||"null")}catch{return null}}
+async function token(){
+ const s=session();if(!s?.access_token)throw Error("Chưa có phiên Admin. Đăng nhập trên trang Admin trước.");
+ if(!s.expires_at||s.expires_at*1000>Date.now()+60000)return s.access_token;
+ if(!s.refresh_token)throw Error("Phiên Admin hết hạn.");
+ if(!tokenTask)tokenTask=(async()=>{
+  const r=await fetch(URL+"/auth/v1/token?grant_type=refresh_token",{method:"POST",cache:"no-store",
+   headers:{"apikey":KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:s.refresh_token})});
+  if(!r.ok)throw Error("Không thể gia hạn phiên Admin.");
+  const updated=await r.json();if(!updated.access_token||!updated.refresh_token)throw Error("Phiên mới không hợp lệ.");
+  if(session()?.access_token===s.access_token)localStorage.setItem(STORE,JSON.stringify({...s,...updated,expires_at:Math.floor(Date.now()/1000)+(Number(updated.expires_in)||3600)}));
+  return session()?.access_token||updated.access_token;
+ })().finally(()=>tokenTask=null);
+ return tokenTask;
+}
+async function api(action,extra={}){
+ const res=await fetch(ENDPOINT,{method:"POST",cache:"no-store",
+ headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+await token()},
+ body:JSON.stringify({action,...extra})});
+ let data={};try{data=await res.json()}catch{}
+ if(!res.ok)throw Error(res.status===401||res.status===403?"Phiên Admin không hợp lệ hoặc thiếu quyền.":data.error||"Máy chủ chưa sẵn sàng.");
+ return data;
+}
+function element(tag,text,cls){const x=document.createElement(tag);x.textContent=text||"";if(cls)x.className=cls;return x}
+async function refresh(){
+ if(refreshing)return;refreshing=true;$("refresh").disabled=true;$("status").textContent="Đang tải các bài thử cần chấm...";
+ try{
+ const r=await api("student_math6_manual_queue");
+ const pending=r.queue?.pending_attempts||[];
+ const root=$("queue");root.replaceChildren();
+ if(!Array.isArray(pending)||!pending.length){$("status").textContent="Không có câu Student Preview đang chờ chấm thủ công.";return}
+ $("status").textContent="Có "+pending.length+" bài thử cần xem. Mỗi bài yêu cầu chấm hết các câu còn chờ trước khi chốt.";
+ for(const a of pending)renderAttempt(root,a);
+ }catch(e){$("status").textContent=e.message}
+ finally{refreshing=false;$("refresh").disabled=false}
+}
+function renderAttempt(root,a){
+ const panel=document.createElement("section");panel.className="panel";
+ panel.append(element("h2","Tập "+a.volume+" · Chương "+a.chapter+" — "+a.chapter_title));
+ const when=new Date(a.submitted_at);panel.append(element("p",
+  (Number.isNaN(when.getTime())?"":when.toLocaleString("vi-VN"))+
+  " · "+a.pending.length+" câu cần chấm","muted"));
+ const controls=[];
+ for(const item of a.pending||[]){
+  const box=document.createElement("div");box.className="question";
+  box.append(element("strong",item.question_id+" · "+item.stem));
+  box.append(element("p","Student trả lời: "+(item.submitted_answer||"(trống)")));
+  box.append(element("p","Đáp án tham khảo: "+(item.expected_answer||"Chưa có"),"muted"));
+  box.append(element("p","Lời giải tham khảo: "+(item.explanation||""),"muted"));
+  const rubric=item.rubric?.criteria||[];
+  if(rubric.length)box.append(element("p","Rubric: "+rubric.join(" · "),"muted"));
+  const label=element("label","Đánh giá theo rubric");
+  const select=document.createElement("select");for(const [value,name] of [["","Chưa chọn"],["CORRECT","Đúng — 1 điểm"],["INCORRECT","Sai — 0 điểm"]]){
+   const o=document.createElement("option");o.value=value;o.textContent=name;select.append(o)
+  }
+  const noteLabel=element("label","Nhận xét (tối thiểu 8 ký tự)");
+  const note=document.createElement("textarea");note.rows=2;note.maxLength=500;note.placeholder="Giải thích căn cứ chấm theo rubric...";
+  box.append(label,select,noteLabel,note);panel.append(box);
+  controls.push({id:item.question_id,select,note});
+ }
+ const action=document.createElement("button");action.type="button";action.textContent="Lưu nhận xét và hoàn tất chấm";
+ const status=element("p","","muted");status.setAttribute("role","status");
+ action.addEventListener("click",async()=>{
+  const decisions={};
+  for(const item of controls){
+   const score=item.select.value,note=item.note.value.trim();
+   if(!["CORRECT","INCORRECT"].includes(score)||note.length<8){
+    status.textContent="Cần chọn đúng/sai và nhận xét tối thiểu 8 ký tự cho mọi câu đang chờ.";return;
+   }
+   decisions[item.id]={decision:score,note};
+  }
+  action.disabled=true;status.textContent="Đang lưu lịch sử và tính lại điểm thử...";
+  try{
+   const response=await api("student_math6_manual_grade",{attempt_id:a.attempt_id,decisions});
+   if(!response.manual_review?.staging_preview)throw Error("Máy chủ không xác nhận bản Preview.");
+   status.textContent="Đã hoàn tất chấm thử. Student có thể mở Lịch sử để xem kết quả.";
+   await refresh();
+  }catch(e){status.textContent=e.message}
+  finally{action.disabled=false}
+ });
+ panel.append(action,status);root.append(panel);
+}
+$("refresh").addEventListener("click",refresh);refresh();
+</script>
+</body></html>
