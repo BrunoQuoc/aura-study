@@ -69,7 +69,7 @@ footer{max-width:1080px;margin:auto;padding:10px 15px 36px;font-size:.81rem;colo
 <section class="card" id="lessonView" hidden><button type="button" id="backToLessons" class="secondary">Về danh sách bài</button><h2 id="lessonTitle" style="margin-top:15px"></h2>
 <p id="lessonSummary"></p><div id="knowledge"></div><div class="state">Ví dụ và kiến thức trong bài là học liệu AURA tự biên soạn. Hãy đối chiếu với SGK trên lớp.</div>
 <div class="controls"><button id="practiceLesson" type="button">Luyện bài này</button><button id="nextLesson" type="button" class="secondary">Bài tiếp theo</button></div></section>
-<section class="card" id="practiceView" hidden><h2>2. Luyện tập theo chương</h2><p>Mỗi lượt tối đa 3 câu đã có bằng chứng kiểm định quy tắc; câu chưa được xác minh không xuất hiện trong bài luyện thử.</p><button id="startPractice" type="button">Bắt đầu 3 câu luyện</button></section>
+<section class="card" id="practiceView" hidden><h2>2. Luyện tập theo chương</h2><p>Mỗi lượt tối đa 3 câu đã có bằng chứng kiểm định quy tắc; câu chưa được xác minh không xuất hiện trong bài luyện thử.</p><p class="muted small">Với 13 bài chưa có câu đủ điều kiện chấm thử, hãy vào <strong>Học bài</strong> rồi chọn <strong>Tự luyện 3 câu</strong>. Phần này không tính điểm.</p><button id="toLessonList" type="button" class="secondary">Chọn bài tự luyện</button><button id="startPractice" type="button">Bắt đầu 3 câu luyện</button></section>
 <section class="card" id="examView" hidden><h2>3. Kiểm tra thử theo chương</h2><p>Bản kiểm tra ngắn tối đa 6 câu đã kiểm định, không thay thế đề kiểm tra chính thức 15 câu. Không có giới hạn thời gian.</p><button id="startExam" type="button">Làm bài kiểm tra thử</button></section>
 <section class="card" id="formativeView" hidden>
   <h2>Ôn tập tự kiểm tra · không tính điểm</h2>
@@ -157,7 +157,7 @@ function renderLessons(){
   const left=document.createElement("div");
   left.append(textNode("h3","Bài "+l.number+" · "+l.title));
   left.append(textNode("p",l.summary||"Ôn kiến thức của bài","muted"));
-  left.append(textNode("p",(l.studied?"Đã mở học · ":"Chưa mở học · ")+(Number(l.verified_question_count)||0)+" câu đã kiểm định","muted small"));
+  left.append(textNode("p",(l.studied?"Đã mở học · ":"Chưa mở học · ")+(Number(l.verified_question_count)>0?l.verified_question_count+" câu có kiểm định":"3 câu tự luyện không tính điểm"),"muted small"));
   const actions=document.createElement("div");actions.className="actions";
   actions.append(makeButton("Học bài",()=>loadLesson(l.id)));
   const verified=Number(l.verified_question_count)||0;
@@ -488,6 +488,7 @@ $("nextLesson").addEventListener("click",()=>{
  if(index>=0&&c.lessons[index+1])loadLesson(c.lessons[index+1].id);
 });
 $("startPractice").addEventListener("click",()=>{const c=chapter();if(c)createAttempt("start",{batch_id:c.id,mode:"PRACTICE"})});
+$("toLessonList").addEventListener("click",()=>showTab("learn"));
 $("startExam").addEventListener("click",()=>{const c=chapter();if(c)createAttempt("start",{batch_id:c.id,mode:"CHAPTER_TEST"})});
 $("answerForm").addEventListener("submit",submitAnswers);
 $("formativeForm").addEventListener("submit",submitFormative);
