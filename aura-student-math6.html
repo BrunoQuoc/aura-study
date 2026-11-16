@@ -356,6 +356,22 @@ async function openWordProblem(x){
   $("wordResult").replaceChildren(textNode("p","Chưa tải được hướng dẫn chấm từng bước: "+e.message,"state warning"));
  }finally{busy=false}
 }
+
+const WORD_ERROR_LABELS={
+ MISREAD_QUESTION:"Đọc hiểu yêu cầu đề",
+ WRONG_OPERATION:"Lập phép tính",
+ NUMERIC_MISMATCH:"Tính toán",
+ WRONG_UNIT:"Đơn vị kết luận",
+ CONCLUSION_DEPENDS_ON_CALCULATION:"Kết luận phụ thuộc đáp số",
+ WRONG_CONCLUSION_OR_UNIT:"Kết luận hoặc đơn vị"
+};
+function openWeakLesson(lessonId){
+ const chosen=catalog.find(c=>(c.lessons||[]).some(l=>l.id===lessonId));
+ if(!chosen){status("Chưa tìm thấy bài ôn phù hợp trong danh mục.");return}
+ $("chapter").value=chosen.id;
+ loadLesson(lessonId);
+}
+
 async function loadWordHistory(){
  const root=$("wordHistory");
  try{
@@ -377,7 +393,7 @@ async function loadWordHistory(){
   if(d.weakness_map.length){
    root.append(textNode("h3","Lỗi cần ôn (90 ngày)"));
    for(const x of d.weakness_map){
-    root.append(textNode("p","• "+x.code+" · "+x.count+" lượt — "+x.remediation,"muted small"));
+    root.append(textNode("p","• "+(WORD_ERROR_LABELS[x.code]||x.code)+" · "+x.count+" lượt — "+x.remediation,"muted small"));
    }
   }
  }catch(e){
@@ -419,7 +435,13 @@ async function checkWordProblem(e){
   }
   if(res.weakness_map.length){
    root.append(textNode("h3","Cần ôn lại"));
-   for(const w of res.weakness_map)root.append(textNode("p","• "+w.code+": "+w.remediation,"state warning"));
+   for(const w of res.weakness_map){
+    const item=document.createElement("div");item.className="answer-card";
+    item.append(textNode("strong",(WORD_ERROR_LABELS[w.code]||w.code)+": cần ôn lại"),
+      textNode("p",w.remediation));
+    if(w.lesson_id)item.append(makeButton("Mở bài học để ôn",()=>openWeakLesson(w.lesson_id),true));
+    root.append(item);
+   }
   }
   root.append(textNode("h3","Lời giải tham khảo"));
   for(const [index,item] of (res.worked_steps||[]).entries()){
