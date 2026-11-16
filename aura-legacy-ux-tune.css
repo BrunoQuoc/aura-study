@@ -1,0 +1,82 @@
+/* AURA STUDY — Legacy UI ergonomics patch, 2026-11-16.
+   Old Admin/Student layout and functional navigation remain unchanged.
+   Only usability, focus visibility and safe-area behavior are adjusted. */
+body.admin-shell,
+body.student-shell {
+  -webkit-text-size-adjust: 100%;
+}
+body.admin-shell .content,
+body.student-shell .content,
+body.admin-shell #app,
+body.student-shell #app {
+  min-width: 0;
+}
+body.admin-shell #app,
+body.student-shell #app {
+  overflow-wrap: break-word;
+}
+body.admin-shell button,
+body.student-shell button,
+body.admin-shell a,
+body.student-shell a {
+  touch-action: manipulation;
+}
+body.admin-shell :is(button, a, input, textarea, select, summary):focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+body.student-shell :is(button, a, input, textarea, select, summary):focus-visible {
+  outline: 3px solid #6ee7ff;
+  outline-offset: 3px;
+}
+body.admin-shell :is(input, textarea, select),
+body.student-shell :is(input, textarea, select) {
+  max-width: 100%;
+}
+.aura-legacy-skip {
+  position: fixed;
+  top: 9px;
+  left: 9px;
+  z-index: 9999;
+  transform: translateY(-180%);
+  padding: 11px 15px;
+  border-radius: 9px;
+  font-weight: 800;
+  font-size: 14px;
+  text-decoration: none;
+  background: #fff;
+  color: #123e67;
+  border: 2px solid #2e6eb5;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .14);
+}
+.aura-legacy-skip:focus {
+  transform: translateY(0);
+}
+@media (max-width: 900px) {
+  body.admin-shell .mobilebar button,
+  body.student-shell .mobilebar button {
+    min-height: 54px;
+  }
+  body.admin-shell .layout,
+  body.student-shell .layout {
+    padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px));
+  }
+}
+@media (max-width: 600px) {
+  body.admin-shell :is(input, textarea, select),
+  body.student-shell :is(input, textarea, select) {
+    font-size: 16px;
+  }
+  body.admin-shell .content :is(img, svg),
+  body.student-shell .content :is(img, svg) {
+    max-width: 100%;
+  }
+  body.admin-shell .mobilebar button,
+  body.student-shell .mobilebar button {
+    padding-top: 9px;
+    padding-bottom: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aura-legacy-skip { transition: none; }
+}
