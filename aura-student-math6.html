@@ -48,32 +48,42 @@ footer{max-width:1080px;margin:auto;padding:10px 15px 36px;font-size:.81rem;colo
 @media(max-width:780px){.layout{grid-template-columns:1fr}.card{padding:14px}main{margin:12px auto}.lesson{align-items:flex-start;flex-direction:column}.lesson .actions{justify-content:flex-start}.kpis{gap:7px}.kpi{padding:8px}.kpi strong{font-size:1.2rem}.menu{gap:7px}.menu button{padding:9px 12px}}
 textarea{font:inherit;line-height:1.5;min-height:78px;resize:vertical;width:100%;border:1px solid #b5c9dc;border-radius:10px;padding:12px}
 #wordResult{margin-top:18px}#wordResult h3{margin:14px 0 8px}
+.student-simple-menu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.student-simple-menu button{font-size:1rem;padding:15px 10px;min-height:58px;border-radius:14px}
+.student-practice-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0}
+.student-choice{border:1px solid #dce7ef;background:#f8fbfe;border-radius:13px;padding:17px;display:flex;flex-direction:column}
+.student-choice h3{margin:0 0 8px}.student-choice p{margin:0 0 15px;flex:1;color:#566e83}
+.student-choice button{width:100%}
+button.inline-action{display:inline;color:#17638c;background:transparent;padding:0;min-height:0;border-radius:0;font-weight:700;text-decoration:underline}
+.student-extra{border-top:1px solid #e2eaf3;padding:14px 0 0;margin-top:15px}
+.student-extra summary{font-weight:700;color:#295a7b;cursor:pointer;min-height:35px}
+.student-trial-notice{font-size:.87rem;padding:10px 12px}
+@media(max-width:680px){.student-practice-choices{grid-template-columns:1fr}.student-simple-menu{gap:6px}.student-simple-menu button{font-size:.86rem;padding:12px 5px;min-height:55px}.student-choice{padding:14px}}
 </style></head><body>
 <header><a href="./aura-portal.html" class="brand">AURA STUDY<small>STUDENT · TOÁN 6</small></a><a href="./aura-student.html">Tài khoản &amp; thiết bị</a></header>
 <main>
-<section class="hero"><span class="eyebrow">Student Preview · Staging</span><h1 id="greeting">Học Toán 6 theo từng bước</h1>
-<p>Chọn bài để học kiến thức, làm luyện tập hoặc kiểm tra thử. Hệ thống gợi ý ôn tập dựa trên những câu có thể chấm an toàn.</p></section>
-<div class="state warning"><strong>Phiên bản thử nghiệm:</strong> Chỉ dành cho thiết bị Student đã ghép. Nội dung AURA tự biên soạn theo chủ đề SGK; chưa phải bộ bài tập gốc đã đối chiếu toàn bộ. Điểm thử không phải kết quả chính thức. Exam Engine live vẫn khóa.</div>
+<section class="hero"><span class="eyebrow">AURA STUDY · TOÁN 6</span><h1 id="greeting">Học Toán 6</h1>
+<p>Chọn bài học, làm bài và xem mình cần ôn lại phần nào.</p></section>
+<div class="state warning student-trial-notice"><strong>Bản học thử.</strong> Nội dung AURA tự biên soạn theo chủ đề SGK, chưa xác minh toàn bộ. Kết quả chỉ để luyện tập, chưa phải điểm kiểm tra chính thức.</div>
 <p id="status" role="status" aria-live="polite">Đang xác minh kết nối thiết bị và tải nội dung Toán 6...</p>
 <div id="workspace" hidden>
-<nav class="menu" aria-label="Chức năng học tập">
-<button type="button" data-tab="learn" aria-selected="true">Học bài</button>
-<button type="button" data-tab="practice" aria-selected="false">Luyện tập</button>
-<button type="button" data-tab="word" aria-selected="false">Toán đố từng bước</button>
-<button type="button" data-tab="exam" aria-selected="false">Kiểm tra thử</button>
-<button type="button" data-tab="progress" aria-selected="false">Kết quả &amp; điểm yếu</button>
+<nav class="menu student-simple-menu" aria-label="Ba bước học Toán 6">
+<button type="button" data-tab="learn" aria-selected="true">1. Học bài</button>
+<button type="button" data-tab="practice" aria-selected="false">2. Làm bài</button>
+<button type="button" data-tab="progress" aria-selected="false">3. Kết quả</button>
 </nav>
 <div class="layout">
 <div>
-<section class="card"><h2>Chọn chương học</h2><label for="chapter">Toán 6 — Tập 1 và Tập 2</label>
+<section class="card" id="chapterSelectorPanel"><h2>Chọn chương học</h2><label for="chapter">Toán 6 — Tập 1 và Tập 2</label>
 <select id="chapter" aria-label="Chương học"></select>
 <p id="chapterHint" class="muted small"></p></section>
-<section class="card" id="learnView"><h2>1. Nội dung bài học</h2><div id="lessons"></div></section>
+<section class="card" id="learnView"><h2>Các bài học</h2><div id="lessons"></div></section>
 <section class="card" id="lessonView" hidden><button type="button" id="backToLessons" class="secondary">Về danh sách bài</button><h2 id="lessonTitle" style="margin-top:15px"></h2>
 <p id="lessonSummary"></p><div id="knowledge"></div><div class="state">Ví dụ và kiến thức trong bài là học liệu AURA tự biên soạn. Hãy đối chiếu với SGK trên lớp.</div>
 <div class="controls"><button id="practiceLesson" type="button">Luyện bài này</button><button id="nextLesson" type="button" class="secondary">Bài tiếp theo</button></div></section>
 <section class="card" id="wordView" hidden>
-<h2>Toán đố — giải từng bước</h2>
+<button id="wordBackToPractice" type="button" class="secondary">← Chọn dạng bài khác</button>
+<h2 style="margin-top:15px">Toán đố — giải từng bước</h2>
 <p>Em thử tự xác định dữ kiện, điều cần tìm, viết phép tính và kết luận trước khi xem lời giải mẫu. Bài này chỉ dùng để học, không tính điểm kiểm tra.</p>
 <div id="wordFilters" class="answer-card">
 <label for="wordSearch">Tìm bài toán theo chủ đề hoặc nội dung</label>
@@ -109,7 +119,19 @@ textarea{font:inherit;line-height:1.5;min-height:78px;resize:vertical;width:100%
 <div id="wordResult" role="status" aria-live="polite"></div>
 <p class="muted small">Điểm 4 phần là đánh giá tạm thời theo các lựa chọn và đáp số. Phần lời giải tự viết chưa được máy hiểu/chấm; Admin sẽ rà và nhận xét. Không ghi điểm thi chính thức.</p>
 </div></section>
-<section class="card" id="practiceView" hidden><h2>2. Luyện tập theo chương</h2><p>Mỗi lượt tối đa 3 câu đã có bằng chứng kiểm định quy tắc; câu chưa được xác minh không xuất hiện trong bài luyện thử.</p><p class="muted small">Với 13 bài chưa có câu đủ điều kiện chấm thử, hãy vào <strong>Học bài</strong> rồi chọn <strong>Tự luyện 3 câu</strong>. Phần này không tính điểm.</p><button id="toLessonList" type="button" class="secondary">Chọn bài tự luyện</button><button id="startPractice" type="button">Bắt đầu 3 câu luyện</button></section>
+<section class="card" id="practiceView" hidden>
+<h2>Chọn cách làm bài</h2>
+<p class="muted">Luyện những câu phù hợp với chương đang chọn, hoặc thử giải toán đố từng bước.</p>
+<div class="student-practice-choices">
+  <div class="student-choice"><h3>Luyện theo chương</h3><p>Trả lời 3 câu, nộp bài và xem lỗi cần ôn.</p><button id="startPractice" type="button">Làm 3 câu</button></div>
+  <div class="student-choice"><h3>Giải toán đố</h3><p>Đọc đề, viết lời giải, xem góp ý từng phần.</p><button id="openWordPractice" type="button">Chọn bài toán đố</button></div>
+</div>
+<p class="muted small">Muốn luyện một bài cụ thể? <button id="toLessonList" type="button" class="inline-action">Về danh sách bài học</button>. Bài chưa có câu được kiểm định sẽ dùng bài tự luyện bổ trợ, không tính điểm.</p>
+<details class="student-extra"><summary>Kiểm tra thử theo chương</summary>
+  <p class="muted small">Bài thử tối đa 6 câu đã kiểm định; không phải đề kiểm tra chính thức.</p>
+  <button id="showExamTrial" type="button" class="secondary">Mở kiểm tra thử</button>
+</details>
+</section>
 <section class="card" id="examView" hidden><h2>3. Kiểm tra thử theo chương</h2><p>Bản kiểm tra ngắn tối đa 6 câu đã kiểm định, không thay thế đề kiểm tra chính thức 15 câu. Không có giới hạn thời gian.</p><button id="startExam" type="button">Làm bài kiểm tra thử</button></section>
 <section class="card" id="formativeView" hidden>
   <h2>Ôn tập tự kiểm tra · không tính điểm</h2>
@@ -125,11 +147,10 @@ textarea{font:inherit;line-height:1.5;min-height:78px;resize:vertical;width:100%
   <section class="card" id="attemptView" hidden><h2 id="attemptTitle">Bài làm</h2><p id="attemptMeta" class="muted small"></p><form id="answerForm"><div class="questions" id="questions"></div><button id="submit" type="submit">Nộp bài và xem kết quả</button></form><p id="examStatus" role="status"></p></section>
 <section class="card" id="resultsView" hidden><h2>4. Kết quả bài làm</h2><div class="kpis" id="resultKpis"></div><div id="gradeList"></div>
 <h3>Kiến thức nên ôn lại</h3><div id="weaknesses"></div><button type="button" class="secondary" id="returnToStudy">Tiếp tục học</button></section>
-<section class="card" id="progressView" hidden><h2>5. Lịch sử học tập và bài làm thử</h2><div class="kpis" id="progressKpis"></div><div id="history"></div><div class="state">Những câu cần giáo viên xem xét chưa được tính điểm cuối. Không quy đổi thành điểm chính thức.</div></section>
+<section class="card" id="progressView" hidden><h2>Kết quả và phần cần ôn</h2><div class="kpis" id="progressKpis"></div><div id="history"></div><div class="state">Những câu cần giáo viên xem xét chưa được tính điểm cuối. Không quy đổi thành điểm chính thức.</div></section>
 </div>
-<aside><section class="card"><h2>Tiến độ của bạn</h2><div id="overview" class="kpis"></div>
-<p class="muted small">Học theo từng bài · luyện theo chương · xem lại lỗi sau khi nộp.</p>
-<div class="state">Đang dùng dữ liệu Staging để nghiệm thu chức năng Student, chưa dùng cho học sinh chính thức.</div></section></aside>
+<aside><section class="card"><h2>Tiến độ học</h2><div id="overview" class="kpis"></div>
+<p class="muted small">Học xong có thể làm bài. Những câu sai sẽ được gợi ý ôn tập.</p></section></aside>
 </div>
 </div>
 </main><footer>AURA STUDY · STUDENT STAGING V1 — Không nhập dữ liệu học sinh thật; 23 hình đang chờ nghiệm thu iPhone chưa được đưa vào bài thử.</footer>
@@ -182,7 +203,9 @@ function stat(container,label,value){
 function chapter(){return chaptersMap.get($("chapter").value)}
 function showTab(tab){
  currentTab=tab;
- for(const b of document.querySelectorAll(".menu button[data-tab]"))b.setAttribute("aria-selected",String(b.dataset.tab===tab));
+ const selected=(tab==="word"||tab==="exam")?"practice":tab;
+ for(const b of document.querySelectorAll(".menu button[data-tab]"))b.setAttribute("aria-selected",String(b.dataset.tab===selected));
+ $("chapterSelectorPanel").hidden=tab==="progress"||tab==="word";
  for(const name of ["learn","practice","word","exam","progress"])$(name+"View").hidden=name!==tab;
  if(tab!=="learn")$("lessonView").hidden=true;
  $("attemptView").hidden=true;$("resultsView").hidden=true;$("formativeView").hidden=true;
@@ -205,8 +228,7 @@ function renderLessons(){
   const quiz=makeButton(verified?"Luyện có chấm thử":"Tự luyện 3 câu",
     ()=>verified?startLesson(l.id):startFormative(l.id),true);
   if(!verified){
-   quiz.title="Bài tự luyện có giải thích, không ghi điểm học sinh.";
-   left.append(textNode("p","Có 3 câu tự luyện bổ trợ, không chấm điểm chính thức. Câu hỏi ngân hàng sẽ mở sau khi đạt kiểm định độc lập.","muted small"));
+   quiz.title="Ba câu tự luyện bổ trợ, không tính điểm chính thức.";
   }
   actions.append(quiz);card.append(left,actions);root.append(card);
  }
@@ -704,6 +726,9 @@ $("nextLesson").addEventListener("click",()=>{
  if(index>=0&&c.lessons[index+1])loadLesson(c.lessons[index+1].id);
 });
 $("startPractice").addEventListener("click",()=>{const c=chapter();if(c)createAttempt("start",{batch_id:c.id,mode:"PRACTICE"})});
+$("openWordPractice").addEventListener("click",()=>showTab("word"));
+$("wordBackToPractice").addEventListener("click",()=>showTab("practice"));
+$("showExamTrial").addEventListener("click",()=>showTab("exam"));
 $("toLessonList").addEventListener("click",()=>showTab("learn"));
 $("startExam").addEventListener("click",()=>{const c=chapter();if(c)createAttempt("start",{batch_id:c.id,mode:"CHAPTER_TEST"})});
 $("answerForm").addEventListener("submit",submitAnswers);
