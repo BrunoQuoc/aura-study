@@ -22,6 +22,13 @@ strong{overflow-wrap:anywhere}
 <div class="note"><strong>Lưu ý:</strong> Đây là quyết định chấm bài thử Staging, không phải ký duyệt SGK, không phát hành Exam Engine và không ghi điểm học sinh thật.</div>
 <section class="panel"><button type="button" id="refresh">Lấy danh sách bài cần chấm</button><p id="status" class="muted" role="status">Đang kiểm tra quyền Admin và tải hàng chờ...</p></section>
 <div id="queue"></div>
+<section class="panel">
+<h2>Toán đố — xem lại lời giải từng bước</h2>
+<p class="muted">Máy chỉ đối chiếu lựa chọn, phép tính và đáp số để cho điểm luyện tạm. Anh xem bài viết tự do, quyết định 0/1 ở từng phần rồi nhập nhận xét.</p>
+<button id="refreshWordQueue" type="button">Tải bài toán đố cần rà soát</button>
+<p id="wordQueueStatus" role="status" class="muted">Đang tải hàng đợi toán đố...</p>
+</section>
+<div id="wordQueue"></div>
 </main>
 <script>
 "use strict";
@@ -112,6 +119,91 @@ function renderAttempt(root,a){
  });
  panel.append(action,status);root.append(panel);
 }
+
+const WORD_STAGES=[
+ ["UNDERSTANDING","Hiểu đề và dữ kiện"],
+ ["PLANNING","Lập phép tính"],
+ ["CALCULATION","Tính toán"],
+ ["CONCLUSION","Kết luận và đơn vị"]
+];
+let wordRefreshing=false;
+async function refreshWordQueue(){
+ if(wordRefreshing)return;
+ wordRefreshing=true;$("refreshWordQueue").disabled=true;
+ $("wordQueueStatus").textContent="Đang đọc bài toán đố Student...";
+ try{
+  const data=await api("student_math6_word_step_queue");
+  const rows=data.queue?.pending_attempts||[];
+  const root=$("wordQueue");root.replaceChildren();
+  if(!Array.isArray(rows)||rows.length===0){
+   $("wordQueueStatus").textContent="Không có bài toán đố đang chờ Admin rà.";
+   return;
+  }
+  $("wordQueueStatus").textContent="Có "+rows.length+" bài toán đố cần rà soát. Các điểm máy chấm chỉ là tạm thời.";
+  for(const item of rows){
+   const panel=document.createElement("section");panel.className="panel";
+   panel.append(element("h2",item.student_name+" · "+item.question_id));
+   panel.append(element("p",item.stem));
+   panel.append(element("p","Máy chấm tạm: "+item.provisional_score+"/4. Anh chấm lại sau khi đọc lời giải.","muted"));
+   const raw=item.student_work||{};
+   const labels=[["facts","Học sinh ghi dữ kiện"],["goal","Học sinh xác định điều cần tìm"],
+   ["steps","Học sinh lập luận và giải"],["conclusion","Học sinh kết luận"]];
+   for(const [key,label] of labels){
+    panel.append(element("strong",label),element("p",raw[key]||"(Không có nội dung)"));
+   }
+   panel.append(element("p","Đáp số đã nhập: "+(item.student_numeric||"")+" · Đáp án mẫu: "+item.expected_answer,"muted"));
+   panel.append(element("h3","Đối chiếu với hướng dẫn"));
+   for(const step of item.solution||[]){
+    panel.append(element("p",step.label+": "+step.calculation,"muted"));
+   }
+   const controls=[];
+   for(const [key,label] of WORD_STAGES){
+    const wrap=document.createElement("div");wrap.className="question";
+    wrap.append(element("label",label+" — điểm Admin"));
+    const choose=document.createElement("select");
+    for(const [value,title] of [["","Chưa đánh giá"],["1","Đạt — 1 điểm"],["0","Chưa đạt — 0 điểm"]]){
+     const opt=document.createElement("option");opt.value=value;opt.textContent=title;choose.append(opt);
+    }
+    const finding=(item.rubric_results||[]).find(x=>x.stage===key);
+    if(finding)wrap.append(element("p","Máy gợi ý: "+finding.points+"/1 — "+finding.hint,"muted"));
+    wrap.append(choose);controls.push({key,choose});panel.append(wrap);
+   }
+   const label=element("label","Nhận xét riêng của Admin (ít nhất 12 ký tự)");
+   const note=document.createElement("textarea");note.rows=3;note.maxLength=1000;
+   note.placeholder="Ví dụ: Em chọn phép tính đúng nhưng chưa trình bày rõ tại sao, cần viết câu kết luận đầy đủ đơn vị.";
+   panel.append(label,note);
+   const button=document.createElement("button");button.textContent="Lưu chấm từng phần (Staging)";button.type="button";
+   const msg=element("p","","muted");msg.setAttribute("role","status");
+   button.addEventListener("click",async()=>{
+    const decisions={};
+    for(const c of controls){
+     if(!["0","1"].includes(c.choose.value)){
+      msg.textContent="Anh hãy chọn Đạt/Chưa đạt cho cả bốn tiêu chí.";return;
+     }
+     decisions[c.key]=Number(c.choose.value);
+    }
+    if(note.value.trim().length<12){
+     msg.textContent="Cần nhận xét ít nhất 12 ký tự để ghi bằng chứng đánh giá.";return;
+    }
+    button.disabled=true;msg.textContent="Đang ghi nhận xét và điểm rà soát...";
+    try{
+     const out=await api("student_math6_word_step_review",{
+      attempt_id:item.attempt_id,decisions,note:note.value.trim()});
+     if(!out.review?.staging_preview||out.review?.official_grade_created!==false)
+      throw Error("Không có xác nhận an toàn từ máy chủ.");
+     msg.textContent="Đã lưu kết quả Admin "+out.review.admin_score+"/4. Student có thể xem trong Lịch sử toán đố.";
+     await refreshWordQueue();
+    }catch(e){msg.textContent="Chưa lưu được: "+e.message}
+    finally{button.disabled=false}
+   });
+   panel.append(button,msg);root.append(panel);
+  }
+ }catch(e){$("wordQueueStatus").textContent=e.message}
+ finally{wordRefreshing=false;$("refreshWordQueue").disabled=false}
+}
+$("refreshWordQueue").addEventListener("click",refreshWordQueue);
+refreshWordQueue();
+
 $("refresh").addEventListener("click",refresh);refresh();
 </script>
 </body></html>
