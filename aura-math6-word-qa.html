@@ -1,0 +1,250 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Cache-Control" content="no-store"><title>AURA STUDY · Rà toán đố & Nghiệm thu</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:#f3f7fb;color:#173750}
+*{box-sizing:border-box}body{margin:0}header{background:#173e5b;color:#fff;padding:14px max(16px,calc((100vw - 1050px)/2));display:flex;justify-content:space-between;gap:15px;align-items:center}header a{color:#def2ff}main{max-width:1050px;margin:20px auto;padding:0 14px 60px}
+h1{font-size:clamp(1.45rem,4vw,2.15rem)}h2{font-size:1.22rem}h3{font-size:1.04rem}p{line-height:1.6}
+a{color:#155c84}.muted{color:#5a7183}.panel{background:#fff;border:1px solid #d6e4ef;border-radius:14px;padding:19px;margin:14px 0;box-shadow:0 3px 14px #253e5006}
+.status{padding:10px 12px;border-left:3px solid #679cbe;background:#eef6fb;border-radius:6px;white-space:pre-wrap;overflow-wrap:anywhere}
+.warning{border-left-color:#bb965d;background:#fff8eb}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.flex{flex:1}
+label{display:block;font-weight:650;margin:12px 0 6px}
+input:not([type="checkbox"]),select,textarea{display:block;width:100%;font:inherit;padding:11px 12px;border:1px solid #a8c1d3;border-radius:9px;background:white;color:#173750}
+textarea{min-height:78px;resize:vertical}
+button{min-height:44px;background:#176792;color:white;font:inherit;font-weight:700;border:0;border-radius:10px;padding:10px 15px;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}.secondary{background:#e8f1f7;color:#1c5272}
+.choice{padding:9px 12px;border:1px solid #e0eaf2;border-radius:8px;margin:7px 0}
+.choice strong{color:#1a674a}
+.check{display:flex;align-items:flex-start;gap:11px;padding:10px 2px;border-bottom:1px solid #e4edf3;font-weight:500}
+.check input{width:20px;height:20px;min-width:20px;margin:3px 0;accent-color:#197c9b}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.kpi{border-radius:10px;background:#f3f8fc;padding:12px}
+.kpi strong{display:block;font-size:1.45rem}.small{font-size:.87rem}.tag{color:#24627e;font-size:.78rem;font-weight:700;letter-spacing:.06em}
+hr{border:0;border-top:1px solid #e0eaf2;margin:17px 0}ul{line-height:1.7}
+@media(max-width:720px){main{margin:10px auto;padding:0 11px 35px}.panel{padding:14px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.row>button{flex:1}}
+</style></head><body>
+<header><strong>AURA STUDY · ADMIN QA</strong><a href="./aura-admin.html">Về Admin</a></header>
+<main>
+<span class="tag">TOÁN 6 · STAGING · CHƯA PHÁT HÀNH</span>
+<h1>Rà bài toán đố và nghiệm thu Student</h1>
+<p class="muted">Bước kiểm tra nội dung dành cho Admin; giáo viên phải duyệt sư phạm riêng. Việc xác nhận thiết bị là bằng chứng Admin tự khai sau thao tác thật, không thay thế kiểm định độc lập.</p>
+<section class="panel"><h2>Tổng quan</h2><div class="kpis" id="overview"></div><p class="status" id="status" role="status">Đang kiểm tra phiên Admin...</p><button id="refresh" type="button" class="secondary">Đọc lại trạng thái Staging</button></section>
+<section class="panel"><span class="tag">BƯỚC 1</span><h2>Rà bản nháp rubric trước khi gửi giáo viên</h2>
+<p class="status warning">Đánh dấu đầy đủ chỉ chuyển trạng thái sang <strong>Chờ giáo viên</strong>; hệ thống tuyệt đối không tự ký xác nhận sư phạm.</p>
+<label for="rubricId">Chọn bài có rubric</label><select id="rubricId"><option value="">Đang tải...</option></select>
+<div id="rubricDetails"></div>
+<h3>Checklist Admin rà bản nháp</h3><div id="rubricChecks"></div>
+<label for="rubricNote">Nhận xét và căn cứ đối chiếu</label>
+<textarea id="rubricNote" maxlength="1000" placeholder="Nêu điểm đúng, điểm cần sửa, nguồn/bản chụp SGK đã đối chiếu nếu có..."></textarea>
+<div class="row"><button id="readyTeacher" type="button">Đã rà · Chuyển chờ giáo viên</button><button id="needsFix" type="button" class="secondary">Đánh dấu cần sửa</button></div>
+<p id="rubricStatus" role="status"></p>
+</section>
+<section class="panel"><span class="tag">BƯỚC 2</span><h2>Phân loại các câu có thể là toán đố</h2>
+<p class="muted">Đây là danh sách được thuật toán gợi ý, không phải tất cả bài toán có lời văn. Phân loại không tự tạo rubric hoặc nâng cấp điểm chấm.</p>
+<label for="candidateId">Chọn câu chưa phân loại</label><select id="candidateId"><option value="">Đang tải...</option></select>
+<p id="candidateStem" class="status"></p>
+<label for="candidateLabel">Kết luận phân loại</label>
+<select id="candidateLabel"><option value="">Chọn loại</option><option value="WORD_PROBLEM">Toán có lời văn</option><option value="NOT_WORD_PROBLEM">Không phải toán có lời văn</option><option value="NEEDS_CONTEXT">Cần xem thêm nguồn/hình</option></select>
+<label for="candidateNote">Căn cứ phân loại</label><textarea id="candidateNote" maxlength="800" placeholder="Giải thích tại sao xác định như vậy, nếu cần nêu tài liệu/hình còn thiếu..."></textarea>
+<button id="saveCandidate" type="button">Lưu phân loại</button><p id="candidateStatus" role="status"></p>
+</section>
+<section class="panel"><span class="tag">BƯỚC 3</span><h2>Nghiệm thu bài toán đố trên thiết bị thật</h2>
+<p class="muted">Dùng liên kết Student đã ghép để làm và nộp bài; sau đó mở <a href="./aura-student-math6-admin-review.html">Admin chấm từng phần</a>, quay lại Student xác nhận nhận xét. Chỉ chọn bài đã có đầy đủ bằng chứng máy chủ.</p>
+<label for="deviceAttempt">Bài Student đã nộp và Admin đã rà (30 ngày)</label><select id="deviceAttempt"><option value="">Đang tải...</option></select>
+<label for="deviceName">Thiết bị thực tế</label><input id="deviceName" maxlength="100" placeholder="Ví dụ: iPhone / Safari">
+<label for="browserName">Ứng dụng/trình duyệt</label><input id="browserName" maxlength="100" placeholder="Ví dụ: Safari iOS">
+<div id="deviceChecks"></div>
+<label for="deviceNote">Ghi nhận quan sát thực tế trên thiết bị (ít nhất 20 ký tự)</label>
+<textarea id="deviceNote" maxlength="1000" placeholder="Nêu thiết bị, thao tác cảm ứng, vấn đề nhìn thấy và kết quả kiểm tra xoay ngang/dọc..."></textarea>
+<button id="attestDevice" type="button">Ghi nhận Admin đã thử trên thiết bị</button>
+<p id="deviceStatus" class="status warning" role="status">Chưa có biên bản nghiệm thu iPhone/iPad thật. Không thể tự tạo bằng chứng thiết bị từ bài mô phỏng SQL.</p>
+</section>
+<section class="panel"><h2>Các lối kiểm tra liên quan</h2>
+<ul><li><a href="./aura-student-math6.html">Student — học và giải toán đố</a></li>
+<li><a href="./aura-student-math6-admin-review.html">Admin — rà lời giải tự luận</a></li>
+<li><a href="./aura-student-math6-acceptance.html">Checklist nghiệm thu Student tổng hợp</a></li></ul>
+</section></main>
+<script>
+"use strict";
+const BASE="https://ufqzuowjhdqpydqvcsob.supabase.co";
+const KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
+const STORE="aura-stage-parent-v1";
+const $=id=>document.getElementById(id);
+let contents=null,devices=null,refreshing=false,tokenTask=null;
+const RUBRIC_CHECKS=[
+["bank_stem_matches","Đề và đáp án bản hiện tại đúng với dữ liệu ngân hàng đang dùng"],
+["numeric_rechecked","Phép tính và kết quả được tính lại độc lập"],
+["goal_choices_reviewed","Ba lựa chọn hiểu đề phù hợp, không sai nghĩa và không vô tình để lộ"],
+["operation_choices_reviewed","Lựa chọn cách lập phép tính đúng và phương án nhiễu hợp lý"],
+["units_reviewed","Đáp số và đơn vị phù hợp, kể cả trường hợp không có đơn vị"],
+["age_appropriate","Ngôn ngữ và mức độ câu hỏi phù hợp học sinh lớp 6"]
+];
+const DEVICE_CHECKS=[
+["student_activation_or_resume","Student mở được đúng hồ sơ qua link kích hoạt hoặc phiên đã nhớ"],
+["word_problem_readable","Đề toán có lời văn hiển thị rõ, đọc được trên thiết bị"],
+["four_stage_selection_touch","Chạm và chọn đủ bốn phần rubric không bị lỗi"],
+["free_text_numeric_entry","Nhập được lời giải tự do, đáp số và đơn vị"],
+["weakness_remediation_navigation","Xem được lỗi và mở đúng bài học được gợi ý ôn"],
+["admin_rubric_review_completed","Admin đã rà lời giải thực và lưu 4 quyết định"],
+["student_sees_admin_feedback","Student xem được nhận xét và điểm Admin trong lịch sử"],
+["portrait_landscape_no_overflow","Đã thử dọc/ngang, không bị che nút hoặc tràn ngang"]
+];
+function element(tag,text,cls){const n=document.createElement(tag);n.textContent=text??"";if(cls)n.className=cls;return n}
+function session(){try{return JSON.parse(localStorage.getItem(STORE)||"null")}catch{return null}}
+async function token(){
+ const s=session();if(!s?.access_token)throw Error("Đăng nhập tại Admin trước khi kiểm tra nội dung.");
+ if(!s.expires_at||s.expires_at*1000>Date.now()+60000)return s.access_token;
+ if(!s.refresh_token)throw Error("Phiên Admin đã hết hạn.");
+ if(!tokenTask)tokenTask=(async()=>{
+  const res=await fetch(BASE+"/auth/v1/token?grant_type=refresh_token",{
+   method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","apikey":KEY},
+   body:JSON.stringify({refresh_token:s.refresh_token})});
+  if(!res.ok)throw Error("Không thể gia hạn phiên Admin.");
+  const d=await res.json();if(!d.access_token||!d.refresh_token)throw Error("Phiên vừa cấp không hợp lệ.");
+  if(session()?.access_token===s.access_token)localStorage.setItem(STORE,JSON.stringify({...s,...d,expires_at:Math.floor(Date.now()/1000)+(Number(d.expires_in)||3600)}));
+  return session()?.access_token||d.access_token;
+ })().finally(()=>tokenTask=null);
+ return tokenTask;
+}
+async function api(action,params={}){
+ const r=await fetch(BASE+"/functions/v1/aura-admin-review-v1",{
+ method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+await token()},
+ body:JSON.stringify({action,...params})});
+ let d={};try{d=await r.json()}catch{}
+ if(!r.ok)throw Error([401,403].includes(r.status)?"Tài khoản không có quyền Admin hoặc phiên hết hạn.":d.error||"Chưa thực hiện được trên Staging.");
+ if(d.staging_only===false||d.live_exam_enabled===true)throw Error("Nguồn dữ liệu không hợp lệ.");
+ return d;
+}
+function selectOptions(id,items,map,label){
+ const root=$(id);root.replaceChildren();
+ const opt=document.createElement("option");opt.value="";opt.textContent=label;root.append(opt);
+ for(const x of items){const o=document.createElement("option");const v=map(x);o.value=v.id;o.textContent=v.title;root.append(o)}
+}
+function createChecks(rootId,items){
+ const root=$(rootId);root.replaceChildren();
+ for(const [key,name] of items){
+  const wrap=document.createElement("label");wrap.className="check";
+  const input=document.createElement("input");input.type="checkbox";input.id=rootId+"-"+key;
+  wrap.append(input,element("span",name));root.append(wrap);
+ }
+}
+function checkedMap(rootId,items){return Object.fromEntries(items.map(([key])=>[key,$(rootId+"-"+key).checked]))}
+function renderRubric(){
+ const id=$("rubricId").value,r=contents?.rubrics?.find(x=>x.question_id===id);
+ const root=$("rubricDetails");root.replaceChildren();
+ for(const [key] of RUBRIC_CHECKS)$( "rubricChecks-"+key).checked=false;
+ $("rubricNote").value="";
+ if(!r)return;
+ root.append(element("h3",r.stem),element("p","Đáp án ngân hàng: "+r.answer_in_bank,"muted"));
+ root.append(element("p","Dữ kiện: "+(r.known_facts||[]).join(" · "), "muted"));
+ root.append(element("p","Cần tìm: "+r.find_goal,"muted"));
+ for(const step of r.steps||[])root.append(element("p","Bước giải mẫu — "+step.label+": "+step.calculation,"small"));
+ for(const [label,options,index] of [
+  ["Hiểu đề",r.goal_choices,r.goal_correct_index],
+  ["Chọn phép tính",r.plan_choices,r.plan_correct_index],
+  ["Đơn vị",r.unit_choices,r.unit_correct_index]
+ ]){root.append(element("strong",label));for(const [n,x] of (options||[]).entries()){
+ const choice=element("div",(n===index?"✓ Đáp án dự kiến: ":"Phương án nhiễu: ")+x,"choice");
+ if(n===index)choice.style.borderColor="#a1cbb2";root.append(choice);
+ }}
+ root.append(element("p","Trạng thái QA hiện tại: "+r.review_state+
+  " · Giáo viên: "+r.teacher_review_status,"muted"));
+ if(r.feedback)root.append(element("p","Nhận xét trước: "+r.feedback,"muted"));
+}
+function renderCandidate(){
+ const c=contents?.triage?.find(x=>x.question_id===$("candidateId").value);
+ $("candidateStem").textContent=c?c.stem+" · Đáp án ngân hàng: "+c.answer+
+ (c.has_figure?" · Cần xem hình vẽ đi kèm":""):"Chọn câu để xem nội dung.";
+ $("candidateLabel").value="";$("candidateNote").value="";
+}
+function renderDeviceSelect(){
+ const rows=Array.isArray(devices?.candidates)?devices.candidates.filter(x=>!x.already_attested&&x.device_active):[];
+ selectOptions("deviceAttempt",rows,x=>({id:x.attempt_id,title:x.student_name+" · "+x.question_id+" · "+new Date(x.submitted_at).toLocaleDateString("vi-VN")}),
+ rows.length?"Chọn bài được làm thật":"Chưa có bài Student đủ điều kiện");
+ $("attestDevice").disabled=!rows.length;
+ $("deviceStatus").textContent=rows.length?
+ "Chỉ ghi biên bản sau khi đã thử đúng bài này trên thiết bị thực và hoàn tất checklist.":
+ "Chưa có bài toán đố nào đã nộp và được Admin rà từ thiết bị Student còn hiệu lực. Hiện không thể ghi biên bản.";
+}
+function render(){
+ if(!contents)return;
+ const o=contents.summary||{},root=$("overview");root.replaceChildren();
+ for(const [label,value] of [
+ ["Tổng câu đã rà danh mục",o.total_inventory],
+ ["Bài có rubric Staging",o.guided],
+ ["Ứng viên chưa phân loại",o.triage_pending],
+ ["Chờ QA rubric",o.rubric_qa_pending],
+ ["Cần sửa",o.needs_fix],
+ ["Sẵn sàng chuyển giáo viên",o.ready_for_teacher],
+ ["Giáo viên đã duyệt",o.teacher_approved],
+ ["Biên bản thiết bị thật",0]
+ ]){const block=document.createElement("div");block.className="kpi";block.append(element("strong",String(value??0)),element("small",label));root.append(block)}
+ selectOptions("rubricId",contents.rubrics||[],x=>({id:x.question_id,title:x.question_id+" · "+x.review_state}),"Chọn bài để rà");
+ selectOptions("candidateId",contents.triage||[],x=>({id:x.question_id,title:x.question_id+" · "+x.lesson_id}),"Chọn ứng viên");
+ renderRubric();renderCandidate();renderDeviceSelect();
+}
+async function refresh(){
+ if(refreshing)return;refreshing=true;$("refresh").disabled=true;
+ $("status").textContent="Đang xác minh Admin và đọc nội dung...";
+ try{
+ const [a,b]=await Promise.all([api("math6_word_content_queue"),api("math6_word_device_candidates")]);
+ if(a?.content_qa?.staging_only!==true||b?.device_qa?.staging_only!==true)throw Error("Nguồn dữ liệu Staging chưa hợp lệ.");
+ contents=a.content_qa;devices=b.device_qa;
+ render();$("status").textContent="Đã kiểm tra quyền Admin. Các bài đang chờ kiểm định giáo viên và nghiệm thu thiết bị không được tự gắn nhãn đạt.";
+ }catch(e){$("status").textContent=e.message}
+ finally{refreshing=false;$("refresh").disabled=false}
+}
+async function saveRubric(decision){
+ const question_id=$("rubricId").value,note=$("rubricNote").value.trim();
+ if(!question_id){$("rubricStatus").textContent="Hãy chọn bài cần rà.";return}
+ if(note.length<15){$("rubricStatus").textContent="Cần nhận xét ít nhất 15 ký tự.";return}
+ const checklist=checkedMap("rubricChecks",RUBRIC_CHECKS);
+ if(decision==="READY_FOR_TEACHER"&&!Object.values(checklist).every(Boolean)){
+ $("rubricStatus").textContent="Muốn chuyển giáo viên cần đánh dấu đủ sáu tiêu chí kiểm tra.";return;
+ }
+ for(const id of ["readyTeacher","needsFix"])$(id).disabled=true;
+ try{
+ const d=await api("math6_word_rubric_precheck",{question_id,decision,checklist,note});
+ if(d.review?.teacher_signed_off!==false)throw Error("Phản hồi chứng nhận sư phạm không hợp lệ.");
+ $("rubricStatus").textContent=decision==="READY_FOR_TEACHER"?"Admin đã kiểm tra sơ bộ; vẫn CHƯA có giáo viên ký duyệt.":"Đã đưa bản nháp vào nhóm cần sửa.";
+ await refresh();$("rubricId").value=question_id;renderRubric();
+ }catch(e){$("rubricStatus").textContent="Chưa ghi được: "+e.message}
+ finally{for(const id of ["readyTeacher","needsFix"])$(id).disabled=false}
+}
+async function saveCandidate(){
+ const question_id=$("candidateId").value,label=$("candidateLabel").value,note=$("candidateNote").value.trim();
+ if(!question_id||!label||note.length<12){$("candidateStatus").textContent="Chọn câu, loại và nhập nhận xét ít nhất 12 ký tự.";return}
+ $("saveCandidate").disabled=true;
+ try{
+ const r=await api("math6_word_candidate_label",{question_id,label,note});
+ if(r.classification?.rubric_created!==false)throw Error("Máy chủ tạo rubric không mong muốn.");
+ $("candidateStatus").textContent="Đã phân loại thủ công. Không tự tạo điểm hoặc phê duyệt nội dung.";
+ await refresh();
+ }catch(e){$("candidateStatus").textContent="Chưa thể lưu: "+e.message}
+ finally{$("saveCandidate").disabled=false}
+}
+async function attestDevice(){
+ const attempt_id=$("deviceAttempt").value,device_label=$("deviceName").value.trim(),
+ browser_label=$("browserName").value.trim(),note=$("deviceNote").value.trim(),
+ checklist=checkedMap("deviceChecks",DEVICE_CHECKS);
+ if(!attempt_id||device_label.length<3||browser_label.length<3||note.length<20||!Object.values(checklist).every(Boolean)){
+ $("deviceStatus").textContent="Cần chọn bài Student thật đã được chấm, điền thiết bị, trình duyệt, quan sát và đánh dấu đủ 8 điều kiện.";return}
+ $("attestDevice").disabled=true;
+ try{
+ const r=await api("math6_word_device_attest",{attempt_id,device_label,browser_label,checklist,note});
+ if(r.attestation?.status!=="ADMIN_USER_REPORTED"||r.attestation?.independent_device_verified!==false)
+ throw Error("Chưa có phản hồi ghi nhận an toàn.");
+ $("deviceStatus").textContent="Đã lưu tự xác nhận của Admin trên Staging. Đây không phải kết quả kiểm định độc lập hoặc giấy phép phát hành.";
+ await refresh();
+ }catch(e){$("deviceStatus").textContent="Chưa ghi được biên bản: "+e.message}
+ finally{if($("deviceAttempt").value)$("attestDevice").disabled=false}
+}
+createChecks("rubricChecks",RUBRIC_CHECKS);
+createChecks("deviceChecks",DEVICE_CHECKS);
+$("rubricId").addEventListener("change",renderRubric);
+$("candidateId").addEventListener("change",renderCandidate);
+$("refresh").addEventListener("click",refresh);
+$("readyTeacher").addEventListener("click",()=>saveRubric("READY_FOR_TEACHER"));
+$("needsFix").addEventListener("click",()=>saveRubric("NEEDS_FIX"));
+$("saveCandidate").addEventListener("click",saveCandidate);
+$("attestDevice").addEventListener("click",attestDevice);
+refresh();
+</script></body></html>
