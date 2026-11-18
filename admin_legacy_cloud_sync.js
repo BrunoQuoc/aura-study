@@ -62,6 +62,7 @@ function panelHTML(){
  'Student đã ghép thiết bị sẽ thấy tài liệu ở mục Bài học / Ôn thi trên máy khác. '+
  'Không đăng đáp án riêng, bài chưa duyệt hoặc mở điểm thi chính thức.</p>'+
  '<p class="meta">Tài liệu lưu trên Drive nên tài khoản Student vẫn cần được cấp quyền xem tệp gốc.</p>'+
+ '<p class="meta"><a href="./aura-admin.html">Đăng nhập máy chủ / cấp liên kết kích hoạt Student</a> (chỉ cần khi kết nối lần đầu).</p>'+
  '<p id="auraCloudAdminStatus" role="status">Đang kiểm tra kết nối kho chung...</p>'+
  '<div id="auraCloudAdminItems"></div></section>';
 }
