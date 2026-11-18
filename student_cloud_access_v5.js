@@ -95,10 +95,16 @@ function overlay(message){
  }
  root.innerHTML='<section class="aura-student-gate-card">'+
   '<span class="small">AURA STUDY · HỌC SINH</span>'+
-  '<h1>Một tài khoản để học đầy đủ</h1>'+
-  '<p>'+escape(message||"Admin cấp một liên kết học. Kích hoạt một lần trên thiết bị này và dùng luôn các chức năng học tập.")+'</p>'+
-  '<a class="btn primary" href="./aura-student.html">Đăng nhập / Kích hoạt tài khoản</a>'+
-  '<small>Không cần mã PIN riêng hoặc kết nối thêm trong trang học.</small></section>';
+  '<h1>Đăng nhập Student</h1>'+
+  '<p>'+escape(message||"Nhập tên đăng nhập và mật khẩu do Admin tạo để bắt đầu học.")+'</p>'+
+  '<form id="auraStudentPasswordFormV6" autocomplete="on">'+
+  '<label for="auraStudentUsernameV6" style="display:block;margin-top:13px;font-weight:700">Tên đăng nhập</label>'+
+  '<input id="auraStudentUsernameV6" type="text" name="username" required maxlength="30" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Ví dụ: sonic6" style="width:100%;box-sizing:border-box;padding:13px;border-radius:11px;border:1px solid #d4e0ef;margin-top:7px">'+
+  '<label for="auraStudentPasswordV6" style="display:block;margin-top:13px;font-weight:700">Mật khẩu</label>'+
+  '<input id="auraStudentPasswordV6" type="password" name="password" required autocomplete="current-password" placeholder="Mật khẩu do Admin cấp" style="width:100%;box-sizing:border-box;padding:13px;border-radius:11px;border:1px solid #d4e0ef;margin-top:7px">'+
+  '<button type="submit" class="btn primary" id="auraStudentLoginSubmitV6" style="width:100%">Đăng nhập và vào học</button>'+
+  '<p id="auraStudentLoginErrorV6" aria-live="polite" role="alert" style="color:#b42318;font-size:12px;min-height:20px"></p></form>'+
+  '<small>Chưa có tài khoản? Nhờ Admin tạo học sinh. Không cần link kích hoạt hoặc ghép thiết bị.</small></section>';
 }
 function gate(message){
  if(verified&&activeLearner)snapshot(activeLearner);
@@ -112,12 +118,13 @@ function setAccount(profile){
  if(!box)return;
  box.replaceChildren();
  const strong=document.createElement("b");strong.textContent=name;
- const link=document.createElement("a");
- link.href="./aura-student.html?manage=1";
- link.className="aura-role";
- link.textContent="Student · Tài khoản";
- link.setAttribute("aria-label","Quản lý phiên Student");
- box.append(strong,link);
+ const logout=document.createElement("button");
+ logout.type="button";logout.className="aura-role";
+ logout.textContent="Đăng xuất";
+ logout.setAttribute("aria-label","Đăng xuất tài khoản Student");
+ logout.style.cssText="border:0;background:none;padding:0;cursor:pointer";
+ logout.onclick=()=>window.AURA_STUDENT_PASSWORD_V6?.logout?.();
+ box.append(strong,logout);
 }
 async function verify(force=false){
  if(checkTask)return checkTask;
@@ -150,7 +157,12 @@ async function verify(force=false){
  return checkTask;
 }
 window.AURA_STUDENT_ONE_LOGIN_V5={verify,isReady:()=>!!verified,learner:()=>verified,
- snapshot:()=>snapshot(activeLearner)};
+ lock:message=>{
+  if(activeLearner)snapshot(activeLearner);
+  clearLearning();
+  nativeRemove.call(localStorage,CURRENT);
+  gate(message||"Đã đăng xuất. Nhập tài khoản và mật khẩu để vào học.");
+ },snapshot:()=>snapshot(activeLearner)};
 gate("Đang xác minh tài khoản học sinh do Admin tạo…");
 verify(true).then(v=>{
  if(v&&typeof window.home==="function")window.home();
