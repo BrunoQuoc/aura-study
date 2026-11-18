@@ -1,0 +1,15 @@
+/* Preserve AURA Student's original hybrid theme and navigation; single login overlay only. */
+body.student-shell:not(.aura-cloud-ready) .layout,
+body.student-shell:not(.aura-cloud-ready) .mobilebar{visibility:hidden!important;pointer-events:none!important}
+body.student-shell .aura-student-gate{
+ position:fixed;inset:0;z-index:100000;background:linear-gradient(125deg,#07152f,#143866 54%,#095568);
+ display:grid;place-items:center;padding:20px;color:#142341;overflow-y:auto}
+body.student-shell .aura-student-gate-card{
+ width:min(460px,100%);background:#f7f9fd;border-radius:23px;padding:30px 25px;
+ box-shadow:0 25px 80px rgba(0,0,0,.22)}
+body.student-shell .aura-student-gate-card h1{font-size:25px;line-height:1.2;margin:14px 0;color:#172944}
+body.student-shell .aura-student-gate-card p{font-size:14px;line-height:1.6;color:#61718b}
+body.student-shell .aura-student-gate-card .btn{display:flex;justify-content:center;text-decoration:none;margin:18px 0;padding:13px}
+body.student-shell .aura-student-gate-card small{color:#7c88a0;font-size:12px;line-height:1.5;display:block}
+body.student-shell .aura-account .aura-role{color:#cee6ff;text-decoration:none;font-weight:700}
+body.student-shell .aura-account .aura-role:hover{text-decoration:underline}
