@@ -237,7 +237,7 @@ async function loadOverview(force=false){
    state.loading=false;state.request=null;state.fetchAt=Date.now();
    // Older Admin addons also write body.dataset.auraPage while the V3 view is
    // mounted; rerender from the actual active V3 view, never from legacy tags.
-   if(app.querySelector(".av3")){
+   if(app.querySelector?.(".av3")||app.innerHTML.includes('class="av3"')){
     if(state.view==="home")overview();
     else if(state.view==="documents")docs(state.tab);
     else if(state.view==="settings")settings();
