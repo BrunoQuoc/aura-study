@@ -30,13 +30,16 @@ function isDriveId(s:unknown):s is string{
  return typeof s==="string"&&/^[A-Za-z0-9_-]{10,180}$/.test(s);
 }
 // Exam and test uploads are manually approved. SGK does not use this endpoint.
-function needsExamReview(title:unknown,docType:unknown):boolean{
- if(docType==="exam")return true;
- if(docType!=="practice")return false;
+function manualContentKind(title:unknown,docType:unknown):"EXAM"|"SAMPLE"|""{
  const v=String(title??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"")
   .replace(/đ/g,"d").replace(/Đ/g,"D").toLowerCase();
- return /\bde[\s._-]*(thi|kiem[\s._-]*tra|kt|giua[\s._-]*ky|cuoi[\s._-]*ky)\b/.test(v)
-  || /\bbai[\s._-]*kiem[\s._-]*tra\b/.test(v);
+ if(docType==="exam"||(docType==="practice"&&
+  (/\bde[\s._-]*(thi|kiem[\s._-]*tra|kt|giua[\s._-]*ky|cuoi[\s._-]*ky)\b/.test(v)||
+   /\bbai[\s._-]*kiem[\s._-]*tra\b/.test(v))))return "EXAM";
+ if(["practice","lesson","reference"].includes(String(docType))&&
+  /\b(bai[\s._-]*mau|bai[\s._-]*giai[\s._-]*mau|vi[\s._-]*du[\s._-]*mau|sample[\s._-]*(paper|work))\b/.test(v))
+  return "SAMPLE";
+ return "";
 }
 Deno.serve(async(req:Request)=>{
  const origin=req.headers.get("Origin");
@@ -70,6 +73,28 @@ Deno.serve(async(req:Request)=>{
     return reply(origin,503,{error:"Verified SGK catalog unavailable"});
    return reply(origin,200,{...data,staging_only:true,official_exam_enabled:false});
   }
+  if(input.action==="admin_content_overview"){
+   if(!admin)return reply(origin,403,{error:"Verified ADMIN required"});
+   const {data,error:e}=await service.rpc("aura_admin_content_overview_v3",{p_admin_uid:user.id});
+   if(e||!data?.staging_only)return reply(origin,503,{error:"Content overview unavailable"});
+   return reply(origin,200,data);
+  }
+  if(input.action==="admin_manual_approve"){
+   if(!admin)return reply(origin,403,{error:"Verified ADMIN required"});
+   const {file_id,title,subject,doc_type,material_kind}=input;
+   const kind=manualContentKind(title,doc_type);
+   if(!isDriveId(file_id)||typeof title!=="string"||title.trim().length<2||
+     title.trim().length>180||typeof subject!=="string"||
+     !["TOAN","NGUVAN","TIENGANH","KHTN","LSDL","GDCD","TINHOC","CONGNGHE","KHAC"].includes(subject)||
+     !kind||kind!==material_kind)
+    return reply(origin,400,{error:"Only external exams or sample papers may be approved"});
+   const {data,error:e}=await service.rpc("aura_manual_material_approve_v3",{
+     p_admin_uid:user.id,p_file_id:file_id,p_title:title.trim(),
+     p_subject:subject,p_doc_type:doc_type,p_kind:kind
+   });
+   if(e||!data?.approved)return reply(origin,409,{error:"Cannot record manual Admin approval"});
+   return reply(origin,200,{...data,staging_only:true,official_exam_enabled:false});
+  }
   if(input.action==="admin_list"){
    if(!admin)return reply(origin,403,{error:"Verified ADMIN required"});
    const {data,error:e}=await service.rpc("aura_legacy_content_admin_list_v1",{p_admin_uid:user.id});
@@ -81,13 +106,13 @@ Deno.serve(async(req:Request)=>{
    const {file_id,title,subject,doc_type,period=""}=input;
    if(!isDriveId(file_id)||typeof title!=="string"||title.trim().length<2||title.trim().length>180
     ||!["TOAN","NGUVAN","TIENGANH","KHTN","LSDL","GDCD","TINHOC","CONGNGHE","KHAC"].includes(String(subject))
-    ||!needsExamReview(title,doc_type)
+    ||!manualContentKind(title,doc_type)
     ||!["","GK1","CK1","GK2","CK2"].includes(String(period)))
     return reply(origin,400,{error:"Invalid or non-student resource. Answer keys are not publishable."});
    const {data,error:e}=await service.rpc("aura_legacy_content_admin_publish_v1",{
     p_admin_uid:user.id,p_drive_file_id:file_id,p_title:title.trim(),
     p_subject:subject,p_doc_type:doc_type,p_period:period});
-   if(e)return reply(origin,409,{error:"Could not publish resource to this Admin household"});
+   if(e)return reply(origin,409,{error:"Bộ đề/bài mẫu chưa được duyệt trên máy chủ hoặc dữ liệu đã thay đổi."});
    return reply(origin,200,{published:data,staging_only:true,official_exam_enabled:false});
   }
   if(input.action==="admin_withdraw"){
