@@ -72,7 +72,10 @@ function pickFile(){
   input.type="file";input.accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.txt";
   input.style.cssText="position:fixed;left:-10000px;opacity:0";
   document.body.appendChild(input);
-  input.addEventListener("change",()=>{const f=input.files?.[0]||null;input.remove();resolve(f)},{once:true});
+  let settled=false;
+  const finish=f=>{if(settled)return;settled=true;input.remove();resolve(f)};
+  input.addEventListener("change",()=>finish(input.files?.[0]||null),{once:true});
+  input.addEventListener("cancel",()=>finish(null),{once:true});
   // Keep input open as long as the native picker is displayed; no artificial timeout.
   input.click();
  });
