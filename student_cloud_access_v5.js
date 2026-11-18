@@ -150,7 +150,10 @@ async function verify(force=false){
    document.body.classList.add("aura-cloud-ready");
    return verified;
   }catch(e){
-   gate(String(e?.message||"Hãy sử dụng liên kết học do Admin cung cấp."));
+   const message=String(e?.message||"");
+   gate(/chưa kết nối|kích hoạt|not paired/i.test(message)
+    ?"Nhập tên đăng nhập và mật khẩu do Admin tạo để vào học."
+    :(message||"Không thể xác minh tài khoản. Vui lòng thử lại."));
    return null;
   }finally{checkTask=null}
  })();
