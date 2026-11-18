@@ -58,7 +58,17 @@ try{
   page.on("pageerror",e=>jsErrors.push(e.message));
   await page.goto(origin+"/admin-direct.html",{waitUntil:"load",timeout:45000});
   await page.locator(".av3-lane-card").first().waitFor({timeout:20000});
-  await page.getByText("Đã kết nối Staging").first().waitFor({timeout:20000});
+  try{
+   await page.locator(".av3-live").first().waitFor({timeout:12000});
+  }catch(error){
+   console.log("ADMIN V3 DEBUG",screen.id,await page.locator(".av3-connect").innerText(),
+    await page.evaluate(()=>({
+      session:!!localStorage.getItem("aura-stage-parent-v1"),
+      cloud:!!window.AURA_LEGACY_CLOUD_ADMIN,hub:!!window.AURA_ADMIN_V3
+    })),jsErrors.slice(0,12));
+   await page.screenshot({path:output+"/"+screen.id+"-diagnostic.png",fullPage:true});
+   throw error;
+  }
   assert.equal(await page.locator(".side .navbtn").count(),5);
   assert.equal(await page.locator(".av3-lane-card").count(),3);
   assert.match(await page.locator("#app").innerText(),/Một kho tài liệu/);
