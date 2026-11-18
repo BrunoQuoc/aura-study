@@ -71,9 +71,12 @@ function renderRows(rows,panel){
   '<div class="fileico">📘</div><div class="grow" style="min-width:180px">'+
   '<b>'+esc(r.title)+'</b><small style="display:block">'+esc(SUBJECT[r.subject])+
   ' · '+esc(DOC[r.doc_type])+(r.period?' · '+esc(PERIOD[r.period]||r.period):'')+'</small></div>'+
-  '<a class="btn primary" target="_blank" rel="noopener noreferrer" href="https://drive.google.com/open?id='+
-  encodeURIComponent(r.drive_file_id)+'">Mở tài liệu</a></article>').join("")+
-  '<p class="meta">Nếu Drive báo chưa có quyền, cần Admin cấp quyền xem tệp gốc. Link từ AURA không tự mở quyền Drive.</p>';
+  '<div style="display:flex;gap:7px;flex-wrap:wrap">'+
+  (r.asset_ready&&/^[0-9a-f-]{36}$/i.test(r.id)?
+   '<button type="button" class="btn primary" data-aura-cloud-open="'+esc(r.id)+'">Mở bản AURA</button>':'')+
+  '<a class="btn soft" target="_blank" rel="noopener noreferrer" href="https://drive.google.com/open?id='+
+  encodeURIComponent(r.drive_file_id)+'">Mở Drive</a></div></article>').join("")+
+  '<p class="meta">Bản AURA có thể đọc trên thiết bị đã kích hoạt, không cần cấp quyền Drive. Nếu chỉ thấy nút Drive, Admin chưa lưu bản sao tệp lên AURA.</p>';
 }
 async function load(panel,which,sub,per){
  const serial=++fetchId;
@@ -91,7 +94,7 @@ async function load(panel,which,sub,per){
   const rows=await api();
   if(serial!==fetchId||!panel.isConnected)return;
   renderRows(rows,panel);
-  status.textContent=rows.length+" tài liệu đang chia sẻ trong kho của học sinh.";
+  status.textContent=rows.length+" tài liệu được chia sẻ · "+rows.filter(x=>x.asset_ready).length+" có bản sao lưu trên AURA.";
  }catch(e){
   if(serial!==fetchId||!panel.isConnected)return;
   panel.querySelector("#auraCloudStudentItems").replaceChildren();
@@ -125,7 +128,7 @@ wrap("lessons","lesson");
 wrap("lessonSubject","subject");
 wrap("subject","subject");
 wrap("studentExamSubject","period");
-window.AURA_LEGACY_CLOUD_STUDENT={refresh:()=>{if(active?.isConnected)load(active,mode,subject,period)}};
+window.AURA_LEGACY_CLOUD_STUDENT={refresh:()=>{if(active?.isConnected)load(active,mode,subject,period)},getToken:token};
 window.addEventListener("focus",()=>{if(active?.isConnected)load(active,mode,subject,period)});
 window.addEventListener("load",()=>{
  setTimeout(()=>{
