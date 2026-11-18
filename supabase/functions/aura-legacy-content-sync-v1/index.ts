@@ -144,6 +144,15 @@ Deno.serve(async(req:Request)=>{
    if(e)return reply(origin,409,{error:"Published resource not found or already withdrawn"});
    return reply(origin,200,{withdrawn:data,staging_only:true});
   }
+  // One account: the existing Admin-issued one-time activation connects Student
+  // directly to this verified learner. No browser-local PIN or second pairing step.
+  if(input.action==="student_profile"){
+   if(!student)return reply(origin,403,{error:"Active Student login required"});
+   const {data,error:e}=await service.rpc("aura_student_unified_profile_v5",{p_student_uid:user.id});
+   if(e||data?.paired!==true||data?.staging_only!==true)
+    return reply(origin,403,{error:"Student account not active or pairing revoked"});
+   return reply(origin,200,data);
+  }
   if(input.action==="student_list"){
    if(!student)return reply(origin,403,{error:"Paired STUDENT device required"});
    const {data,error:e}=await service.rpc("aura_legacy_content_student_list_v1",{p_student_uid:user.id});
