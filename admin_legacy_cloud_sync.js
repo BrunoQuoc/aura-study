@@ -79,8 +79,9 @@ function printItems(items){
   rows.push('<div class="resource" style="display:flex;align-items:center;flex-wrap:wrap;gap:9px">'+
    '<div class="grow" style="min-width:180px"><b>'+esc(r.name||"Tài liệu")+'</b><small style="display:block">'+
    esc(SUBJECT[r.subject])+' · '+esc(DOC[r.docType])+(r.period?" · "+esc(PERIOD[r.period]||r.period):"")+
-   (active?" · Đang chia sẻ":" · Chưa xuất bản")+'</small></div>'+
-   (active?'<button type="button" class="btn soft" data-cloud-action="withdraw" data-cloud-id="'+esc(r.driveFileId)+'">Thu hồi</button>':
+   (active?(remote?.asset_ready?" · Đã có tệp trên AURA":" · Đang chia sẻ link, chưa lưu tệp"):" · Chưa xuất bản")+'</small></div>'+
+   (active?'<button type="button" class="btn primary" data-cloud-action="asset" data-cloud-id="'+esc(r.driveFileId)+'">'+(remote?.asset_ready?"Thay bản sao":"Lưu tệp lên AURA")+'</button>'+
+   '<button type="button" class="btn soft" data-cloud-action="withdraw" data-cloud-id="'+esc(r.driveFileId)+'">Thu hồi</button>':
    '<button type="button" class="btn primary" data-cloud-action="publish" data-cloud-id="'+esc(r.driveFileId)+'">Xuất bản</button>')+
    '</div>');
  }
@@ -89,7 +90,8 @@ function printItems(items){
   if(r.visibility==="PUBLISHED_STAGING"){
    rows.push('<div class="resource" style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">'+
    '<div class="grow" style="min-width:180px"><b>'+esc(r.title)+'</b><small style="display:block">'+
-   esc(SUBJECT[r.subject]||r.subject)+' · Đang chia sẻ (từ lần đăng nhập khác)</small></div>'+
+   esc(SUBJECT[r.subject]||r.subject)+(r.asset_ready?' · Đã có tệp AURA':' · Chưa có tệp AURA')+' · Từ lần đăng nhập khác</small></div>'+
+   '<button class="btn primary" type="button" data-cloud-action="asset" data-cloud-id="'+esc(r.drive_file_id)+'">'+(r.asset_ready?'Thay bản sao':'Lưu tệp lên AURA')+'</button>'+
    '<button class="btn soft" type="button" data-cloud-action="withdraw" data-cloud-id="'+esc(r.drive_file_id)+'">Thu hồi</button></div>');
   }
  }
@@ -126,7 +128,10 @@ async function onClick(e){
  const status=panel.querySelector("#auraCloudAdminStatus");
  el.disabled=true;
  try{
-  if(action==="publish"){
+  if(action==="asset"){
+   if(!window.AURA_LEGACY_ASSET_ADMIN)throw Error("Mô-đun tệp AURA chưa tải.");
+   await window.AURA_LEGACY_ASSET_ADMIN.upload(id);
+  }else if(action==="publish"){
    const r=approvedDocs().find(x=>x.driveFileId===id);
    if(!r)throw Error("Tài liệu không còn trong danh sách đã duyệt. Vui lòng mở lại INBOX.");
    if(!confirm("Xuất bản '"+String(r.name||"Tài liệu").slice(0,70)+"' cho Student đã ghép thiết bị? Tệp Drive cần quyền xem riêng."))return;
@@ -134,7 +139,9 @@ async function onClick(e){
     file_id:r.driveFileId,title:String(r.name||"Tài liệu").slice(0,180),
     subject:r.subject,doc_type:r.docType,period:PERIOD[r.period]?r.period:""});
    if(out.published?.visibility!=="PUBLISHED_STAGING")throw Error("Máy chủ chưa ghi nhận xuất bản.");
-   status.textContent="Đã xuất bản trên máy chủ. Student có thể làm mới mục Bài học hoặc Ôn thi trên thiết bị khác.";
+   status.textContent="Đã xuất bản danh mục. Hãy lưu bản sao lên AURA để Student đọc mà không cần quyền Drive.";
+   if(window.AURA_DRIVE_AUTH?.token&&window.AURA_LEGACY_ASSET_ADMIN)
+    await window.AURA_LEGACY_ASSET_ADMIN.fromDrive(id);
   }else if(action==="withdraw"){
    if(!confirm("Thu hồi tài liệu này khỏi danh sách Student?"))return;
    const out=await api("admin_withdraw",{file_id:id});
@@ -166,6 +173,6 @@ function wrap(name){
  };
 }
 wrap("library");
-window.AURA_LEGACY_CLOUD_ADMIN={refresh:()=>{if(activePanel?.isConnected)load(activePanel)},localApproved:approvedDocs};
+window.AURA_LEGACY_CLOUD_ADMIN={refresh:()=>{if(activePanel?.isConnected)load(activePanel)},localApproved:approvedDocs,getToken:token};
 window.addEventListener("focus",()=>{if(activePanel?.isConnected)load(activePanel)});
 })();
