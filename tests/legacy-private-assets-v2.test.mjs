@@ -20,7 +20,7 @@ test('legacy HTML preserves old app and loads private sync adapters',()=>{
     assert.match(markup,/<main class="content" id="app">/);
     assert.match(markup,new RegExp(role+'_legacy_cloud_sync\\.js\\?v=sync-20261118-asset-v2'));
     assert.match(markup,new RegExp(role+'_legacy_asset_sync\\.js\\?v=asset-v2-20261118'));
-    assert.match(markup,/<nav class="mobilebar">/);
+    assert.match(markup,/<nav class="mobilebar"(?:\s[^>]*)?>/);
   }
   for(const file of ['admin_legacy_cloud_sync.js','student_legacy_cloud_sync.js',
                      'admin_legacy_asset_sync.js','student_legacy_asset_sync.js'])
