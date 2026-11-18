@@ -8,7 +8,16 @@ const BASE="https://ufqzuowjhdqpydqvcsob.supabase.co";
 const KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
 const STORE="aura-stage-parent-v1",INDEX="aura_library_index_v1";
 const API=BASE+"/functions/v1/aura-legacy-content-sync-v1";
-const ALLOWED_DOC=new Set(["lesson","practice","exam","reference","formula"]);
+// SGK official publisher sources are NOT part of this manual review list.
+const MANUAL_SOURCE=new Set(["ADMIN_APPROVED_INBOX","ADMIN_APPROVED_RECOVERED","ADMIN_APPROVED_FINAL"]);
+function isExamSet(r){
+ if(r.docType==="exam")return true;
+ if(r.docType!=="practice")return false;
+ const title=String(r.name||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+  .replace(/đ/g,"d").replace(/Đ/g,"D").toLowerCase();
+ return /\bde[\s._-]*(thi|kiem[\s._-]*tra|kt|giua[\s._-]*ky|cuoi[\s._-]*ky)\b/.test(title)
+  || /\bbai[\s._-]*kiem[\s._-]*tra\b/.test(title);
+}
 const SUBJECT={TOAN:"Toán",NGUVAN:"Ngữ văn",TIENGANH:"Tiếng Anh",KHTN:"KHTN",LSDL:"Lịch sử & Địa lý",GDCD:"GDCD",TINHOC:"Tin học",CONGNGHE:"Công nghệ",KHAC:"Khác"};
 const DOC={lesson:"Bài học",practice:"Bài tập",exam:"Đề kiểm tra thử",reference:"Tài liệu tham khảo",formula:"Công thức"};
 const PERIOD={GK1:"Giữa kỳ 1",CK1:"Cuối kỳ 1",GK2:"Giữa kỳ 2",CK2:"Cuối kỳ 2"};
@@ -22,8 +31,8 @@ function approvedDocs(){
  const seen=new Set();
  return rows.filter(r=>{
   if(!r||r.status!=="ACTIVE"||!driveId(r.driveFileId)||
-   !SUBJECT[r.subject]||!ALLOWED_DOC.has(r.docType)||seen.has(r.driveFileId))return false;
-  if(!["ADMIN_APPROVED_INBOX","ADMIN_APPROVED_RECOVERED"].includes(r.source))return false;
+   !SUBJECT[r.subject]||!isExamSet(r)||seen.has(r.driveFileId))return false;
+  if(!MANUAL_SOURCE.has(r.source))return false;
   seen.add(r.driveFileId);return true;
  }).slice(0,200);
 }
@@ -57,10 +66,10 @@ async function api(action,data={}){
 function panelHTML(){
  return '<section class="card aura-cloud-admin" id="auraLegacyCloudAdmin" style="margin-top:18px">'+
  '<div class="small">THƯ VIỆN CHUNG · GIAO DIỆN ADMIN CŨ</div>'+
- '<h2>Xuất bản tài liệu cho Student</h2>'+
- '<p class="meta">Sau khi duyệt INBOX, vào đây bấm <b>Xuất bản</b> cho từng tài liệu. '+
- 'Student đã ghép thiết bị sẽ thấy tài liệu ở mục Bài học / Ôn thi trên máy khác. '+
- 'Không đăng đáp án riêng, bài chưa duyệt hoặc mở điểm thi chính thức.</p>'+
+ '<h2>SGK tự cập nhật · Đề thi cần duyệt</h2>'+
+ '<p class="meta"><b>SGK chính thức:</b> AURA đồng bộ từ nguồn NXB đã đăng ký, không có bước duyệt từng tài liệu. '+
+ '<b>Đề thi / đề kiểm tra anh đưa:</b> vẫn cần Admin duyệt ở INBOX trước khi xuất bản cho Student.</p>'+
+ '<div id="auraSgkAutoAdmin" class="meta">Đang tải danh mục SGK tự động...</div>'+
  '<p class="meta">Tệp gốc vẫn ở Drive. Để Student đọc mà không cần quyền Drive, hãy lưu bản sao lên AURA sau khi xuất bản.</p>'+
  '<p class="meta"><a href="./aura-admin.html">Đăng nhập máy chủ / cấp liên kết kích hoạt Student</a> (chỉ cần khi kết nối lần đầu).</p>'+
  '<p id="auraCloudAdminStatus" role="status">Đang kiểm tra kết nối kho chung...</p>'+
@@ -95,7 +104,22 @@ function printItems(items){
    '<button class="btn soft" type="button" data-cloud-action="withdraw" data-cloud-id="'+esc(r.drive_file_id)+'">Thu hồi</button></div>');
   }
  }
- root.innerHTML=rows.join("")||'<p class="meta">Chưa có tài liệu được duyệt trong INBOX trên trình duyệt này. Duyệt tài liệu trước rồi quay lại Thư viện.</p>';
+ root.innerHTML='<h3>Đề thi / đề kiểm tra đã được duyệt</h3>'+
+ (rows.join("")||'<p class="meta">Chưa có bộ đề thi / kiểm tra được Admin duyệt. SGK không xuất hiện trong hàng chờ này.</p>');
+}
+function showSgk(panel,data,error){
+ const root=panel.querySelector("#auraSgkAutoAdmin");
+ if(!root)return;
+ if(error){root.textContent="Chưa tải được nguồn SGK: "+error.message;return}
+ const books=Array.isArray(data?.sources)?data.sources:[];
+ const safe=u=>{try{const x=new URL(u);return x.protocol==="https:"&&x.hostname==="taphuan.nxbgd.vn"?x.href:""}catch{return ""}};
+ root.innerHTML='<b>SGK tự đồng bộ: '+books.length+' tập · không yêu cầu duyệt</b>'+
+ books.map(book=>{
+  const url=safe(book.source_url);
+  return '<div style="margin:7px 0"><span>'+esc(book.title)+' · '+esc(book.sections?.length||0)+' mục lục</span> '+
+   (url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Mở nguồn NXB</a>':'')+'</div>';
+ }).join("")+
+ '<p class="meta">Mục lục đã đối chiếu với nhà xuất bản; nội dung trang sách và bài tập chưa được chứng nhận sao chép.</p>';
 }
 async function load(panel){
  const key=++loadCounter;
@@ -103,16 +127,20 @@ async function load(panel){
  if(!storedSession()?.access_token){
   status.innerHTML='Để đồng bộ giữa hai thiết bị, <a href="./aura-admin.html">đăng nhập Admin bằng email</a> một lần, sau đó trở lại trang Admin cũ này.';
   printItems([]);
+  const root=panel.querySelector("#auraSgkAutoAdmin");
+  if(root)root.textContent="Đăng nhập Admin máy chủ để xem trạng thái đồng bộ SGK. SGK không cần nút Duyệt.";
   return;
  }
- status.textContent="Đang tải trạng thái xuất bản...";
+ status.textContent="Đang tải các đề đã duyệt...";
+ const sgk=api("sgk_auto_catalog").then(data=>({data}),error=>({error}));
+ sgk.then(result=>{if(key===loadCounter&&panel.isConnected)showSgk(panel,result.data,result.error)});
  try{
   const result=await api("admin_list");
   if(key!==loadCounter||!panel.isConnected)return;
   const items=result.items||[];
   printItems(items);
   status.textContent=items.filter(x=>x.visibility==="PUBLISHED_STAGING").length+
-   " tài liệu đang chia sẻ qua máy chủ. Chỉ xuất bản nội dung mà anh đã kiểm tra và có quyền chia sẻ.";
+   " bộ đề đang chia sẻ qua máy chủ. Chỉ bộ đề đã được Admin duyệt mới sử dụng nút Xuất bản.";
  }catch(e){
   if(key!==loadCounter||!panel.isConnected)return;
   status.textContent=e.message;
@@ -134,7 +162,7 @@ async function onClick(e){
   }else if(action==="publish"){
    const r=approvedDocs().find(x=>x.driveFileId===id);
    if(!r)throw Error("Tài liệu không còn trong danh sách đã duyệt. Vui lòng mở lại INBOX.");
-   if(!confirm("Xuất bản '"+String(r.name||"Tài liệu").slice(0,70)+"' cho Student đã ghép thiết bị? Sau đó hãy lưu bản sao lên AURA để tránh lỗi quyền xem Drive."))return;
+   if(!confirm("Xuất bản bộ đề đã DUYỆT '"+String(r.name||"Tài liệu").slice(0,70)+"' cho Student đã ghép thiết bị? Đề này chỉ dùng ôn tập, không bật thi chính thức."))return;
    const out=await api("admin_publish",{
     file_id:r.driveFileId,title:String(r.name||"Tài liệu").slice(0,180),
     subject:r.subject,doc_type:r.docType,period:PERIOD[r.period]?r.period:""});
