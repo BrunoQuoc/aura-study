@@ -33,20 +33,36 @@
   <link rel="stylesheet" href="admin_mvp_v2.css?v=admin-ux-20261112">
   <link rel="stylesheet" href="admin_drive_source_ui.css?v=drive-review-metric-20261112">
   <link rel="stylesheet" href="aura-legacy-ux-tune.css?v=ux-20261116-r1">
-  <title>AURA STUDY · Admin</title>
+  <link rel="stylesheet" href="admin_unified_v3.css?v=admin-v3-20261118">
+  <title>AURA STUDY · Admin V3</title>
   <script>(function cleanAura(){try{if('serviceWorker'in navigator)navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister())));if(window.caches)caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k))));}catch(e){}})();</script>
 </head>
-<body class="admin-shell">
+<body class="admin-shell admin-v3">
   <a class="aura-legacy-skip" href="#app">Bỏ qua menu, đến nội dung chính</a>
   <div hidden><span id="netDot"></span><span id="netText"></span></div>
   <header class="topbar"><div class="topin"><div class="brand" role="button" tabindex="0" aria-label="Về trang chủ" title="Về trang chủ" style="cursor:pointer" onclick="home()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();home()}"><div class="brandmark">A</div><div class="brandtext"><b>AURA STUDY</b><small>Quản trị · Admin</small></div></div><div class="spacer"></div><button class="btn soft" type="button" onclick="backup()">Sao lưu</button><button class="btn soft" type="button" onclick="restoreBackup()">Khôi phục</button><div class="aura-account"><b>Admin</b><span class="aura-role">Quản trị</span></div></div></header>
-  <div class="layout"><aside class="side"><button class="navbtn active" data-page="home" onclick="home()">⌂ Tổng quan</button><button class="navbtn" data-page="library" onclick="library()">▦ Thư viện</button><button class="navbtn" data-page="inbox" onclick="auraAdminInbox()">⇧ INBOX</button><button class="navbtn" data-page="driveSources" onclick="auraDriveSourceInbox()">◉ Nguồn Drive</button><button class="navbtn" data-page="lessons" onclick="lessons()">◫ Bài học</button><button class="navbtn" data-page="review" onclick="location.href='admin-ch08-review.html'">✓ Chờ duyệt câu hỏi</button><button class="navbtn" data-page="generator" onclick="generator()">🎲 Tạo đề</button><button class="navbtn" data-page="history" onclick="history()">◷ Kết quả</button><button class="navbtn" data-page="metadata" onclick="auraMetadataManager()">◇ Phân kỳ</button><button class="navbtn" data-page="guide" onclick="guide()">? Hướng dẫn & Vận hành</button><div class="sidebox"><b>AURA Smart Practice</b><div class="small">Cân mức độ • giảm lặp • ưu tiên phần yếu.</div></div></aside><main class="content" id="app"></main></div>
-  <nav class="mobilebar"><button onclick="home()">⌂<br><small>Trang chủ</small></button><button onclick="library()">▦<br><small>Thư viện</small></button><button onclick="auraAdminInbox()">⇧<br><small>INBOX</small></button><button onclick="auraDriveSourceInbox()">◉<br><small>Nguồn Drive</small></button><button onclick="lessons()">◫<br><small>Bài học</small></button><button onclick="location.href='admin-ch08-review.html'">✓<br><small>Chờ duyệt</small></button><button onclick="generator()">🎲<br><small>Tạo đề</small></button><button onclick="history()">◷<br><small>Kết quả</small></button><button onclick="auraMetadataManager()">◇<br><small>Phân kỳ</small></button><button onclick="guide()">?<br><small>Hướng dẫn</small></button></nav>
+  <div class="layout"><aside class="side" aria-label="Điều hướng Admin">
+    <div class="side-title">KHÔNG GIAN QUẢN TRỊ</div>
+    <button class="navbtn active" type="button" data-page="home" onclick="home()"><span class="nav-ico">⌂</span>Tổng quan</button>
+    <button class="navbtn" type="button" data-page="library" onclick="auraAdminDocs('sgk')"><span class="nav-ico">▤</span>Tài liệu</button>
+    <button class="navbtn" type="button" data-page="students" onclick="auraStudentUsers()"><span class="nav-ico">♙</span>Học sinh</button>
+    <button class="navbtn" type="button" data-page="history" onclick="history()"><span class="nav-ico">◷</span>Kết quả</button>
+    <button class="navbtn" type="button" data-page="settings" onclick="auraAdminSettings()"><span class="nav-ico">⚙</span>Hệ thống</button>
+    <div class="av3-side-note"><b>SGK & bài tập</b>Tự chuẩn hóa theo nguồn chuẩn.<br><br><b>Đề thi & bài mẫu</b>Chỉ xuất bản sau khi Admin duyệt.</div>
+  </aside><main class="content" id="app"></main></div>
+  <nav class="mobilebar" aria-label="Điều hướng di động">
+    <button class="active" type="button" data-page="home" onclick="home()">⌂<small>Tổng quan</small></button>
+    <button type="button" data-page="library" onclick="auraAdminDocs('sgk')">▤<small>Tài liệu</small></button>
+    <button type="button" data-page="students" onclick="auraStudentUsers()">♙<small>Học sinh</small></button>
+    <button type="button" data-page="history" onclick="history()">◷<small>Kết quả</small></button>
+    <button type="button" data-page="settings" onclick="auraAdminSettings()">⚙<small>Hệ thống</small></button>
+  </nav>
   <script src="data.js?v=noauth2"></script><script src="math_de1_fix.js?v=de1-r1"></script><script src="lesson_maps.js?v=noauth2"></script><script src="nguvan_bank.js?v=noauth2"></script><script src="english_bank.js?v=noauth2"></script><script src="english_extra.js?v=noauth2"></script><script src="visuals.js?v=noauth2"></script><script src="app.js?v=stable-r1"></script><script src="lesson_maps_ui.js?v=lessons-subjects-r1"></script><script src="generator.js?v=noauth2"></script><script src="generator_guard.js?v=noauth2"></script><script src="smart_engine.js?v=noauth2"></script><script src="v24_patch.js?v=noauth2"></script><script src="dashboard_home.js?v=dashboard-r1"></script><script src="ui_polish.js?v=noauth2"></script><script src="premium_ui.js?v=noauth2"></script><script src="guide.js?v=noauth2"></script><script src="backup.js?v=stable-r2"></script><script src="sync_status.js?v=noauth2"></script><script src="admin_library_publish.js?v=library-r3" data-aura-library-publish="1"></script><script src="local_accounts_v3.js?v=accounts-v3-r1" data-aura-local-accounts="1"></script><script src="local_accounts_loader.js?v=accounts-r4" data-aura-local-accounts-loader="1"></script><script src="aura_pro_2026.js?v=pro-2026-r16"></script><script src="exam_metadata.js?v=exam-meta-r5"></script><script src="admin_metadata_manager.js?v=metadata-complete-20261112"></script><script src="aura_drive_auth_core.js?v=metadata-oauth-20261112"></script><script src="aura_google_drive_config.js?v=drive-r4"></script><script src="admin_inbox.js?v=inbox-r1"></script><script src="admin_inbox_autoroute.js?v=autoroute-r4"></script><script src="admin_inbox_classifier_core.js?v=classifier-r1"></script><script src="admin_inbox_classifier_ui.js?v=classifier-r2"></script><script src="admin_inbox_queue_v2.js?v=queue-r5"></script><script src="admin_inbox_quality.js?v=quality-r1"></script><script src="admin_drive_auth_bridge.js?v=auth-bridge-r2"></script><script src="admin_drive_auth_unified_patch.js?v=auth-unified-r4"></script><script src="multisubject_results.js?v=multi-r4"></script><script src="multisubject_dashboard_patch.js?v=multi-r1"></script><script src="weekly_report.js?v=weekly-r5"></script><script src="admin_report_reset.js?v=reset-r3"></script><script src="admin_library_autopublish_patch.js?v=library-autopublish-r2"></script>
   <script src="admin_mvp_v2.js?v=admin-ux-20261112"></script>
   <script src="admin_drive_source_core.js?v=drive-review-20261112"></script>
   <script src="admin_drive_source_ui.js?v=knowledge-batch-gate-20261113"></script>
   <script src="admin_legacy_cloud_sync.js?v=sync-20261118-asset-v2" defer></script>
   <script src="admin_legacy_asset_sync.js?v=asset-v2-20261118" defer></script>
+  <script src="admin_unified_v3.js?v=admin-v3-20261118" defer></script>
 </body>
 </html>
