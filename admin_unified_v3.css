@@ -163,7 +163,7 @@
  .admin-shell.admin-v3 .av3-lane-card{padding:18px 15px;min-height:238px}
  .admin-shell.admin-v3 .av3-two{grid-template-columns:1fr}
 }
-@media(max-width:760px){
+@media(max-width:900px){
  .admin-shell.admin-v3 .layout{display:block!important;padding:14px 12px 110px!important}
  .admin-shell.admin-v3 .side{display:none!important}
  .admin-shell.admin-v3 .mobilebar{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
