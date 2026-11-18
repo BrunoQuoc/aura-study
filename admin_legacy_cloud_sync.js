@@ -70,7 +70,7 @@ function panelHTML(){
  '<p class="meta"><b>SGK chính thức:</b> AURA đồng bộ từ nguồn NXB đã đăng ký, không có bước duyệt từng tài liệu. '+
  '<b>Đề thi / đề kiểm tra anh đưa:</b> vẫn cần Admin duyệt ở INBOX trước khi xuất bản cho Student.</p>'+
  '<div id="auraSgkAutoAdmin" class="meta">Đang tải danh mục SGK tự động...</div>'+
- '<p class="meta">Tệp gốc vẫn ở Drive. Để Student đọc mà không cần quyền Drive, hãy lưu bản sao lên AURA sau khi xuất bản.</p>'+
+ '<p class="meta">Riêng bộ đề đã duyệt: tệp gốc vẫn ở Drive. Có thể lưu bản sao lên AURA để Student không phải xin quyền xem Drive.</p>'+
  '<p class="meta"><a href="./aura-admin.html">Đăng nhập máy chủ / cấp liên kết kích hoạt Student</a> (chỉ cần khi kết nối lần đầu).</p>'+
  '<p id="auraCloudAdminStatus" role="status">Đang kiểm tra kết nối kho chung...</p>'+
  '<div id="auraCloudAdminItems"></div></section>';
@@ -95,6 +95,7 @@ function printItems(items){
    '</div>');
  }
  for(const r of items){
+  if(!isExamSet({docType:r.doc_type,name:r.title}))continue;
   if(local.some(x=>x.driveFileId===r.drive_file_id))continue;
   if(r.visibility==="PUBLISHED_STAGING"){
    rows.push('<div class="resource" style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">'+
@@ -139,7 +140,7 @@ async function load(panel){
   if(key!==loadCounter||!panel.isConnected)return;
   const items=result.items||[];
   printItems(items);
-  status.textContent=items.filter(x=>x.visibility==="PUBLISHED_STAGING").length+
+  status.textContent=items.filter(x=>x.visibility==="PUBLISHED_STAGING"&&isExamSet({docType:x.doc_type,name:x.title})).length+
    " bộ đề đang chia sẻ qua máy chủ. Chỉ bộ đề đã được Admin duyệt mới sử dụng nút Xuất bản.";
  }catch(e){
   if(key!==loadCounter||!panel.isConnected)return;
