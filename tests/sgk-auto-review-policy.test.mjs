@@ -38,6 +38,16 @@ test('Only approved exam/test sets appear in the Admin manual-publish list',()=>
  assert.equal(result.length,2);
  assert.deepEqual(Array.from(result,x=>x.name),['Đề thi Toán 6','Bài kiểm tra 45 phút']);
 });
+test('External sample papers are manually approved while official lessons remain automatic',()=>{
+ const rows=[
+  row({name:'Bài mẫu hình thoi',docType:'practice'}),
+  row({name:'Bài giải mẫu chương 2',docType:'reference'}),
+  row({name:'Bài mẫu chưa duyệt',docType:'practice',source:'DRIVE_DISCOVERY_METADATA_ONLY'}),
+  row({name:'Bài tập SGK chuẩn',docType:'practice'})
+ ];
+ assert.deepEqual(Array.from(adminDocs(rows),x=>x.name),
+  ['Bài mẫu hình thoi','Bài giải mẫu chương 2']);
+});
 test('Final Admin-approved source is recognized for an exam set',()=>{
  const result=adminDocs([row({source:'ADMIN_APPROVED_FINAL'})]);
  assert.equal(result.length,1);
@@ -52,9 +62,9 @@ test('The SGK catalog loads without approval buttons and from verified NXB links
  assert.match(student,/action:"sgk_auto_catalog"/);
  assert.match(student,/Mở SGK trên NXB/);
  assert.match(student,/không cần Admin duyệt/);
- assert.match(admin,/SGK tự cập nhật · Đề thi cần duyệt/);
+ assert.match(admin,/SGK & bài tập tự động · Đề thi & bài mẫu cần duyệt/);
  assert.match(edge,/input\.action==="sgk_auto_catalog"/);
- assert.match(edge,/needsExamReview\(title,doc_type\)/);
+ assert.match(edge,/manualContentKind\(title,doc_type\)/);
  assert.match(migration,/publisher_primary_verified=true/);
  assert.match(migration,/publisher_toc_directly_inspected=true/);
  assert.match(migration,/d\.revoked_at is null/);
