@@ -175,7 +175,10 @@ async function adminStartup(){
  try{
   const info=await roleInfo();
   if(info.roles?.admin!==true)throw Error("Tài khoản này chưa có quyền Admin.");
-  authedAdmin=true;show("loginPanel",false);show("adminWorkspace",true);
+  authedAdmin=true;
+  location.replace("./admin-direct.html");
+  return;
+  // Legacy student-link workspace remains source-compatible but is not shown.
   set("adminStatus","Đã xác thực Admin. Anh có thể tạo học sinh và cấp liên kết học.");
   await loadStudents();
  }catch(e){
