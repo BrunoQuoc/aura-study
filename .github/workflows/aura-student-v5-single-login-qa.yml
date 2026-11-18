@@ -20,7 +20,7 @@ on:
       - 'student_password_login_v6.js'
       - 'admin_student_password_v6.css'
       - 'supabase/functions/aura-identity-pair/index.ts'
-      - '.github/workflows/aura-student-v6-single-login-qa.yml'
+      - '.github/workflows/aura-student-v5-single-login-qa.yml'
   pull_request:
     paths:
       - 'student-direct.html'
@@ -36,7 +36,7 @@ on:
       - 'student_password_login_v6.js'
       - 'admin_student_password_v6.css'
       - 'supabase/functions/aura-identity-pair/index.ts'
-      - '.github/workflows/aura-student-v6-single-login-qa.yml'
+      - '.github/workflows/aura-student-v5-single-login-qa.yml'
   workflow_dispatch:
 permissions:
   contents: read
