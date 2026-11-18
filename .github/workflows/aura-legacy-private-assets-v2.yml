@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - feat/admin-student-private-assets-v2-20261118
+      - feat/sgk-auto-sync-exams-review-only-20261118
     paths:
       - 'admin-direct.html'
       - 'student-direct.html'
@@ -10,6 +11,10 @@ on:
       - 'supabase/functions/aura-legacy-content-asset-v2/index.ts'
       - 'supabase/migrations/20261118041949_aura_legacy_private_assets_v2_20261118.sql'
       - 'tests/legacy-private-assets-v2.test.mjs'
+      - 'tests/sgk-auto-review-policy.test.mjs'
+      - 'student_sgk_auto_catalog.js'
+      - 'supabase/functions/aura-legacy-content-sync-v1/index.ts'
+      - 'supabase/migrations/20261118071050_aura_sgk_auto_catalog_no_approval_exam_gate_20261118.sql'
       - '.github/workflows/aura-legacy-private-assets-v2.yml'
   pull_request:
     paths:
@@ -19,6 +24,10 @@ on:
       - 'supabase/functions/aura-legacy-content-asset-v2/index.ts'
       - 'supabase/migrations/20261118041949_aura_legacy_private_assets_v2_20261118.sql'
       - 'tests/legacy-private-assets-v2.test.mjs'
+      - 'tests/sgk-auto-review-policy.test.mjs'
+      - 'student_sgk_auto_catalog.js'
+      - 'supabase/functions/aura-legacy-content-sync-v1/index.ts'
+      - 'supabase/migrations/20261118071050_aura_sgk_auto_catalog_no_approval_exam_gate_20261118.sql'
       - '.github/workflows/aura-legacy-private-assets-v2.yml'
   workflow_dispatch:
 permissions:
@@ -35,4 +44,4 @@ jobs:
       - name: Verify Node.js
         run: node --version
       - name: Run private document sync tests
-        run: node --test tests/legacy-private-assets-v2.test.mjs
+        run: node --test tests/legacy-private-assets-v2.test.mjs tests/sgk-auto-review-policy.test.mjs
