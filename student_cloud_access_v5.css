@@ -13,3 +13,9 @@ body.student-shell .aura-student-gate-card .btn{display:flex;justify-content:cen
 body.student-shell .aura-student-gate-card small{color:#7c88a0;font-size:12px;line-height:1.5;display:block}
 body.student-shell .aura-account .aura-role{color:#cee6ff;text-decoration:none;font-weight:700}
 body.student-shell .aura-account .aura-role:hover{text-decoration:underline}
+
+/* On small screens legacy typography hides .aura-role. Logout must remain accessible. */
+@media(max-width:700px){
+ body.student-shell .aura-account button.aura-role{display:inline-flex!important;font-size:10px!important;white-space:nowrap;color:#cce7ff!important}
+ body.student-shell .aura-account b{font-size:11px}
+}
