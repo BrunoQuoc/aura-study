@@ -123,7 +123,13 @@ wrap("library","all");
 wrap("studentReviewHub","all");
 wrap("lessons","lesson");
 wrap("lessonSubject","subject");
+wrap("subject","subject");
 wrap("studentExamSubject","period");
 window.AURA_LEGACY_CLOUD_STUDENT={refresh:()=>{if(active?.isConnected)load(active,mode,subject,period)}};
 window.addEventListener("focus",()=>{if(active?.isConnected)load(active,mode,subject,period)});
+window.addEventListener("load",()=>{
+ setTimeout(()=>{
+  if(!active?.isConnected&&document.body.dataset.auraPage==="home")attach("home");
+ },120);
+},{once:true});
 })();
