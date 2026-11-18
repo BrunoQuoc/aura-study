@@ -32,7 +32,7 @@ async function login(username,password){
   if(typeof password!=="string"||password.length<8)
    throw Error("Kiểm tra lại mật khẩu.");
   const {data,error}=await auth.auth.signInWithPassword({
-   email:loginName+"@students.aura-study.invalid",password
+   email:loginName+"@brunoquoc.github.io",password
   });
   if(error||!data?.session?.access_token)
    throw Error("Tên đăng nhập hoặc mật khẩu không đúng.");
