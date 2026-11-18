@@ -19,6 +19,14 @@ const legacy=Object.freeze({
 });
 const state={view:"home",tab:"sgk",server:null,loading:false,error:"",fetchAt:0,request:null};
 const names={sgk:"Sách giáo khoa",practice:"Bài tập",exam:"Kiểm tra"};
+function navActive(page){
+ const button=document.querySelector('.side .navbtn[data-page="'+page+'"]');
+ if(button&&!button.classList.contains("active")&&typeof window.setActive==="function")
+  window.setActive(page);
+ document.querySelectorAll(".mobilebar [data-page]").forEach(b=>{
+  b.classList.toggle("active",b.dataset.page===page);
+ });
+}
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;":"&#39;"}[c]));
 const allowedOfficial=v=>{try{const u=new URL(v);return u.protocol==="https:"&&u.hostname==="taphuan.nxbgd.vn"?u.href:""}catch{return ""}};
 function read(key,other){
@@ -73,7 +81,7 @@ function tile(kind,number,title,description,tag){
 }
 function overview(){
  state.view="home";
- if(typeof window.setActive==="function")window.setActive("home");
+ navActive("home");
  document.body.dataset.auraPage="unified-home";
  const content=shell(header("TRUNG TÂM QUẢN TRỊ", "Một kho tài liệu. Ba quy trình rõ ràng.",
  "SGK và bài tập từ nguồn chuẩn được AURA tiếp nhận, chuẩn hóa. Chỉ bộ đề và bài mẫu anh đưa ngoài SGK cần anh duyệt.",
@@ -175,7 +183,7 @@ function docsExam(){
 function docs(tab){
  state.view="documents";
  if(names[tab])state.tab=tab;
- if(typeof window.setActive==="function")window.setActive("library");
+ navActive("library");
  document.body.dataset.auraPage="unified-library";
  app.innerHTML=shell(header("QUẢN LÝ HỌC LIỆU","Kho tài liệu",
  "Ba nhóm tài liệu, hai cơ chế xử lý. Nội dung SGK và bài tập được AURA chuẩn hóa; bộ đề, bài mẫu bên ngoài phải có anh duyệt."))+
@@ -186,7 +194,7 @@ function docs(tab){
 }
 function settings(){
  state.view="settings";
- if(typeof window.setActive==="function")window.setActive("settings");
+ navActive("settings");
  document.body.dataset.auraPage="unified-settings";
  app.innerHTML=shell(header("CẤU HÌNH & VẬN HÀNH","Hệ thống",
  "Các công cụ kỹ thuật và bảo trì nằm ở đây, không tạo thêm menu trùng với kho tài liệu."))+
@@ -257,7 +265,7 @@ function showLegacy(action){
  app.insertAdjacentHTML("afterbegin",bar);
  const group=action==="students"?"students":action==="results"?"history":
    ["sources","metadata","guide"].includes(action)?"settings":"library";
- if(typeof window.setActive==="function")window.setActive(group);
+ navActive(group);
 }
 function go(action){
  if(action==="documents"){docs("sgk");return}
