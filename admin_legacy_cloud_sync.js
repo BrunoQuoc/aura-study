@@ -10,13 +10,15 @@ const STORE="aura-stage-parent-v1",INDEX="aura_library_index_v1";
 const API=BASE+"/functions/v1/aura-legacy-content-sync-v1";
 // SGK official publisher sources are NOT part of this manual review list.
 const MANUAL_SOURCE=new Set(["ADMIN_APPROVED_INBOX","ADMIN_APPROVED_RECOVERED","ADMIN_APPROVED_FINAL"]);
-function isExamSet(r){
- if(r.docType==="exam")return true;
- if(r.docType!=="practice")return false;
+function manualKind(r){
  const title=String(r.name||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"")
   .replace(/đ/g,"d").replace(/Đ/g,"D").toLowerCase();
- return /\bde[\s._-]*(thi|kiem[\s._-]*tra|kt|giua[\s._-]*ky|cuoi[\s._-]*ky)\b/.test(title)
-  || /\bbai[\s._-]*kiem[\s._-]*tra\b/.test(title);
+ if(r.docType==="exam"||(r.docType==="practice"&&
+  (/\bde[\s._-]*(thi|kiem[\s._-]*tra|kt|giua[\s._-]*ky|cuoi[\s._-]*ky)\b/.test(title)||
+   /\bbai[\s._-]*kiem[\s._-]*tra\b/.test(title))))return "EXAM";
+ if(["practice","lesson","reference"].includes(r.docType)&&
+  /\b(bai[\s._-]*mau|bai[\s._-]*giai[\s._-]*mau|vi[\s._-]*du[\s._-]*mau|sample[\s._-]*(paper|work))\b/.test(title))return "SAMPLE";
+ return "";
 }
 const SUBJECT={TOAN:"Toán",NGUVAN:"Ngữ văn",TIENGANH:"Tiếng Anh",KHTN:"KHTN",LSDL:"Lịch sử & Địa lý",GDCD:"GDCD",TINHOC:"Tin học",CONGNGHE:"Công nghệ",KHAC:"Khác"};
 const DOC={lesson:"Bài học",practice:"Bài tập",exam:"Đề kiểm tra thử",reference:"Tài liệu tham khảo",formula:"Công thức"};
@@ -31,7 +33,7 @@ function approvedDocs(){
  const seen=new Set();
  return rows.filter(r=>{
   if(!r||r.status!=="ACTIVE"||!driveId(r.driveFileId)||
-   !SUBJECT[r.subject]||!isExamSet(r)||seen.has(r.driveFileId))return false;
+   !SUBJECT[r.subject]||!manualKind(r)||seen.has(r.driveFileId))return false;
   if(!MANUAL_SOURCE.has(r.source))return false;
   seen.add(r.driveFileId);return true;
  }).slice(0,200);
@@ -66,9 +68,9 @@ async function api(action,data={}){
 function panelHTML(){
  return '<section class="card aura-cloud-admin" id="auraLegacyCloudAdmin" style="margin-top:18px">'+
  '<div class="small">THƯ VIỆN CHUNG · GIAO DIỆN ADMIN CŨ</div>'+
- '<h2>SGK tự cập nhật · Đề thi cần duyệt</h2>'+
+ '<h2>SGK & bài tập tự động · Đề thi & bài mẫu cần duyệt</h2>'+
  '<p class="meta"><b>SGK chính thức:</b> AURA đồng bộ từ nguồn NXB đã đăng ký, không có bước duyệt từng tài liệu. '+
- '<b>Đề thi / đề kiểm tra anh đưa:</b> vẫn cần Admin duyệt ở INBOX trước khi xuất bản cho Student.</p>'+
+ '<b>Đề thi, đề kiểm tra, bài mẫu ngoài SGK anh đưa:</b> cần Admin duyệt ở INBOX trước khi xuất bản cho Student.</p>'+
  '<div id="auraSgkAutoAdmin" class="meta">Đang tải danh mục SGK tự động...</div>'+
  '<p class="meta">Riêng bộ đề đã duyệt: tệp gốc vẫn ở Drive. Có thể lưu bản sao lên AURA để Student không phải xin quyền xem Drive.</p>'+
  '<p class="meta"><a href="./aura-admin.html">Đăng nhập máy chủ / cấp liên kết kích hoạt Student</a> (chỉ cần khi kết nối lần đầu).</p>'+
@@ -95,7 +97,7 @@ function printItems(items){
    '</div>');
  }
  for(const r of items){
-  if(!isExamSet({docType:r.doc_type,name:r.title}))continue;
+  if(!manualKind({docType:r.doc_type,name:r.title}))continue;
   if(local.some(x=>x.driveFileId===r.drive_file_id))continue;
   if(r.visibility==="PUBLISHED_STAGING"){
    rows.push('<div class="resource" style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">'+
@@ -105,8 +107,8 @@ function printItems(items){
    '<button class="btn soft" type="button" data-cloud-action="withdraw" data-cloud-id="'+esc(r.drive_file_id)+'">Thu hồi</button></div>');
   }
  }
- root.innerHTML='<h3>Đề thi / đề kiểm tra đã được duyệt</h3>'+
- (rows.join("")||'<p class="meta">Chưa có bộ đề thi / kiểm tra được Admin duyệt. SGK không xuất hiện trong hàng chờ này.</p>');
+ root.innerHTML='<h3>Đề thi / đề kiểm tra / bài mẫu đã được duyệt</h3>'+
+ (rows.join("")||'<p class="meta">Chưa có bộ đề thi / kiểm tra / bài mẫu được Admin duyệt. SGK không xuất hiện trong hàng chờ này.</p>');
 }
 function showSgk(panel,data,error){
  const root=panel.querySelector("#auraSgkAutoAdmin");
@@ -140,7 +142,7 @@ async function load(panel){
   if(key!==loadCounter||!panel.isConnected)return;
   const items=result.items||[];
   printItems(items);
-  status.textContent=items.filter(x=>x.visibility==="PUBLISHED_STAGING"&&isExamSet({docType:x.doc_type,name:x.title})).length+
+  status.textContent=items.filter(x=>x.visibility==="PUBLISHED_STAGING"&&manualKind({docType:x.doc_type,name:x.title})).length+
    " bộ đề đang chia sẻ qua máy chủ. Chỉ bộ đề đã được Admin duyệt mới sử dụng nút Xuất bản.";
  }catch(e){
   if(key!==loadCounter||!panel.isConnected)return;
@@ -163,7 +165,12 @@ async function onClick(e){
   }else if(action==="publish"){
    const r=approvedDocs().find(x=>x.driveFileId===id);
    if(!r)throw Error("Tài liệu không còn trong danh sách đã duyệt. Vui lòng mở lại INBOX.");
-   if(!confirm("Xuất bản bộ đề đã DUYỆT '"+String(r.name||"Tài liệu").slice(0,70)+"' cho Student đã ghép thiết bị? Đề này chỉ dùng ôn tập, không bật thi chính thức."))return;
+   if(!confirm("Xác nhận tài liệu đã được Anh DUYỆT trong INBOX và cho phép xuất bản '"+String(r.name||"Tài liệu").slice(0,70)+"'? Không bật thi chính thức."))return;
+   // Record an explicit, authenticated Admin approval on server BEFORE publication.
+   const approval=await api("admin_manual_approve",{
+    file_id:r.driveFileId,title:String(r.name||"Tài liệu").slice(0,180),
+    subject:r.subject,doc_type:r.docType,material_kind:manualKind(r)});
+   if(approval.approved!==true)throw Error("Máy chủ chưa ghi nhận kiểm duyệt.");
    const out=await api("admin_publish",{
     file_id:r.driveFileId,title:String(r.name||"Tài liệu").slice(0,180),
     subject:r.subject,doc_type:r.docType,period:PERIOD[r.period]?r.period:""});
