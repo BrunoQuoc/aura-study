@@ -7,6 +7,8 @@ on:
       - 'admin-direct.html'
       - 'student-direct.html'
       - '*_legacy_*sync.js'
+      - 'supabase/functions/aura-legacy-content-asset-v2/index.ts'
+      - 'supabase/migrations/20261118041949_aura_legacy_private_assets_v2_20261118.sql'
       - 'tests/legacy-private-assets-v2.test.mjs'
       - '.github/workflows/aura-legacy-private-assets-v2.yml'
   pull_request:
@@ -14,6 +16,8 @@ on:
       - 'admin-direct.html'
       - 'student-direct.html'
       - '*_legacy_*sync.js'
+      - 'supabase/functions/aura-legacy-content-asset-v2/index.ts'
+      - 'supabase/migrations/20261118041949_aura_legacy_private_assets_v2_20261118.sql'
       - 'tests/legacy-private-assets-v2.test.mjs'
       - '.github/workflows/aura-legacy-private-assets-v2.yml'
   workflow_dispatch:
