@@ -56,7 +56,12 @@ Deno.serve(async(req:Request)=>{
   const {data:roles,error:roleError}=await service.rpc("aura_portal_access_v1",{p_user_id:user.id});
   if(roleError||!roles)return response(origin,503,{error:"Identity service unavailable"});
   const admin=!user.is_anonymous&&!!user.email_confirmed_at&&roles.admin===true;
-  const student=user.is_anonymous===true&&roles.student===true;
+  const {data:passwordBound,error:passwordBoundError}=
+    roles.student===true&&user.is_anonymous!==true&&!admin
+    ?await service.rpc("aura_student_password_bound_v6",{p_auth_uid:user.id})
+    :{data:false,error:null};
+  const student=roles.student===true&&
+    (user.is_anonymous===true||(!passwordBoundError&&passwordBound===true));
 
   if(input.action==="admin_upload_ticket"){
    if(!admin)return response(origin,403,{error:"Verified Admin required"});
