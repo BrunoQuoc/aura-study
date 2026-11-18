@@ -5,6 +5,7 @@ on:
       - feat/admin-student-private-assets-v2-20261118
       - feat/sgk-auto-sync-exams-review-only-20261118
       - feat/admin-v3-three-content-lanes-20261118
+      - feat/learning-pipeline-student-preview-v4-20261118
     paths:
       - 'admin-direct.html'
       - 'student-direct.html'
@@ -14,6 +15,10 @@ on:
       - 'tests/legacy-private-assets-v2.test.mjs'
       - 'tests/sgk-auto-review-policy.test.mjs'
       - 'tests/admin-unified-v3.test.mjs'
+      - 'tests/learning-pipeline-v4.test.mjs'
+      - 'admin_learning_pipeline_v4.js'
+      - 'student_learning_pipeline_v4.js'
+      - 'supabase/migrations/20261118083500_aura_learning_pipeline_student_preview_v4_20261118.sql'
       - 'admin_unified_v3.js'
       - 'admin_unified_v3.css'
       - 'supabase/migrations/20261118073500_aura_admin_v3_three_content_lanes_manual_approval_20261118.sql'
@@ -31,6 +36,10 @@ on:
       - 'tests/legacy-private-assets-v2.test.mjs'
       - 'tests/sgk-auto-review-policy.test.mjs'
       - 'tests/admin-unified-v3.test.mjs'
+      - 'tests/learning-pipeline-v4.test.mjs'
+      - 'admin_learning_pipeline_v4.js'
+      - 'student_learning_pipeline_v4.js'
+      - 'supabase/migrations/20261118083500_aura_learning_pipeline_student_preview_v4_20261118.sql'
       - 'admin_unified_v3.js'
       - 'admin_unified_v3.css'
       - 'supabase/migrations/20261118073500_aura_admin_v3_three_content_lanes_manual_approval_20261118.sql'
@@ -53,4 +62,4 @@ jobs:
       - name: Verify Node.js
         run: node --version
       - name: Run private document sync tests
-        run: node --test tests/legacy-private-assets-v2.test.mjs tests/sgk-auto-review-policy.test.mjs tests/admin-unified-v3.test.mjs
+        run: node --test tests/legacy-private-assets-v2.test.mjs tests/sgk-auto-review-policy.test.mjs tests/admin-unified-v3.test.mjs tests/learning-pipeline-v4.test.mjs
