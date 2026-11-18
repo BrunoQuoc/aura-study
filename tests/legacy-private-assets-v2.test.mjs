@@ -140,7 +140,8 @@ test('no unreviewed keys or solution types exposed by metadata sync',()=>{
   const admin=read('admin_legacy_cloud_sync.js');
   const student=read('student_legacy_cloud_sync.js');
   assert.match(admin,/ADMIN_APPROVED_INBOX/);
-  assert.match(admin,/ALLOWED_DOC=new Set\(\["lesson","practice","exam","reference","formula"\]\)/);
+  assert.match(admin,/function isExamSet\(r\)/);
+  assert.match(admin,/MANUAL_SOURCE=new Set/);
   assert.match(student,/action:"student_list"/);
   assert.match(student,/r\.asset_ready/);
   assert.match(student,/data-aura-cloud-open/);
