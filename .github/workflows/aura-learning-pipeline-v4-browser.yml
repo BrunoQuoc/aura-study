@@ -1,0 +1,52 @@
+name: AURA STUDY - Learning Pipeline V4 Browser QA
+on:
+  push:
+    branches:
+      - feat/learning-pipeline-student-preview-v4-20261118
+    paths:
+      - 'admin_learning_pipeline_v4.js'
+      - 'student_learning_pipeline_v4.js'
+      - 'admin_unified_v3.js'
+      - 'admin-direct.html'
+      - 'student-direct.html'
+      - 'tests/learning-pipeline-v4-browser.mjs'
+      - '.github/workflows/aura-learning-pipeline-v4-browser.yml'
+  pull_request:
+    paths:
+      - 'admin_learning_pipeline_v4.js'
+      - 'student_learning_pipeline_v4.js'
+      - 'admin_unified_v3.js'
+      - 'admin-direct.html'
+      - 'student-direct.html'
+      - 'tests/learning-pipeline-v4-browser.mjs'
+      - '.github/workflows/aura-learning-pipeline-v4-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  student-preview-ui:
+    name: Admin to paired Student synthetic browser (phone iPad desktop)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Playwright and use preinstalled Chrome
+        run: |
+          npm install --no-save playwright@1.56.1
+          google-chrome --version
+      - name: Exercise Admin and Student on synthetic server
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/aura-pipeline-browser.log 2>&1 &
+          sleep 2
+          node tests/learning-pipeline-v4-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: aura-v4-learning-pipeline-ui
+          path: test-results/pipeline-v4/
+          retention-days: 7
