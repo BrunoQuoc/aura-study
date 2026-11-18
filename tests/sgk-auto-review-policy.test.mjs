@@ -61,7 +61,7 @@ test('The SGK catalog loads without approval buttons and from verified NXB links
  assert.doesNotThrow(()=>new vm.Script(admin));
  assert.match(student,/action:"sgk_auto_catalog"/);
  assert.match(student,/Mở SGK trên NXB/);
- assert.match(student,/không cần Admin duyệt/);
+ assert.match(student,/AURA tự nhận danh mục|Đọc sách tại nguồn Nhà xuất bản Giáo dục/);
  assert.match(admin,/SGK & bài tập tự động · Đề thi & bài mẫu cần duyệt/);
  assert.match(edge,/input\.action==="sgk_auto_catalog"/);
  assert.match(edge,/manualContentKind\(title,doc_type\)/);
