@@ -128,6 +128,9 @@ function wrap(name,subjectArg=false){
 wrap("home");wrap("lessons");wrap("library");wrap("lessonSubject",true);
 wrap("studentReviewHub");wrap("studentExamSubject");
 window.AURA_SGK_AUTO_CATALOG={refresh:()=>refresh(true),getCached:()=>cached};
+if(typeof setInterval==="function")setInterval(()=>{
+ if(document.visibilityState!=="hidden"&&document.getElementById("auraSgkAutoCatalog"))refresh(true);
+},600000);
 window.addEventListener("focus",()=>{if(document.getElementById("auraSgkAutoCatalog"))refresh(true)});
 window.addEventListener("load",()=>{setTimeout(()=>{
  if(!document.getElementById("auraSgkAutoCatalog")&&
