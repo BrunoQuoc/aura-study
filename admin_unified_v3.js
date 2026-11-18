@@ -207,7 +207,7 @@ function tool(title,desc,action){
 }
 async function loadOverview(force=false){
  if(state.request)return state.request;
- if(!force&&state.server&&Date.now()-state.fetchAt<120000)return;
+ if(!force&&(state.server||state.error)&&Date.now()-state.fetchAt<120000)return;
  const cloud=window.AURA_LEGACY_CLOUD_ADMIN;
  if(!cloud?.getToken){state.error="Cần kết nối phiên Admin máy chủ.";return;}
  state.loading=true;state.error="";
@@ -226,7 +226,7 @@ async function loadOverview(force=false){
    state.error="";
   }catch(e){state.error=String(e?.message||e)}
   finally{
-   state.loading=false;state.request=null;
+   state.loading=false;state.request=null;state.fetchAt=Date.now();
    if(document.body.dataset.auraPage==="unified-home")overview();
    else if(document.body.dataset.auraPage==="unified-library")docs(state.tab);
    else if(document.body.dataset.auraPage==="unified-settings")settings();
