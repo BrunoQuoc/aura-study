@@ -22,7 +22,7 @@ const overview={staging_only:true,manual_review_rule:"EXTERNAL_EXAM_AND_SAMPLE_O
  guided_lesson_drafts:36,practice_module_drafts:15,verified_textbook_exercises:0,
  pending_manual_approvals:0,sources:[{title:"Toán 6",url:source,volume:1,subject:"Toán",grade:6,toc_count:40}]};
 const mockModule='export function createClient(){return {auth:{'+
- 'async signInWithPassword({email,password}){if(email!=="kid6@students.aura-study.invalid"||password!=="Example8ab")return {data:{session:null},error:{message:"Invalid"}};'+
+ 'async signInWithPassword({email,password}){if(email!=="kid6@brunoquoc.github.io"||password!=="Example8ab")return {data:{session:null},error:{message:"Invalid"}};'+
  'const s={access_token:"synthetic-student-jwt",refresh_token:"synthetic-refresh",expires_at:4102444800,expires_in:3600};'+
  'localStorage.setItem("aura-stage-student-v1",JSON.stringify(s));return {data:{session:s},error:null};},'+
  'async signOut(){localStorage.removeItem("aura-stage-student-v1");return {error:null}}}}}';
