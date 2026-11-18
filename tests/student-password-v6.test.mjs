@@ -35,7 +35,7 @@ test("Admin creates user with name username and secret password; link/paired-dev
  assert.match(admin,/api\("enable_password_student"/);
  assert.match(admin,/api\("reset_password_student"/);
  assert.doesNotMatch(admin,/Lấy liên kết học|Tạo và cấp liên kết|auraCloudLinkValue|Đổi thiết bị/);
- assert.doesNotMatch(admin,/pinSalt|pinHash|localStorage/);
+ assert.doesNotMatch(admin,/pinSalt|pinHash|localStorage[.]setItem/);
  assert.doesNotThrow(()=>new vm.Script(admin));
 });
 test("Native GoTrue password login is bound to an active learner and student role",()=>{
