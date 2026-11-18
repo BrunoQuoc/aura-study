@@ -103,6 +103,13 @@ try{
     await page.getByText("Khởi động bằng 24 chiếc bút").waitFor();
     await page.screenshot({path:OUT+"/"+role+"-"+screen.name+".png",fullPage:true});
     assert.ok(calls.includes("student_profile")&&calls.includes("learning_pipeline_lesson"));
+    console.log("AURA LOGOUT DISPLAY",screen.name,await page.locator(".aura-account button").evaluate(el=>{
+      const css=getComputedStyle(el),parent=getComputedStyle(el.parentElement);
+      return {display:css.display,visibility:css.visibility,opacity:css.opacity,
+       parentDisplay:parent.display,parentVisibility:parent.visibility,
+       width:el.getBoundingClientRect().width,height:el.getBoundingClientRect().height,
+       hiddenAncestor:(()=>{let a=el;while(a){if(getComputedStyle(a).display==="none")return a.className;a=a.parentElement}return ""})()};
+    }));
     await page.locator(".aura-account button").click();
     await page.locator("#auraStudentPasswordFormV6").waitFor();
     assert.equal(await page.locator("body.aura-cloud-ready").count(),0);
