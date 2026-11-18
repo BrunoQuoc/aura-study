@@ -80,8 +80,11 @@ try{
   assert.ok(pageOverflow<=3,screen.id+" main dashboard overflow "+pageOverflow);
   await page.screenshot({path:output+"/"+screen.id+"-overview.png",fullPage:true});
   const nav=async k=>{
-   const sel=(screen.width<=760?".mobilebar":".side")+' button[data-page="'+k+'"]';
-   await page.locator(sel).click();
+   const desktop=page.locator('.side button[data-page="'+k+'"]');
+   const mobile=page.locator('.mobilebar button[data-page="'+k+'"]');
+   if(await desktop.isVisible())await desktop.click();
+   else if(await mobile.isVisible())await mobile.click();
+   else throw Error("No visible Admin navigation button for "+screen.id+" "+k);
   };
   await nav("library");
   await page.locator('.av3-tabs [data-v3-action="tab-sgk"]').waitFor();
