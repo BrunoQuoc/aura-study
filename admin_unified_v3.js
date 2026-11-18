@@ -235,9 +235,13 @@ async function loadOverview(force=false){
   }catch(e){state.error=String(e?.message||e)}
   finally{
    state.loading=false;state.request=null;state.fetchAt=Date.now();
-   if(document.body.dataset.auraPage==="unified-home")overview();
-   else if(document.body.dataset.auraPage==="unified-library")docs(state.tab);
-   else if(document.body.dataset.auraPage==="unified-settings")settings();
+   // Older Admin addons also write body.dataset.auraPage while the V3 view is
+   // mounted; rerender from the actual active V3 view, never from legacy tags.
+   if(app.querySelector(".av3")){
+    if(state.view==="home")overview();
+    else if(state.view==="documents")docs(state.tab);
+    else if(state.view==="settings")settings();
+   }
   }
  })();
  state.request=task;return task;
