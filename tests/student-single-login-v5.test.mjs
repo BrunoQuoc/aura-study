@@ -17,7 +17,8 @@ test("The original 5 Student actions stay, and only Tasks/Journey are added on t
  assert.match(html,/student_cloud_access_v5\.js/);
  assert.doesNotMatch(html,/src="local_accounts_v3\.js/);
  assert.doesNotMatch(html,/src="local_accounts_loader\.js/);
- assert.doesNotMatch(html,/src="student_login_direct_fix\.js/);
+ assert.doesNotMatch(html,/src="student_login_direct_fix\\.js/);
+ assert.match(read("aura_pro_2026.js"),/student_cloud_access_v5\\.css/);
 });
 test("One real Student activation opens existing Student UI; account management can stay on portal",()=>{
  const html=read("aura-student.html"),portal=read("aura-simple-access.js");
