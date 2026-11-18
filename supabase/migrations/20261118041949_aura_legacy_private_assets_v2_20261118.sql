@@ -29,7 +29,7 @@ begin
     new.asset_path:=null; new.asset_mime:=null; new.asset_bytes:=null; new.asset_uploaded_at:=null;
   end if;
   return new;
-end $function$
+end $function$;
 
 
 create trigger aura_legacy_reset_asset_v2 before update
@@ -58,7 +58,7 @@ select case
  where h.admin_uid=p_admin_uid order by r.updated_at desc limit 300
  ) t),'[]'::jsonb),
  'staging_only',true,'official_exam_enabled',false)
- end $function$
+ end $function$;
 
 
 CREATE OR REPLACE FUNCTION public.aura_legacy_content_attach_asset_v2(p_admin_uid uuid, p_drive_file_id text, p_asset_path text, p_mime text, p_bytes bigint)
@@ -94,7 +94,7 @@ begin
  asset_uploaded_at=now(),updated_at=now()
  where z.id=r.id;
  return jsonb_build_object('id',r.id,'asset_ready',true,'staging_only',true);
-end $function$
+end $function$;
 
 
 CREATE OR REPLACE FUNCTION public.aura_legacy_content_student_asset_v2(p_student_uid uuid, p_resource_id uuid)
@@ -114,7 +114,7 @@ begin
   where d.auth_uid=p_student_uid and d.revoked_at is null and d.household_id=r.household_id);
  if result is null then raise exception 'RESOURCE_NOT_AVAILABLE' using errcode='42501'; end if;
  return result;
-end $function$
+end $function$;
 
 
 CREATE OR REPLACE FUNCTION public.aura_legacy_content_student_list_v1(p_student_uid uuid)
@@ -144,7 +144,7 @@ begin
  return jsonb_build_object('items',entries,'staging_only',true,
  'teacher_signed_off',false,'official_exam_enabled',false,
  'drive_permissions_required',false);
-end $function$
+end $function$;
 
 
 revoke all on function public.aura_legacy_content_attach_asset_v2(uuid,text,text,text,bigint) from public,anon,authenticated;
