@@ -250,7 +250,7 @@ async function loadOverview(force=false){
 function showLegacy(action){
  const targets={
   inbox:legacy.inbox,sources:legacy.sources,lessons:legacy.lessons,
-  generator:legacy.generator,students:legacy.students,
+  generator:legacy.generator,students:()=>window.AURA_ADMIN_CLOUD_STUDENTS?.show?.(),
   results:legacy.history,metadata:legacy.metadata,
   guide:legacy.guide,publish:legacy.library
  };

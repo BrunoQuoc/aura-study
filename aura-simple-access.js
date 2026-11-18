@@ -195,7 +195,14 @@ async function studentStartup(){
      show("studentReady",true);set("studentReadyText","Đã có học sinh trên thiết bị này.");
      show("studentStartPanel",false);return;
     }
-    location.replace("./aura-student-math6.html");
+    if(new URLSearchParams(location.search).get("manage")==="1"){
+     show("studentReady",true);
+     show("studentStartPanel",false);show("studentNoLink",false);
+     set("studentReadyText","Tài khoản Student đã kết nối");
+     set("loginStatus","Tài khoản học đã được kích hoạt. Bạn có thể trở lại học hoặc chọn kết thúc phiên bên dưới.");
+     return;
+    }
+    location.replace("./student-direct.html");
     return;
    }
    if(!s.user?.is_anonymous)throw Error("Đây không phải phiên Student. Hãy dùng thiết bị học riêng.");
@@ -230,7 +237,7 @@ async function startStudent(){
   if(result.role!=="student")throw Error("Liên kết chưa được kích hoạt.");
   pendingJoin=null;resetChallenge();
   set("loginStatus","Kích hoạt thành công. Đang mở Toán 6...");
-  location.replace("./aura-student-math6.html");
+  location.replace("./student-direct.html");
  }catch(e){
   set("loginStatus",errorText(e)+" Nếu liên kết đã hết hạn, nhờ Admin bấm Lấy link học mới.");
  }finally{resetChallenge();busy(btn,false)}

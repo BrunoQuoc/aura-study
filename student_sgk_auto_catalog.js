@@ -26,10 +26,9 @@ function filterBooks(books,subject){
 }
 function buildPanel(){
  return '<section class="card" id="auraSgkAutoCatalog" style="margin-top:18px">'+
- '<div class="small">SGK · TỰ ĐỒNG BỘ TỪ NGUỒN NHÀ XUẤT BẢN</div>'+
- '<h2>Thư viện SGK chính thức</h2>'+
- '<p class="meta">AURA tự nhận danh mục SGK từ nguồn đã đăng ký, không cần Admin duyệt. '+
- 'Mở sách tại trang NXB để xem nội dung mới nhất; danh sách dưới đây chỉ là mục lục đã xác minh, không phải bản sao toàn bộ SGK.</p>'+
+ '<div class="small">SÁCH GIÁO KHOA · NGUỒN CHÍNH THỨC</div>'+
+ '<h2>Sách giáo khoa</h2>'+
+ '<p class="meta">Đọc sách tại nguồn Nhà xuất bản Giáo dục. Danh sách mục lục được AURA cập nhật tự động; nội dung trang sách vẫn ở nguồn gốc.</p>'+
  '<div id="auraSgkAutoStatus" class="meta" role="status">Đang tải nguồn SGK...</div>'+
  '<div id="auraSgkAutoItems"></div></section>';
 }
@@ -125,8 +124,7 @@ function wrap(name,subjectArg=false){
   return output;
  };
 }
-wrap("home");wrap("lessons");wrap("library");wrap("lessonSubject",true);
-wrap("studentReviewHub");wrap("studentExamSubject");
+wrap("lessons");wrap("lessonSubject",true);
 window.AURA_SGK_AUTO_CATALOG={refresh:()=>refresh(true),getCached:()=>cached};
 if(typeof setInterval==="function")setInterval(()=>{
  if(document.visibilityState!=="hidden"&&document.getElementById("auraSgkAutoCatalog"))refresh(true);
@@ -134,6 +132,6 @@ if(typeof setInterval==="function")setInterval(()=>{
 window.addEventListener("focus",()=>{if(document.getElementById("auraSgkAutoCatalog"))refresh(true)});
 window.addEventListener("load",()=>{setTimeout(()=>{
  if(!document.getElementById("auraSgkAutoCatalog")&&
-    (document.body.dataset.auraPage==="home"||document.body.dataset.auraPage==="lessons"))attach();
+    document.body.dataset.auraPage==="lessons")attach();
 },100)},{once:true});
 })();

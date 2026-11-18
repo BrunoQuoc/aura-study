@@ -118,6 +118,10 @@
 })();
 
 (function loadLocalAccounts(){
+  // Student V5 uses the Admin-created verified cloud learner. Do not inject the
+  // old local PIN overlay: it would require a second, unrelated browser login.
+  if(document.body.classList.contains('student-shell')&&
+    document.querySelector('link[href*="student_cloud_access_v5.css"]'))return;
   if(document.querySelector('script[data-aura-local-accounts-loader]'))return;
   const s=document.createElement('script');s.src='local_accounts_loader.js?v=accounts-r2';s.async=false;s.dataset.auraLocalAccountsLoader='1';document.head.appendChild(s);
 })();

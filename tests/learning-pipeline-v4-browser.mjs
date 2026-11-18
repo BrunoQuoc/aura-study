@@ -65,6 +65,7 @@ async function run(screen){
       action==="learning_pipeline_lesson"?lesson:
       action==="admin_content_overview"?overview:
       action==="sgk_auto_catalog"?sgk:
+      action==="student_profile"?{staging_only:true,learner_id:"f0c38427-7566-4be6-8b7f-91c117123456",name:"Học sinh kiểm thử",paired:true,role:"STUDENT",official_exam_enabled:false}:
       action==="student_list"?{staging_only:true,official_exam_enabled:false,items:[]}:
       action==="admin_list"?{staging_only:true,items:[]}:
       {error:"Synthetic test blocked non-pipeline action"};
@@ -93,6 +94,7 @@ async function run(screen){
     assert.match(await panel.innerText(),/đang khóa QA/i);
     assert.equal(actions.filter(x=>x==="learning_pipeline_catalog").length>=1,true);
    }else{
+    await page.locator("body.aura-cloud-ready").waitFor({timeout:15000});
     await page.evaluate(()=>window.lessons());
     const panel=page.locator("#auraStudentLearningPipelineV4");
     await panel.locator('[data-aura-v4="open"]').first().waitFor({timeout:22000});

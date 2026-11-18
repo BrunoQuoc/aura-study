@@ -1,0 +1,53 @@
+/* AURA STUDY Student V5 — additive features in existing blue/teal visual language. */
+body.student-shell .aura-v5-screen{max-width:1140px}
+body.student-shell .aura-v5-screen>h1{font-size:clamp(26px,3vw,35px);margin:13px 0 9px;color:#fff}
+body.student-shell .aura-v5-lead{color:#c7d9ec;line-height:1.7;max-width:800px;font-size:14px}
+body.student-shell .aura-v5-statgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:22px 0}
+body.student-shell .aura-v5-statgrid article{
+ background:linear-gradient(125deg,rgba(16,43,82,.9),rgba(11,80,93,.78));border:1px solid rgba(111,212,246,.18);
+ border-radius:17px;padding:20px;display:flex;flex-direction:column;gap:6px}
+body.student-shell .aura-v5-statgrid strong{font-size:29px;color:#fff}
+body.student-shell .aura-v5-statgrid span{font-size:12px;color:#cae0ed;line-height:1.5}
+body.student-shell .aura-v5-tasklist{display:grid;gap:12px;margin:19px 0}
+body.student-shell .aura-v5-task{border:1px solid rgba(107,206,240,.17);
+ background:linear-gradient(125deg,rgba(13,38,75,.90),rgba(10,70,85,.80));
+ padding:20px;border-radius:17px;display:flex;align-items:center;gap:15px;justify-content:space-between}
+body.student-shell .aura-v5-task-body{flex:1}
+body.student-shell .aura-v5-task h3{margin:0 0 6px;color:#fff;font-size:16px}
+body.student-shell .aura-v5-task p{font-size:12.5px;line-height:1.6;color:#bad0e4;margin:0 0 7px}
+body.student-shell .aura-v5-task small{color:#77dcf5;font-size:11px}
+body.student-shell .aura-v5-note{font-size:12px;line-height:1.7;color:#b8c9df;margin:20px 0}
+body.student-shell .aura-v5-home-shortcuts{margin:26px 0 20px}
+body.student-shell .aura-v5-home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+body.student-shell .aura-v5-home-grid>button{
+ display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;align-items:center;
+ column-gap:12px;row-gap:5px;padding:21px;text-align:left;
+ border:1px solid rgba(107,206,240,.23);border-radius:18px;color:white;
+ background:linear-gradient(135deg,rgba(24,66,119,.94),rgba(12,84,97,.8));cursor:pointer}
+body.student-shell .aura-v5-home-grid>button:hover{filter:brightness(1.08)}
+body.student-shell .aura-v5-home-grid>button span{font-size:25px;grid-row:span 2}
+body.student-shell .aura-v5-home-grid>button strong{font-size:14px}
+body.student-shell .aura-v5-home-grid>button small{font-size:11px;color:#b7d5e6;line-height:1.5}
+body.student-shell .aura-v5-track{height:11px;border-radius:99px;background:#dce5f2;overflow:hidden;margin:20px 0}
+body.student-shell .aura-v5-track>div{height:100%;border-radius:inherit;background:linear-gradient(90deg,#5974ef,#16b3d6)}
+body.student-shell .aura-v5-actions{display:flex;gap:10px;flex-wrap:wrap}
+body.student-shell .aura-v5-activities{display:grid;gap:7px}
+body.student-shell .aura-v5-activities>p{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #e9edf3;font-size:12px;margin:0}
+body.student-shell .aura-v5-activities span{color:#53677e}
+/* The two old technical connection banners are never Student learning content. */
+body.student-shell #auraLegacyCloudStudent:has(#auraCloudStudentItems:empty),
+body.student-shell[data-student-main-view="home"] #auraLegacyCloudStudent,
+body.student-shell[data-student-main-view="home"] #auraStudentLearningPipelineV4,
+body.student-shell[data-student-main-view="home"] #auraSgkAutoCatalog,
+body.student-shell[data-student-main-view="lessons"] #auraLegacyCloudStudent,
+body.student-shell[data-student-main-view="library"] #auraStudentLearningPipelineV4,
+body.student-shell[data-student-main-view="library"] #auraSgkAutoCatalog{display:none!important}
+@media(max-width:720px){
+ body.student-shell .aura-v5-statgrid{gap:7px}
+ body.student-shell .aura-v5-statgrid article{padding:13px 9px}
+ body.student-shell .aura-v5-statgrid strong{font-size:22px}
+ body.student-shell .aura-v5-statgrid span{font-size:10px}
+ body.student-shell .aura-v5-task{align-items:flex-start;flex-wrap:wrap;padding:16px}
+ body.student-shell .aura-v5-task .btn{margin-left:auto}
+ body.student-shell .aura-v5-home-grid{grid-template-columns:1fr}
+}
