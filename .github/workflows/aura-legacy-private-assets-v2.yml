@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - feat/admin-student-private-assets-v2-20261118
+      - feat/sgk-auto-sync-exams-review-only-20261118
     paths:
       - 'admin-direct.html'
       - 'student-direct.html'
