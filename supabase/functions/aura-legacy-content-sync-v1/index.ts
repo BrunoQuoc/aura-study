@@ -73,6 +73,27 @@ Deno.serve(async(req:Request)=>{
     return reply(origin,503,{error:"Verified SGK catalog unavailable"});
    return reply(origin,200,{...data,staging_only:true,official_exam_enabled:false});
   }
+  // End-to-end learning pipeline. Catalog includes verified publisher headings ONLY;
+  // read-only AURA AI draft previews are separately fetched after server-side QA gate.
+  if(input.action==="learning_pipeline_catalog"){
+   if(!admin&&!student)return reply(origin,403,{error:"Active Admin or paired Student required"});
+   const {data,error:e}=await service.rpc("aura_learning_pipeline_catalog_v4",{p_actor_uid:user.id});
+   if(e||!data?.staging_only||data?.copyright_scope!=="PUBLISHER_TOC_AND_AI_AUTHORED_DRAFTS_ONLY")
+    return reply(origin,403,{error:"Verified learning catalog unavailable or device unpaired"});
+   return reply(origin,200,data);
+  }
+  if(input.action==="learning_pipeline_lesson"){
+   if(!admin&&!student)return reply(origin,403,{error:"Active Admin or paired Student required"});
+   const id=input.section_id;
+   if(typeof id!=="string"||!/^SGK-M6-T[12]-[A-Z0-9-]{3,90}$/.test(id))
+    return reply(origin,400,{error:"Invalid lesson reference"});
+   const {data,error:e}=await service.rpc("aura_learning_pipeline_lesson_v4",{
+    p_actor_uid:user.id,p_section_id:id
+   });
+   if(e||!data||data.preview_only!==true||data.content_origin!=="AURA_AI_AUTHORED_DRAFT")
+    return reply(origin,403,{error:"This lesson is not permitted for Student preview"});
+   return reply(origin,200,data);
+  }
   if(input.action==="admin_content_overview"){
    if(!admin)return reply(origin,403,{error:"Verified ADMIN required"});
    const {data,error:e}=await service.rpc("aura_admin_content_overview_v3",{p_admin_uid:user.id});
