@@ -147,7 +147,7 @@ Deno.serve(async (req: Request) => {
 
       // The .invalid RFC-reserved domain is a private Auth identifier, not a mailbox.
       // Registration and password reset are Admin-only; no child email is required.
-      const privateEmail=username+"@students.aura-study.invalid";
+      const privateEmail=username+"@brunoquoc.github.io";
       const {data:created,error:createError}=await service.auth.admin.createUser({
         email:privateEmail,password,email_confirm:true,
         app_metadata:{aura_student_password_v6:true}
