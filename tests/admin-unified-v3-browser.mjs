@@ -67,7 +67,8 @@ try{
    console.log("ADMIN V3 DEBUG",screen.id,await page.locator(".av3-connect").innerText(),
     await page.evaluate(()=>({
       session:!!localStorage.getItem("aura-stage-parent-v1"),
-      cloud:!!window.AURA_LEGACY_CLOUD_ADMIN,hub:!!window.AURA_ADMIN_V3
+      cloud:!!window.AURA_LEGACY_CLOUD_ADMIN,hub:!!window.AURA_ADMIN_V3,
+      v3State:window.AURA_ADMIN_V3?.status?.()
     })),network.slice(0,30),jsErrors.slice(0,12));
    await page.screenshot({path:output+"/"+screen.id+"-diagnostic.png",fullPage:true});
    throw error;
