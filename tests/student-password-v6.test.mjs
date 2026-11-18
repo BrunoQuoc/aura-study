@@ -29,8 +29,8 @@ test("Admin creates user with name username and secret password; link/paired-dev
  assert.match(admin,/auraCloudNewUsername/);
  assert.match(admin,/auraCloudNewPassword/);
  assert.match(admin,/data-cloud-user="create"/);
- assert.match(admin,/data-cloud-user="configure"/);
- assert.match(admin,/data-cloud-user="reset"/);
+ assert.match(admin,/configured\?'reset':'configure'/);
+ assert.match(admin,/action==="configure"\|\|action==="reset"/);
  assert.match(admin,/api\("create_password_student"/);
  assert.match(admin,/api\("enable_password_student"/);
  assert.match(admin,/api\("reset_password_student"/);
