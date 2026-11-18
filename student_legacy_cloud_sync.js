@@ -44,9 +44,9 @@ async function api(){
 }
 function html(){
  return '<section id="auraLegacyCloudStudent" class="card" style="margin-top:17px">'+
- '<div class="small">TÀI LIỆU ĐỒNG BỘ TỪ ADMIN</div>'+
- '<h2 style="margin:8px 0">Tài liệu mới từ Admin</h2>'+
- '<p class="meta">Được Admin xuất bản từ INBOX qua máy chủ. Đây là tài liệu học bổ sung, không phải bài thi hoặc điểm chính thức.</p>'+
+ '<div class="small">ĐỀ VÀ BÀI MẪU ĐÃ ĐƯỢC DUYỆT</div>'+
+ '<h2 style="margin:8px 0">Tài liệu ôn thi được chia sẻ</h2>'+
+ '<p class="meta">Đề, bài kiểm tra và bài mẫu ngoài SGK đã được Admin duyệt. Không phải điểm thi chính thức.</p>'+
  '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'+
  '<p id="auraCloudStudentStatus" class="meta" role="status" style="flex:1;margin:0">Đang kết nối...</p>'+
  '<button type="button" class="btn soft" id="auraCloudStudentRefresh">Làm mới</button></div>'+
@@ -63,8 +63,8 @@ function renderRows(rows,panel){
   return true;
  }).slice(0,mode==="home"?6:150);
  if(!filtered.length){
-  root.innerHTML='<p class="meta">Chưa có tài liệu phù hợp được Admin xuất bản. Khi Admin đăng lên, bấm Làm mới hoặc mở lại mục này.</p>';
-  return;
+  root.replaceChildren();
+  return 0;
  }
  root.innerHTML=filtered.map(r=>
   '<article class="resource" style="display:flex;align-items:center;flex-wrap:wrap;gap:12px">'+
@@ -76,32 +76,31 @@ function renderRows(rows,panel){
    '<button type="button" class="btn primary" data-aura-cloud-open="'+esc(r.id)+'">Mở bản AURA</button>':'')+
   '<a class="btn soft" target="_blank" rel="noopener noreferrer" href="https://drive.google.com/open?id='+
   encodeURIComponent(r.drive_file_id)+'">Mở Drive</a></div></article>').join("")+
-  '<p class="meta">Bản AURA có thể đọc trên thiết bị đã kích hoạt, không cần cấp quyền Drive. Nếu chỉ thấy nút Drive, Admin chưa lưu bản sao tệp lên AURA.</p>';
+  '<p class="meta">Tài liệu đã được chia sẻ. Nếu nút AURA chưa có, Admin chưa lưu bản sao tệp lên máy chủ.</p>';
+ return filtered.length;
 }
 async function load(panel,which,sub,per){
  const serial=++fetchId;
  const status=panel.querySelector("#auraCloudStudentStatus");
- if(!stored()?.access_token){
-  status.textContent="Chưa kích hoạt kết nối Student trên máy chủ.";
-  panel.querySelector("#auraCloudStudentItems").innerHTML=
-   '<p class="meta">Học sinh cần mở liên kết kích hoạt riêng do Admin gửi một lần trên thiết bị này. '+
-   'Sau khi kích hoạt, quay lại giao diện Student cũ và bấm Làm mới.</p>'+
-   '<a class="btn soft" href="./aura-student.html">Mở trang kích hoạt Student</a>';
-  return;
- }
+ panel.style.display="none";
+ if(!stored()?.access_token)return;
  status.textContent="Đang lấy tài liệu đã xuất bản...";
  try{
   const rows=await api();
   if(serial!==fetchId||!panel.isConnected)return;
-  renderRows(rows,panel);
-  status.textContent=rows.length+" tài liệu được chia sẻ · "+rows.filter(x=>x.asset_ready).length+" có bản sao lưu trên AURA.";
+  const shown=renderRows(rows,panel);
+  panel.style.display=shown?"":"none";
+  status.textContent=shown+" tài liệu đã được Admin duyệt và chia sẻ.";
  }catch(e){
   if(serial!==fetchId||!panel.isConnected)return;
   panel.querySelector("#auraCloudStudentItems").replaceChildren();
-  status.textContent=e.message+" Nhờ Admin kiểm tra quyền ghép thiết bị.";
+  status.textContent=e.message;
+  panel.style.display="none";
  }
 }
 function attach(next,sub="",per=""){
+ // Supplemental exam documents belong in Ôn thi, not Home or ordinary lessons.
+ if(next!=="all"&&next!=="period")return;
  const app=document.getElementById("app");
  if(!app)return;
  let panel=app.querySelector("#auraLegacyCloudStudent");
