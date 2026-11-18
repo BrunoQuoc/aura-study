@@ -294,7 +294,9 @@ app.addEventListener("click",e=>{
  if(!btn||!app.contains(btn))return;
  go(btn.dataset.v3Action||"");
 });
-window.AURA_ADMIN_V3={overview,documents:docs,settings,refresh:()=>loadOverview(true)};
+window.AURA_ADMIN_V3={overview,documents:docs,settings,refresh:()=>loadOverview(true),
+ status:()=>({view:state.view,loading:state.loading,error:state.error,
+  hasData:!!state.server,hasRequest:!!state.request,fetchAt:state.fetchAt})};
 window.home=overview;
 window.library=()=>docs(state.tab);
 window.auraAdminDocs=docs;
