@@ -75,7 +75,7 @@ test("Three-lane UI uses actual protected server data and routes to original too
    verified_textbook_exercises:0,pending_manual_approvals:0,
    sources:[{title:"Toán 6 Tập 1",volume:1,grade:6,subject:"Toán",toc_count:40,
     url:"https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-toan-6-tap-mot.4699854777"}]
-  }}}};
+  }}};
  };
  const context={window,document:mockDocument,URL,Date,fetch,localStorage,console,location:{href:""},setTimeout};
  vm.runInNewContext(read("admin_unified_v3.js"),context);
