@@ -55,8 +55,7 @@ function render(){
  if(state.error){status.textContent=state.error;list.innerHTML=
   '<p class="meta">Nếu chưa kích hoạt thiết bị, hãy <a href="./aura-student.html">mở liên kết Student</a> do Admin cung cấp.</p>';return}
  if(!state.data){status.textContent="Đang nhận danh mục bài học từ máy chủ…";list.replaceChildren();return}
- status.textContent=rows.length+" bản nháp bài học AURA có thể xem trên thiết bị này · "+
-  Number(totals?.locked_practice_modules||0)+" bộ luyện tập đang khóa QA.";
+ status.textContent=rows.length+" bài học AURA đang mở xem thử.";
  if(state.subject&&state.subject!=="TOAN"){
   list.innerHTML='<p class="meta">Chưa có bài học máy chủ cho môn này; AURA không tự suy đoán nội dung sách.</p>';return
  }
@@ -113,9 +112,9 @@ function attach(subject=""){
   section.className="card";
   section.style.marginTop="18px";
   section.innerHTML=
-   '<div class="small">BÀI HỌC AURA · ĐỒNG BỘ TỪ MÁY CHỦ</div>'+
-   '<h2>Bài học theo nguồn chuẩn</h2>'+
-   '<p class="meta">AURA đối chiếu cấu trúc SGK chính thức, sau đó tự biên soạn phần hướng dẫn. Chỉ bản nháp đủ cấu trúc được mở xem thử.</p>'+
+   '<div class="small">BÀI HỌC AURA · TOÁN 6</div>'+
+   '<h2>Bài học AURA theo SGK</h2>'+
+   '<p class="meta">Các bài AURA tự biên soạn theo chương trình SGK, đang ở chế độ xem thử và chưa được giáo viên chứng nhận.</p>'+
    '<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">'+
    '<p id="auraStudentPipelineStatus" role="status" class="meta" style="flex:1;margin:0">Đang kết nối…</p>'+
    '<button type="button" class="btn soft" data-aura-v4="refresh">Làm mới</button></div>'+
@@ -133,8 +132,7 @@ document.addEventListener("click",e=>{
  if(action==="open")openLesson(btn.dataset.id);
  if(action==="close"){state.detail="";state.detailId="";render()}
 });
-for(const [name,subjectArg] of [["home",false],["library",false],["lessons",false],
- ["lessonSubject",true],["subject",true],["studentReviewHub",false]]){
+for(const [name,subjectArg] of [["lessons",false],["lessonSubject",true]]){
  const orig=window[name];if(typeof orig!=="function")continue;
  window[name]=function(...args){
   const value=orig.apply(this,args);
@@ -145,9 +143,7 @@ for(const [name,subjectArg] of [["home",false],["library",false],["lessons",fals
 window.AURA_STUDENT_LEARNING_PIPELINE={refresh:()=>load(true),getCached:()=>state.data};
 window.addEventListener("load",()=>{
  setTimeout(()=>{
-  if(!panel()&&(document.body.dataset.auraPage==="home"||
-    document.body.dataset.auraPage==="lessons"||document.body.dataset.auraPage==="library"))
-   attach();
+  if(!panel()&&document.body.dataset.auraPage==="lessons")attach();
  },160);
 },{once:true});
 })();
