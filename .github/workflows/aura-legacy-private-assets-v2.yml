@@ -1,0 +1,34 @@
+name: AURA STUDY - Private Admin Student Sync QA
+on:
+  push:
+    branches:
+      - feat/admin-student-private-assets-v2-20261118
+    paths:
+      - 'admin-direct.html'
+      - 'student-direct.html'
+      - '*_legacy_*sync.js'
+      - 'tests/legacy-private-assets-v2.test.mjs'
+      - '.github/workflows/aura-legacy-private-assets-v2.yml'
+  pull_request:
+    paths:
+      - 'admin-direct.html'
+      - 'student-direct.html'
+      - '*_legacy_*sync.js'
+      - 'tests/legacy-private-assets-v2.test.mjs'
+      - '.github/workflows/aura-legacy-private-assets-v2.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  private-sync-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout reviewed source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Verify Node.js
+        run: node --version
+      - name: Run private document sync tests
+        run: node --test tests/legacy-private-assets-v2.test.mjs
