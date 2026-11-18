@@ -29,6 +29,15 @@ function isValidObject(input:unknown):input is Record<string,unknown>{
 function isDriveId(s:unknown):s is string{
  return typeof s==="string"&&/^[A-Za-z0-9_-]{10,180}$/.test(s);
 }
+// Exam and test uploads are manually approved. SGK does not use this endpoint.
+function needsExamReview(title:unknown,docType:unknown):boolean{
+ if(docType==="exam")return true;
+ if(docType!=="practice")return false;
+ const v=String(title??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+  .replace(/đ/g,"d").replace(/Đ/g,"D").toLowerCase();
+ return /\bde[\s._-]*(thi|kiem[\s._-]*tra|kt|giua[\s._-]*ky|cuoi[\s._-]*ky)\b/.test(v)
+  || /\bbai[\s._-]*kiem[\s._-]*tra\b/.test(v);
+}
 Deno.serve(async(req:Request)=>{
  const origin=req.headers.get("Origin");
  if(origin&&!ORIGINS.has(origin))return reply(null,403,{error:"Origin not allowed"});
@@ -72,7 +81,7 @@ Deno.serve(async(req:Request)=>{
    const {file_id,title,subject,doc_type,period=""}=input;
    if(!isDriveId(file_id)||typeof title!=="string"||title.trim().length<2||title.trim().length>180
     ||!["TOAN","NGUVAN","TIENGANH","KHTN","LSDL","GDCD","TINHOC","CONGNGHE","KHAC"].includes(String(subject))
-    ||!["lesson","practice","exam","reference","formula"].includes(String(doc_type))
+    ||!needsExamReview(title,doc_type)
     ||!["","GK1","CK1","GK2","CK2"].includes(String(period)))
     return reply(origin,400,{error:"Invalid or non-student resource. Answer keys are not publishable."});
    const {data,error:e}=await service.rpc("aura_legacy_content_admin_publish_v1",{
