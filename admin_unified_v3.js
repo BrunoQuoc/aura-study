@@ -190,6 +190,7 @@ function docs(tab){
  tabstrip()+'<div class="av3-document-body">'+
  ({sgk:docsSgk,practice:docsPractice,exam:docsExam}[state.tab])()+
  '</div><p class="av3-footnote">Trạng thái chuẩn hóa là tình trạng dữ liệu thực tế, không phải chứng nhận chất lượng hay bản quyền toàn bộ nội dung. AURA vẫn giữ các nguồn gốc để đối chiếu.</p></div>';
+ if(window.AURA_LEARNING_PIPELINE_ADMIN?.mount)window.AURA_LEARNING_PIPELINE_ADMIN.mount(state.tab);
  loadOverview();
 }
 function settings(){
