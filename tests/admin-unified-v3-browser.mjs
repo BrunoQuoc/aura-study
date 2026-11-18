@@ -21,7 +21,7 @@ const catalog={
   url:"https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-toan-6-tap-hai.4699864675",
   verified_full_text:false,content_scope:"OFFICIAL_TOC_IMAGE_ONLY"}]
 };
-const browser=await chromium.launch({headless:true});
+const browser=await chromium.launch({headless:true,channel:"chrome"});
 let checks=0;
 try{
  for(const screen of [
