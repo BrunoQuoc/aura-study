@@ -8,7 +8,7 @@ if(!document.body.classList.contains("student-shell"))return;
 const API="https://ufqzuowjhdqpydqvcsob.supabase.co/functions/v1/aura-legacy-content-sync-v1";
 const KEY="sb_publishable_d7x2eMPcTVYwWQc1U3ic1Q_PEaTut1p";
 const state={data:null,request:null,updated:0,error:"",subject:"",shown:9,detail:"",detailId:"",serial:0};
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;',"'" :"&#39;"}[c]));
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function officialUrl(value){
  try{const u=new URL(String(value||""));return u.protocol==="https:"&&u.hostname==="taphuan.nxbgd.vn"?u.href:""}catch{return ""}
 }
