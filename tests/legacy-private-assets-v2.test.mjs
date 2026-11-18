@@ -149,7 +149,7 @@ test('no unreviewed keys or solution types exposed by metadata sync',()=>{
 
 test('schema migration is private, signed, scoped and reproducible',()=>{
   const sql=read('supabase/migrations/20261118041949_aura_legacy_private_assets_v2_20261118.sql');
-  assert.match(sql,/aura-legacy-approved-v2','aura-private-bucket');
+  assert.match(sql,/aura-legacy-approved-v2/,'aura-private-bucket');
   assert.match(sql,/false,6291456/);
   assert.match(sql,/content_version is distinct from old\.content_version/);
   assert.match(sql,/create trigger aura_legacy_reset_asset_v2/);
