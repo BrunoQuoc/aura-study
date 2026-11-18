@@ -7,6 +7,7 @@ on:
       - feat/admin-v3-three-content-lanes-20261118
       - feat/learning-pipeline-student-preview-v4-20261118
       - feat/student-single-login-navigation-v5-20261118
+      - feat/student-password-login-no-links-v6-20261118
     paths:
       - 'admin-direct.html'
       - 'student-direct.html'
@@ -18,6 +19,12 @@ on:
       - 'tests/admin-unified-v3.test.mjs'
       - 'tests/learning-pipeline-v4.test.mjs'
       - 'tests/student-single-login-v5.test.mjs'
+      - 'tests/student-password-v6.test.mjs'
+      - 'student_password_login_v6.js'
+      - 'admin_student_password_v6.css'
+      - 'supabase/functions/aura-identity-pair/index.ts'
+      - 'supabase/migrations/20261118093000_aura_student_password_login_v6_20261118.sql'
+      - 'supabase/migrations/20261118093100_aura_atomic_admin_student_password_creation_v6_20261118.sql'
       - 'student_cloud_access_v5.js'
       - 'student_learning_navigation_v5.js'
       - 'admin_cloud_students_v5.js'
@@ -46,6 +53,12 @@ on:
       - 'tests/admin-unified-v3.test.mjs'
       - 'tests/learning-pipeline-v4.test.mjs'
       - 'tests/student-single-login-v5.test.mjs'
+      - 'tests/student-password-v6.test.mjs'
+      - 'student_password_login_v6.js'
+      - 'admin_student_password_v6.css'
+      - 'supabase/functions/aura-identity-pair/index.ts'
+      - 'supabase/migrations/20261118093000_aura_student_password_login_v6_20261118.sql'
+      - 'supabase/migrations/20261118093100_aura_atomic_admin_student_password_creation_v6_20261118.sql'
       - 'student_cloud_access_v5.js'
       - 'student_learning_navigation_v5.js'
       - 'admin_cloud_students_v5.js'
@@ -77,4 +90,4 @@ jobs:
       - name: Verify Node.js
         run: node --version
       - name: Run private document sync tests
-        run: node --test tests/legacy-private-assets-v2.test.mjs tests/sgk-auto-review-policy.test.mjs tests/admin-unified-v3.test.mjs tests/learning-pipeline-v4.test.mjs tests/student-single-login-v5.test.mjs
+        run: node --test tests/legacy-private-assets-v2.test.mjs tests/sgk-auto-review-policy.test.mjs tests/admin-unified-v3.test.mjs tests/learning-pipeline-v4.test.mjs tests/student-single-login-v5.test.mjs tests/student-password-v6.test.mjs

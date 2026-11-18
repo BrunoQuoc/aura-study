@@ -20,23 +20,23 @@ test("The original 5 Student actions stay, and only Tasks/Journey are added on t
  assert.doesNotMatch(html,/src="student_login_direct_fix\\.js/);
  assert.match(read("aura_pro_2026.js"),/student_cloud_access_v5[.]css/);
 });
-test("One real Student activation opens existing Student UI; account management can stay on portal",()=>{
+test("Student normal portal routes to direct login, preserving legacy activation compatibility",()=>{
  const html=read("aura-student.html"),portal=read("aura-simple-access.js");
- assert.match(html,/href="\.\/student-direct\.html"/);
- assert.doesNotMatch(html,/aura-student-math6\.html/);
- assert.match(portal,/new URLSearchParams\(location\.search\)\.get\("manage"\)/);
+ assert.match(html,/location\.replace\("\.\/student-direct\.html"\)/);
  assert.match(portal,/location\.replace\("\.\/student-direct\.html"\)/);
  assert.doesNotMatch(portal,/location\.replace\("\.\/aura-student-math6\.html"\)/);
+ assert.match(read("student-direct.html"),/student_password_login_v6\.js/);
 });
-test("Admin V3 Student roster now uses server users, not local PIN creation",()=>{
+test("Admin V3 manages password users rather than browser PIN or activation links",()=>{
  const admin=read("admin-direct.html");
  const list=read("admin_cloud_students_v5.js");
  const v3=read("admin_unified_v3.js");
  assert.match(admin,/admin_cloud_students_v5\.js/);
- assert.match(list,/api\("create_student",\{name\}\)/);
- assert.match(list,/api\("list_students"\)/);
- assert.match(list,/api\("issue_student_link"/);
- assert.match(list,/api\("revoke_student_devices"/);
+ assert.match(list,/api\("create_password_student"/);
+ assert.match(list,/api\("list_password_students"\)/);
+ assert.match(list,/api\("enable_password_student"/);
+ assert.match(list,/api\("reset_password_student"/);
+ assert.doesNotMatch(list,/data-cloud-user="issue"|Lấy liên kết học|Đổi thiết bị/);
  assert.match(list,/window\.auraStudentUsers=show/);
  assert.match(v3,/AURA_ADMIN_CLOUD_STUDENTS\?\.show/);
  assert.doesNotMatch(list,/pinHash|pinSalt|aura_local_students_v1/);

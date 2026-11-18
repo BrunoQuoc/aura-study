@@ -1,8 +1,9 @@
-name: AURA STUDY - Student V5 Single Login Browser QA
+name: AURA STUDY - Student V6 Password Login Browser QA
 on:
   push:
     branches:
       - feat/student-single-login-navigation-v5-20261118
+      - feat/student-password-login-no-links-v6-20261118
     paths:
       - 'student-direct.html'
       - 'admin-direct.html'
@@ -15,6 +16,10 @@ on:
       - 'aura_pro_2026.js'
       - 'aura-student.html'
       - 'tests/student-single-login-v5-browser.mjs'
+      - 'tests/student-password-v6-browser.mjs'
+      - 'student_password_login_v6.js'
+      - 'admin_student_password_v6.css'
+      - 'supabase/functions/aura-identity-pair/index.ts'
       - '.github/workflows/aura-student-v5-single-login-qa.yml'
   pull_request:
     paths:
@@ -27,12 +32,16 @@ on:
       - 'aura_pro_2026.js'
       - 'aura-student.html'
       - 'tests/student-single-login-v5-browser.mjs'
+      - 'tests/student-password-v6-browser.mjs'
+      - 'student_password_login_v6.js'
+      - 'admin_student_password_v6.css'
+      - 'supabase/functions/aura-identity-pair/index.ts'
       - '.github/workflows/aura-student-v5-single-login-qa.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  student-v5-smoke:
+  student-v6-smoke:
     name: Student cloud-only + Admin users across phone iPad desktop (synthetic)
     runs-on: ubuntu-24.04
     timeout-minutes: 16
@@ -47,14 +56,14 @@ jobs:
         run: |
           npm install --no-save playwright@1.56.1
           google-chrome --version
-      - name: Test legacy Student with a single verified cloud account
+      - name: Test legacy Student with a password-provisioned cloud account
         run: |
-          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/aura-student-v5-http.log 2>&1 &
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/aura-student-v6-http.log 2>&1 &
           sleep 2
-          node tests/student-single-login-v5-browser.mjs
+          node tests/student-password-v6-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: aura-student-v5-login-and-nav
-          path: test-results/student-v5/
+          name: aura-student-v6-login-and-nav
+          path: test-results/student-v6/
           retention-days: 7
