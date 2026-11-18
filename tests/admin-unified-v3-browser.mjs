@@ -54,8 +54,11 @@ try{
    }
    return route.abort();
   });
-  const page=await context.newPage(),jsErrors=[];
+  const page=await context.newPage(),jsErrors=[],network=[];
   page.on("pageerror",e=>jsErrors.push(e.message));
+  page.on("request",req=>{if(req.url().includes("supabase"))network.push("REQ "+req.method()+" "+req.url())});
+  page.on("response",r=>{if(r.url().includes("supabase"))network.push("RES "+r.status()+" "+r.url())});
+  page.on("requestfailed",req=>network.push("FAILED "+req.url()+" "+req.failure()?.errorText));
   await page.goto(origin+"/admin-direct.html",{waitUntil:"load",timeout:45000});
   await page.locator(".av3-lane-card").first().waitFor({timeout:20000});
   try{
@@ -65,7 +68,7 @@ try{
     await page.evaluate(()=>({
       session:!!localStorage.getItem("aura-stage-parent-v1"),
       cloud:!!window.AURA_LEGACY_CLOUD_ADMIN,hub:!!window.AURA_ADMIN_V3
-    })),jsErrors.slice(0,12));
+    })),network.slice(0,30),jsErrors.slice(0,12));
    await page.screenshot({path:output+"/"+screen.id+"-diagnostic.png",fullPage:true});
    throw error;
   }
