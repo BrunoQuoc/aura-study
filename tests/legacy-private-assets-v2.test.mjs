@@ -146,3 +146,26 @@ test('no unreviewed keys or solution types exposed by metadata sync',()=>{
   assert.match(student,/data-aura-cloud-open/);
   assert.doesNotMatch(student,/service_role|sb_secret_/);
 });
+
+test('schema migration is private, signed, scoped and reproducible',()=>{
+  const sql=read('supabase/migrations/20261118041949_aura_legacy_private_assets_v2_20261118.sql');
+  assert.match(sql,/aura-legacy-approved-v2','aura-private-bucket');
+  assert.match(sql,/false,6291456/);
+  assert.match(sql,/content_version is distinct from old\.content_version/);
+  assert.match(sql,/create trigger aura_legacy_reset_asset_v2/);
+  assert.equal((sql.match(/\$function\$;/g)||[]).length,5);
+  assert.match(sql,/revoke all on function public\.aura_legacy_content_attach_asset_v2/);
+  assert.match(sql,/revoke all on function public\.aura_legacy_content_student_asset_v2/);
+  assert.match(sql,/d\.revoked_at is null/);
+  assert.match(sql,/r\.visibility='PUBLISHED_STAGING'/);
+});
+test('server gateway requires verified roles and never returns private path to Student',()=>{
+  const edge=read('supabase/functions/aura-legacy-content-asset-v2/index.ts');
+  assert.match(edge,/auth\.getUser/);
+  assert.match(edge,/user\.email_confirmed_at/);
+  assert.match(edge,/user\.is_anonymous/);
+  assert.match(edge,/createSignedUploadUrl/);
+  assert.match(edge,/createSignedUrl\(record\.path,180\)/);
+  assert.match(edge,/STUDENT device required|Paired Student required/);
+  assert.doesNotMatch(edge,/official_exam_enabled:\s*true/);
+});
