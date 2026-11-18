@@ -31,10 +31,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install pinned Chromium for compatible Ubuntu 24.04
+      - name: Use pinned Playwright with pre-installed Chrome (Ubuntu 24.04)
         run: |
           npm install --no-save playwright@1.56.1
-          npx playwright install --with-deps chromium
+          google-chrome --version
       - name: Run browser against local source with mocked server
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/aura-admin-v3-http.log 2>&1 &
