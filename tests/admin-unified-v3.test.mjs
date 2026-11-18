@@ -35,7 +35,7 @@ test("All three content lanes are user-facing and no official source needs appro
  assert.match(js,/Anh duyệt/);
  assert.match(js,/doc.*="exam"/);
  assert.match(js,/Máy chủ/);
- assert.match(read("admin_unified_v3.css"),/max-width:760px/);
+ assert.match(read("admin_unified_v3.css"),/max-width:900px/);
 });
 test("Three-lane UI uses actual protected server data and routes to original tools",async()=>{
  const node={innerHTML:"",listeners:{},addEventListener(name,fn){this.listeners[name]=fn},contains:()=>true,insertAdjacentHTML(_where,html){this.innerHTML=html+this.innerHTML}};
