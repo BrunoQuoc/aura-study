@@ -61,7 +61,7 @@ function panelHTML(){
  '<p class="meta">Sau khi duyệt INBOX, vào đây bấm <b>Xuất bản</b> cho từng tài liệu. '+
  'Student đã ghép thiết bị sẽ thấy tài liệu ở mục Bài học / Ôn thi trên máy khác. '+
  'Không đăng đáp án riêng, bài chưa duyệt hoặc mở điểm thi chính thức.</p>'+
- '<p class="meta">Tài liệu lưu trên Drive nên tài khoản Student vẫn cần được cấp quyền xem tệp gốc.</p>'+
+ '<p class="meta">Tệp gốc vẫn ở Drive. Để Student đọc mà không cần quyền Drive, hãy lưu bản sao lên AURA sau khi xuất bản.</p>'+
  '<p class="meta"><a href="./aura-admin.html">Đăng nhập máy chủ / cấp liên kết kích hoạt Student</a> (chỉ cần khi kết nối lần đầu).</p>'+
  '<p id="auraCloudAdminStatus" role="status">Đang kiểm tra kết nối kho chung...</p>'+
  '<div id="auraCloudAdminItems"></div></section>';
@@ -134,7 +134,7 @@ async function onClick(e){
   }else if(action==="publish"){
    const r=approvedDocs().find(x=>x.driveFileId===id);
    if(!r)throw Error("Tài liệu không còn trong danh sách đã duyệt. Vui lòng mở lại INBOX.");
-   if(!confirm("Xuất bản '"+String(r.name||"Tài liệu").slice(0,70)+"' cho Student đã ghép thiết bị? Tệp Drive cần quyền xem riêng."))return;
+   if(!confirm("Xuất bản '"+String(r.name||"Tài liệu").slice(0,70)+"' cho Student đã ghép thiết bị? Sau đó hãy lưu bản sao lên AURA để tránh lỗi quyền xem Drive."))return;
    const out=await api("admin_publish",{
     file_id:r.driveFileId,title:String(r.name||"Tài liệu").slice(0,180),
     subject:r.subject,doc_type:r.docType,period:PERIOD[r.period]?r.period:""});
