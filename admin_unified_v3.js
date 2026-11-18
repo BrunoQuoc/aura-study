@@ -27,7 +27,7 @@ function navActive(page){
   b.classList.toggle("active",b.dataset.page===page);
  });
 }
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;":"&#39;"}[c]));
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const allowedOfficial=v=>{try{const u=new URL(v);return u.protocol==="https:"&&u.hostname==="taphuan.nxbgd.vn"?u.href:""}catch{return ""}};
 function read(key,other){
  try{const x=JSON.parse(localStorage.getItem(key)||"null");return x??other}catch{return other}
