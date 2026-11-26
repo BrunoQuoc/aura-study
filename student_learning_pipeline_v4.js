@@ -1,6 +1,6 @@
 /* AURA STUDY Student V4 — paired device receives server-side normalized AURA study drafts.
  * This supplements (never replaces) the existing Student layout, exam engine or NXB catalog.
- * Only verified publisher TOC headings and AURA-authored lesson previews are displayed.
+ * Verified publisher TOC headings and AURA-authored lessons are displayed directly. AURA-authored SGK/practice content does not require Admin approval.
  */
 (function(){
 "use strict";
@@ -16,30 +16,30 @@ const panel=()=>document.getElementById("auraStudentLearningPipelineV4");
 function lessons(){
  return Array.isArray(state.data?.items)?
   state.data.items.filter(x=>x.lane==="SGK"&&x.preview_ready===true&&
-    x.status==="AI_DRAFT_PREVIEW"&&x.content_origin==="AURA_AI_AUTHORED_DRAFT"&&
+    (x.status==="AI_AUTO_STUDENT"||x.status==="AI_DRAFT_PREVIEW")&&x.content_origin==="AURA_AI_AUTHORED_DRAFT"&&
     x.subject==="Toán"&&officialUrl(x.source_url)):[];
 }
 async function api(action,more={}){
  const token=await window.AURA_LEGACY_CLOUD_STUDENT?.getToken?.();
- if(!token)throw Error("Hãy kích hoạt Student trên thiết bị này để xem bài học AURA.");
+ if(!token)throw Error("Hãy đăng nhập Student để xem bài học AURA.");
  const r=await fetch(API,{method:"POST",cache:"no-store",
   headers:{"Content-Type":"application/json",apikey:KEY,Authorization:"Bearer "+token},
   body:JSON.stringify({action,...more})});
  let data={};try{data=await r.json()}catch{}
  if(!r.ok)throw Error(r.status===403?"Thiết bị Student chưa được ghép hoặc đã thu hồi quyền.":(data.error||"Máy chủ học liệu chưa sẵn sàng."));
- if(data.staging_only!==true||data.preview_only!==true||data.official_exam_enabled===true)
+ if(data.staging_only!==true||data.student_auto_publish!==true||data.official_exam_enabled===true)
   throw Error("Máy chủ không xác nhận chế độ học thử an toàn.");
  return data;
 }
 function detailMarkup(d){
- if(d.content_origin!=="AURA_AI_AUTHORED_DRAFT"||d.preview_only!==true||
+ if(d.content_origin!=="AURA_AI_AUTHORED_DRAFT"||d.student_auto_published!==true||
    d.auto_grading_enabled!==false||d.textbook_body_verified!==false)return "";
  const steps=[["Khởi động",d.opening],["Kiến thức AURA",d.concept],
   ["Ví dụ minh họa",d.worked_example],["Tự luyện (không chấm điểm)",d.practice_prompt],
   ["Vận dụng",d.application_prompt]];
  return '<div class="card" style="background:#f6f8ff;margin-top:12px;border-color:#dbe6ff">'+
  '<h3>'+esc(d.title)+'</h3>'+
- '<p class="meta" style="color:#946128"><b>Bản nháp AURA tự biên soạn.</b> Chưa được giáo viên chứng nhận; không phải trang sách hoặc bài tập SGK nguyên văn. Không có chấm điểm tự động.</p>'+
+ '<p class="meta" style="color:#946128"><b>AURA tự biên soạn.</b> Được đưa thẳng vào Student; chưa phải trang sách hoặc bài tập SGK nguyên văn và chưa được giáo viên chứng nhận. Không có chấm điểm tự động.</p>'+
  steps.map(([title,body],i)=>'<div style="margin:16px 0;padding-top:11px;border-top:1px solid #e0e8f4">'+
  '<div class="small">BƯỚC '+(i+1)+'</div><b>'+esc(title)+'</b>'+
  '<p style="white-space:pre-wrap;line-height:1.65;margin:8px 0">'+esc(body)+'</p></div>').join("")+
@@ -53,7 +53,7 @@ function render(){
  const list=el.querySelector("#auraStudentPipelineItems");
  if(!status||!list)return;
  if(state.error){status.textContent=state.error;list.innerHTML=
-  '<p class="meta">Nếu chưa kích hoạt thiết bị, hãy <a href="./aura-student.html">mở liên kết Student</a> do Admin cung cấp.</p>';return}
+  '<p class="meta">Nếu chưa có tài khoản, hãy nhờ Admin tạo tên đăng nhập và mật khẩu.</p>';return}
  if(!state.data){status.textContent="Đang nhận danh mục bài học từ máy chủ…";list.replaceChildren();return}
  status.textContent=rows.length+" bài học AURA đang mở xem thử.";
  if(state.subject&&state.subject!=="TOAN"){
@@ -65,7 +65,7 @@ function render(){
   '<div class="fileico">📖</div><div class="grow" style="min-width:180px">'+
   '<b>'+esc(u.title)+'</b>'+
   '<small style="display:block">Toán 6 · Tập '+esc(u.volume)+' · tr. '+esc(u.printed_page)+
-  ' · AURA tự biên soạn, chưa chứng nhận</small></div>'+
+  ' · AURA tự biên soạn · vào Student tự động</small></div>'+
   '<button type="button" class="btn primary" data-aura-v4="open" data-id="'+esc(u.id)+'">Xem bài AURA</button>'+
   '</div>').join("")+'</div>'+
  (rows.length>state.shown?'<button class="btn soft" style="margin-top:12px" type="button" data-aura-v4="more">Xem thêm bài học</button>':'')+
@@ -114,7 +114,7 @@ function attach(subject=""){
   section.innerHTML=
    '<div class="small">BÀI HỌC AURA · TOÁN 6</div>'+
    '<h2>Bài học AURA theo SGK</h2>'+
-   '<p class="meta">Các bài AURA tự biên soạn theo chương trình SGK, đang ở chế độ xem thử và chưa được giáo viên chứng nhận.</p>'+
+   '<p class="meta">Các bài AURA tự biên soạn theo chương trình SGK, được AURA tự động đưa vào Student; chưa được giáo viên chứng nhận.</p>'+
    '<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">'+
    '<p id="auraStudentPipelineStatus" role="status" class="meta" style="flex:1;margin:0">Đang kết nối…</p>'+
    '<button type="button" class="btn soft" data-aura-v4="refresh">Làm mới</button></div>'+
